@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gym Tracker PWA</title>
+    <!-- PWA settings -->
+    <meta name="theme-color" content="#121212">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- SheetJS for Excel Import -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app-container">
+        <!-- HEADER -->
+        <header id="app-header">
+            <h1 id="header-title" data-i18n="nav.calendar">Calendario</h1>
+            <div style="display:flex; gap:8px;">
+                <button id="btn-language" class="btn-icon" style="color: var(--text-primary);"><i class="ph ph-globe"></i></button>
+                <button id="header-action" class="hidden"><i class="ph ph-plus"></i></button>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT AREA -->
+        <main id="main-content">
+            <!-- CALENDAR VIEW -->
+            <section id="view-calendar" class="view active">
+                <div class="calendar-header-week">
+                    <button id="btn-open-month-picker" class="month-picker-btn">
+                        <h2 id="current-month-year">Agosto, 2026</h2>
+                        <i class="ph ph-caret-down"></i>
+                    </button>
+                    <div class="week-navigation">
+                        <button id="btn-today" class="btn-icon" style="font-size: 14px; padding: 4px 8px; border: 1px solid var(--border-color); border-radius: 4px; margin-right: 8px;" data-i18n="calendar.today">Hoy</button>
+                        <button id="prev-week"><i class="ph ph-caret-left"></i></button>
+                        <span id="current-week-label">Semana 33</span>
+                        <button id="next-week"><i class="ph ph-caret-right"></i></button>
+                    </div>
+                </div>
+                
+                <div id="weekly-grid" class="weekly-grid">
+                    <!-- Days injected via JS -->
+                </div>
+                
+                <div class="today-sessions">
+                    <h3 id="selected-day-label" data-i18n="calendar.dayPlan">Plan para el día</h3>
+                    <div id="day-sessions-list" class="sessions-list">
+                        <!-- Sessions for the selected day -->
+                        <div class="empty-state" data-i18n="calendar.selectDay">Selecciona un día</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EXERCISES VIEW -->
+            <section id="view-exercises" class="view">
+                <div style="display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap;">
+                    <div class="search-bar" style="flex: 1; margin-bottom: 0; min-width: 200px;">
+                        <i class="ph ph-magnifying-glass"></i>
+                        <input type="text" id="exercise-search" placeholder="Buscar ejercicios..." data-i18n-placeholder="exercises.search">
+                    </div>
+                    <button id="btn-manage-groups" class="btn-secondary" style="padding: 12px; display: flex; align-items: center; justify-content: center;" title="Gestionar Grupos"><i class="ph ph-folder-notch-plus" style="font-size: 20px;"></i></button>
+                    <button id="btn-import-excel" class="btn-secondary" style="padding: 12px; display: flex; align-items: center; justify-content: center; background: #10B981; color: #000; border-color: #10B981;" title="Importar Excel"><i class="ph ph-file-xls" style="font-size: 20px;"></i></button>
+                    <input type="file" id="input-import-excel" accept=".xlsx, .xls" style="display: none;">
+                </div>
+                
+                <div class="exercise-groups-container">
+                    <!-- Groups injected via JS -->
+                    <div id="exercises-list" class="exercises-list">
+                        <div class="empty-state" data-i18n="exercises.empty">No hay ejercicios. Añade uno nuevo.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HISTORY VIEW -->
+            <section id="view-history" class="view">
+                <h2 style="font-size: 18px; margin-bottom: 16px;" data-i18n="history.title">Registro de Entrenamientos</h2>
+                <div id="history-list" class="history-list">
+                    <!-- Global History List injected via JS -->
+                    <div class="empty-state" data-i18n="history.empty">No hay entrenamientos completados aún.</div>
+                </div>
+            </section>
+
+            <!-- WORKOUT SESSION VIEW (Overlays everything else) -->
+            <section id="view-workout" class="view overlay-view">
+                <div class="workout-header">
+                    <button id="close-workout"><i class="ph ph-caret-left"></i></button>
+                    <h2 id="workout-title" data-i18n="workout.title">Entrenamiento</h2>
+                    <button id="btn-start-workout" class="btn-primary" style="padding: 8px 16px; font-size: 14px;" data-i18n="workout.start">Iniciar</button>
+                    <div id="workout-timer" style="display:none; font-weight:700; font-size: 16px; color:var(--text-primary); font-variant-numeric: tabular-nums;">00:00</div>
+                </div>
+                <div id="workout-content" class="workout-content">
+                    <!-- Workout sets injected via JS -->
+                </div>
+                <div class="workout-footer" style="padding: 24px; display: none;" id="workout-footer">
+                    <button id="finish-workout" class="btn-primary full-width" data-i18n="workout.finish">Finalizar Entrenamiento</button>
+                </div>
+            </section>
+        </main>
+
+        <!-- BOTTOM NAVIGATION -->
+        <nav id="bottom-nav">
+            <button class="nav-item active" data-target="view-calendar">
+                <i class="ph ph-calendar-blank"></i>
+                <span data-i18n="nav.calendar">Calendario</span>
+            </button>
+            <button class="nav-item" data-target="view-exercises">
+                <i class="ph ph-barbell"></i>
+                <span data-i18n="nav.exercises">Ejercicios</span>
+            </button>
+            <button class="nav-item" data-target="view-history">
+                <i class="ph ph-clock-counter-clockwise"></i>
+                <span data-i18n="nav.history">Historial</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- MODALS -->
+
+    <!-- Event Type Selector Modal -->
+    <div id="modal-event-type" class="modal">
+        <div class="modal-content" style="max-width: 400px; margin: auto; border-radius: 24px; text-align: center;">
+            <div class="modal-header" style="justify-content: center; margin-bottom: 16px;">
+                <h3 data-i18n="modals.add.title">¿Qué quieres añadir?</h3>
+            </div>
+            <div class="modal-body">
+                <button class="btn-secondary full-width" style="margin-bottom: 12px; padding: 16px;" onclick="selectEventType('routine')">
+                    <i class="ph ph-calendar-plus" style="font-size: 24px; margin-bottom: 4px;"></i><br><span data-i18n="modals.add.block">Bloque 4 Semanas</span>
+                </button>
+                <button class="btn-secondary full-width" style="margin-bottom: 12px; padding: 16px;" onclick="selectEventType('workout')">
+                    <i class="ph ph-barbell" style="font-size: 24px; margin-bottom: 4px;"></i><br><span data-i18n="modals.add.workout">Entrenamiento Suelto (Hoy)</span>
+                </button>
+                <button class="btn-secondary full-width" style="padding: 16px;" onclick="selectEventType('goal')">
+                    <i class="ph ph-sneaker" style="font-size: 24px; margin-bottom: 4px;"></i><br><span data-i18n="modals.add.goal">Objetivo de Pasos (Hoy)</span>
+                </button>
+            </div>
+            <button class="btn-primary full-width close-modal" style="margin-top: 16px;" data-i18n="common.cancel">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Delete Session Modal -->
+    <div id="modal-delete-session" class="modal">
+        <div class="modal-content" style="max-width: 400px; margin: auto; border-radius: 24px; text-align: center;">
+            <div class="modal-header" style="justify-content: center; margin-bottom: 16px;">
+                <h3 data-i18n="modals.delete.title">Eliminar Sesión</h3>
+            </div>
+            <div class="modal-body">
+                <button class="btn-primary full-width" style="margin-bottom: 12px; padding: 16px; background-color: var(--color-heavy); border-color: var(--color-heavy);" id="btn-delete-single">
+                    <i class="ph ph-trash" style="font-size: 24px; margin-bottom: 4px;"></i><br><span data-i18n="modals.delete.single">Solo esta sesión</span>
+                </button>
+                <button class="btn-primary full-width" style="margin-bottom: 12px; padding: 16px; background-color: var(--color-heavy); border-color: var(--color-heavy);" id="btn-delete-recurring">
+                    <i class="ph ph-calendar-x" style="font-size: 24px; margin-bottom: 4px;"></i><br><span data-i18n="modals.delete.recurring">Esta sesión y de semanas futuras</span>
+                </button>
+            </div>
+            <button class="btn-secondary full-width close-modal" style="margin-top: 16px;" data-i18n="common.cancel">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Single Goal Event Modal -->
+    <div id="modal-single-goal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-i18n="modals.goal.title">Objetivo de Pasos</h3>
+                <button class="close-modal"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="color:var(--text-secondary); font-size:14px; margin-bottom:20px; line-height:1.5;" data-i18n="modals.goal.desc">Dado que el navegador no puede acceder automáticamente a Samsung Health, deberás apuntar aquí tu objetivo y marcarlo como completado al final del día.</p>
+                <div class="form-group">
+                    <label data-i18n="modals.goal.label">Pasos Objetivo (ej. 10000)</label>
+                    <input type="number" id="goal-steps-target" value="10000">
+                </div>
+                <button id="btn-save-goal" class="btn-primary full-width" data-i18n="modals.goal.save">Guardar Objetivo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Month/Year Picker Modal -->
+    <div id="modal-month-picker" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-i18n="modals.picker.title">Ir a Fecha</h3>
+                <button class="close-modal"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body">
+                <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-bottom: 24px;">
+                    <button id="picker-prev-year" class="btn-icon"><i class="ph ph-caret-left"></i></button>
+                    <span id="picker-year-display" style="font-size: 20px; font-weight: 700;">2026</span>
+                    <button id="picker-next-year" class="btn-icon"><i class="ph ph-caret-right"></i></button>
+                </div>
+                <div id="picker-months-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;">
+                    <!-- Months injected via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manage Groups Modal -->
+    <div id="modal-manage-groups" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-i18n="modals.groups.title">Gestionar Grupos</h3>
+                <button class="close-modal"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body scrollable-modal-body">
+                <div style="display:flex; gap:8px; margin-bottom:20px;">
+                    <input type="text" id="new-group-name" placeholder="Nuevo Grupo..." data-i18n-placeholder="modals.groups.new" style="flex:1; background:var(--bg-surface); border:1px solid var(--border-color); padding:10px; border-radius:8px; color:#fff;">
+                    <button id="btn-add-group" class="btn-primary" style="padding:10px 16px;" data-i18n="common.add">Añadir</button>
+                </div>
+                <ul id="groups-manage-list" style="list-style:none; padding:0;">
+                    <!-- Groups injected via JS -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Routine Modal -->
+    <div id="modal-add-routine" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-routine-title" data-i18n="modals.routine.title">Añadir Bloque (4 sem)</h3>
+                <button class="close-modal"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="routine-duration" value="4">
+                <div class="form-group">
+                    <label data-i18n="modals.routine.type">Tipo de Sesión</label>
+                    <div class="block-type-selector">
+                        <button class="type-btn hypertrophy" data-type="hypertrophy" data-i18n="types.hypertrophy">Hipertrofia</button>
+                        <button class="type-btn heavy" data-type="heavy" data-i18n="types.heavy">Pesado</button>
+                        <button class="type-btn intensity" data-type="intensity" data-i18n="types.intensity">Alta Int.</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="modals.routine.name">Nombre</label>
+                    <input type="text" id="routine-name" placeholder="Ej. Torso Pesado" data-i18n-placeholder="modals.routine.namePlaceholder">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="modals.routine.selected">Ejercicios Seleccionados</label>
+                    <button id="btn-open-exercise-selector" class="btn-secondary full-width" data-i18n="modals.routine.selectBtn">Seleccionar Ejercicios</button>
+                    
+                    <div id="routine-builder-tools" style="display:flex; gap:8px; margin-top:12px;">
+                         <button id="btn-create-superset" class="btn-secondary" style="flex:1; font-size:12px; padding: 8px;"><i class="ph ph-link"></i> <span data-i18n="modals.routine.createSuperset">Crear Superserie</span></button>
+                         <button id="btn-remove-selected-items" class="btn-secondary" style="flex:1; font-size:12px; padding: 8px; color:var(--color-heavy); border-color:var(--color-heavy);"><i class="ph ph-trash"></i> <span data-i18n="common.delete">Eliminar</span></button>
+                    </div>
+
+                    <ul id="routine-selected-exercises-list" class="selected-items-list" style="margin-top: 12px; list-style: none; padding: 0; max-height: 40vh; overflow-y: auto; overflow-x: hidden;"></ul>
+                </div>
+                <button id="btn-save-routine" class="btn-primary full-width" data-i18n="modals.routine.schedule">Programar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Select Exercises for Routine Modal -->
+    <div id="modal-select-exercises" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-i18n="modals.selectEx.title">Elige Ejercicios</h3>
+                <button id="btn-confirm-exercises" class="btn-primary" style="padding: 8px 16px; font-size: 14px;" data-i18n="common.confirm">Confirmar</button>
+            </div>
+            <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+                <div id="exercise-selection-list">
+                    <!-- Checkbox list of exercises grouped -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Exercise Modal -->
+    <div id="modal-exercise" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-exercise-title" data-i18n="modals.exercise.title">Nuevo Ejercicio</h3>
+                <button class="close-modal"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body scrollable-modal-body">
+                <input type="hidden" id="exercise-id">
+                <div class="form-group">
+                    <label data-i18n="modals.exercise.name">Nombre del Ejercicio</label>
+                    <input type="text" id="exercise-name" placeholder="Ej. Press de Banca" data-i18n-placeholder="modals.exercise.namePlaceholder">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="modals.exercise.group">Grupo (Carpeta)</label>
+                    <select id="exercise-group">
+                        <!-- Options injected via JS -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="modals.exercise.youtube">Enlace YouTube (Opcional)</label>
+                    <input type="url" id="exercise-youtube" placeholder="https://youtube.com/... o https://youtu.be/...">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="modals.exercise.image">Imagen Adjunta (Opcional)</label>
+                    <input type="file" id="exercise-image" accept="image/*">
+                    <img id="exercise-image-preview" src="" alt="Preview" style="display:none; max-width: 100%; margin-top: 10px; border-radius: 8px; cursor: pointer;">
+                    <input type="hidden" id="exercise-image-data">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="modals.exercise.max1rm">1RM Actual (Manual) (kg)</label>
+                    <input type="text" id="exercise-max1rm" placeholder="Ej. 100">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="modals.exercise.repsHyp">Reps. (Hipertrofia)</label>
+                    <input type="text" id="exercise-reps-hypertrophy" value="10">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="modals.exercise.repsHea">Reps. (Pesado)</label>
+                    <input type="text" id="exercise-reps-heavy" value="5">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="modals.exercise.repsInt">Reps. (Alta Int.)</label>
+                    <input type="text" id="exercise-reps-intensity" value="8-12 + Fallo">
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 16px;">
+                    <button id="btn-save-exercise" class="btn-primary" style="flex: 1;" data-i18n="modals.exercise.save">Guardar Ejercicio</button>
+                    <button id="btn-delete-exercise" class="btn-secondary" style="display: none; padding: 12px; color: var(--color-heavy); border-color: var(--color-heavy);" title="Eliminar Ejercicio"><i class="ph ph-trash"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dropset Calculator Modal -->
+    <div id="modal-dropset-calc" class="modal">
+        <div class="modal-content" style="max-width: 300px; margin: auto; text-align: center; border-radius: 24px;">
+            <div class="modal-header" style="justify-content: center; margin-bottom: 16px;">
+                <h3 data-i18n="modals.dropset.title">Calculadora Dropset</h3>
+            </div>
+            <div class="modal-body">
+                <div style="font-size: 16px; margin-bottom: 20px;">
+                    <span data-i18n="modals.dropset.currentWeight">Peso actual:</span> <strong id="dropset-current-weight">100</strong> kg
+                </div>
+                <div class="dropset-options">
+                    <button class="dropset-option btn-apply-dropset" data-multiplier="0.8">
+                        <span>-20%</span>
+                        <strong id="dropset-20">80 kg</strong>
+                    </button>
+                    <button class="dropset-option btn-apply-dropset" data-multiplier="0.6">
+                        <span>-40%</span>
+                        <strong id="dropset-40">60 kg</strong>
+                    </button>
+                </div>
+            </div>
+            <button class="btn-secondary full-width close-modal" style="margin-top: 16px;" data-i18n="common.cancel">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Inline History Modal -->
+    <div id="modal-inline-history" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-i18n="modals.inlineHistory.title">Historial del Ejercicio</h3>
+                <button class="close-modal"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body" id="inline-history-content" style="max-height: 50vh; overflow-y: auto;">
+                <!-- History injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="modal-lightbox" class="modal" style="background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center;">
+        <button class="close-modal" style="position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2);"><i class="ph ph-x"></i></button>
+        <img id="lightbox-img" src="" style="max-width: 90vw; max-height: 90vh; border-radius: 8px; object-fit: contain;">
+    </div>
+
+    
+    <!-- Language Modal -->
+    <div id="modal-language" class="modal">
+        <div class="modal-content" style="max-width: 300px; margin: auto; border-radius: 24px; text-align: center;">
+            <div class="modal-header" style="justify-content: center; margin-bottom: 16px;">
+                <h3 data-i18n="language.select">Select Language</h3>
+            </div>
+            <div class="modal-body">
+                <button class="btn-secondary full-width lang-select-btn" data-lang="es" style="margin-bottom: 8px;">🇪🇸 Español</button>
+                <button class="btn-secondary full-width lang-select-btn" data-lang="en" style="margin-bottom: 8px;">🇬🇧 English</button>
+                <button class="btn-secondary full-width lang-select-btn" data-lang="ru" style="margin-bottom: 8px;">🇷🇺 Русский</button>
+                <button class="btn-secondary full-width lang-select-btn" data-lang="et" style="margin-bottom: 8px;">🇪🇪 Eesti</button>
+                <button class="btn-secondary full-width lang-select-btn" data-lang="uk">🇺🇦 Українська</button>
+            </div>
+            <button class="btn-primary full-width close-modal" style="margin-top: 16px;" data-i18n="common.cancel">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- Javascript -->
+    <script src="app.js"></script>
+</body>
+</html>
