@@ -913,7 +913,7 @@ document.getElementById('btn-save-routine').addEventListener('click', () => {
                 supersetId: supersetId,
                 supersetName: sName,
                 sets: [
-                    { type: 'Aproximación', weight: 0, reps: '' },
+                    { type: 'Calentamiento', weight: 0, reps: '' },
                     { type: 'Efectiva', weight: 0, reps: '' }
                 ],
                 comments: ''
@@ -1153,8 +1153,8 @@ const renderWorkout = () => {
                 setRow.style.padding = '4px 0';
                 
                 setRow.innerHTML = `
-                    <div class="set-number">${setIndex + 1}</div>
-                    <div style="display:flex; flex-direction:column;">
+                    <div class="set-number" style="margin-top: 8px;">${setIndex + 1}</div>
+                    <div style="display:flex; flex-direction:column; justify-content: flex-start;">
                         <select class="set-type-select">
                             <option value="Calentamiento" ${set.type==='Calentamiento'?'selected':''}>Calentamiento</option>
                             <option value="Aproximación" ${set.type==='Aproximación'?'selected':''}>Aproximación</option>
@@ -1163,14 +1163,18 @@ const renderWorkout = () => {
                             <option value="Dropset" ${set.type==='Dropset'?'selected':''}>Dropset</option>
                             <option value="Dropset fallo" ${set.type==='Dropset fallo'?'selected':''}>Dropset fallo</option>
                         </select>
-                        <div class="target-reps-text">Obj: ${targetReps}</div>
+                        <div class="target-reps-text" style="margin-top: 4px;">Obj: ${targetReps}</div>
                     </div>
-                    <div style="display:flex; flex-direction:column; align-items:center;">
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content: flex-start;">
                         <input type="number" class="set-input weight-input" value="${set.weight || ''}" placeholder="0" style="margin-bottom:4px; max-width:50px;">
                         <button class="calc-dropset-btn" style="font-size:9px; padding:2px 4px;">Drop</button>
                     </div>
-                    <input type="text" class="set-input reps-input" value="${set.reps || ''}" placeholder="-" style="max-width:50px;">
-                    <button class="btn-icon delete-set" style="padding:4px;"><i class="ph ph-trash"></i></button>
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content: flex-start;">
+                        <input type="text" class="set-input reps-input" value="${set.reps || ''}" placeholder="-" style="max-width:50px;">
+                    </div>
+                    <div style="display:flex; justify-content: center; margin-top: 4px;">
+                        <button class="btn-icon delete-set" style="padding:4px;"><i class="ph ph-trash"></i></button>
+                    </div>
                 `;
                 
                 const wInput = setRow.querySelector('.weight-input');
