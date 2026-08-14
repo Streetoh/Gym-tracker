@@ -1,13 +1,16 @@
 // Gym Tracker PWA Logic - Phase 4
 
+let savedExercises = JSON.parse(localStorage.getItem('gym_exercises'));
+let savedGroups = JSON.parse(localStorage.getItem('gym_groups'));
+
 let state = {
     language: localStorage.getItem('gym_language') || 'es',
-    exercises: JSON.parse(localStorage.getItem('gym_exercises')) || [],
+    exercises: (savedExercises && savedExercises.length > 0) ? savedExercises : (typeof defaultExercises !== 'undefined' ? defaultExercises : []),
     sessions: JSON.parse(localStorage.getItem('gym_sessions')) || [],
     selectedDate: new Date(),
     currentWeekStart: new Date(),
     completedWorkouts: JSON.parse(localStorage.getItem('gym_completed')) || [],
-    groups: JSON.parse(localStorage.getItem('gym_groups')) || ['Sin Grupo'],
+    groups: (savedGroups && savedGroups.length > 0) ? savedGroups : (typeof defaultGroups !== 'undefined' ? defaultGroups : ['Sin Grupo']),
     activeWorkoutState: JSON.parse(localStorage.getItem('gym_active_workout')) || null
 };
 
