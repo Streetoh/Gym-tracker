@@ -610,7 +610,30 @@ const renderExercises = () => {
         if(exList.length === 0) continue;
         const groupDiv = document.createElement('div');
         groupDiv.classList.add('exercise-group');
-        groupDiv.innerHTML = `<div class="exercise-group-title"><i class="ph ph-folder"></i> ${groupName}</div>`;
+        
+        const titleDiv = document.createElement('div');
+        titleDiv.classList.add('exercise-group-title');
+        
+        const isOpen = !window.closedGroupAccordions?.includes(groupName);
+        titleDiv.innerHTML = `<i class="ph ph-folder"></i> <span style="margin-left: 8px;">${groupName}</span> <i class="ph ph-caret-${isOpen ? 'up' : 'down'}" style="margin-left: auto;"></i>`;
+        groupDiv.appendChild(titleDiv);
+        
+        const cardsContainer = document.createElement('div');
+        cardsContainer.style.display = isOpen ? 'block' : 'none';
+        
+        titleDiv.addEventListener('click', () => {
+            window.closedGroupAccordions = window.closedGroupAccordions || [];
+            const currentlyOpen = !window.closedGroupAccordions.includes(groupName);
+            if (currentlyOpen) {
+                window.closedGroupAccordions.push(groupName);
+                cardsContainer.style.display = 'none';
+                titleDiv.querySelector('.ph-caret-up').classList.replace('ph-caret-up', 'ph-caret-down');
+            } else {
+                window.closedGroupAccordions = window.closedGroupAccordions.filter(g => g !== groupName);
+                cardsContainer.style.display = 'block';
+                titleDiv.querySelector('.ph-caret-down').classList.replace('ph-caret-down', 'ph-caret-up');
+            }
+        });
         
         exList.forEach(ex => {
             const card = document.createElement('div');
@@ -623,8 +646,9 @@ const renderExercises = () => {
                 <div class="exercise-action"><i class="ph ph-pencil-simple"></i></div>
             `;
             card.addEventListener('click', () => editExercise(ex));
-            groupDiv.appendChild(card);
+            cardsContainer.appendChild(card);
         });
+        groupDiv.appendChild(cardsContainer);
         container.appendChild(groupDiv);
     }
 };
