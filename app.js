@@ -72,6 +72,21 @@ navItems.forEach(item => {
     item.addEventListener('click', () => {
         const target = item.getAttribute('data-target');
         
+        if (target === 'view-workout') {
+            if (!(state.activeWorkoutState && state.activeWorkoutState.startTime)) {
+                alert('No hay ningún entrenamiento activo.');
+                return;
+            }
+            document.getElementById('view-workout').classList.add('active');
+            navItems.forEach(nav => nav.classList.remove('active'));
+            item.classList.add('active');
+            updateWorkoutBanner();
+            return;
+        } else {
+            document.getElementById('view-workout').classList.remove('active');
+            updateWorkoutBanner();
+        }
+        
         navItems.forEach(nav => nav.classList.remove('active'));
         item.classList.add('active');
         
@@ -202,7 +217,7 @@ document.getElementById('picker-next-year').addEventListener('click', () => { pi
 
 const translations = {
     es: {
-        nav: { calendar: "Calendario", exercises: "Ejercicios", history: "Historial" },
+        nav: { calendar: "Calendario", exercises: "Ejercicios", history: "Historial", workout: "En curso" },
         header: { title: "Calendario" },
         calendar: {
             today: "Hoy", dayPlan: "Plan para el día", selectDay: "Selecciona un día",
@@ -770,6 +785,23 @@ typeBtns.forEach(btn => {
         typeBtns.forEach(b => b.classList.remove('selected'));
         btn.classList.add('selected');
         selectedBlockType = btn.dataset.type;
+        
+        // Update all existing items to new target reps and recalculate rest times
+        routineItems.forEach(item => {
+            item.exercises.forEach(ex => {
+                ex.sets.forEach(set => {
+                    if(set.type === 'Calentamiento' || set.type === 'Aproximación') {
+                        // ignore, those are fixed usually? Wait, earlier we used defaults.
+                        // Actually let's just update all reps to defaults[selectedBlockType] if they match old defaults?
+                        // Or just override all 'Efectiva'/'Al fallo'/'Dropset' with new defaults.
+                    }
+                    if(['Efectiva', 'Al fallo', 'Dropset', 'Dropset fallo'].includes(set.type)) {
+                        set.reps = ex.dbEx.defaults[selectedBlockType] || '';
+                    }
+                });
+            });
+        });
+        renderRoutineItems(); // re-render to update rest times and placeholders
     });
 });
 document.querySelector('.type-btn.hypertrophy').classList.add('selected');
@@ -788,68 +820,244 @@ document.getElementById('btn-open-exercise-selector').addEventListener('click', 
         grouped[g].push(ex);
     });
     
-    for (const [gName, exList] of Object.entries(grouped)) {
-        list.innerHTML += `<div style="font-weight:700; margin-top:12px; color:var(--text-secondary); text-transform:uppercase; font-size:12px;">${gName}</div>`;
-        exList.forEach(ex => {
-            // Checkboxes are always empty when opening, as we are appending to the routine
-            list.innerHTML += `
-                <div class="checkbox-item">
-                    <input type="checkbox" id="chk-${ex.id}" value="${ex.id}">
-                    <label for="chk-${ex.id}">${ex.name}</label>
-                </div>
-            `;
+    const groupKeys = Object.keys(grouped).sort((a, b) => {
+        if (a === 'Sin Grupo') return 1;
+        if (b === 'Sin Grupo') return -1;
+        return a.localeCompare(b);
+    });
+    
+    for (const gName of groupKeys) {
+        const exList = grouped[gName];
+        exList.sort((a, b) => a.name.localeCompare(b.name));
+        
+        const groupDiv = document.createElement('div');
+        const titleDiv = document.createElement('div');
+        titleDiv.style.cssText = "font-weight:700; margin-top:12px; color:var(--text-secondary); text-transform:uppercase; font-size:12px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; user-select:none; padding:8px 0;";
+        
+        const isOpen = window.openSelectorAccordions?.includes(gName) || false;
+        titleDiv.innerHTML = `<span>${gName}</span> <i class="ph ph-caret-${isOpen ? 'up' : 'down'}"></i>`;
+        groupDiv.appendChild(titleDiv);
+        
+        const itemsContainer = document.createElement('div');
+        itemsContainer.style.display = isOpen ? 'block' : 'none';
+        
+        titleDiv.addEventListener('click', () => {
+            window.openSelectorAccordions = window.openSelectorAccordions || [];
+            const currentlyOpen = window.openSelectorAccordions.includes(gName);
+            if (currentlyOpen) {
+                window.openSelectorAccordions = window.openSelectorAccordions.filter(g => g !== gName);
+                itemsContainer.style.display = 'none';
+                titleDiv.querySelector('i').classList.replace('ph-caret-up', 'ph-caret-down');
+            } else {
+                window.openSelectorAccordions.push(gName);
+                itemsContainer.style.display = 'block';
+                titleDiv.querySelector('i').classList.replace('ph-caret-down', 'ph-caret-up');
+            }
         });
+        
+        exList.forEach(ex => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'checkbox-item';
+            itemDiv.innerHTML = `
+                <input type="checkbox" id="chk-${ex.id}" value="${ex.id}">
+                <label for="chk-${ex.id}">${ex.name}</label>
+            `;
+            itemsContainer.appendChild(itemDiv);
+        });
+        
+        groupDiv.appendChild(itemsContainer);
+        list.appendChild(groupDiv);
     }
     openModal(modalSelectExercises);
 });
 
+
+function calculateRestTime(currentType, nextType, blockType, isSuperset) {
+    if (currentType === 'Calentamiento' || currentType === 'Aproximación') return '45s';
+    
+    // Si estamos aquí, es Efectiva, Al fallo, Dropset, etc.
+    if (isSuperset) return '60s';
+    
+    if (blockType === 'hypertrophy') return '60s';
+    if (blockType === 'heavy') return '90s';
+    if (blockType === 'intensity') {
+        if (nextType && nextType.toLowerCase().includes('dropset')) return '90s';
+        return '60s';
+    }
+    
+    return '60s'; // default fallback
+}
+
 const renderRoutineItems = () => {
     const ul = document.getElementById('routine-selected-exercises-list');
     ul.innerHTML = '';
+    
+    const blockType = document.querySelector('.block-type-selector .type-btn.selected')?.dataset.type || 'hypertrophy';
+    
     routineItems.forEach((item, index) => {
         const li = document.createElement('li');
-        li.style.cssText = "display:flex; align-items:flex-start; background:var(--bg-surface-elevated); padding:12px; margin-bottom:8px; border-radius:8px;";
+        li.dataset.id = item.id;
+        li.style.cssText = "display:flex; align-items:flex-start; background:var(--bg-surface-elevated); padding:12px; margin-bottom:8px; border-radius:8px; flex-direction:column;";
+        
+        // --- TOP ROW: Checkbox, Title/Controls ---
+        const topRow = document.createElement('div');
+        topRow.style.cssText = "display:flex; width:100%; align-items:center;";
+        
+        const dragHandle = document.createElement('div');
+        dragHandle.className = 'drag-handle';
+        dragHandle.style.cssText = "cursor:grab; margin-right:8px; color:var(--text-secondary);";
+        dragHandle.innerHTML = '<i class="ph ph-list"></i>';
         
         const chk = document.createElement('input');
         chk.type = 'checkbox';
         chk.value = item.id;
         chk.className = 'builder-chk';
         chk.style.marginRight = '12px';
-        chk.style.marginTop = '4px';
         
-        const content = document.createElement('div');
-        content.style.flex = "1";
+        const contentDiv = document.createElement('div');
+        contentDiv.style.flex = "1";
         
+        let btnUngroup = null;
         if (item.isSuperset) {
-            content.innerHTML = `<strong style="color:var(--color-hypertrophy); font-size:14px; margin-bottom:4px; display:block;"><i class="ph ph-link"></i> ${item.name}</strong>`;
-            item.exercises.forEach(e => {
-                content.innerHTML += `<div style="font-size:12px; color:var(--text-secondary); margin-left:8px; padding-bottom:2px;">- ${e.dbEx.name}</div>`;
-            });
-            const btnUngroup = document.createElement('button');
+            contentDiv.innerHTML = `<strong style="color:var(--color-hypertrophy); font-size:14px; margin-bottom:4px; display:block;"><i class="ph ph-link"></i> ${item.name}</strong>`;
+            btnUngroup = document.createElement('button');
             btnUngroup.innerHTML = '<i class="ph ph-link-break"></i>';
             btnUngroup.className = 'btn-icon';
             btnUngroup.onclick = () => {
-                const singles = item.exercises.map(e => ({ id: Date.now()+Math.random(), isSuperset: false, exercises: [e] }));
+                const singles = item.exercises.map(e => ({ id: Date.now()+Math.random().toString(), isSuperset: false, exercises: [e] }));
                 routineItems.splice(index, 1, ...singles);
                 renderRoutineItems();
             };
-            li.appendChild(chk);
-            li.appendChild(content);
-            li.appendChild(btnUngroup);
         } else {
-            content.innerHTML = `<span style="font-size:14px;">${item.exercises[0].dbEx.name}</span>`;
-            li.appendChild(chk);
-            li.appendChild(content);
+            contentDiv.innerHTML = `<span style="font-size:14px; font-weight:700;">${item.exercises[0].dbEx.name}</span>`;
         }
+        
+        topRow.appendChild(dragHandle);
+        topRow.appendChild(chk);
+        topRow.appendChild(contentDiv);
+        if (btnUngroup) topRow.appendChild(btnUngroup);
+        li.appendChild(topRow);
+
+        // --- SETS BUILDER ---
+        item.exercises.forEach((ex, exIndex) => {
+            const exContainer = document.createElement('div');
+            exContainer.style.cssText = "width:100%; margin-top:12px; border-top:1px solid var(--border-color); padding-top:12px;";
+            if (item.isSuperset) {
+                exContainer.innerHTML = `<div style="font-size:13px; font-weight:600; margin-bottom:8px; color:var(--text-secondary);">- ${ex.dbEx.name}</div>`;
+            }
+            
+            const setsList = document.createElement('div');
+            ex.sets = ex.sets || [];
+            
+            const renderSets = () => {
+                setsList.innerHTML = '';
+                ex.sets.forEach((set, setIndex) => {
+                    const row = document.createElement('div');
+                    row.style.cssText = "display:flex; align-items:center; gap:8px; margin-bottom:8px;";
+                    row.innerHTML = `
+                        <div style="font-size:12px; color:var(--text-secondary); width:16px;">${setIndex + 1}</div>
+                        <select class="set-input set-type" style="flex:1; padding:4px; border-radius:4px; font-size:12px; height:auto;">
+                            <option value="Calentamiento" ${set.type==='Calentamiento'?'selected':''}>Calentamiento</option>
+                            <option value="Aproximación" ${set.type==='Aproximación'?'selected':''}>Aproximación</option>
+                            <option value="Efectiva" ${set.type==='Efectiva'?'selected':''}>Efectiva</option>
+                            <option value="Al fallo" ${set.type==='Al fallo'?'selected':''}>Al fallo</option>
+                            <option value="Dropset" ${set.type==='Dropset'?'selected':''}>Dropset</option>
+                            <option value="Dropset fallo" ${set.type==='Dropset fallo'?'selected':''}>Dropset fallo</option>
+                        </select>
+                        <div style="display:flex; flex-direction:column; align-items:center;">
+                            <span style="font-size:9px; color:var(--text-secondary); line-height:1;">reps</span>
+                            <input type="text" class="set-input set-reps" value="${set.reps || ''}" placeholder="${ex.dbEx.defaults[blockType] || 'reps'}" style="width:50px; padding:4px; border-radius:4px; font-size:12px; height:auto; text-align:center;">
+                        </div>
+                        <button class="btn-icon delete-set"><i class="ph ph-trash"></i></button>
+                    `;
+                    row.querySelector('.set-type').addEventListener('change', (e) => {
+                        set.type = e.target.value;
+                        renderSets(); // Recalculate rest times on type change
+                    });
+                    row.querySelector('.set-reps').addEventListener('change', (e) => set.reps = e.target.value);
+                    row.querySelector('.delete-set').addEventListener('click', () => {
+                        ex.sets.splice(setIndex, 1);
+                        renderSets();
+                    });
+                    setsList.appendChild(row);
+                    
+                    // Add Rest Time text if not the very last set of the item
+                    // Or actually just between sets
+                    if (setIndex < ex.sets.length - 1 || exIndex < item.exercises.length - 1) {
+                        let nextType = null;
+                        if (setIndex < ex.sets.length - 1) {
+                            nextType = ex.sets[setIndex + 1].type;
+                        } else if (item.isSuperset && exIndex < item.exercises.length - 1) {
+                            // If superset, rest time between exercises? Usually there is no rest or very little. 
+                            // But let's calculate based on Efectiva
+                            nextType = item.exercises[exIndex + 1].sets[0]?.type || 'Efectiva';
+                        }
+                        
+                        const restVal = calculateRestTime(set.type, nextType, blockType, item.isSuperset);
+                        set.restTime = restVal; // Save to object for later
+                        
+                        const restDiv = document.createElement('div');
+                        restDiv.style.cssText = "font-size:11px; color:var(--color-heavy); margin-bottom:8px; display:flex; align-items:center; gap:4px; margin-left: 24px;";
+                        restDiv.innerHTML = `<i class="ph ph-timer"></i> ${restVal}`;
+                        setsList.appendChild(restDiv);
+                    }
+                });
+            };
+            renderSets();
+            
+            const addSetBtn = document.createElement('button');
+            addSetBtn.className = 'add-set-btn';
+            addSetBtn.style.marginTop = '4px';
+            addSetBtn.textContent = '+ Añadir Serie';
+            addSetBtn.onclick = () => {
+                const lastSet = ex.sets[ex.sets.length - 1] || { type: 'Efectiva', reps: '' };
+                ex.sets.push({ ...lastSet });
+                renderSets();
+            };
+            
+            exContainer.appendChild(setsList);
+            exContainer.appendChild(addSetBtn);
+            li.appendChild(exContainer);
+        });
+        
         ul.appendChild(li);
+    });
+    
+    // Init Sortable
+    if(window.routineSortable) window.routineSortable.destroy();
+    window.routineSortable = new Sortable(ul, {
+        handle: '.drag-handle',
+        animation: 150,
+        onEnd: function (evt) {
+            const temp = routineItems[evt.oldIndex];
+            routineItems.splice(evt.oldIndex, 1);
+            routineItems.splice(evt.newIndex, 0, temp);
+            renderRoutineItems(); // re-render to update index
+        }
     });
 };
 
+
+document.getElementById('btn-cancel-exercises').addEventListener('click', () => {
+    closeModal(modalSelectExercises);
+});
+
 document.getElementById('btn-confirm-exercises').addEventListener('click', () => {
+    const selectedBlockType = document.querySelector('.block-type-selector .type-btn.selected')?.dataset.type || 'hypertrophy';
     document.querySelectorAll('#exercise-selection-list input[type="checkbox"]:checked').forEach(cb => {
         const ex = state.exercises.find(e => e.id === cb.value);
         if(ex) {
-            routineItems.push({ id: Date.now() + Math.random().toString(), isSuperset: false, exercises: [{ exerciseId: ex.id, dbEx: ex }] });
+            const targetReps = ex.defaults[selectedBlockType] || '';
+            const initialSets = [
+                { type: 'Calentamiento', reps: targetReps },
+                { type: 'Aproximación', reps: targetReps },
+                { type: 'Efectiva', reps: targetReps }
+            ];
+            routineItems.push({ 
+                id: Date.now() + Math.random().toString(), 
+                isSuperset: false, 
+                exercises: [{ exerciseId: ex.id, dbEx: ex, sets: initialSets }] 
+            });
         }
     });
     renderRoutineItems();
@@ -878,6 +1086,16 @@ document.getElementById('btn-create-superset').addEventListener('click', () => {
     const uniqueGroups = [...new Set(groups)];
     const supersetName = `Superserie de ${uniqueGroups.join(' y ')}`;
     
+    // Override sets to 3 Efectivas by default for supersets
+    combinedExercises.forEach(ex => {
+        const targetReps = ex.dbEx.defaults[selectedBlockType] || '';
+        ex.sets = [
+            { type: 'Efectiva', reps: targetReps },
+            { type: 'Efectiva', reps: targetReps },
+            { type: 'Efectiva', reps: targetReps }
+        ];
+    });
+
     routineItems.push({
         id: Date.now().toString(),
         isSuperset: true,
@@ -912,20 +1130,23 @@ document.getElementById('btn-save-routine').addEventListener('click', () => {
                 name: e.dbEx.name,
                 supersetId: supersetId,
                 supersetName: sName,
-                sets: [
-                    { type: 'Calentamiento', weight: 0, reps: '' },
-                    { type: 'Efectiva', weight: 0, reps: '' }
+                sets: e.sets ? e.sets.map(s => ({ type: s.type, weight: 0, targetReps: s.reps, reps: '', repsDrop: '', restTime: s.restTime })) : [
+                    { type: 'Calentamiento', weight: 0, reps: '', restTime: '45s' },
+                    { type: 'Aproximación', weight: 0, reps: '', restTime: '45s' },
+                    { type: 'Efectiva', weight: 0, reps: '', restTime: '60s' }
                 ],
                 comments: ''
             });
         });
     });
     
+    const blockId = Date.now().toString() + Math.random().toString().slice(2, 6);
     for (let i = 0; i < duration; i++) {
         const d = new Date(startDate);
         d.setDate(d.getDate() + (i * 7));
         state.sessions.push({
             id: Date.now().toString() + i,
+            blockId: blockId,
             date: formatDate(d),
             name: duration > 1 ? `${name} (Semana ${i+1})` : name,
             type: selectedBlockType,
@@ -1050,6 +1271,7 @@ window.openLightbox = (src) => {
 };
 
 const renderWorkout = () => {
+    try {
     const content = document.getElementById('workout-content');
     content.innerHTML = '';
     
@@ -1152,9 +1374,30 @@ const renderWorkout = () => {
                 setRow.classList.add('set-row');
                 setRow.style.padding = '4px 0';
                 
+                
+                let targetRepsBase = targetReps;
+                let targetRepsDrop = '';
+                if (targetReps && typeof targetReps === 'string' && targetReps.includes('+')) {
+                    const parts = targetReps.split('+');
+                    if (targetReps.startsWith('(')) {
+                        targetRepsBase = parts[0].trim() + ')';
+                    } else {
+                        targetRepsBase = parts[0].trim();
+                    }
+                    targetRepsDrop = targetReps; // The full string for dropset
+                }
+
+                let repsHtml = `<input type="text" class="set-input reps-input" value="${set.reps || ''}" placeholder="${targetRepsBase}" style="max-width:65px;">`;
+                let weightHtml = `<input type="number" class="set-input weight-input" value="${set.weight || ''}" placeholder="0" style="margin-bottom:4px; max-width:65px;">`;
+                
+                if (set.type.includes('Dropset')) {
+                    repsHtml += `<input type="text" class="set-input reps-drop-input" value="${set.repsDrop || ''}" placeholder="${targetRepsDrop}" style="max-width:65px; margin-left:4px;">`;
+                    weightHtml += `<input type="number" class="set-input weight-drop-input" value="${set.weightDrop || ''}" placeholder="Drop kg" style="margin-bottom:4px; max-width:65px; margin-left:4px;">`;
+                }
+
                 setRow.innerHTML = `
                     <div class="set-number" style="margin-top: 8px;">${setIndex + 1}</div>
-                    <div style="display:flex; flex-direction:column; justify-content: flex-start;">
+                    <div style="display:flex; flex-direction:column; justify-content: flex-start; flex: 1;">
                         <select class="set-type-select">
                             <option value="Calentamiento" ${set.type==='Calentamiento'?'selected':''}>Calentamiento</option>
                             <option value="Aproximación" ${set.type==='Aproximación'?'selected':''}>Aproximación</option>
@@ -1166,13 +1409,12 @@ const renderWorkout = () => {
                         <div class="target-reps-text" style="margin-top: 4px;">Obj: ${targetReps}</div>
                     </div>
                     <div style="display:flex; flex-direction:column; align-items:center; justify-content: flex-start;">
-                        <input type="number" class="set-input weight-input" value="${set.weight || ''}" placeholder="0" style="margin-bottom:4px; max-width:50px;">
-                        <button class="calc-dropset-btn" style="font-size:9px; padding:2px 4px;">Drop</button>
+                        <div style="display:flex;">${weightHtml}</div>
                     </div>
-                    <div style="display:flex; flex-direction:column; align-items:center; justify-content: flex-start;">
-                        <input type="text" class="set-input reps-input" value="${set.reps || ''}" placeholder="-" style="max-width:50px;">
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content: flex-start; margin-left: 8px;">
+                        <div style="display:flex;">${repsHtml}</div>
                     </div>
-                    <div style="display:flex; justify-content: center; margin-top: 4px;">
+                    <div style="display:flex; justify-content: center; margin-top: 4px; padding-left: 8px;">
                         <button class="btn-icon delete-set" style="padding:4px;"><i class="ph ph-trash"></i></button>
                     </div>
                 `;
@@ -1184,7 +1426,9 @@ const renderWorkout = () => {
                 tInput.addEventListener('change', (e) => { set.type = e.target.value; autoSaveWorkout(); renderWorkout(); }); 
                 wInput.addEventListener('change', (e) => { set.weight = parseFloat(e.target.value); autoSaveWorkout(); });
                 rInput.addEventListener('change', (e) => { set.reps = e.target.value; autoSaveWorkout(); });
-                setRow.querySelector('.calc-dropset-btn').addEventListener('click', () => openDropsetCalc(set.weight, wInput));
+                setRow.querySelector('.calc-dropset-btn')?.addEventListener('click', () => openDropsetCalc(set.weight, wInput));
+                const rDropInput = setRow.querySelector('.reps-drop-input');
+                if (rDropInput) rDropInput.addEventListener('change', (e) => { set.repsDrop = e.target.value; autoSaveWorkout(); });
                 
                 setRow.querySelector('.delete-set').addEventListener('click', () => {
                     ex.sets.splice(setIndex, 1);
@@ -1193,20 +1437,18 @@ const renderWorkout = () => {
                 });
                 
                 setsContainer.appendChild(setRow);
+                if (set.restTime && setIndex < ex.sets.length - 1) {
+                    const restDiv = document.createElement('div');
+                    restDiv.style.cssText = "font-size:11px; color:var(--color-heavy); margin: 4px 0 12px 24px; display:flex; align-items:center; gap:4px;";
+                    restDiv.innerHTML = `<i class="ph ph-timer"></i> ${set.restTime}`;
+                    setsContainer.appendChild(restDiv);
+                }
             });
             
             exSection.appendChild(setsContainer);
             
-            const addSetBtn = document.createElement('button');
-            addSetBtn.classList.add('add-set-btn');
-            addSetBtn.textContent = '+ Añadir Serie';
-            addSetBtn.addEventListener('click', () => {
-                const lastSet = ex.sets[ex.sets.length - 1] || { type: 'Efectiva', weight: 0, reps: '' };
-                ex.sets.push({ ...lastSet });
-                autoSaveWorkout();
-                renderWorkout();
-            });
-            exSection.appendChild(addSetBtn);
+            // "Añadir Serie" button removed as per user request
+
             
             const commentDiv = document.createElement('div');
             commentDiv.classList.add('exercise-comments');
@@ -1249,6 +1491,7 @@ const renderWorkout = () => {
         exDiv.appendChild(body);
         content.appendChild(exDiv);
     });
+    } catch(e) { alert("ERROR in renderWorkout: " + e.stack); }
 };
 
 document.getElementById('close-workout').addEventListener('click', () => {
@@ -1278,11 +1521,20 @@ document.getElementById('btn-delete-recurring').addEventListener('click', () => 
         const dayOfWeek = deletedDate.getDay();
         
         state.sessions = state.sessions.filter(s => {
-            if (s.type !== sessionToDelete.type) return true;
             const sDate = parseDateStr(s.date);
-            if (sDate < deletedDate) return true;
-            if (sDate.getDay() !== dayOfWeek) return true;
-            return false;
+            if (sDate < deletedDate) return true; // Mantener sesiones pasadas
+            
+            if (sessionToDelete.blockId) {
+                if (s.blockId === sessionToDelete.blockId) return false;
+            } else {
+                // Fallback para sesiones creadas antes del cambio
+                const baseName = sessionToDelete.name.split(' (Semana')[0];
+                const sBaseName = s.name.split(' (Semana')[0];
+                if (s.type === sessionToDelete.type && sBaseName === baseName && sDate.getDay() === dayOfWeek) {
+                    return false;
+                }
+            }
+            return true;
         });
         
         saveState();
@@ -1479,3 +1731,21 @@ if (state.activeWorkoutState) {
 
 document.querySelector('[data-target="view-calendar"]').click();
 
+
+
+function updateWorkoutBanner() {
+    const banner = document.getElementById('active-workout-banner');
+    if (!banner) return;
+    
+    // Si hay sesion activa y el view-workout NO esta activo
+    if (state.activeWorkoutState && state.activeWorkoutState.startTime && !document.getElementById('view-workout').classList.contains('active')) {
+        banner.classList.add('visible');
+    } else {
+        banner.classList.remove('visible');
+    }
+}
+document.getElementById('active-workout-banner')?.addEventListener('click', () => {
+    if (state.activeWorkoutState && state.activeWorkoutState.startTime) {
+        document.querySelector('.nav-item[data-target="view-workout"]').click();
+    }
+});
