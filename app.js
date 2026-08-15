@@ -77,7 +77,7 @@ navItems.forEach(item => {
                 alert('No hay ningún entrenamiento activo.');
                 return;
             }
-            document.getElementById('view-workout').classList.add('active');
+            startWorkout(state.activeWorkoutState.session);
             navItems.forEach(nav => nav.classList.remove('active'));
             item.classList.add('active');
             updateWorkoutBanner();
@@ -1190,7 +1190,7 @@ const updateTimerUI = () => {
 };
 
 const autoSaveWorkout = () => {
-    if(activeSession) {
+    if(activeSession && state.activeWorkoutState && state.activeWorkoutState.session && state.activeWorkoutState.session.id === activeSession.id) {
         state.activeWorkoutState.session = activeSession;
         saveState();
     }
@@ -1209,7 +1209,9 @@ const startWorkout = (session) => {
     document.getElementById('workout-title').textContent = session.name;
     document.documentElement.style.setProperty('--color-accent', `var(--color-${session.type})`);
     
-    if(state.activeWorkoutState && state.activeWorkoutState.session && state.activeWorkoutState.session.id === session.id) {
+    const isActive = state.activeWorkoutState && state.activeWorkoutState.session && state.activeWorkoutState.session.id === session.id;
+    
+    if(isActive && state.activeWorkoutState.startTime) {
         // Resuming
         activeSession = state.activeWorkoutState.session;
         document.getElementById('btn-start-workout').style.display = 'none';
@@ -1219,29 +1221,42 @@ const startWorkout = (session) => {
         timerInterval = setInterval(updateTimerUI, 1000);
         updateTimerUI();
     } else {
-        // Starting fresh
-        state.activeWorkoutState = {
-            session: activeSession,
-            startTime: null
-        };
+        // Previewing (Starting fresh or looking)
         openExerciseAccordions = [0]; // Open first exercise by default
-        document.getElementById('btn-start-workout').style.display = 'block';
+        
+        const isAnotherRunning = state.activeWorkoutState && state.activeWorkoutState.startTime;
+        const startBtn = document.getElementById('btn-start-workout');
+        startBtn.style.display = 'block';
+        startBtn.textContent = isAnotherRunning ? 'Reemplazar Sesión Activa' : 'Iniciar';
+        
         document.getElementById('workout-timer').style.display = 'none';
         document.getElementById('workout-footer').style.display = 'none';
         document.getElementById('workout-timer').textContent = '00:00';
+        clearInterval(timerInterval);
     }
     
     renderWorkout();
 };
 
 document.getElementById('btn-start-workout').addEventListener('click', (e) => {
+    if (state.activeWorkoutState && state.activeWorkoutState.startTime) {
+        if (!confirm('Ya tienes un entrenamiento en curso. ¿Deseas cancelarlo e iniciar este nuevo?')) {
+            return;
+        }
+    }
+    
+    state.activeWorkoutState = {
+        session: activeSession,
+        startTime: Date.now()
+    };
+    
     e.target.style.display = 'none';
     document.getElementById('workout-timer').style.display = 'block';
     document.getElementById('workout-footer').style.display = 'block';
-    state.activeWorkoutState.startTime = Date.now();
     saveState();
     clearInterval(timerInterval);
     timerInterval = setInterval(updateTimerUI, 1000);
+    updateWorkoutBanner();
 });
 
 const openDropsetCalc = (weight, inputElem) => {
