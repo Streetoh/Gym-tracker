@@ -2226,7 +2226,7 @@ const renderProgressionView = () => {
     const groups = state.groups.filter(g => g !== 'Sin Grupo');
     groups.forEach(g => {
         const card = document.createElement('div');
-        card.style.background = progressionSelectedGroup === g ? 'var(--primary-color)' : 'var(--bg-surface-elevated)';
+        card.style.background = progressionSelectedGroup === g ? 'var(--color-accent)' : 'var(--bg-surface-elevated)';
         card.style.color = progressionSelectedGroup === g ? '#fff' : 'var(--text-primary)';
         card.style.padding = '12px 8px';
         card.style.borderRadius = '8px';
@@ -2282,7 +2282,7 @@ const renderProgressionExerciseList = () => {
         const item = document.createElement('div');
         item.style.padding = '12px';
         item.style.background = progressionSelectedExId === ex.id ? 'rgba(37, 99, 235, 0.1)' : 'var(--bg-surface)';
-        item.style.border = progressionSelectedExId === ex.id ? '1px solid var(--primary-color)' : '1px solid var(--border-color)';
+        item.style.border = progressionSelectedExId === ex.id ? '1px solid var(--color-accent)' : '1px solid var(--border-color)';
         item.style.borderRadius = '8px';
         item.style.fontSize = '14px';
         item.style.fontWeight = progressionSelectedExId === ex.id ? '600' : '400';
@@ -2527,7 +2527,7 @@ const renderEvolutionHistory = () => {
             <div style="padding: 16px; cursor: pointer;" onclick="const d = document.getElementById('${folderId}'); d.style.display = d.style.display === 'none' ? 'block' : 'none';">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <div style="display:flex; align-items:center; gap: 8px;">
-                        <i class="ph ph-folder" style="font-size: 20px; color: var(--primary-color);"></i>
+                        <i class="ph ph-folder" style="font-size: 20px; color: var(--color-accent);"></i>
                         <h4 style="margin:0; font-size:16px;">${dateStr}</h4>
                     </div>
                     <button class="btn-icon" style="color: var(--color-heavy); margin-left: 12px; padding: 4px;" onclick="event.stopPropagation(); deleteEvolution('${item.id}')"><i class="ph ph-trash"></i></button>
