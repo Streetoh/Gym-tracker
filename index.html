@@ -292,6 +292,15 @@
                     </div>
                     <button id="btn-generate-pdf" class="btn-primary full-width" style="padding: 16px;"><i class="ph ph-printer"></i> Imprimir / Guardar PDF</button>
                 </div>
+
+                <hr style="margin: 32px 0; border: none; border-top: 1px solid var(--border-color);">
+                <h3 style="margin-bottom: 16px;">Copia de Seguridad (Datos)</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px;">Guarda una copia de todos tus ejercicios, historial y progresos para no perderlos, o para pasarlos a otro dispositivo.</p>
+                <div style="display:flex; gap: 12px; flex-direction: column;">
+                    <button id="btn-export-data" class="btn-secondary full-width" style="padding: 16px;"><i class="ph ph-download-simple"></i> Exportar Datos (JSON)</button>
+                    <button id="btn-import-data" class="btn-secondary full-width" style="padding: 16px;"><i class="ph ph-upload-simple"></i> Importar Datos (JSON)</button>
+                    <input type="file" id="input-import-data" accept=".json" style="display:none;">
+                </div>
             </section>
 
             <!-- WORKOUT SESSION VIEW (Overlays everything else) -->

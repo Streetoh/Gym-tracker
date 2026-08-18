@@ -723,6 +723,60 @@ window.deleteGroup = (g) => {
     renderExercises();
 };
 
+// --- BACKUP DATA (JSON) ---
+const btnExportData = document.getElementById('btn-export-data');
+if (btnExportData) {
+    btnExportData.addEventListener('click', () => {
+        const dataStr = JSON.stringify(state, null, 2);
+        const blob = new Blob([dataStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `GymTracker_Backup_${formatDate(new Date()).replace(/\//g, '-')}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+}
+
+const btnImportData = document.getElementById('btn-import-data');
+const inputImportData = document.getElementById('input-import-data');
+if (btnImportData && inputImportData) {
+    btnImportData.addEventListener('click', () => {
+        inputImportData.click();
+    });
+    inputImportData.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const importedState = JSON.parse(event.target.result);
+                if (importedState && (importedState.exercises || importedState.sessions)) {
+                    if (confirm("¿Estás seguro de que quieres importar esta copia de seguridad? Se sobreescribirán todos tus datos actuales.")) {
+                        state.exercises = importedState.exercises || [];
+                        state.sessions = importedState.sessions || [];
+                        state.completedWorkouts = importedState.completedWorkouts || [];
+                        state.groups = importedState.groups || ['Sin Grupo'];
+                        state.activeWorkoutState = importedState.activeWorkoutState || null;
+                        
+                        saveState();
+                        alert("Copia de seguridad restaurada con éxito. La aplicación se recargará.");
+                        location.reload();
+                    }
+                } else {
+                    alert("El archivo no parece ser una copia de seguridad válida de GymTracker.");
+                }
+            } catch(err) {
+                alert("Error al leer el archivo JSON.");
+                console.error(err);
+            }
+        };
+        reader.readAsText(file);
+        e.target.value = ''; // Reset input
+    });
+}
+
 // EXCEL IMPORT
 document.getElementById('btn-import-excel').addEventListener('click', () => {
     document.getElementById('input-import-excel').click();
