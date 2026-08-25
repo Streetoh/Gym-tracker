@@ -1,11 +1,37 @@
 const defaultExercises = [
   {
+    "id": "84c8d370-1ce3-4a69-b717-a4c8c723725f",
+    "name": "Aperturas con cable en polea baja",
+    "group": "Pecho",
+    "max1RM": "",
+    "youtubeLink": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
+    "defaults": {
+      "hypertrophy": "(12-15)",
+      "heavy": "(6-8)",
+      "intensity": "(10-12 + al fallo)"
+    }
+  },
+  {
+    "id": "84c8d370-1ce3-4a69-b717-a4c8c723725f",
+    "name": "Aperturas con cable en polea baja",
+    "group": "Pecho",
+    "max1RM": "",
+    "youtubeLink": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
+    "defaults": {
+      "hypertrophy": "(12-15)",
+      "heavy": "(6-8)",
+      "intensity": "(10-12 + al fallo)"
+    }
+  },
+  {
     "id": "91349635-d11e-4ccb-9c0d-dba762c62dad",
     "name": "Prensa de piernas (pies elevados, énfasis posterior) (básico de pierna)",
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/sled-leg-press/sled-leg-press-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -18,7 +44,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/dumbbell-reverse-lunge/dumbbell-reverse-lunge-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -31,7 +57,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/dumbbell-romanian-deadlift/dumbbell-romanian-deadlift-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -70,7 +96,7 @@ const defaultExercises = [
     "group": "Abdominales y core",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -96,7 +122,7 @@ const defaultExercises = [
     "group": "Pecho",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/smith-machine-bench-press/smith-machine-bench-press-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -109,7 +135,7 @@ const defaultExercises = [
     "group": "Pecho",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/incline-dumbbell-fly/incline-dumbbell-fly-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -122,7 +148,7 @@ const defaultExercises = [
     "group": "Pecho",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/decline-dumbbell-fly/decline-dumbbell-fly-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -135,7 +161,7 @@ const defaultExercises = [
     "group": "Bíceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-bicep-curl/cable-bicep-curl-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -148,7 +174,7 @@ const defaultExercises = [
     "group": "Tríceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-tricep-kickback/cable-tricep-kickback-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -161,7 +187,7 @@ const defaultExercises = [
     "group": "Bíceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/incline-bench-press/incline-bench-press-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -174,7 +200,7 @@ const defaultExercises = [
     "group": "Tríceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/tricep-extension/tricep-extension-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -187,7 +213,7 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -200,7 +226,7 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/seated-cable-row/seated-cable-row-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -226,7 +252,7 @@ const defaultExercises = [
     "group": "Hombro",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/shoulder-press/shoulder-press-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -239,7 +265,7 @@ const defaultExercises = [
     "group": "Hombro",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/leaning-cable-lateral-raise/leaning-cable-lateral-raise-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -252,7 +278,7 @@ const defaultExercises = [
     "group": "Hombro",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -265,7 +291,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/squat/squat-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -278,7 +304,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/squat/squat-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -291,7 +317,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/leg-extension/leg-extension-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -304,7 +330,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/lying-leg-curl/lying-leg-curl-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -317,7 +343,7 @@ const defaultExercises = [
     "group": "Abdominales y core",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-woodchopper/cable-woodchopper-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(8-12)",
@@ -343,7 +369,7 @@ const defaultExercises = [
     "group": "Hombro",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/shoulder-press/shoulder-press-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -356,7 +382,7 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/smith-machine-bent-over-row/smith-machine-bent-over-row-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -369,7 +395,7 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -382,7 +408,7 @@ const defaultExercises = [
     "group": "Pecho",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/bench-press/bench-press-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -395,7 +421,7 @@ const defaultExercises = [
     "group": "Hombro",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(6-8)",
@@ -408,7 +434,7 @@ const defaultExercises = [
     "group": "Pecho",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/incline-dumbbell-bench-press/incline-dumbbell-bench-press-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -421,7 +447,7 @@ const defaultExercises = [
     "group": "Hombro",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/shoulder-press/shoulder-press-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -434,7 +460,7 @@ const defaultExercises = [
     "group": "Pecho",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -447,7 +473,7 @@ const defaultExercises = [
     "group": "Hombro",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-lateral-raise/cable-lateral-raise-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -460,7 +486,7 @@ const defaultExercises = [
     "group": "Tríceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -473,7 +499,7 @@ const defaultExercises = [
     "group": "Tríceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -486,7 +512,7 @@ const defaultExercises = [
     "group": "Abdominales y core",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/ab-wheel-rollout/ab-wheel-rollout-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(12-15)",
@@ -499,7 +525,7 @@ const defaultExercises = [
     "group": "Multiarticular",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/deadlift/deadlift-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -512,7 +538,7 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/dumbbell-row/dumbbell-row-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -525,7 +551,7 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -551,7 +577,7 @@ const defaultExercises = [
     "group": "Bíceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/hammer-curl/hammer-curl-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -564,7 +590,7 @@ const defaultExercises = [
     "group": "Hombro",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -577,7 +603,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/smith-machine-squat/smith-machine-squat-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -590,7 +616,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/dumbbell-bulgarian-split-squat/dumbbell-bulgarian-split-squat-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -603,7 +629,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/deadlift/deadlift-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -616,7 +642,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/leg-extension/leg-extension-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -629,7 +655,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/lying-leg-curl/lying-leg-curl-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -642,7 +668,7 @@ const defaultExercises = [
     "group": "Pecho",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/smith-machine-incline-bench-press/smith-machine-incline-bench-press-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -655,7 +681,7 @@ const defaultExercises = [
     "group": "Pecho",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/bench-press/bench-press-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -668,7 +694,7 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -681,7 +707,7 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/dumbbell-row/dumbbell-row-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -694,7 +720,7 @@ const defaultExercises = [
     "group": "Hombro",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-lateral-raise/cable-lateral-raise-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -707,7 +733,7 @@ const defaultExercises = [
     "group": "Hombro",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -720,7 +746,7 @@ const defaultExercises = [
     "group": "Bíceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/dumbbell-curl/dumbbell-curl-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -733,7 +759,7 @@ const defaultExercises = [
     "group": "Tríceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -746,7 +772,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/hip-thrust/hip-thrust-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -759,7 +785,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-pull-through/cable-pull-through-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -772,7 +798,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/sled-leg-press/sled-leg-press-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -785,7 +811,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/leg-extension/leg-extension-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -798,7 +824,7 @@ const defaultExercises = [
     "group": "Abdominales y core",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/side-plank/side-plank-800.jpg",
     "defaults": {
       "hypertrophy": "(15-30 segundos)",
       "heavy": "(15-30 segundos)",
@@ -811,7 +837,7 @@ const defaultExercises = [
     "group": "Abdominales y core",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/plank/plank-800.jpg",
     "defaults": {
       "hypertrophy": "(30-60 segundos)",
       "heavy": "(30-60 segundos)",
@@ -824,7 +850,7 @@ const defaultExercises = [
     "group": "Pecho",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/bench-press/bench-press-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -837,7 +863,7 @@ const defaultExercises = [
     "group": "Pecho",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/machine-chest-fly/machine-chest-fly-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -863,7 +889,7 @@ const defaultExercises = [
     "group": "Bíceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/dumbbell-curl/dumbbell-curl-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -876,7 +902,7 @@ const defaultExercises = [
     "group": "Abdominales y core",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -889,7 +915,7 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -902,7 +928,7 @@ const defaultExercises = [
     "group": "Pecho",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/decline-dumbbell-bench-press/decline-dumbbell-bench-press-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -915,7 +941,7 @@ const defaultExercises = [
     "group": "Hombro",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/seated-dumbbell-lateral-raise/seated-dumbbell-lateral-raise-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(6-8)",
@@ -928,7 +954,7 @@ const defaultExercises = [
     "group": "Bíceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/hammer-curl/hammer-curl-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -941,7 +967,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -954,7 +980,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/sled-leg-press/sled-leg-press-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -967,7 +993,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/dumbbell-romanian-deadlift/dumbbell-romanian-deadlift-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -980,7 +1006,7 @@ const defaultExercises = [
     "group": "Hombro",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/push-press/push-press-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -1006,7 +1032,7 @@ const defaultExercises = [
     "group": "Bíceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(8-12)",
@@ -1019,7 +1045,7 @@ const defaultExercises = [
     "group": "Tríceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(8-12)",
@@ -1032,7 +1058,7 @@ const defaultExercises = [
     "group": "Bíceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/dumbbell-curl/dumbbell-curl-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(8-12)",
@@ -1045,7 +1071,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/deadlift/deadlift-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(4-6)",
@@ -1071,7 +1097,7 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/incline-bench-press/incline-bench-press-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(6-8)",
@@ -1084,7 +1110,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/single-leg-hip-thrust/single-leg-hip-thrust-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -1110,22 +1136,11 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://static.strengthlevel.com/images/exercises/dumbbell-row/dumbbell-row-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
       "intensity": "(8-12 + al fallo)"
     }
   }
-];
-
-const defaultGroups = [
-  "Espalda",
-  "Hombro",
-  "Pecho",
-  "Tríceps",
-  "Bíceps",
-  "Multiarticular",
-  "Piernas",
-  "Abdominales y core"
 ];

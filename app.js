@@ -1,7 +1,623 @@
-// Gym Tracker PWA Logic - Phase 4
+Object.defineProperty(window, 'isApkEnv', {
+    get: function() {
+        if (typeof Capacitor !== 'undefined' && Capacitor.isNativePlatform) return Capacitor.isNativePlatform();
+        if (window.Capacitor && window.Capacitor.isNativePlatform) return window.Capacitor.isNativePlatform();
+        const ua = window.navigator.userAgent;
+        const isAndroid = ua.includes('Android');
+        const isCapacitor = (window.location.hostname === 'localhost' && window.location.port === '') || window.location.protocol === 'file:';
+        return !!window.Capacitor || (isAndroid && isCapacitor);
+    }
+});
 
 let savedExercises = JSON.parse(localStorage.getItem('gym_exercises'));
 let savedGroups = JSON.parse(localStorage.getItem('gym_groups'));
+
+const exerciseTranslations = {
+  "Aperturas con cable en polea baja": {
+    "es": "Aperturas con cable en polea baja",
+    "en": "Low Cable Crossover / Flyes",
+    "ru": "Сведение рук на нижнем блоке (кроссовер)",
+    "et": "Ristivedu alaplokil",
+    "uk": "Зведення рук на нижньому блоці (кросовер)"
+  },
+    "Prensa de piernas (pies elevados, énfasis posterior) (básico de pierna)": {
+        "es": "Prensa de piernas (pies elevados, énfasis posterior) (básico de pierna)",
+        "en": "Leg Press (High Feet, Posterior Focus) (Leg Basic)",
+        "ru": "Жим ногами (высокая постановка, акцент на заднюю поверхность) (базовое)",
+        "et": "Jalapress (kõrge asetus, tagakülje rõhk) (baasharjutus)",
+        "uk": "Жим ногами (висока постановка, акцент на задню поверхню) (базова)"
+    },
+    "Zancada inversa dinámica con mancuernas": {
+        "es": "Zancada inversa dinámica con mancuernas",
+        "en": "Dynamic Dumbbell Reverse Lunge",
+        "ru": "Динамические обратные выпады с гантелями",
+        "et": "Dünaamiline tagurpidi väljaaste hantlitega",
+        "uk": "Динамічні зворотні випади з гантелями"
+    },
+    "Peso muerto rumano con mancuerna (cadena posterior)": {
+        "es": "Peso muerto rumano con mancuerna (cadena posterior)",
+        "en": "Dumbbell Romanian Deadlift (Posterior Chain)",
+        "ru": "Румынская тяга с гантелями (задняя цепь)",
+        "et": "Rumeenia jõutõmme hantlitega (tagakett)",
+        "uk": "Румунська тяга з гантелями (задній ланцюг)"
+    },
+    "Abductor sentado en máquina": {
+        "es": "Abductor sentado en máquina",
+        "en": "Seated Machine Hip Abduction",
+        "ru": "Разведение ног сидя в тренажере",
+        "et": "Jalgade eemaldamine trenažööril istudes",
+        "uk": "Розведення ніг сидячи в тренажері"
+    },
+    "Aductor sentado en máquina": {
+        "es": "Aductor sentado en máquina",
+        "en": "Seated Machine Hip Adduction",
+        "ru": "Сведение ног сидя в тренажере",
+        "et": "Jalgade lähendamine trenažööril istudes",
+        "uk": "Зведення ніг сидячи в тренажері"
+    },
+    "Crunch lateral de rodillas en polea alta": {
+        "es": "Crunch lateral de rodillas en polea alta",
+        "en": "Kneeling High Cable Side Crunch",
+        "ru": "Боковые скручивания на коленях на верхнем блоке",
+        "et": "Küljele kerepainutus põlvedel ülaplokil",
+        "uk": "Бічні скручування на колінах на верхньому блоці"
+    },
+    "Swings con kettlebell": {
+        "es": "Swings con kettlebell",
+        "en": "Kettlebell Swings",
+        "ru": "Махи с гирей",
+        "et": "Sangpommi kiigutamine",
+        "uk": "Махи з гирею"
+    },
+    "Press banca en multipower (básico de pectoral)": {
+        "es": "Press banca en multipower (básico de pectoral)",
+        "en": "Smith Machine Bench Press (Chest Basic)",
+        "ru": "Жим лежа в тренажере Смита (базовое на грудь)",
+        "et": "Lamades surumine Smithi masinal (rinna baasharjutus)",
+        "uk": "Жим лежачи в тренажері Сміта (базова на груди)"
+    },
+    "Aperturas en banco inclinado con mancuernas (pectoral superior)": {
+        "es": "Aperturas en banco inclinado con mancuernas (pectoral superior)",
+        "en": "Incline Dumbbell Flyes (Upper Chest)",
+        "ru": "Разводка гантелей на наклонной скамье (верх груди)",
+        "et": "Hantlite lennutamine kaldpingil (ülarind)",
+        "uk": "Розведення гантелей на похилій лаві (верх грудей)"
+    },
+    "Aperturas en banco declinado con mancuernas (pectoral inferior)": {
+        "es": "Aperturas en banco declinado con mancuernas (pectoral inferior)",
+        "en": "Decline Dumbbell Flyes (Lower Chest)",
+        "ru": "Разводка гантелей на скамье с обратным наклоном (низ груди)",
+        "et": "Hantlite lennutamine negatiivse kaldega pingil (alarind)",
+        "uk": "Розведення гантелей на лаві зі зворотним нахилом (низ грудей)"
+    },
+    "Curl de bíceps unilateral en polea baja codo detrás del cuerpo": {
+        "es": "Curl de bíceps unilateral en polea baja codo detrás del cuerpo",
+        "en": "Single-Arm Cable Bicep Curl (Elbow Behind Body)",
+        "ru": "Сгибание на бицепс одной рукой на нижнем блоке (локоть за корпусом)",
+        "et": "Ühe käega biitsepsi kõverdus alaplokil küünarnukk kere taga",
+        "uk": "Згинання на біцепс однією рукою на нижньому блоці (лікоть за корпусом)"
+    },
+    "Patada de tríceps en polea baja agarre supino": {
+        "es": "Patada de tríceps en polea baja agarre supino",
+        "en": "Underhand Cable Tricep Kickback",
+        "ru": "Разгибание на трицепс назад на нижнем блоке обратным хватом",
+        "et": "Triitsepsi sirutus taha alaplokil althaardega",
+        "uk": "Розгинання на трицепс назад на нижньому блоці зворотним хватом"
+    },
+    "Curl martillo en banco inclinado con mancuernas": {
+        "es": "Curl martillo en banco inclinado con mancuernas",
+        "en": "Incline Dumbbell Hammer Curl",
+        "ru": "Молотковые сгибания на наклонной скамье с гантелями",
+        "et": "Hammer-kõverdused kaldpingil hantlitega",
+        "uk": "Молоткові згинання на похилій лаві з гантелями"
+    },
+    "Extensión de tríceps sentado a 1 brazo por encima de la cabeza con mancuerna": {
+        "es": "Extensión de tríceps sentado a 1 brazo por encima de la cabeza con mancuerna",
+        "en": "Seated Single-Arm Overhead Dumbbell Tricep Extension",
+        "ru": "Французский жим одной рукой сидя с гантелью из-за головы",
+        "et": "Ühe käega triitsepsi sirutus istudes hantliga pea kohalt",
+        "uk": "Французький жим однією рукою сидячи з гантеллю з-за голови"
+    },
+    "Jalón a 1 brazo al pecho sentado con cable en polea alta (espalda unilateral tracciones verticales)": {
+        "es": "Jalón a 1 brazo al pecho sentado con cable en polea alta (espalda unilateral tracciones verticales)",
+        "en": "Single-Arm Seated Lat Pulldown (Unilateral Vertical Pull)",
+        "ru": "Тяга верхнего блока к груди одной рукой сидя (вертикальная тяга)",
+        "et": "Ühe käega ülaploki tõmme rinnale istudes (ühepoolne vertikaalne tõmme)",
+        "uk": "Тяга верхнього блоку до грудей однією рукою сидячи (вертикальна тяга)"
+    },
+    "Remo a 1 brazo sentado con cable en polea baja (espalda unilateral tracciones horizontales)": {
+        "es": "Remo a 1 brazo sentado con cable en polea baja (espalda unilateral tracciones horizontales)",
+        "en": "Single-Arm Seated Cable Row (Unilateral Horizontal Pull)",
+        "ru": "Тяга нижнего блока к поясу одной рукой сидя (горизонтальная тяга)",
+        "et": "Ühe käega alaploki tõmme istudes (ühepoolne horisontaalne tõmme)",
+        "uk": "Тяга нижнього блоку до пояса однією рукою сидячи (горизонтальна тяга)"
+    },
+    "Hiperextensión lumbar (tradicional) (Espalda baja)": {
+        "es": "Hiperextensión lumbar (tradicional) (Espalda baja)",
+        "en": "Hyperextension (Traditional) (Lower Back)",
+        "ru": "Гиперэкстензия (традиционная) (поясница)",
+        "et": "Seljasirutus pingil (traditsiooniline) (alaselg)",
+        "uk": "Гіперекстензія (традиційна) (поперек)"
+    },
+    "Press militar sentado en máquina (básico de hombro)": {
+        "es": "Press militar sentado en máquina (básico de hombro)",
+        "en": "Seated Machine Overhead Press (Shoulder Basic)",
+        "ru": "Армейский жим сидя в тренажере (базовое на плечи)",
+        "et": "Õlapress trenažööril istudes (õlgade baasharjutus)",
+        "uk": "Армійський жим сидячи в тренажері (базова на плечі)"
+    },
+    "Elevación lateral a 1 brazo inclinado con cable en polea baja (hombro medio)": {
+        "es": "Elevación lateral a 1 brazo inclinado con cable en polea baja (hombro medio)",
+        "en": "Leaning Single-Arm Cable Lateral Raise (Lateral Delt)",
+        "ru": "Махи в сторону одной рукой в наклоне на нижнем блоке (средняя дельта)",
+        "et": "Kallutatud ühe käe külgmine tõste alaplokil (keskosa õlg)",
+        "uk": "Махи вбік однією рукою в нахилі на нижньому блоці (середня дельта)"
+    },
+    "Pájaros simultáneos en polea alta (hombro posterior)": {
+        "es": "Pájaros simultáneos en polea alta (hombro posterior)",
+        "en": "High Cable Rear Delt Flyes (Rear Delt)",
+        "ru": "Разведение рук на заднюю дельту на верхнем блоке",
+        "et": "Tagumise õlalihase lennutus ülaplokil",
+        "uk": "Розведення рук на задню дельту на верхньому блоці"
+    },
+    "Sentadilla a cajón en multipower": {
+        "es": "Sentadilla a cajón en multipower",
+        "en": "Smith Machine Box Squat",
+        "ru": "Приседания на ящик в тренажере Смита",
+        "et": "Kükk kastile Smithi masinal",
+        "uk": "Присідання на ящик у тренажері Сміта"
+    },
+    "Sentadilla ATG en multipower (énfasus glúteo)": {
+        "es": "Sentadilla ATG en multipower (énfasus glúteo)",
+        "en": "Smith Machine ATG Squat (Glute Focus)",
+        "ru": "Глубокие приседания (ATG) в тренажере Смита (акцент на ягодицы)",
+        "et": "Sügav kükk (ATG) Smithi masinal (tuhararõhk)",
+        "uk": "Глибокі присідання (ATG) в тренажері Сміта (акцент на сідниці)"
+    },
+    "Extensión de cuádriceps sentado en máquina (cuádriceps aislado)": {
+        "es": "Extensión de cuádriceps sentado en máquina (cuádriceps aislado)",
+        "en": "Seated Leg Extension (Isolated Quads)",
+        "ru": "Разгибание ног сидя в тренажере (изоляция квадрицепса)",
+        "et": "Jalgade sirutamine trenažööril istudes (nelipealihase isolatsioon)",
+        "uk": "Розгинання ніг сидячи в тренажері (ізоляція квадрицепса)"
+    },
+    "Curl femoral tumbado en máquina (femoral aislado)": {
+        "es": "Curl femoral tumbado en máquina (femoral aislado)",
+        "en": "Lying Leg Curl (Isolated Hamstrings)",
+        "ru": "Сгибание ног лежа в тренажере (изоляция бицепса бедра)",
+        "et": "Jalgade kõverdamine kõhuli trenažööril (tagareie isolatsioon)",
+        "uk": "Згинання ніг лежачи в тренажері (ізоляція біцепса стегна)"
+    },
+    "Leñador en polea media": {
+        "es": "Leñador en polea media",
+        "en": "Cable Woodchopper (Middle Pulley)",
+        "ru": "Упражнение «Дровосек» на среднем блоке",
+        "et": "Puuraidur keskmisel plokil",
+        "uk": "Вправа «Дроворуб» на середньому блоці"
+    },
+    "Crunch en V": {
+        "es": "Crunch en V",
+        "en": "V-Ups / V-Crunch",
+        "ru": "Складка на пресс (V-Crunch)",
+        "et": "V-kõhulihaste harjutus",
+        "uk": "Складка на прес (V-Crunch)"
+    },
+    "Press militar sentado con barra (tradicional) (básico de hombro)": {
+        "es": "Press militar sentado con barra (tradicional) (básico de hombro)",
+        "en": "Seated Barbell Military Press (Traditional) (Shoulder Basic)",
+        "ru": "Армейский жим со штангой сидя (традиционный) (базовое на плечи)",
+        "et": "Kangi surumine istudes (traditsiooniline) (õlgade baasharjutus)",
+        "uk": "Армійський жим зі штангою сидячи (традиційний) (базова на плечі)"
+    },
+    "Remo con barra en multipower (espalda tracciones horizontales)": {
+        "es": "Remo con barra en multipower (espalda tracciones horizontales)",
+        "en": "Smith Machine Bent-Over Row (Horizontal Pull)",
+        "ru": "Тяга штанги в наклоне в тренажере Смита (горизонтальная тяга)",
+        "et": "Kangi tõmbed ettekallutatult Smithi masinal (horisontaalne tõmme)",
+        "uk": "Тяга штанги в нахилі в тренажері Сміта (горизонтальна тяга)"
+    },
+    "Jalón al pecho sentado con barra agarre neutro abierto en polea alta (espalda tracciones verticales)": {
+        "es": "Jalón al pecho sentado con barra agarre neutro abierto en polea alta (espalda tracciones verticales)",
+        "en": "Wide Neutral-Grip Lat Pulldown (Vertical Pull)",
+        "ru": "Тяга верхнего блока широким нейтральным хватом (вертикальная тяга)",
+        "et": "Ülaploki tõmme laia neutraalse haardega rinnale (vertikaalne tõmme)",
+        "uk": "Тяга верхнього блоку широким нейтральним хватом (вертикальна тяга)"
+    },
+    "Press banca con mancuernas (pectoral plano y estabilizadores)": {
+        "es": "Press banca con mancuernas (pectoral plano y estabilizadores)",
+        "en": "Flat Dumbbell Bench Press (Chest & Stabilizers)",
+        "ru": "Жим гантелей на горизонтальной скамье (грудь и стабилизаторы)",
+        "et": "Hantlite surumine lamades (rind ja stabiliseerijad)",
+        "uk": "Жим гантелей на горизонтальній лаві (груди і стабілізатори)"
+    },
+    "Pájaros sentado con cable en polea media (hombro posterior)": {
+        "es": "Pájaros sentado con cable en polea media (hombro posterior)",
+        "en": "Seated Cable Rear Delt Flyes (Middle Pulley)",
+        "ru": "Разведение рук на средних блоках сидя (задняя дельта)",
+        "et": "Tagumise õlalihase lennutus istudes keskmisel plokil",
+        "uk": "Розведення рук на середніх блоках сидячи (задня дельта)"
+    },
+    "Press banca inclinado con mancuernas (Pectoral y estabilizadores)": {
+        "es": "Press banca inclinado con mancuernas (Pectoral y estabilizadores)",
+        "en": "Incline Dumbbell Bench Press (Chest & Stabilizers)",
+        "ru": "Жим гантелей на наклонной скамье (грудь и стабилизаторы)",
+        "et": "Hantlite surumine kaldpingil (rind ja stabiliseerijad)",
+        "uk": "Жим гантелей на похилій лаві (груди і стабілізатори)"
+    },
+    "Press militar sentado en multipower (Básico multiarticular de hombro)": {
+        "es": "Press militar sentado en multipower (Básico multiarticular de hombro)",
+        "en": "Smith Machine Overhead Press (Compound Shoulder Basic)",
+        "ru": "Армейский жим сидя в тренажере Смита (базовое на плечи)",
+        "et": "Kangi surumine istudes Smithi masinal (õlgade baasharjutus)",
+        "uk": "Армійський жим сидячи в тренажері Сміта (базова на плечі)"
+    },
+    "Aperturas con cable en polea alta": {
+        "es": "Aperturas con cable en polea alta",
+        "en": "High Cable Crossover / Flyes",
+        "ru": "Сведение рук на верхнем блоке (кроссовер)",
+        "et": "Ristivedu ülaplokil",
+        "uk": "Зведення рук на верхньому блоці (кросовер)"
+    },
+    "Elevaciones laterales tumbado con cable en polea baja": {
+        "es": "Elevaciones laterales tumbado con cable en polea baja",
+        "en": "Lying Cable Lateral Raise (Low Pulley)",
+        "ru": "Махи в сторону лежа на нижнем блоке",
+        "et": "Külgmine tõste lamades alaplokil",
+        "uk": "Махи вбік лежачи на нижньому блоці"
+    },
+    "Extensión de tríceps con cuerda en polea alta": {
+        "es": "Extensión de tríceps con cuerda en polea alta",
+        "en": "High Cable Rope Tricep Pushdown",
+        "ru": "Разгибание на трицепс с канатной рукоятью на верхнем блоке",
+        "et": "Triitsepsi sirutus köiega ülaplokil",
+        "uk": "Розгинання на трицепс з канатною рукояткою на верхньому блоці"
+    },
+    "Extensión de tríceps por encima de la cabeza con barra en polea alta": {
+        "es": "Extensión de tríceps por encima de la cabeza con barra en polea alta",
+        "en": "Overhead Cable Bar Tricep Extension (High Pulley)",
+        "ru": "Разгибание на трицепс из-за головы с прямой рукоятью на верхнем блоке",
+        "et": "Triitsepsi sirutus kangiga pea kohalt ülaplokil",
+        "uk": "Розгинання на трицепс з-за голови з прямою рукояткою на верхньому блоці"
+    },
+    "Rueda abdominal": {
+        "es": "Rueda abdominal",
+        "en": "Ab Wheel Rollout",
+        "ru": "Гимнастический ролик для пресса",
+        "et": "Kõhurull",
+        "uk": "Гімнастичний ролик для преса"
+    },
+    "Peso muerto (tradicional) (básico multiarticular)": {
+        "es": "Peso muerto (tradicional) (básico multiarticular)",
+        "en": "Deadlift (Traditional) (Compound Basic)",
+        "ru": "Становая тяга (классическая) (базовое многосуставное)",
+        "et": "Jõutõmme (traditsiooniline) (baasharjutus)",
+        "uk": "Станова тяга (класична) (базова багатосуглобова)"
+    },
+    "Remo a 1 brazo con barra (espalda unilateral, tracciones horizontales)": {
+        "es": "Remo a 1 brazo con barra (espalda unilateral, tracciones horizontales)",
+        "en": "Single-Arm Barbell Row (Unilateral Horizontal Pull)",
+        "ru": "Тяга штанги одной рукой (односторонняя горизонтальная тяга)",
+        "et": "Ühe käega kangi tõmme (ühepoolne horisontaalne tõmme)",
+        "uk": "Тяга штанги однією рукою (одностороння горизонтальна тяга)"
+    },
+    "Jalón al pecho sentado con agarre neutro cerrado en polea alta (espalda, tracciones verticales)": {
+        "es": "Jalón al pecho sentado con agarre neutro cerrado en polea alta (espalda, tracciones verticales)",
+        "en": "Close Neutral-Grip Lat Pulldown (Vertical Pull)",
+        "ru": "Тяга верхнего блока узким нейтральным хватом (вертикальная тяга)",
+        "et": "Ülaploki tõmme kitsa neutraalse haardega rinnale (vertikaalne tõmme)",
+        "uk": "Тяга верхнього блоку вузьким нейтральним хватом (вертикальна тяга)"
+    },
+    "Curl con barra EZ agarre inverso": {
+        "es": "Curl con barra EZ agarre inverso",
+        "en": "Reverse-Grip EZ Bar Curl",
+        "ru": "Сгибание рук с EZ-грифом обратным хватом",
+        "et": "Biitsepsi kõverdus EZ-kangiga pealthaardes",
+        "uk": "Згинання рук з EZ-грифом зворотним хватом"
+    },
+    "Curl martillo con mancuernas": {
+        "es": "Curl martillo con mancuernas",
+        "en": "Dumbbell Hammer Curl",
+        "ru": "Молотковые сгибания с гантелями",
+        "et": "Hammer-kõverdused hantlitega",
+        "uk": "Молоткові згинання з гантелями"
+    },
+    "Facepull con cuerda en polea alta (Hombro posterior)": {
+        "es": "Facepull con cuerda en polea alta (Hombro posterior)",
+        "en": "Face Pull with Rope (Rear Delt)",
+        "ru": "Тяга к лицу с канатом на верхнем блоке (Facepull)",
+        "et": "Facepull köiega ülaplokil (tagumine õlg)",
+        "uk": "Тяга до обличчя з канатом на верхньому блоці (Facepull)"
+    },
+    "Sentadilla en multipower": {
+        "es": "Sentadilla en multipower",
+        "en": "Smith Machine Squat",
+        "ru": "Приседания в тренажере Смита",
+        "et": "Kükk Smithi masinal",
+        "uk": "Присідання в тренажері Сміта"
+    },
+    "Sentadilla búlgara con mancuerna (énfasis en glúteo)": {
+        "es": "Sentadilla búlgara con mancuerna (énfasis en glúteo)",
+        "en": "Dumbbell Bulgarian Split Squat (Glute Focus)",
+        "ru": "Болгарские выпады с гантелями (акцент на ягодицы)",
+        "et": "Bulgaaria väljaastekükk hantlitega (tuhararõhk)",
+        "uk": "Болгарські випади з гантелями (акцент на сідниці)"
+    },
+    "Peso muerto rumano con barra (tradicional) (cadena posterior)": {
+        "es": "Peso muerto rumano con barra (tradicional) (cadena posterior)",
+        "en": "Barbell Romanian Deadlift (Traditional) (Posterior Chain)",
+        "ru": "Румынская тяга со штангой (классическая) (задняя цепь)",
+        "et": "Rumeenia jõutõmme kangiga (traditsiooniline) (tagakett)",
+        "uk": "Румунська тяга зі штангою (класична) (задній ланцюг)"
+    },
+    "Curl femoral a 1 pierna de pie en máquina": {
+        "es": "Curl femoral a 1 pierna de pie en máquina",
+        "en": "Standing Single-Leg Curl Machine",
+        "ru": "Сгибание одной ноги стоя в тренажере",
+        "et": "Ühe jala kõverdamine seistes trenažööril",
+        "uk": "Згинання однієї ноги стоячи в тренажері"
+    },
+    "Press banca inclinado en multipower (básico multiarticular de pectoral)": {
+        "es": "Press banca inclinado en multipower (básico multiarticular de pectoral)",
+        "en": "Smith Machine Incline Bench Press (Compound Chest Basic)",
+        "ru": "Жим штанги на наклонной скамье в тренажере Смита (базовое на грудь)",
+        "et": "Kaldpingil surumine Smithi masinal (rinna baasharjutus)",
+        "uk": "Жим штанги на похилій лаві в тренажері Сміта (базова на груди)"
+    },
+    "Jalón al pecho sentado con barra agarre prono medio en polea alta (espalda, tracciones verticales)": {
+        "es": "Jalón al pecho sentado con barra agarre prono medio en polea alta (espalda, tracciones verticales)",
+        "en": "Medium Overhand Lat Pulldown (Vertical Pull)",
+        "ru": "Тяга верхнего блока к груди средним прямым хватом (вертикальная тяга)",
+        "et": "Ülaploki tõmme rinnale keskmise pealthaardega (vertikaalne tõmme)",
+        "uk": "Тяга верхнього блоку до грудей середнім прямим хватом (вертикальна тяга)"
+    },
+    "Remo al pecho agarre supino (espalda, tracciones horizontales)": {
+        "es": "Remo al pecho agarre supino (espalda, tracciones horizontales)",
+        "en": "Underhand Barbell Row (Horizontal Pull)",
+        "ru": "Тяга к поясу/груди обратным хватом (горизонтальная тяга)",
+        "et": "Kangi tõmbed rinnale althaardega (horisontaalne tõmme)",
+        "uk": "Тяга до пояса/грудей зворотним хватом (горизонтальна тяга)"
+    },
+    "Elevaciones laterales con cable en polea baja (deltoides medio)": {
+        "es": "Elevaciones laterales con cable en polea baja (deltoides medio)",
+        "en": "Low Cable Lateral Raise (Lateral Delt)",
+        "ru": "Махи в сторону на нижнем блоке (средняя дельта)",
+        "et": "Külgmised tõsted alaplokil (keskosa õlg)",
+        "uk": "Махи вбік на нижньому блоці (середня дельта)"
+    },
+    "Pájaros con cable en polea baja (deltoides posterior)": {
+        "es": "Pájaros con cable en polea baja (deltoides posterior)",
+        "en": "Low Cable Rear Delt Flyes (Rear Delt)",
+        "ru": "Разведение рук в наклоне на нижнем блоке (задняя дельта)",
+        "et": "Tagumise õlalihase lennutus alaplokil",
+        "uk": "Розведення рук у нахилі на нижньому блоці (задня дельта)"
+    },
+    "Curl con barra EZ en polea baja": {
+        "es": "Curl con barra EZ en polea baja",
+        "en": "Low Cable EZ Bar Bicep Curl",
+        "ru": "Сгибание на бицепс с EZ-рукоятью на нижнем блоке",
+        "et": "Biitsepsi kõverdus EZ-sangaga alaplokil",
+        "uk": "Згинання на біцепс з EZ-рукояткою на нижньому блоці"
+    },
+    "Extensión de tríceps con barra en polea alta": {
+        "es": "Extensión de tríceps con barra en polea alta",
+        "en": "High Cable Straight Bar Tricep Pushdown",
+        "ru": "Разгибание на трицепс с прямой рукоятью на верхнем блоке",
+        "et": "Triitsepsi sirutus sirge kangiga ülaplokil",
+        "uk": "Розгинання на трицепс з прямою рукояткою на верхньому блоці"
+    },
+    "Hip thrust (tradicional) (básico de glúteo)": {
+        "es": "Hip thrust (tradicional) (básico de glúteo)",
+        "en": "Barbell Hip Thrust (Traditional) (Glute Basic)",
+        "ru": "Ягодичный мостик (классический) (базовое на ягодицы)",
+        "et": "Puusatõste kangiga (traditsiooniline) (tuhara baasharjutus)",
+        "uk": "Сідничний місток (класичний) (базова на сідниці)"
+    },
+    "Pull through en polea baja (glúteo mayor)": {
+        "es": "Pull through en polea baja (glúteo mayor)",
+        "en": "Cable Pull-Through (Gluteus Maximus)",
+        "ru": "Тяга через ноги на нижнем блоке (Pull Through)",
+        "et": "Pull-through alaplokil (suur tuharalihas)",
+        "uk": "Тяга через ноги на нижньому блоці (Pull Through)"
+    },
+    "Prensa de piernas (tradicional) (básico de pierna)": {
+        "es": "Prensa de piernas (tradicional) (básico de pierna)",
+        "en": "Leg Press (Traditional) (Leg Basic)",
+        "ru": "Жим ногами (классический) (базовое на ноги)",
+        "et": "Jalapress (traditsiooniline) (jalgade baasharjutus)",
+        "uk": "Жим ногами (класичний) (базова на ноги)"
+    },
+    "Extensión de cuádriceps a 1 pierna sentado en máquina": {
+        "es": "Extensión de cuádriceps a 1 pierna sentado en máquina",
+        "en": "Seated Single-Leg Extension Machine",
+        "ru": "Разгибание одной ноги сидя в тренажере",
+        "et": "Ühe jala sirutamine trenažööril istudes",
+        "uk": "Розгинання однієї ноги сидячи в тренажері"
+    },
+    "Plancha lateral (estática, tradicional)": {
+        "es": "Plancha lateral (estática, tradicional)",
+        "en": "Side Plank (Static, Traditional)",
+        "ru": "Боковая планка (статическая, классическая)",
+        "et": "Küljeplank (staatiline, traditsiooniline)",
+        "uk": "Бічна планка (статична, класична)"
+    },
+    "Plancha (tradicional)": {
+        "es": "Plancha (tradicional)",
+        "en": "Plank (Traditional)",
+        "ru": "Планка (классическая)",
+        "et": "Plank (traditsiooniline)",
+        "uk": "Планка (класична)"
+    },
+    "Press banca con barra (tradicional)": {
+        "es": "Press banca con barra (tradicional)",
+        "en": "Barbell Bench Press (Traditional)",
+        "ru": "Жим штанги лежа (классический)",
+        "et": "Lamades surumine kangiga (traditsiooniline)",
+        "uk": "Жим штанги лежачи (класичний)"
+    },
+    "Apertura sentado en máquina": {
+        "es": "Apertura sentado en máquina",
+        "en": "Seated Machine Chest Fly (Pec Deck)",
+        "ru": "Сведение рук в тренажере «Бабочка» (Pec Deck)",
+        "et": "Rinna lennutus trenažööril istudes (Pec Deck)",
+        "uk": "Зведення рук у тренажері «Метелик» (Pec Deck)"
+    },
+    "Pájaros sentado en máquina": {
+        "es": "Pájaros sentado en máquina",
+        "en": "Seated Reverse Fly Machine (Rear Delt)",
+        "ru": "Обратная бабочка в тренажере (задняя дельта)",
+        "et": "Tagumise õlalihase trenažöör (Reverse Pec Deck)",
+        "uk": "Зворотний метелик у тренажері (задня дельта)"
+    },
+    "Curl de bíceps alterno con mancuerna": {
+        "es": "Curl de bíceps alterno con mancuerna",
+        "en": "Alternating Dumbbell Bicep Curl",
+        "ru": "Поочередное сгибание рук с гантелями на бицепс",
+        "et": "Vahelduv biitsepsi kõverdus hantlitega",
+        "uk": "Почергове згинання рук з гантелями на біцепс"
+    },
+    "Crunch abdominal de rodillas con cuerda en polea alta": {
+        "es": "Crunch abdominal de rodillas con cuerda en polea alta",
+        "en": "Kneeling Cable Rope Crunch",
+        "ru": "Скручивания на коленях на блоке с канатом",
+        "et": "Kõhulihaste kerepainutus põlvedel köiega ülaplokil",
+        "uk": "Скручування на колінах на блоці з канатом"
+    },
+    "Pullover con barra en polea alta": {
+        "es": "Pullover con barra en polea alta",
+        "en": "Straight-Arm Lat Pulldown / Cable Pullover",
+        "ru": "Пулловер на верхнем блоке с прямой рукоятью",
+        "et": "Pullover kangiga ülaplokil",
+        "uk": "Пуловер на верхньому блоці з прямою рукояткою"
+    },
+    "Press banca declinado con mancuernas": {
+        "es": "Press banca declinado con mancuernas",
+        "en": "Decline Dumbbell Bench Press",
+        "ru": "Жим гантелей на наклонной скамье головой вниз",
+        "et": "Surumine hantlitega negatiivsel kaldel",
+        "uk": "Жим гантелей на похилій лаві головою вниз"
+    },
+    "Elevaciones laterales sentado con mancuernas": {
+        "es": "Elevaciones laterales sentado con mancuernas",
+        "en": "Seated Dumbbell Lateral Raise",
+        "ru": "Махи гантелями в стороны сидя",
+        "et": "Külgmised tõsted hantlitega istudes",
+        "uk": "Махи гантелями вбік сидячи"
+    },
+    "Curl de bíceps en banco scott con barra EZ": {
+        "es": "Curl de bíceps en banco scott con barra EZ",
+        "en": "Preacher Curl with EZ Bar",
+        "ru": "Сгибание рук на скамье Скотта с EZ-грифом",
+        "et": "Biitsepsi kõverdus Scotti pingil EZ-kangiga",
+        "uk": "Згинання рук на лаві Скотта з EZ-грифом"
+    },
+    "Patada de glúteo a 1 pierna con cable en polea baja": {
+        "es": "Patada de glúteo a 1 pierna con cable en polea baja",
+        "en": "Single-Leg Cable Glute Kickback",
+        "ru": "Махи назад одной ногой на нижнем блоке на ягодицы",
+        "et": "Ühe jala tuharasirutus taha alaplokil",
+        "uk": "Махи назад однією ногою на нижньому блоці на сідниці"
+    },
+    "Prensa de piernas (pies abajo)": {
+        "es": "Prensa de piernas (pies abajo)",
+        "en": "Leg Press (Low Feet Placement, Quad Focus)",
+        "ru": "Жим ногами (низкая постановка, акцент на квадрицепс)",
+        "et": "Jalapress (madal jalgade asetus)",
+        "uk": "Жим ногами (низька постановка, акцент на квадрицепс)"
+    },
+    "Peso muerto rumano a 1 pierna con mancuernas": {
+        "es": "Peso muerto rumano a 1 pierna con mancuernas",
+        "en": "Single-Leg Dumbbell Romanian Deadlift",
+        "ru": "Румынская тяга на одной ноге с гантелями",
+        "et": "Ühe jala Rumeenia jõutõmme hantlitega",
+        "uk": "Румунська тяга на одній нозі з гантелями"
+    },
+    "Push press (tradicional)": {
+        "es": "Push press (tradicional)",
+        "en": "Push Press (Traditional)",
+        "ru": "Швунг жимовой (классический)",
+        "et": "Push press (traditsiooniline)",
+        "uk": "Швунг жимовий (класичний)"
+    },
+    "Six ways con mancuernas": {
+        "es": "Six ways con mancuernas",
+        "en": "Dumbbell 6-Way Shoulder Raises",
+        "ru": "Упражнение 6 Ways с гантелями на плечи",
+        "et": "6-suunaline õlatõste hantlitega",
+        "uk": "Вправа 6 Ways з гантелями на плечі"
+    },
+    "Curl martillo con cuerda en polea baja": {
+        "es": "Curl martillo con cuerda en polea baja",
+        "en": "Low Cable Rope Hammer Curl",
+        "ru": "Молотковые сгибания с канатной рукоятью на нижнем блоке",
+        "et": "Hammer-kõverdus köiega alaplokil",
+        "uk": "Молоткові згинання з канатною рукояткою на нижньому блоці"
+    },
+    "Extensión de tríceps por encima de la cabeza con cuerda en polea alta": {
+        "es": "Extensión de tríceps por encima de la cabeza con cuerda en polea alta",
+        "en": "Overhead Rope Cable Tricep Extension",
+        "ru": "Разгибание на трицепс из-за головы с канатом на верхнем блоке",
+        "et": "Triitsepsi sirutus köiega pea kohalt ülaplokil",
+        "uk": "Розгинання на трицепс з-за голови з канатом на верхньому блоці"
+    },
+    "Curl de bíceps con mancuerna": {
+        "es": "Curl de bíceps con mancuerna",
+        "en": "Dumbbell Bicep Curl",
+        "ru": "Сгибание рук с гантелями на бицепс",
+        "et": "Biitsepsi kõverdus hantlitega",
+        "uk": "Згинання рук з гантелями на біцепс"
+    },
+    "Peso muerto rumano en multipower": {
+        "es": "Peso muerto rumano en multipower",
+        "en": "Smith Machine Romanian Deadlift",
+        "ru": "Румынская тяга в тренажере Смита",
+        "et": "Rumeenia jõutõmme Smithi masinal",
+        "uk": "Румунська тяга в тренажері Сміта"
+    },
+    "Hollowman": {
+        "es": "Hollowman",
+        "en": "Hollow Body Hold",
+        "ru": "Упражнение «Лодочка» / Холлоу (Hollow Hold)",
+        "et": "Hollow body hoid",
+        "uk": "Вправа «Човник» / Холлоу (Hollow Hold)"
+    },
+    "Remo en banco inclinado con mancuernas": {
+        "es": "Remo en banco inclinado con mancuernas",
+        "en": "Incline Dumbbell Chest-Supported Row",
+        "ru": "Тяга гантелей на наклонной скамье с упором в грудь",
+        "et": "Hantlite tõmbed toetudes kaldpingile",
+        "uk": "Тяга гантелей на похилій лаві з упором у груди"
+    },
+    "Hip thrust a 1 pierna en máquina": {
+        "es": "Hip thrust a 1 pierna en máquina",
+        "en": "Single-Leg Machine Hip Thrust",
+        "ru": "Ягодичный мостик на одной ноге в тренажере",
+        "et": "Ühe jala puusatõste trenažööril",
+        "uk": "Сідничний місток на одній нозі в тренажері"
+    },
+    "Crunch abdominal en banco declinado con giro": {
+        "es": "Crunch abdominal en banco declinado con giro",
+        "en": "Decline Twisting Abdominal Crunch",
+        "ru": "Скручивания на римском стуле / наклонной скамье с поворотом",
+        "et": "Kerepainutus pöördega negatiivse kaldega pingil",
+        "uk": "Скручування на римському стільці / похилій лаві з поворотом"
+    },
+    "Remo a 1 brazo con mancuerna": {
+        "es": "Remo a 1 brazo con mancuerna",
+        "en": "Single-Arm Dumbbell Row",
+        "ru": "Тяга гантели в наклоне одной рукой",
+        "et": "Ühe käega hantli tõmme ettekallutatult",
+        "uk": "Тяга гантелі в нахилі однією рукою"
+    }
+};
+
+function getTrExName(originalName) {
+    if (!originalName) return '';
+    const lang = (typeof state !== 'undefined' && state.language) ? state.language : 'es';
+    if (exerciseTranslations[originalName] && exerciseTranslations[originalName][lang]) {
+        return exerciseTranslations[originalName][lang];
+    }
+    return originalName;
+}
 
 let state = {
     language: localStorage.getItem('gym_language') || 'es',
@@ -11,19 +627,75 @@ let state = {
     currentWeekStart: new Date(),
     completedWorkouts: JSON.parse(localStorage.getItem('gym_completed')) || [],
     groups: (savedGroups && savedGroups.length > 0) ? savedGroups : (typeof defaultGroups !== 'undefined' ? defaultGroups : ['Sin Grupo']),
-    activeWorkoutState: JSON.parse(localStorage.getItem('gym_active_workout')) || null
+    activeWorkoutState: JSON.parse(localStorage.getItem('gym_active_workout')) || null,
+    evolution: JSON.parse(localStorage.getItem('gym_evolution')) || []
 };
 
+// Reconcile missing default exercises and images
+if (typeof defaultExercises !== 'undefined') {
+    defaultExercises.forEach(defEx => {
+        let existing = state.exercises.find(ex => ex.id === defEx.id);
+        if (!existing) {
+            state.exercises.push(defEx);
+        } else if (defEx.imageData && existing.imageData === undefined) {
+            existing.imageData = defEx.imageData;
+        }
+    });
+}
+
 // UI State
-let openExerciseAccordions = []; // Store indices of open exercises to persist across re-renders
+let openExerciseAccordions = [];
 
 // Utils
+// Notificación de entrenamiento activo
+window.manageWorkoutNotification = async (show) => {
+    if (window.Capacitor && window.Capacitor.Plugins.LocalNotifications) {
+        const { LocalNotifications } = window.Capacitor.Plugins;
+        try {
+            if (show) {
+                let perm = await LocalNotifications.checkPermissions();
+                if (perm.display !== 'granted') {
+                    perm = await LocalNotifications.requestPermissions();
+                }
+                if (perm.display === 'granted') {
+                    try {
+                        await LocalNotifications.createChannel({
+                            id: 'workout_active',
+                            name: 'Entrenamientos Activos',
+                            importance: 4,
+                            visibility: 1
+                        });
+                    } catch (e) {}
+
+                    await LocalNotifications.schedule({
+                        notifications: [
+                            {
+                                title: "Entrenamiento en curso",
+                                body: "Tienes un entrenamiento activo. Pulsa para continuar.",
+                                id: 1,
+                                ongoing: true,
+                                autoCancel: false,
+                                channelId: 'workout_active'
+                            }
+                        ]
+                    });
+                }
+            } else {
+                await LocalNotifications.cancel({ notifications: [{ id: 1 }] });
+            }
+        } catch (e) {
+            console.error("Notification Error:", e);
+        }
+    }
+};
+
 const saveState = () => {
     localStorage.setItem('gym_exercises', JSON.stringify(state.exercises));
     localStorage.setItem('gym_sessions', JSON.stringify(state.sessions));
     localStorage.setItem('gym_completed', JSON.stringify(state.completedWorkouts));
     localStorage.setItem('gym_groups', JSON.stringify(state.groups));
     localStorage.setItem('gym_active_workout', JSON.stringify(state.activeWorkoutState));
+    localStorage.setItem('gym_evolution', JSON.stringify(state.evolution));
 };
 
 const formatDate = (date) => {
@@ -74,7 +746,7 @@ navItems.forEach(item => {
         
         if (target === 'view-workout') {
             if (!(state.activeWorkoutState && state.activeWorkoutState.startTime)) {
-                alert('No hay ningún entrenamiento activo.');
+                alert(getT('alerts.noActiveWorkout') || 'No active workout.');
                 return;
             }
             startWorkout(state.activeWorkoutState.session);
@@ -100,18 +772,18 @@ navItems.forEach(item => {
         headerAction.classList.add('hidden');
         document.getElementById('header-edit-switch').style.display = target === 'view-calendar' ? 'flex' : 'none';
         if (target === 'view-calendar') {
-            headerTitle.textContent = 'Calendario';
+            headerTitle.textContent = getT('header.calendar');
             headerAction.classList.remove('hidden');
-            headerAction.innerHTML = '<i class="ph ph-calendar-plus"></i> <span style="font-size:14px; font-weight:600; margin-left:4px;" data-i18n="calendar.createSession">Crear sesión</span>';
+            headerAction.innerHTML = `<i class="ph ph-calendar-plus"></i> <span style="font-size:14px; font-weight:600; margin-left:4px;" data-i18n="calendar.createSession">${getT('calendar.createSession')}</span>`;
             headerAction.style.width = 'auto';
             headerAction.style.padding = '0 12px';
             headerAction.style.borderRadius = '16px';
             headerAction.onclick = () => { editingSessionId = null; openModal(modalEventType); };
             renderCalendar();
         } else if (target === 'view-exercises') {
-            headerTitle.textContent = 'Ejercicios';
+            headerTitle.textContent = getT('header.exercises');
             headerAction.classList.remove('hidden');
-            headerAction.innerHTML = '<i class="ph ph-plus"></i> <span style="font-size:14px; font-weight:600; margin-left:4px;">Crear ejercicio</span>';
+            headerAction.innerHTML = `<i class="ph ph-plus"></i> <span style="font-size:14px; font-weight:600; margin-left:4px;">${getT('modals.exercise.title')}</span>`;
             headerAction.style.width = 'auto';
             headerAction.style.padding = '0 12px';
             headerAction.style.borderRadius = '16px';
@@ -124,12 +796,16 @@ navItems.forEach(item => {
                 document.getElementById('exercise-youtube').value = '';
                 document.getElementById('exercise-image').value = '';
                 document.getElementById('exercise-image-preview').style.display = 'none';
+                document.getElementById('btn-remove-exercise-image').style.display = 'none';
                 document.getElementById('exercise-image-data').value = '';
                 
                 const select = document.getElementById('exercise-group');
                 select.innerHTML = '';
                 state.groups.forEach(g => {
-                    select.innerHTML += `<option value="${g}">${g}</option>`;
+                    let gKey = g === 'Abdominales y core' ? 'core' : (g === 'Tríceps' ? 'triceps' : (g === 'Bíceps' ? 'biceps' : g.toLowerCase()));
+                    let trGroup = getT('groups.' + gKey);
+                    trGroup = trGroup !== 'groups.' + g.toLowerCase() ? trGroup : g;
+                    select.innerHTML += `<option value="${g}">${trGroup}</option>`;
                 });
                 
                 document.getElementById('btn-delete-exercise').style.display = 'none';
@@ -139,16 +815,16 @@ navItems.forEach(item => {
             };
             renderExercises();
         } else if (target === 'view-history') {
-            headerTitle.textContent = 'Historial';
+            headerTitle.textContent = getT('header.history');
             renderGlobalHistory();
         } else if (target === 'view-progression') {
-            headerTitle.textContent = 'Progresión';
+            headerTitle.textContent = getT('header.progression');
             if (typeof renderProgressionView !== 'undefined') renderProgressionView();
         } else if (target === 'view-evolution') {
-            headerTitle.textContent = 'Evolución';
+            headerTitle.textContent = getT('header.evolution');
             if (typeof renderEvolutionHistory !== 'undefined') renderEvolutionHistory();
         } else if (target === 'view-export') {
-            headerTitle.textContent = 'Exportar';
+            headerTitle.textContent = getT('header.export');
             if (typeof renderExportList !== 'undefined') renderExportList();
         }
     });
@@ -173,11 +849,11 @@ window.selectEventType = (type) => {
     }
     
     if(type === 'routine') {
-        document.getElementById('modal-routine-title').textContent = 'Añadir Bloque (4 sem)';
+        document.getElementById('modal-routine-title').textContent = getT('modals.routine.title');
         document.getElementById('routine-duration').value = '4';
         openModal(modalAddRoutine);
     } else if (type === 'workout') {
-        document.getElementById('modal-routine-title').textContent = 'Añadir Entreno (Hoy)';
+        document.getElementById('modal-routine-title').textContent = getT('modals.add.workout');
         document.getElementById('routine-duration').value = '1';
         openModal(modalAddRoutine);
     } else if (type === 'goal') {
@@ -330,191 +1006,1250 @@ document.getElementById('btn-open-month-picker')?.addEventListener('click', () =
 
 
 const translations = {
-    es: {
-        nav: { calendar: "Calendario", exercises: "Ejercicios", history: "Historial", workout: "En curso" },
-        header: { title: "Calendario" },
-        calendar: {
-            today: "Hoy", dayPlan: "Plan para el día", selectDay: "Selecciona un día",
-            week: "Semana", months: ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],
-            days: ["L", "M", "X", "J", "V", "S", "D"]
+    "es": {
+        "setTypes": {
+            "warmup": "Calentamiento",
+            "approach": "Aproximación",
+            "effective": "Efectiva",
+            "failure": "Al fallo",
+            "dropset": "Dropset",
+            "dropsetFailure": "Dropset fallo"
         },
-        exercises: { search: "Buscar ejercicios...", empty: "No hay ejercicios. Añade uno nuevo." },
-        history: { title: "Registro de Entrenamientos", empty: "No hay entrenamientos completados aún." },
-        workout: { title: "Entrenamiento", start: "Iniciar", finish: "Finalizar Entrenamiento", finishConfirm: "¿Finalizar entrenamiento?", sets: "Series" },
-        common: { cancel: "Cancelar", add: "Añadir", delete: "Eliminar", confirm: "Confirmar", edit: "Editar", save: "Guardar", yes: "Sí", no: "No", ok: "OK", create: "Crear" },
-        types: { hypertrophy: "Hipertrofia", heavy: "Pesados", intensity: "Alta Int.", workout: "Entrenamiento", goal: "Objetivo de Pasos" },
-        modals: {
-            add: { title: "¿Qué quieres añadir?", block: "Bloque 4 Semanas", workout: "Entrenamiento Suelto (Hoy)", goal: "Objetivo de Pasos (Hoy)" },
-            delete: { title: "Eliminar Sesión", single: "Solo esta sesión", recurring: "Esta sesión y de semanas futuras", confirm: "¿Eliminar sesión?" },
-            goal: { title: "Objetivo de Pasos", desc: "Dado que el navegador no puede acceder automáticamente a Samsung Health, deberás apuntar aquí tu objetivo y marcarlo como completado al final del día.", label: "Pasos Objetivo (ej. 10000)", save: "Guardar Objetivo", reached: "¡Objetivo alcanzado!" },
-            picker: { title: "Ir a Fecha" },
-            groups: { title: "Gestionar Grupos", new: "Nuevo Grupo..." },
-            routine: { title: "Añadir Bloque (4 sem)", type: "Tipo de Sesión", name: "Nombre", namePlaceholder: "Ej. Torso Pesado", selected: "Ejercicios Seleccionados", selectBtn: "Seleccionar Ejercicios", createSuperset: "Crear Superserie", schedule: "Programar" },
-            selectEx: { title: "Elige Ejercicios" },
-            exercise: { title: "Nuevo Ejercicio", editTitle: "Editar ejercicio", name: "Nombre del ejercicio", namePlaceholder: "Ej. Press de Banca", group: "Grupo (carpeta)", youtube: "Enlace YouTube (opcional)", image: "Imagen adjunta (opcional)", max1rm: "1RM Actual (Manual) (kg)", repsHyp: "Reps. (Hipertrofia)", repsHea: "Reps. (Pesado)", repsInt: "Reps. (Alta Int.)", save: "Guardar ejercicio" },
-            dropset: { title: "Calculadora Dropset", currentWeight: "Peso actual:" },
-inlineHistory: { title: "Historial del Ejercicio" }
+        "nav": {
+            "calendar": "Calendario",
+            "exercises": "Ejercicios",
+            "history": "Historial",
+            "workout": "En curso",
+            "progression": "Progresión",
+            "evolution": "Evolución",
+            "export": "Exp / Imp"
         },
-        language: { select: "Seleccionar Idioma" },
-        misc: { supersetOf: "Superserie de", groupUnassigned: "Sin Grupo", steps: "Pasos" }
-    ,
-        evolution: {
-            measurementsTitle: "Medidas Corporales (cm)",
-            m1: "1. Pecho",
-            m2: "2. Brazo Izq.",
-            m3: "3. Brazo Der.",
-            m4: "4. Abdomen",
-            m5: "5. Cintura",
-            m6: "6. Caderas",
-            m7: "7. Muslo Izq.",
-            m8: "8. Muslo Der."
+        "header": {
+            "title": "Calendario",
+            "calendar": "Calendario",
+            "exercises": "Ejercicios",
+            "history": "Historial",
+            "workout": "Entrenamiento",
+            "workoutActive": "En curso",
+            "progression": "Progresión",
+            "evolution": "Evolución",
+            "export": "Exportar/Importar"
         },
+        "calendar": {
+            "today": "Hoy",
+            "dayPlan": "Plan para el día",
+            "selectDay": "Selecciona un día",
+            "week": "Semana",
+            "months": [
+                "Enero",
+                "Febrero",
+                "Marzo",
+                "Abril",
+                "Mayo",
+                "Junio",
+                "Julio",
+                "Agosto",
+                "Septiembre",
+                "Octubre",
+                "Noviembre",
+                "Diciembre"
+            ],
+            "days": [
+                "L",
+                "M",
+                "X",
+                "J",
+                "V",
+                "S",
+                "D"
+            ],
+            "createSession": "Crear Sesión",
+            "editMode": "Modo Edición",
+            "viewMode": "Modo Lectura",
+            "emptyDay": "No hay entrenamientos para este día."
+        },
+        "exercises": {
+            "search": "Buscar ejercicios...",
+            "empty": "No hay ejercicios. Añade uno nuevo."
+        },
+        "history": {
+            "title": "Registro de Entrenamientos",
+            "empty": "No hay entrenamientos completados aún.",
+            "deleteAllConfirm": "¿Eliminar todos los entrenamientos del historial? Esta acción no se puede deshacer."
+        },
+        "workout": {
+            "title": "Entrenamiento",
+            "start": "Iniciar",
+            "finish": "Finalizar Entrenamiento",
+            "finishConfirm": "¿Finalizar entrenamiento?",
+            "sets": "Series",
+            "series": "Serie",
+            "addSet": "Añadir serie",
+            "cancel": "Cancelar",
+            "replaceConfirm": "Ya tienes un entrenamiento en curso. ¿Deseas cancelarlo e iniciar este nuevo?",
+            "cancelConfirm": "¿Estás seguro de que deseas cancelar el entrenamiento? Se perderán los datos de esta sesión."
+        },
+        "common": {
+            "cancel": "Cancelar",
+            "add": "Añadir",
+            "delete": "Eliminar",
+            "confirm": "Confirmar",
+            "edit": "Editar",
+            "save": "Guardar",
+            "yes": "Sí",
+            "no": "No",
+            "ok": "OK",
+            "create": "Crear",
+            "deleteAll": "Eliminar Todo"
+        },
+        "types": {
+            "hypertrophy": "Hipertrofia",
+            "heavy": "Pesados",
+            "intensity": "Alta Int.",
+            "workout": "Entrenamiento",
+            "goal": "Objetivo de Pasos"
+        },
+        "alerts": {
+            "noActiveWorkout": "No hay ningún entrenamiento activo.",
+            "nameRequired": "Pon un nombre al ejercicio",
+            "supersetMin": "Selecciona al menos 2 elementos para crear una superserie.",
+            "exerciseRequired": "Selecciona al menos un ejercicio.",
+            "weightRequired": "Por favor, introduce el peso.",
+            "saveError": "Error al guardar: ",
+            "backupSuccess": "Copia de seguridad guardada correctamente.",
+            "exportError": "Error al exportar: ",
+            "importSuccess": "Datos importados correctamente. La aplicación se reiniciará.",
+            "readError": "Error al leer el archivo: ",
+            "exportMin": "Por favor, selecciona al menos un entrenamiento para exportar.",
+            "exportNotFound": "No se encontraron entrenamientos planificados con los IDs seleccionados.",
+            "workoutFinished": "¡Entrenamiento Finalizado! Duración: "
+        },
+        "modals": {
+            "add": {
+                "title": "¿Qué quieres añadir?",
+                "block": "Bloque 4 Semanas",
+                "workout": "Entrenamiento Suelto (Hoy)",
+                "goal": "Objetivo de Pasos (Hoy)"
+            },
+            "delete": {
+                "title": "Eliminar Sesión",
+                "single": "Solo esta sesión",
+                "recurring": "Esta sesión y de semanas futuras",
+                "confirm": "¿Eliminar sesión?"
+            },
+            "goal": {
+                "title": "Objetivo de Pasos",
+                "desc": "Dado que el navegador no puede acceder automáticamente a Samsung Health, deberás apuntar aquí tu objetivo y marcarlo como completado al final del día.",
+                "label": "Pasos Objetivo (ej. 10000)",
+                "save": "Guardar Objetivo",
+                "reached": "¡Objetivo alcanzado!"
+            },
+            "picker": {
+                "title": "Ir a Fecha"
+            },
+            "groups": {
+                "title": "Gestionar Grupos",
+                "new": "Nuevo Grupo...",
+                "espalda": "Espalda",
+                "hombro": "Hombro",
+                "pecho": "Pecho",
+                "triceps": "Tríceps",
+                "biceps": "Bíceps",
+                "multiarticular": "Multiarticular",
+                "piernas": "Piernas",
+                "core": "Abdominales y core",
+                "todos": "Todos"
+            },
+            "routine": {
+                "title": "Añadir Bloque (4 sem)",
+                "type": "Tipo de Sesión",
+                "name": "Nombre",
+                "namePlaceholder": "Ej. Torso Pesado",
+                "selected": "Ejercicios Seleccionados",
+                "selectBtn": "Seleccionar Ejercicios",
+                "createSuperset": "Crear Superserie",
+                "schedule": "Programar"
+            },
+            "selectEx": {
+                "title": "Elige Ejercicios"
+            },
+            "exercise": {
+                "title": "Nuevo Ejercicio",
+                "editTitle": "Editar ejercicio",
+                "name": "Nombre del ejercicio",
+                "namePlaceholder": "Ej. Press de Banca",
+                "group": "Grupo (carpeta)",
+                "youtube": "Enlace YouTube (opcional)",
+                "image": "Imagen adjunta (opcional)",
+                "max1rm": "1RM Actual (Manual) (kg)",
+                "repsHyp": "Reps. (Hipertrofia)",
+                "repsHea": "Reps. (Pesado)",
+                "repsInt": "Reps. (Alta Int.)",
+                "save": "Guardar ejercicio",
+                "prHyp": "PR (Hipertrofia)",
+                "prHeavy": "PR (Pesadas)"
+            },
+            "dropset": {
+                "title": "Calculadora Dropset",
+                "currentWeight": "Peso actual:"
+            },
+            "inlineHistory": {
+                "title": "Historial del Ejercicio"
+            }
+        },
+        "evolution": {
+            "measurementsTitle": "Medidas Corporales (cm)",
+            "newRecord": "Nuevo Registro",
+            "saveRecord": "Guardar Registro",
+            "m1": "1. Pecho",
+            "m2": "2. Brazo Izq.",
+            "m3": "3. Brazo Der.",
+            "m4": "4. Abdomen",
+            "m5": "5. Cintura",
+            "m6": "6. Caderas",
+            "m7": "7. Muslo Izq.",
+            "m8": "8. Muslo Der.",
+            "desc": "Registra y observa tus cambios físicos, medidas corporales, peso y porcentaje de grasa con el paso del tiempo.",
+            "weightPlaceholder": "Peso (kg)",
+            "bfPlaceholder": "% Grasa",
+            "photosLabel": "Fotos (Frontal, Lateral, Espalda)"
+        },
+        "export": {
+            "desc": "Guarda una copia de todos tus datos para no perderlos, o pásalos a otro dispositivo.",
+            "exportBtn": "Exportar Datos (JSON)",
+            "importBtn": "Importar Datos (JSON)",
+            "modes": {
+                "single": "Individuales",
+                "block": "Bloques",
+                "calendar": "Calendario"
+            },
+            "selected": "seleccionados",
+            "deselectAll": "Deseleccionar todo",
+            "selectDesc": "Selecciona los entrenamientos que deseas exportar.",
+            "printPdf": "Imprimir / Guardar PDF",
+            "exportPlanned": "Exportar sesiones",
+            "importPlanned": "Importar sesiones"
+        },
+        "groups": {
+            "espalda": "Espalda",
+            "hombro": "Hombro",
+            "pecho": "Pecho",
+            "triceps": "Tríceps",
+            "biceps": "Bíceps",
+            "multiarticular": "Multiarticular",
+            "piernas": "Piernas",
+            "core": "Abdominales y core",
+            "todos": "Todos"
+        },
+        "language": {
+            "select": "Seleccionar Idioma"
+        },
+        "misc": {
+            "supersetOf": "Superserie de",
+            "groupUnassigned": "Sin Grupo",
+            "steps": "Pasos"
+        },
+        "progression": {
+            "searchPlaceholder": "Buscar ejercicio..."
+        }
     },
-    en: {
-        nav: { calendar: "Calendar", exercises: "Exercises", history: "History" },
-        header: { title: "Calendar" },
-        calendar: {
-            today: "Today", dayPlan: "Daily Plan", selectDay: "Select a day",
-            week: "Week", months: ["January","February","March","April","May","June","July","August","September","October","November","December"],
-            days: ["M", "T", "W", "T", "F", "S", "S"]
+    "en": {
+        "setTypes": {
+            "warmup": "Warm-up",
+            "approach": "Approach",
+            "effective": "Effective",
+            "failure": "Failure",
+            "dropset": "Dropset",
+            "dropsetFailure": "Dropset failure"
         },
-        exercises: { search: "Search exercises...", empty: "No exercises. Add a new one." },
-        history: { title: "Workout Log", empty: "No completed workouts yet." },
-        workout: { title: "Workout", start: "Start", finish: "Finish Workout", finishConfirm: "Finish workout?", sets: "Sets" },
-        common: { cancel: "Cancel", add: "Add", delete: "Delete", confirm: "Confirm", edit: "Edit", save: "Save", yes: "Yes", no: "No", ok: "OK", create: "Create" },
-        types: { hypertrophy: "Hypertrophy", heavy: "Heavy", intensity: "High Int.", workout: "Workout", goal: "Step Goal" },
-        modals: {
-            add: { title: "What to add?", block: "4-Week Block", workout: "Single Workout (Today)", goal: "Step Goal (Today)" },
-            delete: { title: "Delete Session", single: "Only this session", recurring: "This session and future ones", confirm: "Delete session?" },
-            goal: { title: "Step Goal", desc: "Since the browser cannot automatically access Samsung Health, record your goal here and mark it completed at the end of the day.", label: "Target Steps (e.g. 10000)", save: "Save Goal", reached: "Goal reached!" },
-            picker: { title: "Go to Date" },
-            groups: { title: "Manage Groups", new: "New Group..." },
-            routine: { title: "Add Block (4 wks)", type: "Session Type", name: "Name", namePlaceholder: "e.g. Heavy Upper", selected: "Selected Exercises", selectBtn: "Select Exercises", createSuperset: "Create Superset", schedule: "Schedule" },
-            selectEx: { title: "Choose Exercises" },
-            exercise: { title: "New Exercise", editTitle: "Edit Exercise", name: "Exercise Name", namePlaceholder: "e.g. Bench Press", group: "Group (Folder)", youtube: "YouTube Link (Optional)", image: "Attached Image (Optional)", max1rm: "Current 1RM (Manual) (kg)", repsHyp: "Reps (Hypertrophy)", repsHea: "Reps (Heavy)", repsInt: "Reps (High Int.)", save: "Save Exercise" },
-            dropset: { title: "Dropset Calculator", currentWeight: "Current weight:" },
-        evolution: {
-            measurementsTitle: "Body Measurements (cm)",
-            m1: "1. Chest",
-            m2: "2. L. Arm",
-            m3: "3. R. Arm",
-            m4: "4. Abdomen",
-            m5: "5. Waist",
-            m6: "6. Hips",
-            m7: "7. L. Thigh",
-            m8: "8. R. Thigh"
+        "nav": {
+            "calendar": "Calendar",
+            "exercises": "Exercises",
+            "history": "History",
+            "workout": "Workout",
+            "progression": "Progression",
+            "evolution": "Evolution",
+            "export": "Exp / Imp"
         },
-            inlineHistory: { title: "Exercise History" }
+        "header": {
+            "title": "Calendar",
+            "calendar": "Calendar",
+            "exercises": "Exercises",
+            "history": "History",
+            "workout": "Workout",
+            "workoutActive": "Workout Active",
+            "progression": "Progression",
+            "evolution": "Evolution",
+            "export": "Export/Import"
         },
-        language: { select: "Select Language" },
-        misc: { supersetOf: "Superset of", groupUnassigned: "Unassigned", steps: "Steps" }
+        "calendar": {
+            "today": "Today",
+            "dayPlan": "Plan for the day",
+            "selectDay": "Select a day",
+            "week": "Week",
+            "months": [
+                "January",
+                "February",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+            ],
+            "days": [
+                "M",
+                "T",
+                "W",
+                "T",
+                "F",
+                "S",
+                "S"
+            ],
+            "createSession": "Create Session",
+            "editMode": "Edit Mode",
+            "viewMode": "View Mode",
+            "emptyDay": "No workouts for this day."
+        },
+        "exercises": {
+            "search": "Search exercises...",
+            "empty": "No exercises. Add a new one."
+        },
+        "history": {
+            "title": "Workout History",
+            "empty": "No completed workouts yet.",
+            "deleteAllConfirm": "Delete all workouts from history? This cannot be undone."
+        },
+        "workout": {
+            "title": "Workout",
+            "start": "Start",
+            "finish": "Finish Workout",
+            "finishConfirm": "Finish workout?",
+            "sets": "Sets",
+            "series": "Set",
+            "addSet": "Add set",
+            "cancel": "Cancel",
+            "replaceConfirm": "You already have an active workout. Cancel it and start this one?",
+            "cancelConfirm": "Are you sure you want to cancel? Data will be lost."
+        },
+        "common": {
+            "cancel": "Cancel",
+            "add": "Add",
+            "delete": "Delete",
+            "confirm": "Confirm",
+            "edit": "Edit",
+            "save": "Save",
+            "yes": "Yes",
+            "no": "No",
+            "ok": "OK",
+            "create": "Create",
+            "deleteAll": "Delete All"
+        },
+        "types": {
+            "hypertrophy": "Hypertrophy",
+            "heavy": "Heavy",
+            "intensity": "High Int.",
+            "workout": "Workout",
+            "goal": "Step Goal"
+        },
+        "alerts": {
+            "noActiveWorkout": "There is no active workout.",
+            "nameRequired": "Enter an exercise name",
+            "supersetMin": "Select at least 2 exercises.",
+            "exerciseRequired": "Select at least one exercise.",
+            "weightRequired": "Please enter weight.",
+            "saveError": "Save error: ",
+            "backupSuccess": "Backup saved successfully.",
+            "exportError": "Export error: ",
+            "importSuccess": "Data imported successfully. App will restart.",
+            "readError": "Error reading file: ",
+            "exportMin": "Please select at least one workout to export.",
+            "exportNotFound": "No planned workouts found with selected IDs.",
+            "workoutFinished": "Workout Finished! Duration: "
+        },
+        "modals": {
+            "add": {
+                "title": "What to add?",
+                "block": "4-Week Block",
+                "workout": "Single Workout (Today)",
+                "goal": "Step Goal (Today)"
+            },
+            "delete": {
+                "title": "Delete Session",
+                "single": "Only this session",
+                "recurring": "This and future weeks",
+                "confirm": "Delete session?"
+            },
+            "goal": {
+                "title": "Step Goal",
+                "desc": "Since the browser can't access Samsung Health, log your goal here.",
+                "label": "Step Goal (e.g. 10000)",
+                "save": "Save Goal",
+                "reached": "Goal Reached!"
+            },
+            "picker": {
+                "title": "Go to Date"
+            },
+            "groups": {
+                "title": "Manage Groups",
+                "new": "New Group...",
+                "espalda": "Back",
+                "hombro": "Shoulders",
+                "pecho": "Chest",
+                "triceps": "Triceps",
+                "biceps": "Biceps",
+                "multiarticular": "Compound",
+                "piernas": "Legs",
+                "core": "Abs & Core",
+                "todos": "All"
+            },
+            "routine": {
+                "title": "Add Block (4 wk)",
+                "type": "Session Type",
+                "name": "Name",
+                "namePlaceholder": "e.g. Heavy Upper",
+                "selected": "Selected Exercises",
+                "selectBtn": "Select Exercises",
+                "createSuperset": "Create Superset",
+                "schedule": "Schedule"
+            },
+            "selectEx": {
+                "title": "Choose Exercises"
+            },
+            "exercise": {
+                "title": "New Exercise",
+                "editTitle": "Edit Exercise",
+                "name": "Exercise Name",
+                "namePlaceholder": "e.g. Bench Press",
+                "group": "Group (Folder)",
+                "youtube": "YouTube Link (optional)",
+                "image": "Attached Image (optional)",
+                "max1rm": "Current 1RM (Manual) (kg)",
+                "repsHyp": "Reps (Hypertrophy)",
+                "repsHea": "Reps (Heavy)",
+                "repsInt": "Reps (High Int.)",
+                "save": "Save Exercise",
+                "prHyp": "PR (Hypertrophy)",
+                "prHeavy": "PR (Heavy)"
+            },
+            "dropset": {
+                "title": "Dropset Calculator",
+                "currentWeight": "Current Weight:"
+            },
+            "inlineHistory": {
+                "title": "Exercise History"
+            }
+        },
+        "evolution": {
+            "measurementsTitle": "Body Measurements (cm)",
+            "newRecord": "New Record",
+            "saveRecord": "Save Record",
+            "m1": "1. Chest",
+            "m2": "2. Left Arm",
+            "m3": "3. Right Arm",
+            "m4": "4. Abdomen",
+            "m5": "5. Waist",
+            "m6": "6. Hips",
+            "m7": "7. Left Thigh",
+            "m8": "8. Right Thigh",
+            "desc": "Record and observe your physical changes, body measurements, weight, and body fat percentage over time.",
+            "weightPlaceholder": "Weight (kg)",
+            "bfPlaceholder": "Body Fat %",
+            "photosLabel": "Photos (Front, Side, Back)"
+        },
+        "export": {
+            "desc": "Save a copy of all your data so you don't lose it, or move it to another device.",
+            "exportBtn": "Export Data (JSON)",
+            "importBtn": "Import Data (JSON)",
+            "modes": {
+                "single": "Singles",
+                "block": "Blocks",
+                "calendar": "Calendar"
+            },
+            "selected": "selected",
+            "deselectAll": "Deselect All",
+            "selectDesc": "Select the workouts you wish to export.",
+            "printPdf": "Print / Save PDF",
+            "exportPlanned": "Export Sessions",
+            "importPlanned": "Import Sessions"
+        },
+        "groups": {
+            "espalda": "Back",
+            "hombro": "Shoulders",
+            "pecho": "Chest",
+            "triceps": "Triceps",
+            "biceps": "Biceps",
+            "multiarticular": "Compound",
+            "piernas": "Legs",
+            "core": "Abs & Core",
+            "todos": "All"
+        },
+        "language": {
+            "select": "Select Language"
+        },
+        "misc": {
+            "supersetOf": "Superset of",
+            "groupUnassigned": "No Group",
+            "steps": "Steps"
+        },
+        "progression": {
+            "searchPlaceholder": "Search exercise..."
+        }
     },
-    ru: {
-        nav: { calendar: "Календарь", exercises: "Упражнения", history: "История" },
-        header: { title: "Календарь" },
-        calendar: {
-            today: "Сегодня", dayPlan: "План на день", selectDay: "Выберите день",
-            week: "Неделя", months: ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],
-            days: ["П", "В", "С", "Ч", "П", "С", "В"]
+    "ru": {
+        "setTypes": {
+            "warmup": "Разминка",
+            "approach": "Подводящий",
+            "effective": "Рабочий",
+            "failure": "До отказа",
+            "dropset": "Дропсет",
+            "dropsetFailure": "Дропсет отказ"
         },
-        exercises: { search: "Поиск упражнений...", empty: "Нет упражнений. Добавьте новое." },
-        history: { title: "Журнал тренировок", empty: "Пока нет завершенных тренировок." },
-        workout: { title: "Тренировка", start: "Начать", finish: "Завершить", finishConfirm: "Завершить тренировку?", sets: "Подходы" },
-        common: { cancel: "Отмена", add: "Добавить", delete: "Удалить", confirm: "Подтвердить", edit: "Изменить", save: "Сохранить", yes: "Да", no: "Нет", ok: "ОК", create: "Создать" },
-        types: { hypertrophy: "Гипертрофия", heavy: "Тяжелые", intensity: "Выс. Инт.", workout: "Тренировка", goal: "Цель шагов" },
-        modals: {
-            add: { title: "Что добавить?", block: "Блок 4 недели", workout: "Тренировка (Сегодня)", goal: "Цель шагов (Сегодня)" },
-            delete: { title: "Удалить сессию", single: "Только эту", recurring: "Эту и будущие", confirm: "Удалить сессию?" },
-            goal: { title: "Цель шагов", desc: "Поскольку браузер не имеет доступа к Samsung Health, запишите цель здесь и отметьте её в конце дня.", label: "Цель шагов (напр. 10000)", save: "Сохранить цель", reached: "Цель достигнута!" },
-            picker: { title: "Перейти к дате" },
-            groups: { title: "Управление группами", new: "Новая группа..." },
-            routine: { title: "Блок (4 нед)", type: "Тип сессии", name: "Название", namePlaceholder: "напр. Тяжелый верх", selected: "Выбранные упражнения", selectBtn: "Выбрать упражнения", createSuperset: "Создать суперсет", schedule: "Запланировать" },
-            selectEx: { title: "Выбрать упражнения" },
-            exercise: { title: "Новое упражнение", editTitle: "Изменить упражнение", name: "Название", namePlaceholder: "напр. Жим лежа", group: "Группа", youtube: "Ссылка YouTube (необяз.)", image: "Изображение (необяз.)", max1rm: "Текущий 1ПМ (кг)", repsHyp: "Повт. (Гипертрофия)", repsHea: "Повт. (Тяжелые)", repsInt: "Повт. (Выс. Инт.)", save: "Сохранить" },
-            dropset: { title: "Калькулятор дропсета", currentWeight: "Текущий вес:" },
-        evolution: {
-            measurementsTitle: "Размеры тела (см)",
-            m1: "1. Грудь",
-            m2: "2. Л. Рука",
-            m3: "3. П. Рука",
-            m4: "4. Живот",
-            m5: "5. Талия",
-            m6: "6. Бедра",
-            m7: "7. Л. Бедро",
-            m8: "8. П. Бедро"
+        "nav": {
+            "calendar": "Календарь",
+            "exercises": "Упражнения",
+            "history": "История",
+            "workout": "Тренировка",
+            "progression": "Прогресс",
+            "evolution": "Эволюция",
+            "export": "Эксп / Имп"
         },
-            inlineHistory: { title: "История упражнения" }
+        "header": {
+            "title": "Календарь",
+            "calendar": "Календарь",
+            "exercises": "Упражнения",
+            "history": "История",
+            "workout": "Тренировка",
+            "workoutActive": "Тренировка",
+            "progression": "Прогресс",
+            "evolution": "Эволюция",
+            "export": "Экспорт/Импорт"
         },
-        language: { select: "Выбрать язык" },
-        misc: { supersetOf: "Суперсет", groupUnassigned: "Без группы", steps: "Шаги" }
+        "calendar": {
+            "today": "Сегодня",
+            "dayPlan": "План на день",
+            "selectDay": "Выберите день",
+            "week": "Неделя",
+            "months": [
+                "Январь",
+                "Февраль",
+                "Март",
+                "Апрель",
+                "Май",
+                "Июнь",
+                "Июль",
+                "Август",
+                "Сентябрь",
+                "Октябрь",
+                "Ноябрь",
+                "Декабрь"
+            ],
+            "days": [
+                "П",
+                "В",
+                "С",
+                "Ч",
+                "П",
+                "С",
+                "В"
+            ],
+            "createSession": "Создать",
+            "editMode": "Режим ред.",
+            "viewMode": "Режим чт.",
+            "emptyDay": "Нет тренировок на этот день."
+        },
+        "exercises": {
+            "search": "Поиск...",
+            "empty": "Нет упражнений. Добавьте."
+        },
+        "history": {
+            "title": "История Тренировок",
+            "empty": "Пока нет тренировок.",
+            "deleteAllConfirm": "Удалить все тренировки из истории? Это нельзя отменить."
+        },
+        "workout": {
+            "title": "Тренировка",
+            "start": "Начать",
+            "finish": "Завершить",
+            "finishConfirm": "Завершить?",
+            "sets": "Подходы",
+            "series": "Подход",
+            "addSet": "Добавить подход",
+            "cancel": "Отмена",
+            "replaceConfirm": "Есть активная. Заменить?",
+            "cancelConfirm": "Отменить тренировку? Данные будут потеряны."
+        },
+        "common": {
+            "cancel": "Отмена",
+            "add": "Добавить",
+            "delete": "Удалить",
+            "confirm": "Подтвердить",
+            "edit": "Изменить",
+            "save": "Сохранить",
+            "yes": "Да",
+            "no": "Нет",
+            "ok": "ОК",
+            "create": "Создать",
+            "deleteAll": "Удалить Все"
+        },
+        "types": {
+            "hypertrophy": "Гипертрофия",
+            "heavy": "Тяжелые",
+            "intensity": "Выс. Инт.",
+            "workout": "Тренировка",
+            "goal": "Шаги"
+        },
+        "alerts": {
+            "noActiveWorkout": "Нет активной тренировки.",
+            "nameRequired": "Введите имя",
+            "supersetMin": "Мин 2 упражнения.",
+            "exerciseRequired": "Выберите хотя бы одно.",
+            "weightRequired": "Введите вес.",
+            "saveError": "Ошибка сохранения: ",
+            "backupSuccess": "Резервная копия сохранена.",
+            "exportError": "Ошибка экспорта: ",
+            "importSuccess": "Данные импортированы. Перезапуск.",
+            "readError": "Ошибка чтения: ",
+            "exportMin": "Выберите тренировку.",
+            "exportNotFound": "Не найдено.",
+            "workoutFinished": "Тренировка завершена! Время: "
+        },
+        "modals": {
+            "add": {
+                "title": "Что добавить?",
+                "block": "4-недельный блок",
+                "workout": "Тренировка (Сегодня)",
+                "goal": "Шаги (Сегодня)"
+            },
+            "delete": {
+                "title": "Удалить Сессию",
+                "single": "Только эту",
+                "recurring": "Эту и будущие",
+                "confirm": "Удалить?"
+            },
+            "goal": {
+                "title": "Цель Шагов",
+                "desc": "Укажите шаги здесь.",
+                "label": "Цель (напр. 10000)",
+                "save": "Сохранить",
+                "reached": "Цель Достигнута!"
+            },
+            "picker": {
+                "title": "Перейти к Дате"
+            },
+            "groups": {
+                "title": "Управление Группами",
+                "new": "Новая Группа...",
+                "espalda": "Спина",
+                "hombro": "Плечи",
+                "pecho": "Грудь",
+                "triceps": "Трицепс",
+                "biceps": "Бицепс",
+                "multiarticular": "Базовые",
+                "piernas": "Ноги",
+                "core": "Пресс и Кор",
+                "todos": "Все"
+            },
+            "routine": {
+                "title": "Добавить Блок",
+                "type": "Тип",
+                "name": "Имя",
+                "namePlaceholder": "Напр. Тяжелый верх",
+                "selected": "Выбрано",
+                "selectBtn": "Выбрать",
+                "createSuperset": "Создать Суперсет",
+                "schedule": "Запланировать"
+            },
+            "selectEx": {
+                "title": "Выберите Упражнения"
+            },
+            "exercise": {
+                "title": "Новое",
+                "editTitle": "Редактировать",
+                "name": "Имя",
+                "namePlaceholder": "Напр. Жим",
+                "group": "Группа",
+                "youtube": "YouTube (опционально)",
+                "image": "Фото (опционально)",
+                "max1rm": "Текущий 1RM (кг)",
+                "repsHyp": "Повт. (Гипер)",
+                "repsHea": "Повт. (Тяжелые)",
+                "repsInt": "Повт. (Инт.)",
+                "save": "Сохранить",
+                "prHyp": "PR (Гипертрофия)",
+                "prHeavy": "PR (Тяжелые)"
+            },
+            "dropset": {
+                "title": "Калькулятор Дропсета",
+                "currentWeight": "Текущий вес:"
+            },
+            "inlineHistory": {
+                "title": "История Упражнения"
+            }
+        },
+        "evolution": {
+            "measurementsTitle": "Размеры Тела (см)",
+            "newRecord": "Новая Запись",
+            "saveRecord": "Сохранить",
+            "m1": "1. Грудь",
+            "m2": "2. Лев. Рука",
+            "m3": "3. Прав. Рука",
+            "m4": "4. Живот",
+            "m5": "5. Талия",
+            "m6": "6. Бедра",
+            "m7": "7. Лев. Нога",
+            "m8": "8. Прав. Нога",
+            "desc": "Регистрируйте и наблюдайте за своими физическими изменениями, размерами тела, весом и процентом жира с течением времени.",
+            "weightPlaceholder": "Вес (кг)",
+            "bfPlaceholder": "% Жира",
+            "photosLabel": "Фото (Спереди, Сбоку, Сзади)"
+        },
+        "export": {
+            "desc": "Сохраните копию ваших данных.",
+            "exportBtn": "Экспорт (JSON)",
+            "importBtn": "Импорт (JSON)",
+            "modes": {
+                "single": "Отдельные",
+                "block": "Блоки",
+                "calendar": "Календарь"
+            },
+            "selected": "выбрано",
+            "deselectAll": "Снять все",
+            "selectDesc": "Выберите тренировки, которые вы хотите экспортировать.",
+            "printPdf": "Печать / Сохранить PDF",
+            "exportPlanned": "Экспорт Сессий",
+            "importPlanned": "Импорт Сессий"
+        },
+        "groups": {
+            "espalda": "Спина",
+            "hombro": "Плечи",
+            "pecho": "Грудь",
+            "triceps": "Трицепс",
+            "biceps": "Бицепс",
+            "multiarticular": "Базовые",
+            "piernas": "Ноги",
+            "core": "Пресс и Кор",
+            "todos": "Все"
+        },
+        "language": {
+            "select": "Выбрать Язык"
+        },
+        "misc": {
+            "supersetOf": "Суперсет",
+            "groupUnassigned": "Без Группы",
+            "steps": "Шаги"
+        },
+        "progression": {
+            "searchPlaceholder": "Поиск упражнения..."
+        }
     },
-    et: {
-        nav: { calendar: "Kalender", exercises: "Harjutused", history: "Ajalugu" },
-        header: { title: "Kalender" },
-        calendar: {
-            today: "Täna", dayPlan: "Päevaplaan", selectDay: "Vali päev",
-            week: "Nädal", months: ["Jaanuar","Veebruar","Märts","Aprill","Mai","Juuni","Juuli","August","September","Oktoober","November","Detsember"],
-            days: ["E", "T", "K", "N", "R", "L", "P"]
+    "et": {
+        "setTypes": {
+            "warmup": "Soojendus",
+            "approach": "Lähenemine",
+            "effective": "Efektiivne",
+            "failure": "Suutlikkuseni",
+            "dropset": "Dropset",
+            "dropsetFailure": "Dropset suutlikkuseni"
         },
-        exercises: { search: "Otsi harjutusi...", empty: "Harjutusi pole. Lisa uus." },
-        history: { title: "Treeningute logi", empty: "Lõpetatud treeninguid veel pole." },
-        workout: { title: "Treening", start: "Alusta", finish: "Lõpeta treening", finishConfirm: "Kas lõpetada treening?", sets: "Seeriad" },
-        common: { cancel: "Tühista", add: "Lisa", delete: "Kustuta", confirm: "Kinnita", edit: "Muuda", save: "Salvesta", yes: "Jah", no: "Ei", ok: "OK", create: "Loo" },
-        types: { hypertrophy: "Hüpertroofia", heavy: "Rasked", intensity: "Kõrge Int.", workout: "Treening", goal: "Sammude eesmärk" },
-        modals: {
-            add: { title: "Mida lisada?", block: "4-nädala plokk", workout: "Üksik treening (Täna)", goal: "Sammude eesmärk (Täna)" },
-            delete: { title: "Kustuta sessioon", single: "Ainult see", recurring: "See ja tulevased", confirm: "Kustuta sessioon?" },
-            goal: { title: "Sammude eesmärk", desc: "Kuna brauser ei pääse Samsung Healthile ligi, märgi oma eesmärk siia.", label: "Sammud (nt 10000)", save: "Salvesta eesmärk", reached: "Eesmärk saavutatud!" },
-            picker: { title: "Mine kuupäevale" },
-            groups: { title: "Halda gruppe", new: "Uus grupp..." },
-            routine: { title: "Lisa plokk (4 näd)", type: "Sessiooni tüüp", name: "Nimi", namePlaceholder: "nt Raske Ülakeha", selected: "Valitud harjutused", selectBtn: "Vali harjutused", createSuperset: "Loo superseeria", schedule: "Planeeri" },
-            selectEx: { title: "Vali harjutused" },
-            exercise: { title: "Uus harjutus", editTitle: "Muuda harjutust", name: "Nimi", namePlaceholder: "nt Rinnalt surumine", group: "Grupp", youtube: "YouTube link (valikuline)", image: "Pilt (valikuline)", max1rm: "1RM (kg)", repsHyp: "Kordused (Hüpertroofia)", repsHea: "Kordused (Rasked)", repsInt: "Kordused (Kõrge Int.)", save: "Salvesta harjutus" },
-            dropset: { title: "Dropseti kalkulaator", currentWeight: "Praegune raskus:" },
-        evolution: {
-            measurementsTitle: "Kehamõõdud (cm)",
-            m1: "1. Rind",
-            m2: "2. V. Käsi",
-            m3: "3. P. Käsi",
-            m4: "4. Kõht",
-            m5: "5. Talje",
-            m6: "6. Puusad",
-            m7: "7. V. Reis",
-            m8: "8. P. Reis"
+        "nav": {
+            "calendar": "Kalender",
+            "exercises": "Harjutused",
+            "history": "Ajalugu",
+            "workout": "Treening",
+            "progression": "Progress",
+            "evolution": "Evolutsioon",
+            "export": "Eksp / Imp"
         },
-            inlineHistory: { title: "Harjutuse ajalugu" }
+        "header": {
+            "title": "Kalender",
+            "calendar": "Kalender",
+            "exercises": "Harjutused",
+            "history": "Ajalugu",
+            "workout": "Treening",
+            "workoutActive": "Aktiivne Treening",
+            "progression": "Progress",
+            "evolution": "Evolutsioon",
+            "export": "Eksport/Import"
         },
-        language: { select: "Vali keel" },
-        misc: { supersetOf: "Superseeria:", groupUnassigned: "Grupita", steps: "Sammud" }
+        "calendar": {
+            "today": "Täna",
+            "dayPlan": "Päeva plaan",
+            "selectDay": "Vali päev",
+            "week": "Nädal",
+            "months": [
+                "Jaanuar",
+                "Veebruar",
+                "Märts",
+                "Aprill",
+                "Mai",
+                "Juuni",
+                "Juuli",
+                "August",
+                "September",
+                "Oktoober",
+                "November",
+                "Detsember"
+            ],
+            "days": [
+                "E",
+                "T",
+                "K",
+                "N",
+                "R",
+                "L",
+                "P"
+            ],
+            "createSession": "Loo Sessioon",
+            "editMode": "Muutmisrežiim",
+            "viewMode": "Vaaterežiim",
+            "emptyDay": "Selleks päevaks pole treeninguid."
+        },
+        "exercises": {
+            "search": "Otsi...",
+            "empty": "Harjutusi pole. Lisa."
+        },
+        "history": {
+            "title": "Treeningute Ajalugu",
+            "empty": "Pole treeninguid.",
+            "deleteAllConfirm": "Kustuta kõik treeningud ajaloost? Seda ei saa tagasi võtta."
+        },
+        "workout": {
+            "title": "Treening",
+            "start": "Alusta",
+            "finish": "Lõpeta Treening",
+            "finishConfirm": "Lõpeta?",
+            "sets": "Seeriad",
+            "series": "Seeria",
+            "addSet": "Lisa seeria",
+            "cancel": "Tühista",
+            "replaceConfirm": "Aktiivne treening on olemas. Kas tühistada?",
+            "cancelConfirm": "Oled kindel? Andmed kaovad."
+        },
+        "common": {
+            "cancel": "Tühista",
+            "add": "Lisa",
+            "delete": "Kustuta",
+            "confirm": "Kinnita",
+            "edit": "Muuda",
+            "save": "Salvesta",
+            "yes": "Jah",
+            "no": "Ei",
+            "ok": "OK",
+            "create": "Loo",
+            "deleteAll": "Kustuta Kõik"
+        },
+        "types": {
+            "hypertrophy": "Hüpertroofia",
+            "heavy": "Rasked",
+            "intensity": "Kõrge Int.",
+            "workout": "Treening",
+            "goal": "Sammud"
+        },
+        "alerts": {
+            "noActiveWorkout": "Aktiivset treeningut ei ole.",
+            "nameRequired": "Sisesta nimi",
+            "supersetMin": "Vali vähemalt 2.",
+            "exerciseRequired": "Vali harjutus.",
+            "weightRequired": "Sisesta kaal.",
+            "saveError": "Viga salvestamisel: ",
+            "backupSuccess": "Varukoopia tehtud.",
+            "exportError": "Viga eksportimisel: ",
+            "importSuccess": "Andmed imporditud. Taaskäivitus.",
+            "readError": "Viga faili lugemisel: ",
+            "exportMin": "Vali treening.",
+            "exportNotFound": "Ei leitud.",
+            "workoutFinished": "Treening lõpetatud! Aeg: "
+        },
+        "modals": {
+            "add": {
+                "title": "Mida lisada?",
+                "block": "4-Nädalane Plokk",
+                "workout": "Treening (Täna)",
+                "goal": "Sammud (Täna)"
+            },
+            "delete": {
+                "title": "Kustuta",
+                "single": "Ainult see",
+                "recurring": "See ja tulevased",
+                "confirm": "Kustuta?"
+            },
+            "goal": {
+                "title": "Sammude Eesmärk",
+                "desc": "Märgi siia.",
+                "label": "Eesmärk (nt 10000)",
+                "save": "Salvesta",
+                "reached": "Saavutatud!"
+            },
+            "picker": {
+                "title": "Mine Kuupäevale"
+            },
+            "groups": {
+                "title": "Halda Gruppe",
+                "new": "Uus Grupp...",
+                "espalda": "Selg",
+                "hombro": "Õlad",
+                "pecho": "Rind",
+                "triceps": "Triitseps",
+                "biceps": "Biitseps",
+                "multiarticular": "Mitme liigese",
+                "piernas": "Jalad",
+                "core": "Kõht & Tuum",
+                "todos": "Kõik"
+            },
+            "routine": {
+                "title": "Lisa Plokk",
+                "type": "Tüüp",
+                "name": "Nimi",
+                "namePlaceholder": "Nt Raske Ülakeha",
+                "selected": "Valitud",
+                "selectBtn": "Vali",
+                "createSuperset": "Loo Superset",
+                "schedule": "Plaani"
+            },
+            "selectEx": {
+                "title": "Vali Harjutused"
+            },
+            "exercise": {
+                "title": "Uus Harjutus",
+                "editTitle": "Muuda Harjutust",
+                "name": "Nimi",
+                "namePlaceholder": "Nt Rinnaltsurumine",
+                "group": "Grupp",
+                "youtube": "YouTube (valikuline)",
+                "image": "Pilt (valikuline)",
+                "max1rm": "Praegune 1RM (kg)",
+                "repsHyp": "Kord. (Hüper)",
+                "repsHea": "Kord. (Rasked)",
+                "repsInt": "Kord. (Int.)",
+                "save": "Salvesta",
+                "prHyp": "PR (Hüpertroofia)",
+                "prHeavy": "PR (Raske)"
+            },
+            "dropset": {
+                "title": "Dropset Kalkulaator",
+                "currentWeight": "Praegune kaal:"
+            },
+            "inlineHistory": {
+                "title": "Harjutuse Ajalugu"
+            }
+        },
+        "evolution": {
+            "measurementsTitle": "Kehamõõdud (cm)",
+            "newRecord": "Uus Kirje",
+            "saveRecord": "Salvesta",
+            "m1": "1. Rind",
+            "m2": "2. Vasak Käsi",
+            "m3": "3. Parem Käsi",
+            "m4": "4. Kõht",
+            "m5": "5. Vöö",
+            "m6": "6. Puusad",
+            "m7": "7. Vasak Jalg",
+            "m8": "8. Parem Jalg",
+            "desc": "Salvestage ja jälgige oma füüsilisi muutusi, kehamõõte, kaalu ja keharasva protsenti ajas.",
+            "weightPlaceholder": "Kaal (kg)",
+            "bfPlaceholder": "Rasvaprotsent",
+            "photosLabel": "Fotod (Eest, Küljelt, Tagant)"
+        },
+        "export": {
+            "desc": "Salvesta oma andmete koopia.",
+            "exportBtn": "Eksport (JSON)",
+            "importBtn": "Import (JSON)",
+            "modes": {
+                "single": "Üksikud",
+                "block": "Plokid",
+                "calendar": "Kalender"
+            },
+            "selected": "valitud",
+            "deselectAll": "Tühista kõik",
+            "selectDesc": "Valige treeningud, mida soovite eksportida.",
+            "printPdf": "Prindi / Salvesta PDF",
+            "exportPlanned": "Ekspordi Sess.",
+            "importPlanned": "Impordi Sess."
+        },
+        "groups": {
+            "espalda": "Selg",
+            "hombro": "Õlad",
+            "pecho": "Rind",
+            "triceps": "Triitseps",
+            "biceps": "Biitseps",
+            "multiarticular": "Mitme liigese",
+            "piernas": "Jalad",
+            "core": "Kõht & Tuum",
+            "todos": "Kõik"
+        },
+        "language": {
+            "select": "Vali Keel"
+        },
+        "misc": {
+            "supersetOf": "Superset",
+            "groupUnassigned": "Määramata",
+            "steps": "Sammud"
+        },
+        "progression": {
+            "searchPlaceholder": "Otsi harjutust..."
+        }
     },
-    uk: {
-        nav: { calendar: "Календар", exercises: "Вправи", history: "Історія" },
-        header: { title: "Календар" },
-        calendar: {
-            today: "Сьогодні", dayPlan: "План на день", selectDay: "Виберіть день",
-            week: "Тиждень", months: ["Січень","Лютий","Березень","Квітень","Травень","Червень","Липень","Серпень","Вересень","Жовтень","Листопад","Грудень"],
-            days: ["П", "В", "С", "Ч", "П", "С", "Н"]
+    "uk": {
+        "setTypes": {
+            "warmup": "Розминка",
+            "approach": "Підвідний",
+            "effective": "Робочий",
+            "failure": "До відмови",
+            "dropset": "Дропсет",
+            "dropsetFailure": "Дропсет відмова"
         },
-        exercises: { search: "Пошук вправ...", empty: "Немає вправ. Додайте нову." },
-        history: { title: "Журнал тренувань", empty: "Ще немає завершених тренувань." },
-        workout: { title: "Тренування", start: "Почати", finish: "Завершити", finishConfirm: "Завершити тренування?", sets: "Підходи" },
-        common: { cancel: "Скасувати", add: "Додати", delete: "Видалити", confirm: "Підтвердити", edit: "Редагувати", save: "Зберегти", yes: "Так", no: "Ні", ok: "ОК", create: "Створити" },
-        types: { hypertrophy: "Гіпертрофія", heavy: "Важкі", intensity: "Вис. Інт.", workout: "Тренування", goal: "Ціль кроків" },
-        modals: {
-            add: { title: "Що додати?", block: "Блок 4 тижні", workout: "Тренування (Сьогодні)", goal: "Ціль кроків (Сьогодні)" },
-            delete: { title: "Видалити сесію", single: "Тільки цю", recurring: "Цю та майбутні", confirm: "Видалити сесію?" },
-            goal: { title: "Ціль кроків", desc: "Оскільки браузер не має доступу до Samsung Health, запишіть ціль тут.", label: "Ціль кроків (напр. 10000)", save: "Зберегти ціль", reached: "Ціль досягнута!" },
-            picker: { title: "Перейти до дати" },
-            groups: { title: "Управління групами", new: "Нова група..." },
-            routine: { title: "Блок (4 тиж)", type: "Тип сесії", name: "Назва", namePlaceholder: "напр. Важкий верх", selected: "Вибрані вправи", selectBtn: "Вибрати вправи", createSuperset: "Створити суперсет", schedule: "Запланувати" },
-            selectEx: { title: "Вибрати вправи" },
-            exercise: { title: "Нова вправа", editTitle: "Редагувати вправу", name: "Назва", namePlaceholder: "напр. Жим лежачи", group: "Група", youtube: "Посилання YouTube (необов.)", image: "Зображення (необяз.)", max1rm: "Поточний 1ПМ (кг)", repsHyp: "Повт. (Гіпертрофія)", repsHea: "Повт. (Важкі)", repsInt: "Повт. (Вис. Інт.)", save: "Зберегти" },
-            dropset: { title: "Калькулятор дропсету", currentWeight: "Поточна вага:" },
-            inlineHistory: { title: "Історія вправи" }
+        "nav": {
+            "calendar": "Календар",
+            "exercises": "Вправи",
+            "history": "Історія",
+            "workout": "Тренування",
+            "progression": "Прогрес",
+            "evolution": "Еволюція",
+            "export": "Експ / Імп"
         },
-        language: { select: "Вибрати мову" },
-        misc: { supersetOf: "Суперсет", groupUnassigned: "Без групи", steps: "Кроки" }
+        "header": {
+            "title": "Календар",
+            "calendar": "Календар",
+            "exercises": "Вправи",
+            "history": "Історія",
+            "workout": "Тренування",
+            "workoutActive": "Тренування",
+            "progression": "Прогрес",
+            "evolution": "Еволюція",
+            "export": "Експорт/Імпорт"
+        },
+        "calendar": {
+            "today": "Сьогодні",
+            "dayPlan": "План на день",
+            "selectDay": "Виберіть день",
+            "week": "Тиждень",
+            "months": [
+                "Січень",
+                "Лютий",
+                "Березень",
+                "Квітень",
+                "Травень",
+                "Червень",
+                "Липень",
+                "Серпень",
+                "Вересень",
+                "Жовтень",
+                "Листопад",
+                "Грудень"
+            ],
+            "days": [
+                "П",
+                "В",
+                "С",
+                "Ч",
+                "П",
+                "С",
+                "Н"
+            ],
+            "createSession": "Створити",
+            "editMode": "Режим ред.",
+            "viewMode": "Режим чит.",
+            "emptyDay": "Немає тренувань на цей день."
+        },
+        "exercises": {
+            "search": "Пошук...",
+            "empty": "Немає вправ. Додайте."
+        },
+        "history": {
+            "title": "Історія Тренувань",
+            "empty": "Поки немає тренувань.",
+            "deleteAllConfirm": "Видалити всі тренування з історії? Це неможливо скасувати."
+        },
+        "workout": {
+            "title": "Тренування",
+            "start": "Почати",
+            "finish": "Завершити",
+            "finishConfirm": "Завершити?",
+            "sets": "Підходи",
+            "series": "Підхід",
+            "addSet": "Додати підхід",
+            "cancel": "Скасувати",
+            "replaceConfirm": "Є активне. Замінити?",
+            "cancelConfirm": "Скасувати? Дані будуть втрачені."
+        },
+        "common": {
+            "cancel": "Скасувати",
+            "add": "Додати",
+            "delete": "Видалити",
+            "confirm": "Підтвердити",
+            "edit": "Редагувати",
+            "save": "Зберегти",
+            "yes": "Так",
+            "no": "Ні",
+            "ok": "ОК",
+            "create": "Створити",
+            "deleteAll": "Видалити Всі"
+        },
+        "types": {
+            "hypertrophy": "Гіпертрофія",
+            "heavy": "Важкі",
+            "intensity": "Вис. Інт.",
+            "workout": "Тренування",
+            "goal": "Кроки"
+        },
+        "alerts": {
+            "noActiveWorkout": "Немає активного тренування.",
+            "nameRequired": "Введіть ім'я",
+            "supersetMin": "Мін 2 вправи.",
+            "exerciseRequired": "Виберіть хоча б одну.",
+            "weightRequired": "Введіть вагу.",
+            "saveError": "Помилка збереження: ",
+            "backupSuccess": "Резервну копію збережено.",
+            "exportError": "Помилка експорту: ",
+            "importSuccess": "Дані імпортовано. Перезапуск.",
+            "readError": "Помилка читання: ",
+            "exportMin": "Виберіть тренування.",
+            "exportNotFound": "Не знайдено.",
+            "workoutFinished": "Тренування завершено! Час: "
+        },
+        "modals": {
+            "add": {
+                "title": "Що додати?",
+                "block": "4-тижневий блок",
+                "workout": "Тренування (Сьогодні)",
+                "goal": "Кроки (Сьогодні)"
+            },
+            "delete": {
+                "title": "Видалити",
+                "single": "Тільки цю",
+                "recurring": "Цю і майбутні",
+                "confirm": "Видалити?"
+            },
+            "goal": {
+                "title": "Ціль Кроків",
+                "desc": "Вкажіть кроки тут.",
+                "label": "Ціль (напр. 10000)",
+                "save": "Зберегти",
+                "reached": "Ціль Досягнуто!"
+            },
+            "picker": {
+                "title": "Перейти до Дати"
+            },
+            "groups": {
+                "title": "Управління Групами",
+                "new": "Нова Група...",
+                "espalda": "Спина",
+                "hombro": "Плечі",
+                "pecho": "Груди",
+                "triceps": "Трицепс",
+                "biceps": "Біцепс",
+                "multiarticular": "Базові",
+                "piernas": "Ноги",
+                "core": "Прес і Кор",
+                "todos": "Всі"
+            },
+            "routine": {
+                "title": "Додати Блок",
+                "type": "Тип",
+                "name": "Ім'я",
+                "namePlaceholder": "Напр. Важкий верх",
+                "selected": "Вибрано",
+                "selectBtn": "Вибрати",
+                "createSuperset": "Створити Суперсет",
+                "schedule": "Запланувати"
+            },
+            "selectEx": {
+                "title": "Виберіть Вправи"
+            },
+            "exercise": {
+                "title": "Нова Вправа",
+                "editTitle": "Редагувати",
+                "name": "Ім'я",
+                "namePlaceholder": "Напр. Жим",
+                "group": "Група",
+                "youtube": "YouTube (необов'язково)",
+                "image": "Фото (необов'язково)",
+                "max1rm": "Поточний 1RM (кг)",
+                "repsHyp": "Повт. (Гіпер)",
+                "repsHea": "Повт. (Важкі)",
+                "repsInt": "Повт. (Інт.)",
+                "save": "Зберегти",
+                "prHyp": "PR (Гіпертрофія)",
+                "prHeavy": "PR (Важкі)"
+            },
+            "dropset": {
+                "title": "Калькулятор Дропсету",
+                "currentWeight": "Поточна вага:"
+            },
+            "inlineHistory": {
+                "title": "Історія Вправи"
+            }
+        },
+        "evolution": {
+            "measurementsTitle": "Розміри Тіла (см)",
+            "newRecord": "Новий Запис",
+            "saveRecord": "Зберегти",
+            "m1": "1. Груди",
+            "m2": "2. Лів. Рука",
+            "m3": "3. Прав. Рука",
+            "m4": "4. Живіт",
+            "m5": "5. Талія",
+            "m6": "6. Стегна",
+            "m7": "7. Лів. Нога",
+            "m8": "8. Прав. Нога",
+            "desc": "Реєструйте та спостерігайте за своїми фізичними змінами, розмірами тіла, вагою та відсотком жиру з часом.",
+            "weightPlaceholder": "Вага (кг)",
+            "bfPlaceholder": "% Жиру",
+            "photosLabel": "Фото (Спереду, Збоку, Ззаду)"
+        },
+        "export": {
+            "desc": "Збережіть копію ваших даних.",
+            "exportBtn": "Експорт (JSON)",
+            "importBtn": "Імпорт (JSON)",
+            "modes": {
+                "single": "Окремі",
+                "block": "Блоки",
+                "calendar": "Календар"
+            },
+            "selected": "вибрано",
+            "deselectAll": "Зняти всі",
+            "selectDesc": "Виберіть тренування, які ви хочете експортувати.",
+            "printPdf": "Друк / Зберегти PDF",
+            "exportPlanned": "Експорт Сесій",
+            "importPlanned": "Імпорт Сесій"
+        },
+        "groups": {
+            "espalda": "Спина",
+            "hombro": "Плечі",
+            "pecho": "Груди",
+            "triceps": "Трицепс",
+            "biceps": "Біцепс",
+            "multiarticular": "Базові",
+            "piernas": "Ноги",
+            "core": "Прес і Кор",
+            "todos": "Всі"
+        },
+        "language": {
+            "select": "Вибрати Мову"
+        },
+        "misc": {
+            "supersetOf": "Суперсет",
+            "groupUnassigned": "Без Групи",
+            "steps": "Кроки"
+        },
+        "progression": {
+            "searchPlaceholder": "Пошук вправи..."
+        }
     }
+};
+
+const getSetTypeT = (str) => {
+    const map = {
+        'Calentamiento': 'warmup', 'Aproximación': 'approach', 'Efectiva': 'effective',
+        'Al fallo': 'failure', 'Dropset': 'dropset', 'Dropset fallo': 'dropsetFailure'
+    };
+    if (map[str]) return getT('setTypes.' + map[str]);
+    return str;
 };
 
 const getT = (path) => {
@@ -527,15 +2262,62 @@ const getT = (path) => {
     return result || path;
 };
 
+
+const formatSessionName = (name) => {
+    if (!name) return name;
+    // Match " (Week 1)", " (Semana 2)", etc. at the end of the string
+    return name.replace(/\s+\(([^)]+)\s+(\d+)\)$/, (match, word, num) => {
+        return ' (' + getT('calendar.week') + ' ' + num + ')';
+    });
+};
+
 const updateLanguageUI = () => {
-    document.documentElement.lang = state.language;
-    document.getElementById('current-lang-text').textContent = state.language.toUpperCase();
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        el.innerHTML = getT(el.getAttribute('data-i18n'));
-    });
-    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-        el.setAttribute('placeholder', getT(el.getAttribute('data-i18n-placeholder')));
-    });
+    try {
+        document.documentElement.lang = state.language;
+        const flagMap = { 'es': 'ES', 'en': 'EN', 'ru': 'RU', 'et': 'ET', 'uk': 'UA' };
+        const textElem = document.getElementById('current-lang-text');
+        if(textElem) textElem.textContent = flagMap[state.language] || state.language.toUpperCase();
+        
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (key) {
+                const text = getT(key);
+                if (text && text !== key) {
+                    el.innerHTML = text;
+                }
+            }
+        });
+        
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (key) {
+                const text = getT(key);
+                if (text && text !== key) {
+                    el.setAttribute('placeholder', text);
+                }
+            }
+        });
+
+        // Force header update
+        const activeView = document.querySelector('.view.active');
+        const headerTitle = document.getElementById('header-title');
+        if (activeView && headerTitle) {
+            const viewId = activeView.id;
+            if(viewId === 'view-workout' && state.activeWorkoutState && state.activeWorkoutState.startTime) {
+                headerTitle.textContent = getT('header.workoutActive');
+            } else {
+                headerTitle.textContent = getT('header.' + viewId.replace('view-', ''));
+            }
+            if (viewId === 'view-exercises') {
+                const headerAction = document.getElementById('header-action');
+                if (headerAction) {
+                    headerAction.innerHTML = `<i class="ph ph-plus"></i> <span style="font-size:14px; font-weight:600; margin-left:4px;">${getT('modals.exercise.title')}</span>`;
+                }
+            }
+        }
+    } catch (e) {
+        console.error('Language UI update error: ', e);
+    }
 };
 
 
@@ -544,7 +2326,7 @@ const renderCalendar = () => {
     grid.innerHTML = '';
     
     const weekStart = new Date(state.currentWeekStart);
-    const monthNamesFull = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    const monthNamesFull = getT('calendar.months');
     const thurs = new Date(weekStart);
     thurs.setDate(thurs.getDate() + 3);
     
@@ -584,23 +2366,20 @@ const renderCalendar = () => {
             });
             cell.appendChild(indContainer);
             
-            if (dStr === selectedDateStr) {
-                const colors = [];
+            const colors = [];
                 if(daySessions.some(s => s.type === 'hypertrophy')) colors.push('#2563EB');
                 if(daySessions.some(s => s.type === 'heavy')) colors.push('#DC2626');
                 if(daySessions.some(s => s.type === 'intensity')) colors.push('#10B981');
                 
                 if (colors.length === 1) {
-                    cell.style.border = `3px solid ${colors[0]}`;
-                    cell.style.background = "transparent";
+                    cell.style.border = '2px solid ' + colors[0];
                 } else if (colors.length > 1) {
                     const gradient = colors.join(', ');
-                    cell.style.border = `3px solid transparent`;
-                    cell.style.background = `linear-gradient(var(--bg-surface), var(--bg-surface)) padding-box, linear-gradient(to bottom right, ${gradient}) border-box`;
+                    cell.style.border = '2px solid transparent';
+                    const bg = cell.classList.contains('today') ? 'var(--color-hypertrophy-glow)' : 'var(--bg-surface)';
+                    cell.style.background = `linear-gradient(${bg}, ${bg}) padding-box, linear-gradient(to bottom right, ${gradient}) border-box`;
                 }
-            }
         }
-        
         cell.addEventListener('click', () => {
             state.selectedDate = d;
             renderCalendar();
@@ -635,7 +2414,7 @@ const renderTodaySessions = () => {
     const daySessions = state.sessions.filter(s => s.date === dateStr);
     
     if (daySessions.length === 0) {
-        list.innerHTML = `<div class="empty-state">No hay entrenamientos para este día.</div>`;
+        list.innerHTML = `<div class="empty-state">${getT('calendar.emptyDay') || 'No hay entrenamientos para este día.'}</div>`;
         return;
     }
     
@@ -643,7 +2422,7 @@ const renderTodaySessions = () => {
         const card = document.createElement('div');
         card.classList.add('session-card', `type-${session.type}`);
         
-        let typeName = session.type === 'hypertrophy' ? 'Hipertrofia' : session.type === 'heavy' ? 'Pesado' : session.type === 'intensity' ? 'Alta Intensidad' : 'Objetivo';
+        let typeName = getT('types.' + session.type);
         
         card.innerHTML = `
             <div class="session-info">
@@ -722,60 +2501,6 @@ window.deleteGroup = (g) => {
     renderManageGroups();
     renderExercises();
 };
-
-// --- BACKUP DATA (JSON) ---
-const btnExportData = document.getElementById('btn-export-data');
-if (btnExportData) {
-    btnExportData.addEventListener('click', () => {
-        const dataStr = JSON.stringify(state, null, 2);
-        const blob = new Blob([dataStr], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `GymTracker_Backup_${formatDate(new Date()).replace(/\//g, '-')}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-    });
-}
-
-const btnImportData = document.getElementById('btn-import-data');
-const inputImportData = document.getElementById('input-import-data');
-if (btnImportData && inputImportData) {
-    btnImportData.addEventListener('click', () => {
-        inputImportData.click();
-    });
-    inputImportData.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            try {
-                const importedState = JSON.parse(event.target.result);
-                if (importedState && (importedState.exercises || importedState.sessions)) {
-                    if (confirm("¿Estás seguro de que quieres importar esta copia de seguridad? Se sobreescribirán todos tus datos actuales.")) {
-                        state.exercises = importedState.exercises || [];
-                        state.sessions = importedState.sessions || [];
-                        state.completedWorkouts = importedState.completedWorkouts || [];
-                        state.groups = importedState.groups || ['Sin Grupo'];
-                        state.activeWorkoutState = importedState.activeWorkoutState || null;
-                        
-                        saveState();
-                        alert("Copia de seguridad restaurada con éxito. La aplicación se recargará.");
-                        location.reload();
-                    }
-                } else {
-                    alert("El archivo no parece ser una copia de seguridad válida de GymTracker.");
-                }
-            } catch(err) {
-                alert("Error al leer el archivo JSON.");
-                console.error(err);
-            }
-        };
-        reader.readAsText(file);
-        e.target.value = ''; // Reset input
-    });
-}
 
 // EXCEL IMPORT
 document.getElementById('btn-import-excel').addEventListener('click', () => {
@@ -863,6 +2588,9 @@ const renderExercises = () => {
     
     state.groups.forEach(g => {
         const card = document.createElement('div');
+        let gKey = g === 'Abdominales y core' ? 'core' : (g === 'Tríceps' ? 'triceps' : (g === 'Bíceps' ? 'biceps' : g.toLowerCase()));
+        let trGroup = getT('groups.' + gKey);
+        trGroup = trGroup !== 'groups.' + g.toLowerCase() ? trGroup : g;
         card.style.background = window.exercisesSelectedGroup === g ? 'var(--color-accent)' : 'var(--bg-surface-elevated)';
         card.style.color = window.exercisesSelectedGroup === g ? '#fff' : 'var(--text-primary)';
         card.style.padding = '12px 8px';
@@ -875,7 +2603,8 @@ const renderExercises = () => {
         card.style.textAlign = 'center';
         card.style.border = '1px solid var(--border-color)';
         
-        card.innerHTML = `<span style="font-size: 26px; margin-bottom: 6px; display: block; line-height: 1;">${typeof getGroupEmoji !== 'undefined' ? getGroupEmoji(g) : '🏋️'}</span><span style="font-size:12px; font-weight:600;">${g}</span>`;
+        card.innerHTML = `<span style="font-size: 26px; margin-bottom: 6px; display: block; line-height: 1;">${typeof getGroupEmoji !== 'undefined' ? getGroupEmoji(g) : '🏋️'}</span><span style="font-size:12px; font-weight:600;">${trGroup}</span>`;
+
         
         card.onclick = () => {
             window.exercisesSelectedGroup = window.exercisesSelectedGroup === g ? null : g;
@@ -894,8 +2623,11 @@ const renderExercises = () => {
     }
     const searchVal = document.getElementById('exercise-search').value.toLowerCase();
     if (searchVal) {
-        filteredEx = filteredEx.filter(ex => ex.name.toLowerCase().includes(searchVal));
+        filteredEx = filteredEx.filter(ex => ex.name.toLowerCase().includes(searchVal) || getTrExName(ex.name).toLowerCase().includes(searchVal));
     }
+    
+    // Sort alphabetically by translated name
+    filteredEx.sort((a, b) => getTrExName(a.name).localeCompare(getTrExName(b.name)));
     
     if (filteredEx.length === 0) {
         exListContainer.innerHTML = `<div class="empty-state">No hay ejercicios para esta selección.</div>`;
@@ -910,7 +2642,7 @@ const renderExercises = () => {
             };
             card.innerHTML = `
                 <div class="exercise-info">
-                    <h3 class="exercise-name">${ex.name}</h3>
+                    <h3 class="exercise-name">${getTrExName(ex.name)}</h3>
                     <div class="exercise-group-label" style="font-size:12px; opacity:0.8; margin-top:2px;">${ex.group}</div>
                     <div class="exercise-prs" style="margin-top: 8px;">
                         <span class="pr-badge pr-hypertrophy">PR Hipertrofia: ${ex.prs && ex.prs.hypertrophy ? ex.prs.hypertrophy.weight + 'kg x ' + ex.prs.hypertrophy.reps : '-'}</span>
@@ -929,6 +2661,13 @@ const renderExercises = () => {
     if(typeof updateLanguageUI !== 'undefined') updateLanguageUI();
 };
 
+
+document.getElementById('btn-remove-exercise-image').addEventListener('click', () => {
+    document.getElementById('exercise-image').value = '';
+    document.getElementById('exercise-image-data').value = '';
+    document.getElementById('exercise-image-preview').style.display = 'none';
+    document.getElementById('btn-remove-exercise-image').style.display = 'none';
+});
 document.getElementById('exercise-image').addEventListener('change', (e) => {
     const file = e.target.files[0];
     if(!file) return;
@@ -952,6 +2691,8 @@ document.getElementById('exercise-image').addEventListener('change', (e) => {
             const preview = document.getElementById('exercise-image-preview');
             preview.src = dataUrl;
             preview.style.display = 'block';
+        document.getElementById('btn-remove-exercise-image').style.display = 'flex';
+            document.getElementById('btn-remove-exercise-image').style.display = 'flex';
         };
         img.src = event.target.result;
     };
@@ -973,7 +2714,10 @@ const editExercise = (ex) => {
     const select = document.getElementById('exercise-group');
     select.innerHTML = '';
     state.groups.forEach(g => {
-        select.innerHTML += `<option value="${g}" ${ex.group === g ? 'selected' : ''}>${g}</option>`;
+        let gKey = g === 'Abdominales y core' ? 'core' : (g === 'Tríceps' ? 'triceps' : (g === 'Bíceps' ? 'biceps' : g.toLowerCase()));
+        let trGroup = getT('groups.' + gKey);
+        trGroup = trGroup !== 'groups.' + g.toLowerCase() ? trGroup : g;
+        select.innerHTML += `<option value="${g}" ${ex.group === g ? 'selected' : ''}>${trGroup}</option>`;
     });
     
     const imgData = ex.imageData || '';
@@ -982,8 +2726,10 @@ const editExercise = (ex) => {
     if (imgData) {
         preview.src = imgData;
         preview.style.display = 'block';
+        document.getElementById('btn-remove-exercise-image').style.display = 'flex';
     } else {
         preview.style.display = 'none';
+        document.getElementById('btn-remove-exercise-image').style.display = 'none';
     }
     
     document.getElementById('exercise-reps-hypertrophy').value = ex.defaults ? ex.defaults.hypertrophy : '10';
@@ -1024,7 +2770,7 @@ document.getElementById('btn-save-exercise').addEventListener('click', () => {
     const rHe = document.getElementById('exercise-reps-heavy').value;
     const rI = document.getElementById('exercise-reps-intensity').value;
     
-    if (!name) return alert('Pon un nombre al ejercicio');
+    if (!name) return alert(getT('alerts.nameRequired') || 'Exercise name required');
     
     if (id) {
         const ex = state.exercises.find(e => e.id === id);
@@ -1103,7 +2849,7 @@ document.getElementById('btn-open-exercise-selector').addEventListener('click', 
     
     for (const gName of groupKeys) {
         const exList = grouped[gName];
-        exList.sort((a, b) => a.name.localeCompare(b.name));
+        exList.sort((a, b) => getTrExName(a.name).localeCompare(getTrExName(b.name)));
         
         const groupDiv = document.createElement('div');
         const titleDiv = document.createElement('div');
@@ -1133,17 +2879,40 @@ document.getElementById('btn-open-exercise-selector').addEventListener('click', 
         exList.forEach(ex => {
             const itemDiv = document.createElement('div');
             itemDiv.className = 'checkbox-item';
+            itemDiv.style.alignItems = 'center';
             itemDiv.innerHTML = `
-                <input type="checkbox" id="chk-${ex.id}" value="${ex.id}">
-                <label for="chk-${ex.id}">${ex.name}</label>
+                <div style="position:relative; display:inline-flex; align-items:center;">
+                    <input type="checkbox" id="chk-${ex.id}" value="${ex.id}" class="ex-select-cb" style="margin-right: 8px;">
+                    <span class="ex-select-badge" style="position:absolute; left:-2px; top:-2px; background:var(--color-accent); color:white; border-radius:50%; font-size:10px; font-weight:bold; width:16px; height:16px; display:none; align-items:center; justify-content:center; pointer-events:none; z-index:2;"></span>
+                </div>
+                <label for="chk-${ex.id}" style="margin-left: 4px;">${getTrExName(ex.name)}</label>
             `;
+            const cb = itemDiv.querySelector('input');
+            cb.addEventListener('change', (e) => {
+                window.exerciseSelectionOrder = window.exerciseSelectionOrder || [];
+                if(e.target.checked) {
+                    window.exerciseSelectionOrder.push(ex.id);
+                } else {
+                    window.exerciseSelectionOrder = window.exerciseSelectionOrder.filter(id => id !== ex.id);
+                }
+                document.querySelectorAll('.ex-select-cb').forEach(box => {
+                    const idx = window.exerciseSelectionOrder.indexOf(box.value);
+                    const badge = box.nextElementSibling;
+                    if(idx !== -1) {
+                        badge.textContent = idx + 1;
+                        badge.style.display = 'flex';
+                    } else {
+                        badge.style.display = 'none';
+                    }
+                });
+            });
             itemsContainer.appendChild(itemDiv);
         });
         
         groupDiv.appendChild(itemsContainer);
         list.appendChild(groupDiv);
     }
-    openModal(modalSelectExercises);
+    window.exerciseSelectionOrder = []; openModal(modalSelectExercises);
 });
 
 
@@ -1181,7 +2950,7 @@ const renderRoutineItems = () => {
         const dragHandle = document.createElement('div');
         dragHandle.className = 'drag-handle';
         dragHandle.style.cssText = "cursor:grab; margin-right:8px; color:var(--text-secondary);";
-        dragHandle.innerHTML = '<i class="ph ph-list"></i>';
+        dragHandle.innerHTML = '<i class="ph ph-list"></i> <span class="exercise-number" style="margin-left: 4px; font-size: 14px;"></span>';
         
         const chk = document.createElement('input');
         chk.type = 'checkbox';
@@ -1204,7 +2973,7 @@ const renderRoutineItems = () => {
                 renderRoutineItems();
             };
         } else {
-            contentDiv.innerHTML = `<span style="font-size:14px; font-weight:700;">${item.exercises[0].dbEx.name}</span>`;
+            contentDiv.innerHTML = `<span style="font-size:14px; font-weight:700;">${getTrExName(item.exercises[0].dbEx.name)}</span>`;
         }
         
         topRow.appendChild(dragHandle);
@@ -1218,7 +2987,7 @@ const renderRoutineItems = () => {
             const exContainer = document.createElement('div');
             exContainer.style.cssText = "width:100%; margin-top:12px; border-top:1px solid var(--border-color); padding-top:12px;";
             if (item.isSuperset) {
-                exContainer.innerHTML = `<div style="font-size:13px; font-weight:600; margin-bottom:8px; color:var(--text-secondary);">- ${ex.dbEx.name}</div>`;
+                exContainer.innerHTML = `<div style="font-size:13px; font-weight:600; margin-bottom:8px; color:var(--text-secondary);">- ${getTrExName(ex.dbEx.name)}</div>`;
             }
             
             const setsList = document.createElement('div');
@@ -1232,12 +3001,11 @@ const renderRoutineItems = () => {
                     row.innerHTML = `
                         <div style="font-size:12px; color:var(--text-secondary); width:16px;">${setIndex + 1}</div>
                         <select class="set-input set-type" style="flex:1; padding:4px; border-radius:4px; font-size:12px; height:auto;">
-                            <option value="Calentamiento" ${set.type==='Calentamiento'?'selected':''}>Calentamiento</option>
-                            <option value="Aproximación" ${set.type==='Aproximación'?'selected':''}>Aproximación</option>
-                            <option value="Efectiva" ${set.type==='Efectiva'?'selected':''}>Efectiva</option>
-                            <option value="Al fallo" ${set.type==='Al fallo'?'selected':''}>Al fallo</option>
-                            <option value="Dropset" ${set.type==='Dropset'?'selected':''}>Dropset</option>
-                            <option value="Dropset fallo" ${set.type==='Dropset fallo'?'selected':''}>Dropset fallo</option>
+                            <option value="Calentamiento" ${set.type==='Calentamiento'?'selected':''}>${getSetTypeT('Calentamiento')}</option><option value="Aproximación" ${set.type==='Aproximación'?'selected':''}>${getSetTypeT('Aproximación')}</option>
+                            <option value="Efectiva" ${set.type==='Efectiva'?'selected':''}>${getSetTypeT('Efectiva')}</option>
+                            <option value="Al fallo" ${set.type==='Al fallo'?'selected':''}>${getSetTypeT('Al fallo')}</option>
+                            <option value="Dropset" ${set.type==='Dropset'?'selected':''}>${getSetTypeT('Dropset')}</option>
+                            <option value="Dropset fallo" ${set.type==='Dropset fallo'?'selected':''}>${getSetTypeT('Dropset fallo')}</option>
                         </select>
                         <div style="display:flex; flex-direction:column; align-items:center;">
                             <span style="font-size:9px; color:var(--text-secondary); line-height:1;">reps</span>
@@ -1283,7 +3051,7 @@ const renderRoutineItems = () => {
             const addSetBtn = document.createElement('button');
             addSetBtn.className = 'add-set-btn';
             addSetBtn.style.marginTop = '4px';
-            addSetBtn.textContent = '+ Añadir Serie';
+            addSetBtn.textContent = '+ ' + (getT('workout.addSet') || 'Añadir serie');
             addSetBtn.onclick = () => {
                 const lastSet = ex.sets[ex.sets.length - 1] || { type: 'Efectiva', reps: '' };
                 ex.sets.push({ ...lastSet });
@@ -1319,8 +3087,8 @@ document.getElementById('btn-cancel-exercises').addEventListener('click', () => 
 
 document.getElementById('btn-confirm-exercises').addEventListener('click', () => {
     const selectedBlockType = document.querySelector('.block-type-selector .type-btn.selected')?.dataset.type || 'hypertrophy';
-    document.querySelectorAll('#exercise-selection-list input[type="checkbox"]:checked').forEach(cb => {
-        const ex = state.exercises.find(e => e.id === cb.value);
+    (window.exerciseSelectionOrder || []).forEach(exId => {
+        const ex = state.exercises.find(e => e.id === exId);
         if(ex) {
             const targetReps = ex.defaults[selectedBlockType] || '';
             const initialSets = [
@@ -1341,7 +3109,7 @@ document.getElementById('btn-confirm-exercises').addEventListener('click', () =>
 
 document.getElementById('btn-create-superset').addEventListener('click', () => {
     const checkedBoxes = Array.from(document.querySelectorAll('.builder-chk:checked'));
-    if(checkedBoxes.length < 2) return alert('Selecciona al menos 2 elementos para crear una superserie.');
+    if(checkedBoxes.length < 2) return alert(getT('alerts.supersetMin') || 'Select at least 2 items');
     
     const selectedIds = checkedBoxes.map(cb => cb.value);
     
@@ -1390,7 +3158,7 @@ document.getElementById('btn-remove-selected-items').addEventListener('click', (
 document.getElementById('btn-save-routine').addEventListener('click', () => {
     const name = document.getElementById('routine-name').value || 'Entrenamiento';
     const duration = parseInt(document.getElementById('routine-duration').value) || 1;
-    if(routineItems.length === 0) return alert('Selecciona al menos un ejercicio.');
+    if(routineItems.length === 0) return alert(getT('alerts.exerciseRequired') || 'Select at least 1 exercise');
     
     const startDate = state.selectedDate;
     
@@ -1423,7 +3191,7 @@ document.getElementById('btn-save-routine').addEventListener('click', () => {
             id: Date.now().toString() + i,
             blockId: blockId,
             date: formatDate(d),
-            name: duration > 1 ? `${name} (Semana ${i+1})` : name,
+            name: duration > 1 ? `${name} (${getT('calendar.week')} ${i+1})` : name,
             type: selectedBlockType,
             exercises: JSON.parse(JSON.stringify(workoutExercises))
         });
@@ -1505,7 +3273,13 @@ const startWorkout = (session) => {
         openExerciseAccordions = [0]; 
         const startBtn = document.getElementById('btn-start-workout');
         startBtn.style.display = 'none';
-        document.getElementById('workout-timer').style.display = 'block';
+        const tc = document.getElementById('workout-timer-container');
+        if (tc) tc.style.display = 'flex';
+        else document.getElementById('workout-timer').style.display = 'block';
+        
+        const bc = document.getElementById('btn-cancel-workout');
+        if (bc) bc.style.display = 'none';
+        
         document.getElementById('workout-timer').textContent = 'Completado';
         document.getElementById('workout-footer').style.display = 'none';
         clearInterval(timerInterval);
@@ -1513,7 +3287,12 @@ const startWorkout = (session) => {
         // Resuming
         activeSession = state.activeWorkoutState.session;
         document.getElementById('btn-start-workout').style.display = 'none';
-        document.getElementById('workout-timer').style.display = 'block';
+        const tc2 = document.getElementById('workout-timer-container');
+        if (tc2) tc2.style.display = 'flex';
+        else document.getElementById('workout-timer').style.display = 'block';
+        
+        const bc2 = document.getElementById('btn-cancel-workout');
+        if (bc2) bc2.style.display = 'block';
         document.getElementById('workout-footer').style.display = 'block';
         clearInterval(timerInterval);
         timerInterval = setInterval(updateTimerUI, 1000);
@@ -1527,7 +3306,9 @@ const startWorkout = (session) => {
         startBtn.style.display = 'block';
         startBtn.textContent = isAnotherRunning ? 'Reemplazar Sesión Activa' : 'Iniciar';
         
-        document.getElementById('workout-timer').style.display = 'none';
+        const tc3 = document.getElementById('workout-timer-container');
+        if (tc3) tc3.style.display = 'none';
+        else document.getElementById('workout-timer').style.display = 'none';
         document.getElementById('workout-footer').style.display = 'none';
         document.getElementById('workout-timer').textContent = '00:00';
         clearInterval(timerInterval);
@@ -1538,7 +3319,7 @@ const startWorkout = (session) => {
 
 document.getElementById('btn-start-workout').addEventListener('click', (e) => {
     if (state.activeWorkoutState && state.activeWorkoutState.startTime) {
-        if (!confirm('Ya tienes un entrenamiento en curso. ¿Deseas cancelarlo e iniciar este nuevo?')) {
+        if (!confirm(getT('workout.replaceConfirm') || 'You already have an active workout. Cancel it and start this one?')) {
             return;
         }
     }
@@ -1548,9 +3329,15 @@ document.getElementById('btn-start-workout').addEventListener('click', (e) => {
         session: activeSession,
         startTime: Date.now()
     };
+    if (window.manageWorkoutNotification) window.manageWorkoutNotification(true);
     
     e.target.style.display = 'none';
-    document.getElementById('workout-timer').style.display = 'block';
+    const tc4 = document.getElementById('workout-timer-container');
+    if (tc4) tc4.style.display = 'flex';
+    else document.getElementById('workout-timer').style.display = 'block';
+    
+    const bc4 = document.getElementById('btn-cancel-workout');
+    if (bc4) bc4.style.display = 'block';
     document.getElementById('workout-footer').style.display = 'block';
     saveState();
     clearInterval(timerInterval);
@@ -1630,7 +3417,7 @@ const renderWorkout = () => {
         } else {
             const dbEx = state.exercises.find(e => e.id === block.exercises[0].exerciseId);
             const groupName = dbEx ? (dbEx.group || 'Sin Grupo') : 'Sin Grupo';
-            headerTitle = `(${groupName}) ${block.name}`;
+            headerTitle = `(${groupName}) ${getTrExName(block.name)}`;
         }
         
         // Header (Accordion)
@@ -1666,7 +3453,7 @@ const renderWorkout = () => {
             }
             
             exSection.innerHTML = `
-                ${block.type === 'superset' ? `<div style="font-weight:700; color:var(--text-primary); margin-bottom:12px;">${ex.name}</div>` : ''}
+                ${block.type === 'superset' ? `<div style="font-weight:700; color:var(--text-primary); margin-bottom:12px;">${getTrExName(ex.name)}</div>` : ''}
                 <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 12px;">
                     <div class="media-links" style="margin:0; width:100%; display:flex; flex-wrap:wrap; gap:8px;">${mediaHtml}</div>
                     <button class="history-btn" onclick="openInlineHistory('${ex.exerciseId}')" style="min-width: 80px;"><i class="ph ph-clock-counter-clockwise"></i> Hist.</button>
@@ -1718,12 +3505,11 @@ const renderWorkout = () => {
                     <div class="set-number" style="margin-top: 8px;">${setIndex + 1}</div>
                     <div style="display:flex; flex-direction:column; justify-content: flex-start; flex: 1;">
                         <select class="set-type-select" ${!isWorkoutActive ? 'disabled' : ''}>
-                            <option value="Calentamiento" ${set.type==='Calentamiento'?'selected':''}>Calentamiento</option>
-                            <option value="Aproximación" ${set.type==='Aproximación'?'selected':''}>Aproximación</option>
-                            <option value="Efectiva" ${set.type==='Efectiva'?'selected':''}>Efectiva</option>
-                            <option value="Al fallo" ${set.type==='Al fallo'?'selected':''}>Al fallo</option>
-                            <option value="Dropset" ${set.type==='Dropset'?'selected':''}>Dropset</option>
-                            <option value="Dropset fallo" ${set.type==='Dropset fallo'?'selected':''}>Dropset fallo</option>
+                            <option value="Calentamiento" ${set.type==='Calentamiento'?'selected':''}>${getSetTypeT('Calentamiento')}</option><option value="Aproximación" ${set.type==='Aproximación'?'selected':''}>${getSetTypeT('Aproximación')}</option>
+                            <option value="Efectiva" ${set.type==='Efectiva'?'selected':''}>${getSetTypeT('Efectiva')}</option>
+                            <option value="Al fallo" ${set.type==='Al fallo'?'selected':''}>${getSetTypeT('Al fallo')}</option>
+                            <option value="Dropset" ${set.type==='Dropset'?'selected':''}>${getSetTypeT('Dropset')}</option>
+                            <option value="Dropset fallo" ${set.type==='Dropset fallo'?'selected':''}>${getSetTypeT('Dropset fallo')}</option>
                         </select>
                         <div class="target-reps-text" style="margin-top: 4px;">Obj: ${targetReps}</div>
                     </div>
@@ -1771,7 +3557,7 @@ const renderWorkout = () => {
             
             const commentDiv = document.createElement('div');
             commentDiv.classList.add('exercise-comments');
-            commentDiv.innerHTML = `<input type="text" placeholder="Comentarios ${ex.name}..." value="${ex.comments || ''}">`;
+            commentDiv.innerHTML = `<input type="text" placeholder="Comentarios ${getTrExName(ex.name)}..." value="${ex.comments || ''}">`;
             commentDiv.querySelector('input').addEventListener('change', (e) => { ex.comments = e.target.value; autoSaveWorkout(); });
             exSection.appendChild(commentDiv);
             
@@ -1851,8 +3637,8 @@ document.getElementById('btn-delete-recurring').addEventListener('click', () => 
                 if (s.blockId === sessionToDelete.blockId) return false;
             } else {
                 // Fallback para sesiones creadas antes del cambio
-                const baseName = sessionToDelete.name.split(' (Semana')[0];
-                const sBaseName = s.name.split(' (Semana')[0];
+                const baseName = sessionToDelete.name.replace(/\s+\(.*?\d+\)$/, '');
+                const sBaseName = s.name.replace(/\s+\(.*?\d+\)$/, '');
                 if (s.type === sessionToDelete.type && sBaseName === baseName && sDate.getDay() === dayOfWeek) {
                     return false;
                 }
@@ -1893,11 +3679,12 @@ document.getElementById('finish-workout').addEventListener('click', () => {
     
     workoutView.classList.remove('active');
     state.activeWorkoutState = null; // CLEAR active state fully
+    if (window.manageWorkoutNotification) window.manageWorkoutNotification(false);
     activeSession = null;
     openExerciseAccordions = [];
     saveState();
     renderCalendar();
-    alert(`¡Entrenamiento Finalizado! Duración: ${formatTimer(duration > 0 ? duration : 0)}`);
+    alert((getT('alerts.workoutFinished') || 'Workout finished! Duration: ') + formatTimer(duration > 0 ? duration : 0));
 });
 
 
@@ -1947,13 +3734,13 @@ const renderGlobalHistory = () => {
             let maxW = 0;
             ex.sets.forEach(s => { if(s.weight > maxW) maxW = s.weight; });
             body.innerHTML += `<div class="history-set" style="margin-top:8px;">
-                <strong style="color:var(--text-primary);">${ex.name}</strong> 
+                <strong style="color:var(--text-primary);">${getTrExName(ex.name)}</strong> 
                 <span style="color:var(--color-accent); font-weight:600;">Max: ${maxW}kg</span>
             </div>`;
             
             ex.sets.forEach((s, idx) => {
                 body.innerHTML += `<div style="font-size:11px; display:flex; justify-content:space-between; color:var(--text-secondary); padding: 2px 0;">
-                    <span>Serie ${idx+1} (${s.type})</span> <span>${s.reps || '-'} x ${s.weight || 0}kg</span>
+                    <span>${getT('workout.series') || 'Serie'} ${idx+1} (${getSetTypeT(s.type)})</span> <span>${s.reps || '-'} x ${s.weight || 0}kg</span>
                 </div>`;
             });
         });
@@ -1992,7 +3779,7 @@ window.openInlineHistory = (exerciseId) => {
             
             exData.sets.forEach((s, idx) => {
                 body.innerHTML += `<div style="font-size:12px; display:flex; justify-content:space-between; margin-top:4px;">
-                    <span style="color:var(--text-secondary);">Serie ${idx+1} (${s.type})</span> 
+                    <span style="color:var(--text-secondary);">${getT('workout.series') || 'Serie'} ${idx+1} (${getSetTypeT(s.type)})</span> 
                     <span style="font-weight:600;">${s.reps || '-'} x ${s.weight || 0}kg</span>
                 </div>`;
             });
@@ -2024,6 +3811,13 @@ document.querySelectorAll('.lang-select-btn').forEach(btn => {
         renderCalendar();
         renderExercises();
         renderGlobalHistory();
+        if (typeof renderProgressionView !== 'undefined') renderProgressionView();
+        if (typeof renderEvolutionHistory !== 'undefined') renderEvolutionHistory();
+        if (typeof renderExportList !== 'undefined') renderExportList();
+        if (typeof switchView !== 'undefined') {
+            const activeView = document.querySelector('.view.active');
+            if(activeView) switchView(activeView.id);
+        }
     });
 });
 
@@ -2046,10 +3840,14 @@ if (state.activeWorkoutState) {
     if (activeSession) {
         workoutStartTime = state.activeWorkoutState.startTime;
         workoutView.classList.add('active');
-        startWorkoutTimer();
+        clearInterval(timerInterval);
+        timerInterval = setInterval(updateTimerUI, 1000);
+        updateTimerUI();
         renderWorkout();
+        if (window.manageWorkoutNotification) window.manageWorkoutNotification(true);
     } else {
         state.activeWorkoutState = null;
+        if (window.manageWorkoutNotification) window.manageWorkoutNotification(false);
     }
 }
 
@@ -2105,6 +3903,7 @@ const handleCalendarSwipe = (diff) => {
 const calendarContainer = document.getElementById('view-calendar');
 if (calendarContainer) {
     calendarContainer.addEventListener('touchstart', e => {
+        if (window.isApkEnv) return;
         touchStartX = e.changedTouches[0].screenX;
         touchCurrentX = touchStartX;
         if (e.target.closest('.calendar-grid') || e.target.closest('.week-navigation')) {
@@ -2118,6 +3917,7 @@ if (calendarContainer) {
     }, {passive: true});
     
     calendarContainer.addEventListener('touchmove', e => {
+        if (window.isApkEnv) return;
         if (!swipeTarget) return;
         touchCurrentX = e.changedTouches[0].screenX;
         let delta = touchCurrentX - touchStartX;
@@ -2125,6 +3925,7 @@ if (calendarContainer) {
     }, {passive: true});
     
     calendarContainer.addEventListener('touchend', e => {
+        if (window.isApkEnv) return;
         const diff = touchStartX - touchCurrentX;
         if (e.target.closest('.sessions-list') && !swipeTarget) return;
         handleCalendarSwipe(diff);
@@ -2189,6 +3990,7 @@ const handleTabSwipe = (diff) => {
 const mainContent = document.getElementById('main-content');
 if (mainContent) {
     mainContent.addEventListener('touchstart', e => {
+        if (window.isApkEnv) return;
         if (e.target.closest('#view-calendar') || e.target.closest('.scrollable') || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.closest('.modal')) return;
         touchStartX = e.changedTouches[0].screenX;
         touchCurrentX = touchStartX;
@@ -2200,6 +4002,7 @@ if (mainContent) {
     }, {passive: true});
     
     mainContent.addEventListener('touchmove', e => {
+        if (window.isApkEnv) return;
         if (e.target.closest('#view-calendar') || e.target.closest('.scrollable') || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.closest('.modal')) return;
         if (!currentView || touchStartX === 0) return;
         
@@ -2237,6 +4040,7 @@ if (mainContent) {
     }, {passive: true});
     
     mainContent.addEventListener('touchend', e => {
+        if (window.isApkEnv) return;
         if (e.target.closest('#view-calendar') || e.target.closest('.scrollable') || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.closest('.modal')) return;
         if (touchStartX === 0) return;
         const diff = touchStartX - touchCurrentX;
@@ -2280,7 +4084,7 @@ const renderProgressionView = () => {
     const groups = state.groups.filter(g => g !== 'Sin Grupo');
     groups.forEach(g => {
         const card = document.createElement('div');
-        card.style.background = progressionSelectedGroup === g ? 'var(--color-accent)' : 'var(--bg-surface-elevated)';
+        card.style.background = progressionSelectedGroup === g ? 'var(--primary-color)' : 'var(--bg-surface-elevated)';
         card.style.color = progressionSelectedGroup === g ? '#fff' : 'var(--text-primary)';
         card.style.padding = '12px 8px';
         card.style.borderRadius = '8px';
@@ -2292,7 +4096,11 @@ const renderProgressionView = () => {
         card.style.textAlign = 'center';
         card.style.border = '1px solid var(--border-color)';
         
-        card.innerHTML = `<span style="font-size: 26px; margin-bottom: 6px; display: block; line-height: 1;">${getGroupEmoji(g)}</span><span style="font-size:12px; font-weight:600;">${g}</span>`;
+        
+        const gKey = g === 'Abdominales y core' ? 'core' : (g === 'Tríceps' ? 'triceps' : (g === 'Bíceps' ? 'biceps' : g.toLowerCase()));
+        let trG = getT('groups.' + gKey);
+        trG = trG !== 'groups.' + gKey ? trG : g;
+        card.innerHTML = `<span style="font-size: 26px; margin-bottom: 6px; display: block; line-height: 1;">${getGroupEmoji(g)}</span><span style="font-size:12px; font-weight:600;">${trG}</span>`;
         
         card.onclick = () => {
             progressionSelectedGroup = progressionSelectedGroup === g ? null : g;
@@ -2323,7 +4131,7 @@ const renderProgressionExerciseList = () => {
     
     let filtered = state.exercises.filter(ex => {
         if (progressionSelectedGroup && ex.group !== progressionSelectedGroup) return false;
-        if (searchVal && !ex.name.toLowerCase().includes(searchVal)) return false;
+        if (searchVal && !ex.name.toLowerCase().includes(searchVal) && !getTrExName(ex.name).toLowerCase().includes(searchVal)) return false;
         return true;
     });
     
@@ -2336,12 +4144,12 @@ const renderProgressionExerciseList = () => {
         const item = document.createElement('div');
         item.style.padding = '12px';
         item.style.background = progressionSelectedExId === ex.id ? 'rgba(37, 99, 235, 0.1)' : 'var(--bg-surface)';
-        item.style.border = progressionSelectedExId === ex.id ? '1px solid var(--color-accent)' : '1px solid var(--border-color)';
+        item.style.border = progressionSelectedExId === ex.id ? '1px solid var(--primary-color)' : '1px solid var(--border-color)';
         item.style.borderRadius = '8px';
         item.style.fontSize = '14px';
         item.style.fontWeight = progressionSelectedExId === ex.id ? '600' : '400';
         item.style.cursor = 'pointer';
-        item.textContent = ex.name;
+        item.textContent = getTrExName(ex.name);
         item.onclick = () => {
             progressionSelectedExId = ex.id;
             // Clear the search input so the list closes if no group is selected
@@ -2362,7 +4170,7 @@ const renderProgressionExerciseList = () => {
                     chartCanvas.parentElement.insertBefore(titleEl, chartCanvas);
                 }
             }
-            if (titleEl) titleEl.textContent = ex.name;
+            if (titleEl) titleEl.textContent = getTrExName(ex.name);
 
             renderProgressionExerciseList();
             updateProgressionChart();
@@ -2550,26 +4358,31 @@ const renderEvolutionHistory = () => {
         
         let measurementsHtml = '';
         if (item.m1 || item.m2 || item.m3 || item.m4 || item.m5 || item.m6 || item.m7 || item.m8) {
+            const isApk = window.isApkEnv;
             measurementsHtml = `
-            <div style="display: grid; grid-template-columns: auto auto; gap: 8px 16px; justify-content: start; font-size: 12px; margin-top: 12px; color: var(--text-secondary); background: var(--bg-background); padding: 8px; border-radius: 4px;">
-                ${item.m2 ? `<div><strong>Brz Izq:</strong> ${item.m2} cm</div>` : '<div></div>'}
-                ${item.m3 ? `<div><strong>Brz Der:</strong> ${item.m3} cm</div>` : '<div></div>'}
-                ${item.m7 ? `<div><strong>Msl Izq:</strong> ${item.m7} cm</div>` : '<div></div>'}
-                ${item.m8 ? `<div><strong>Msl Der:</strong> ${item.m8} cm</div>` : '<div></div>'}
-                ${item.m1 ? `<div><strong>Pecho:</strong> ${item.m1} cm</div>` : '<div></div>'}
-                ${item.m4 ? `<div><strong>Abdomen:</strong> ${item.m4} cm</div>` : '<div></div>'}
-                ${item.m5 ? `<div><strong>Cintura:</strong> ${item.m5} cm</div>` : '<div></div>'}
-                ${item.m6 ? `<div><strong>Caderas:</strong> ${item.m6} cm</div>` : '<div></div>'}
+            <div style="margin-top: 12px; color: var(--text-secondary); background: var(--bg-background); padding: 8px; border-radius: 4px;">
+                ${isApk ? `<div style="margin-bottom: 12px;"><img src="img/body-measurements.png" style="width: 100%; max-height: 200px; object-fit: contain; opacity: 0.8;"></div>` : ''}
+                <div style="display: grid; grid-template-columns: auto auto; gap: 8px 16px; justify-content: start; font-size: 12px;">
+                    ${item.m2 ? `<div><strong>${getT('evolution.m2').replace(/^\d+\.\s*/, '')}:</strong> ${item.m2} cm</div>` : '<div></div>'}
+                    ${item.m3 ? `<div><strong>${getT('evolution.m3').replace(/^\d+\.\s*/, '')}:</strong> ${item.m3} cm</div>` : '<div></div>'}
+                    ${item.m7 ? `<div><strong>${getT('evolution.m7').replace(/^\d+\.\s*/, '')}:</strong> ${item.m7} cm</div>` : '<div></div>'}
+                    ${item.m8 ? `<div><strong>${getT('evolution.m8').replace(/^\d+\.\s*/, '')}:</strong> ${item.m8} cm</div>` : '<div></div>'}
+                    ${item.m1 ? `<div><strong>${getT('evolution.m1').replace(/^\d+\.\s*/, '')}:</strong> ${item.m1} cm</div>` : '<div></div>'}
+                    ${item.m4 ? `<div><strong>${getT('evolution.m4').replace(/^\d+\.\s*/, '')}:</strong> ${item.m4} cm</div>` : '<div></div>'}
+                    ${item.m5 ? `<div><strong>${getT('evolution.m5').replace(/^\d+\.\s*/, '')}:</strong> ${item.m5} cm</div>` : '<div></div>'}
+                    ${item.m6 ? `<div><strong>${getT('evolution.m6').replace(/^\d+\.\s*/, '')}:</strong> ${item.m6} cm</div>` : '<div></div>'}
+                </div>
             </div>`;
         }
 
         let photosHtml = '';
         if (item.photos && item.photos.length > 0) {
+            const isApk = window.isApkEnv;
             photosHtml = `
-            <div style="display:flex; gap:8px; margin-top:12px; overflow-x:auto;">`;
+            <div style="display:flex; ${isApk ? 'flex-direction: column;' : 'flex-direction: row;'} gap:8px; margin-top:12px; overflow-x:auto;">`;
             item.photos.forEach(photo => {
                 if (photo) {
-                    photosHtml += `<img src="${photo}" style="height: 100px; border-radius: 8px; object-fit: cover; cursor: pointer;" onclick="document.getElementById('lightbox-img').src=this.src; document.getElementById('modal-lightbox').style.display='flex';">`;
+                    photosHtml += `<img src="${photo}" style="height: ${isApk ? 'auto' : '100px'}; width: ${isApk ? '100%' : 'auto'}; max-height: ${isApk ? '300px' : 'none'}; border-radius: 8px; object-fit: cover; cursor: pointer;" onclick="document.getElementById('lightbox-img').src=this.src; document.getElementById('modal-lightbox').style.display='flex';">`;
                 }
             });
             photosHtml += `</div>`;
@@ -2577,19 +4390,21 @@ const renderEvolutionHistory = () => {
         
         const folderId = 'evol-details-' + item.id;
         
+        const isApk = window.isApkEnv;
         div.innerHTML = `
             <div style="padding: 16px; cursor: pointer;" onclick="const d = document.getElementById('${folderId}'); d.style.display = d.style.display === 'none' ? 'block' : 'none';">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <div style="display:flex; align-items:center; gap: 8px;">
-                        <i class="ph ph-folder" style="font-size: 20px; color: var(--color-accent);"></i>
+                        <i class="ph ph-folder" style="font-size: 20px; color: var(--primary-color);"></i>
                         <h4 style="margin:0; font-size:16px;">${dateStr}</h4>
                     </div>
                     <button class="btn-icon" style="color: var(--color-heavy); margin-left: 12px; padding: 4px;" onclick="event.stopPropagation(); deleteEvolution('${item.id}')"><i class="ph ph-trash"></i></button>
                 </div>
-                <div style="margin-top: 8px; color: var(--text-secondary); font-size: 14px; display: flex; gap: 8px; align-items: center;">
-                    <span style="background: var(--bg-surface-elevated); padding: 4px 8px; border-radius: 12px;"><strong>Peso:</strong> ${item.weight} kg</span>
-                    ${item.bf ? `<span style="background: var(--bg-surface-elevated); padding: 4px 8px; border-radius: 12px;"><strong>Grasa:</strong> ${item.bf}%</span>` : ''}
-                    ${item.photos && item.photos.length > 0 ? `<span style="color: var(--text-secondary); font-size: 12px; margin-left: auto;"><i class="ph ph-camera"></i> ${item.photos.length}</span>` : ''}
+                <div style="margin-top: 8px; color: var(--text-secondary); font-size: 14px; display: flex; ${isApk ? 'gap: 16px; justify-content: flex-start;' : 'gap: 8px; align-items: center;'}">
+                    <span style="background: var(--bg-surface-elevated); padding: 4px 8px; border-radius: 12px; ${isApk ? 'width: 45%; text-align: left;' : ''}"><strong>Peso:</strong> ${item.weight} kg</span>
+                    ${item.bf ? `<span style="background: var(--bg-surface-elevated); padding: 4px 8px; border-radius: 12px; ${isApk ? 'width: 45%; text-align: left;' : ''}"><strong>Grasa:</strong> ${item.bf}%</span>` : ''}
+                    ${item.photos && item.photos.length > 0 && !isApk ? `<span style="color: var(--text-secondary); font-size: 12px; margin-left: auto;"><i class="ph ph-camera"></i> ${item.photos.length}</span>` : ''}
+                    ${item.photos && item.photos.length > 0 && isApk ? `<div style="width: 100%; text-align: right; margin-top: 4px; font-size: 12px;"><i class="ph ph-camera"></i> ${item.photos.length}</div>` : ''}
                 </div>
             </div>
             <div id="${folderId}" style="display:none; padding: 0 16px 16px 16px; border-top: 1px solid var(--border-color);">
@@ -2652,7 +4467,7 @@ document.getElementById('btn-save-evolution')?.addEventListener('click', async (
         if (!weight) {
             btn.textContent = originalText;
             btn.disabled = false;
-            return alert('Por favor, introduce el peso.');
+            return alert(getT('alerts.weightRequired') || 'Weight required');
         }
         
         const frontInput = document.getElementById('evolution-photo-front');
@@ -2697,7 +4512,7 @@ document.getElementById('btn-save-evolution')?.addEventListener('click', async (
         
         renderEvolutionView();
     } catch (err) {
-        alert('Error al guardar: ' + err.message);
+        alert((getT('alerts.saveError') || 'Save error: ') + err.message);
     } finally {
         btn.textContent = originalText;
         btn.disabled = false;
@@ -2718,7 +4533,7 @@ window.renderExportCalendar = () => {
     const viewDate = new Date(state.exportWeekStart || state.currentWeekStart); // using exportWeekStart as the month tracker now
     const viewMonth = viewDate.getMonth();
     const viewYear = viewDate.getFullYear();
-    const monthNamesFull = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    const monthNamesFull = getT('calendar.months');
     
     document.getElementById('export-current-week-label').textContent = `${monthNamesFull[viewMonth]} ${viewYear}`;
     
@@ -2771,20 +4586,30 @@ window.renderExportCalendar = () => {
                 indContainer.appendChild(indicator);
             });
             cell.appendChild(indContainer);
-            if (dStr === selectedDateStr) {
+            
+            const isApk = window.isApkEnv;
+            if (isApk || dStr === selectedDateStr) {
                 const colors = [];
                 if(daySessions.some(s => s.type === 'hypertrophy')) colors.push('#2563EB');
                 if(daySessions.some(s => s.type === 'heavy')) colors.push('#DC2626');
                 if(daySessions.some(s => s.type === 'intensity')) colors.push('#10B981');
                 if (colors.length === 1) {
-                    cell.style.border = `3px solid ${colors[0]}`;
-                    cell.style.background = "transparent";
+                    cell.style.border = `2px solid ${colors[0]}`;
                 } else if (colors.length > 1) {
                     const gradient = colors.join(', ');
-                    cell.style.border = `3px solid transparent`;
+                    cell.style.border = `2px solid transparent`;
                     cell.style.borderImage = `linear-gradient(to bottom right, ${gradient}) 1`;
-                    cell.style.background = "transparent";
                 }
+            }
+            if (dStr === selectedDateStr && !isApk) {
+                cell.style.border = '';
+            }
+        }
+        
+        if (dStr === selectedDateStr) {
+            const isApk = window.isApkEnv;
+            if (isApk) {
+                cell.style.transform = 'scale(1.05)';
             }
         }
         
@@ -2833,8 +4658,8 @@ window.renderExportCalendar = () => {
             div.addEventListener("click", () => {
                 if (exportSelected.has(session.id)) exportSelected.delete(session.id);
                 else exportSelected.add(session.id);
-                window.renderExportCalendar(); 
-                document.getElementById('export-selected-count').textContent = exportSelected.size + " seleccionados";
+                window.renderExportCalendar();
+                renderExportList();
             });
             
             sessionsList.appendChild(div);
@@ -2847,6 +4672,112 @@ const renderExportList = () => {
     const countEl = document.getElementById("export-selected-count");
     const actionCont = document.getElementById("export-action-container");
     if(!container) return;
+    
+    if (window.isApkEnv) {
+        const viewExport = document.getElementById("view-export");
+        const modeButtons = viewExport.querySelector('div:first-child');
+        const descText = viewExport.querySelector('p');
+        if (modeButtons) modeButtons.style.display = 'none';
+        if (descText) descText.style.display = 'none';
+        if (actionCont) actionCont.style.display = 'none';
+        
+        container.innerHTML = `
+            <div style="padding: 0 16px;">
+                <h2 style="font-size: 18px; color: var(--text-primary); margin-bottom: 8px;">${getT('header.export')}</h2>
+                <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; line-height: 1.5;">${getT('export.desc')}</p>
+                
+                <button id="btn-backup-export" class="btn-secondary" style="width: 100%; padding: 16px; margin-bottom: 16px; font-weight: 600; display: flex; justify-content: center; gap: 8px;"><i class="ph ph-download-simple"></i> ${getT('export.exportBtn')}</button>
+                <button id="btn-backup-import" class="btn-secondary" style="width: 100%; padding: 16px; font-weight: 600; display: flex; justify-content: center; gap: 8px;"><i class="ph ph-upload-simple"></i> ${getT('export.importBtn')}</button>
+            </div>
+            <input type="file" id="file-import-json" accept=".json" style="display: none;">
+        `;
+        
+        document.getElementById('btn-backup-export').addEventListener('click', async () => {
+            try {
+                const data = {
+                    gym_exercises: localStorage.getItem('gym_exercises'),
+                    gym_groups: localStorage.getItem('gym_groups'),
+                    gym_sessions: localStorage.getItem('gym_sessions'),
+                    gym_evolution: localStorage.getItem('gym_evolution'),
+                    gym_routines: localStorage.getItem('gym_routines'),
+                    gym_goals: localStorage.getItem('gym_goals'),
+                    gym_completed: localStorage.getItem('gym_completed')
+                };
+                const jsonStr = JSON.stringify(data);
+                const filename = 'gymtracker_backup_' + new Date().toISOString().split('T')[0] + '.json';
+                
+                if (window.Capacitor && window.Capacitor.Plugins.SaveAs && window.Capacitor.Plugins.Filesystem) {
+                    try {
+                        const { Filesystem } = window.Capacitor.Plugins;
+                        // Write to cache first to avoid memory limits in intents
+                        const cacheResult = await Filesystem.writeFile({
+                            path: 'temp_backup.json',
+                            data: jsonStr,
+                            directory: 'CACHE',
+                            encoding: 'utf8'
+                        });
+                        
+                        // Pass the absolute file path to the native SaveAs plugin
+                        // The uri might be something like "file:///data/user/0/com.gymtracker.app/cache/temp_backup.json"
+                        // Convert "file://" to normal path by removing it
+                        const cachePath = cacheResult.uri.replace(/^file:\/\//, '');
+
+                        await window.Capacitor.Plugins.SaveAs.save({
+                            sourcePath: cachePath,
+                            filename: filename,
+                            mimeType: 'application/json'
+                        });
+                        alert(getT('alerts.backupSuccess') || 'Backup saved');
+                    } catch (e) {
+                        if (e.message !== 'User cancelled') {
+                            alert((getT('alerts.saveError') || 'Save error: ') + e.message);
+                        }
+                    }
+                } else {
+                    const blob = new Blob([jsonStr], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }
+            } catch (e) {
+                console.error(e);
+                alert((getT('alerts.exportError') || 'Export error: ') + e.message);
+            }
+        });
+
+        document.getElementById('btn-backup-import').addEventListener('click', () => {
+            document.getElementById('file-import-json').click();
+        });
+
+        document.getElementById('file-import-json').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                try {
+                    const data = JSON.parse(ev.target.result);
+                    if (data.gym_exercises) localStorage.setItem('gym_exercises', data.gym_exercises);
+                    if (data.gym_groups) localStorage.setItem('gym_groups', data.gym_groups);
+                    if (data.gym_sessions) localStorage.setItem('gym_sessions', data.gym_sessions);
+                    if (data.gym_evolution) localStorage.setItem('gym_evolution', data.gym_evolution);
+                    if (data.gym_routines) localStorage.setItem('gym_routines', data.gym_routines);
+                    if (data.gym_goals) localStorage.setItem('gym_goals', data.gym_goals);
+                    if (data.gym_completed) localStorage.setItem('gym_completed', data.gym_completed);
+                    alert(getT('alerts.importSuccess') || 'Import successful. App will restart.');
+                    window.location.reload();
+                } catch (err) {
+                    alert((getT('alerts.readError') || 'Read error: ') + err.message + '\nPreview: ' + String(ev.target.result).substring(0, 100));
+                }
+            };
+            reader.readAsText(file);
+        });
+        return;
+    }
     
     container.innerHTML = "";
     
@@ -2865,7 +4796,7 @@ const renderExportList = () => {
     } else if (exportMode === "block") {
         const blocks = {};
         workouts.forEach(w => {
-            const baseName = w.name ? w.name.split(' (Semana')[0].trim() : 'Entrenamiento';
+            const baseName = w.name ? w.name.replace(/\s+\(.*?\d+\)$/, '').trim() : getT('workout.title');
             if(!blocks[baseName]) blocks[baseName] = [];
             blocks[baseName].push(w.id);
         });
@@ -2981,14 +4912,14 @@ document.getElementById("btn-deselect-all-export")?.addEventListener("click", ()
 document.getElementById("btn-generate-pdf")?.addEventListener("click", async () => {
     const selectedIds = Array.from(exportSelected);
     if(selectedIds.length === 0) {
-        alert('Por favor, selecciona al menos un entrenamiento para exportar.');
+        alert(getT('alerts.exportMin') || 'Select at least 1 workout to export');
         return;
     }
     
     const sessionsToExport = state.sessions.filter(s => selectedIds.includes(s.id));
     sessionsToExport.sort((a,b) => new Date(a.date) - new Date(b.date));
     
-    if (sessionsToExport.length === 0) return alert("No se encontraron entrenamientos planificados con los IDs seleccionados.");
+    if (sessionsToExport.length === 0) return alert(getT('alerts.exportNotFound') || 'No planned workouts found');
     
     let printContainer = document.getElementById('print-container');
     if (!printContainer) {
@@ -3069,7 +5000,7 @@ document.getElementById("btn-generate-pdf")?.addEventListener("click", async () 
                 
                 const exName = document.createElement('h3');
                 exName.style.cssText = "margin: 0 0 4px 0; font-size: 14px; color: #1f2937;";
-                exName.textContent = ex.name + (ex.comments ? ` (Nota: ${ex.comments})` : '');
+                exName.textContent = getTrExName(ex.name) + (ex.comments ? ` (Nota: ${ex.comments})` : '');
                 tableContent.appendChild(exName);
 
                 const table = document.createElement('table');
@@ -3080,7 +5011,7 @@ document.getElementById("btn-generate-pdf")?.addEventListener("click", async () 
                 table.innerHTML = `
                     <thead>
                         <tr style="background-color: #f3f4f6;">
-                            <th style="width: 12%;">Serie</th>
+                            <th style="width: 12%;">${getT('workout.series') || 'Serie'}</th>
                             <th style="width: 20%;">Tipo</th>
                             <th style="width: 16%;">Desc.</th>
                             <th style="width: 26%;">Peso</th>
@@ -3092,10 +5023,7 @@ document.getElementById("btn-generate-pdf")?.addEventListener("click", async () 
                 const tbody = table.querySelector('tbody');
                 
                 (ex.sets || []).forEach((set, i) => {
-                    let setTypeLabel = set.type === 'warmup' ? 'Calentamiento' : 
-                                    set.type === 'approach' ? 'Aproximación' : 
-                                    set.type === 'effective' ? 'Efectiva' : 
-                                    set.type === 'dropset' ? 'Dropset' : 'Dropset (Fallo)';
+                    let setTypeLabel = getSetTypeT(set.type);
                     if (set.type && ['Calentamiento', 'Aproximación', 'Efectiva', 'Al fallo', 'Dropset', 'Dropset fallo'].includes(set.type)) {
                         setTypeLabel = set.type; 
                     }
@@ -3152,39 +5080,46 @@ document.getElementById("btn-generate-pdf")?.addEventListener("click", async () 
     });
     
     const doPrint = async () => {
-        if (window.Capacitor && window.Capacitor.isNativePlatform() && typeof html2pdf !== 'undefined') {
+        if (window.isApkEnv && typeof html2pdf !== 'undefined') {
+            let filename = prompt("Nombre del archivo PDF a guardar:", "Entrenamientos");
+            if (!filename) return;
+            if (!filename.toLowerCase().endsWith('.pdf')) filename += '.pdf';
+            
+            printContainer.style.display = 'block';
             printContainer.style.position = 'absolute';
-            printContainer.style.left = '-9999px';
+            printContainer.style.left = '0';
             printContainer.style.top = '0';
+            printContainer.style.width = '100%';
+            printContainer.style.background = 'white';
+            printContainer.style.zIndex = '9999';
             
             const opt = {
                 margin:       10,
-                filename:     'entrenamientos.pdf',
+                filename:     filename,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, useCORS: true },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             
             try {
+                document.body.classList.remove('is-apk');
                 const pdfBase64 = await html2pdf().set(opt).from(printContainer).outputPdf('datauristring');
+                document.body.classList.add('is-apk');
                 const base64Data = pdfBase64.split(',')[1];
                 
-                const { Filesystem, Directory, Share } = window.Capacitor.Plugins;
+                const { Filesystem } = window.Capacitor.Plugins;
                 
-                const result = await Filesystem.writeFile({
-                    path: 'entrenamientos.pdf',
+                await Filesystem.writeFile({
+                    path: filename,
                     data: base64Data,
-                    directory: Directory.Cache
+                    directory: 'DOCUMENTS'
                 });
                 
-                await Share.share({
-                    title: 'Entrenamientos PDF',
-                    url: result.uri,
-                    dialogTitle: 'Compartir PDF'
-                });
+                alert('ÉXITO: El PDF se ha guardado en la carpeta Documentos del almacenamiento de tu teléfono como "' + filename + '".');
             } catch (e) {
                 console.error(e);
                 alert('Error al generar PDF: ' + e.message);
+                document.body.classList.add('is-apk');
             } finally {
                 printContainer.style.display = 'none';
                 printContainer.innerHTML = '';
@@ -3246,9 +5181,9 @@ window.editSession = (sessionId) => {
     if(!session) return;
     
     editingSessionId = session.id;
-    document.getElementById('routine-name').value = session.name || '';
-    document.getElementById('routine-duration').value = session.duration || 1;
-    document.getElementById('routine-type').value = session.type || 'hypertrophy';
+    const rn = document.getElementById('routine-name'); if(rn) rn.value = session.name || '';
+    const rd = document.getElementById('routine-duration'); if(rd) rd.value = session.duration || 1;
+    const rt = document.getElementById('routine-type'); if(rt) rt.value = session.type || 'hypertrophy';
     
     routineItems = [];
     const grouped = {};
@@ -3280,4 +5215,177 @@ window.editSession = (sessionId) => {
 document.getElementById('header-edit-switch')?.querySelector('input').addEventListener('change', (e) => {
     state.calendarEditMode = e.target.checked;
     renderTodaySessions();
+});
+
+// Nav arrows logic
+const navScroll = document.getElementById('bottom-nav');
+const navArrows = document.querySelectorAll('.nav-arrow');
+if(navScroll && navArrows.length === 2 && window.isApkEnv) {
+  navArrows[0].addEventListener('click', () => navScroll.scrollBy({left: -100, behavior: 'smooth'}));
+  navArrows[1].addEventListener('click', () => navScroll.scrollBy({left: 100, behavior: 'smooth'}));
+  const checkScroll = () => {
+    navArrows[0].style.opacity = navScroll.scrollLeft > 0 ? '1' : '0.3';
+    navArrows[1].style.opacity = navScroll.scrollLeft < (navScroll.scrollWidth - navScroll.clientWidth - 5) ? '1' : '0.3';
+  };
+  navScroll.addEventListener('scroll', checkScroll);
+  window.addEventListener('resize', checkScroll);
+  setTimeout(checkScroll, 500);
+}
+
+if (window.isApkEnv) {
+    document.body.classList.add('is-apk');
+    const exportNavLabel = document.querySelector('.nav-item[data-target="view-export"] span');
+    if (exportNavLabel) exportNavLabel.textContent = 'Exp/Imp';
+    
+    // Evolution form layout for APK
+    const weightInput = document.getElementById('evolution-weight');
+    const bfInput = document.getElementById('evolution-bf');
+    if (weightInput && bfInput) {
+        weightInput.style.flex = 'none';
+        weightInput.style.width = '45%';
+        bfInput.style.flex = 'none';
+        bfInput.style.width = '45%';
+    }
+    const frontPhoto = document.getElementById('evolution-photo-front');
+    if (frontPhoto) {
+        const photoContainer = frontPhoto.parentElement;
+        if (photoContainer) photoContainer.style.flexDirection = 'column';
+    }
+    const m1 = document.getElementById('evol-m1');
+    if (m1) {
+        const grid = m1.parentElement.parentElement;
+        const container = grid.parentElement;
+        if (container && grid) {
+            container.style.flexDirection = 'column';
+            container.style.alignItems = 'flex-start';
+            const img = container.querySelector('img');
+            if (img) {
+                img.style.width = '100%';
+                img.style.maxWidth = '200px';
+                img.style.marginBottom = '16px';
+                img.style.alignSelf = 'center';
+            }
+            grid.style.marginLeft = '0';
+            grid.style.width = '100%';
+            grid.style.justifyContent = 'start';
+        }
+    }
+}
+
+// ...
+document.addEventListener('DOMContentLoaded', async () => {
+    // Fallback for cached index.html
+    const timerElem = document.getElementById('workout-timer');
+    if (timerElem && !document.getElementById('workout-timer-container')) {
+        const container = document.createElement('div');
+        container.id = 'workout-timer-container';
+        container.style.display = 'none';
+        container.style.flexDirection = 'column';
+        container.style.alignItems = 'flex-end';
+        timerElem.parentNode.insertBefore(container, timerElem);
+        container.appendChild(timerElem);
+        timerElem.style.display = 'block';
+        const cancelBtnEl = document.createElement('button');
+        cancelBtnEl.id = 'btn-cancel-workout';
+        cancelBtnEl.style.cssText = 'background:none; border:none; color:var(--error-color, #ff4d4f); font-size: 12px; cursor:pointer; padding: 2px 0 0 0; display:none;';
+        cancelBtnEl.textContent = 'Cancelar';
+        container.appendChild(cancelBtnEl);
+    }
+    if (window.Capacitor && window.Capacitor.Plugins.LocalNotifications) {
+        const { LocalNotifications } = window.Capacitor.Plugins;
+        LocalNotifications.addListener('localNotificationActionPerformed', (notificationAction) => {
+            if (state && state.activeWorkoutState) {
+                if (window.manageWorkoutNotification) window.manageWorkoutNotification(true);
+            }
+        });
+    }
+
+    const cancelBtn = document.getElementById('btn-cancel-workout');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+            if (confirm(getT('workout.cancelConfirm') || 'Cancel workout? Data will be lost.')) {
+                const workoutView = document.getElementById('view-workout');
+                if (workoutView) workoutView.classList.remove('active');
+                state.activeWorkoutState = null;
+                activeSession = null;
+                openExerciseAccordions = [];
+                if (typeof timerInterval !== 'undefined') clearInterval(timerInterval);
+                if (window.manageWorkoutNotification) window.manageWorkoutNotification(false);
+                saveState();
+                if (typeof updateWorkoutBanner === 'function') updateWorkoutBanner();
+                if (typeof renderCalendar === 'function') renderCalendar();
+            }
+        });
+    }
+});
+
+
+
+document.getElementById('btn-export-calendar').addEventListener('click', async () => {
+    try {
+        const data = {
+            gym_exercises: localStorage.getItem('gym_exercises'),
+            gym_groups: localStorage.getItem('gym_groups'),
+            gym_sessions: localStorage.getItem('gym_sessions'),
+            gym_routines: localStorage.getItem('gym_routines')
+        };
+        const jsonStr = JSON.stringify(data);
+        const filename = 'gymtracker_planned_' + new Date().toISOString().split('T')[0] + '.json';
+        
+        if (window.Capacitor && window.Capacitor.Plugins.SaveAs && window.Capacitor.Plugins.Filesystem) {
+            try {
+                const { Filesystem } = window.Capacitor.Plugins;
+                const cacheResult = await Filesystem.writeFile({
+                    path: 'temp_planned.json',
+                    data: jsonStr,
+                    directory: 'CACHE',
+                    encoding: 'utf8'
+                });
+                
+                const cachePath = cacheResult.uri.replace(/^file:\/\//, '');
+                await window.Capacitor.Plugins.SaveAs.save({
+                    sourcePath: cachePath,
+                    filename: filename,
+                    mimeType: 'application/json'
+                });
+                alert(getT('alerts.exportSuccess') || 'Export successful');
+            } catch (err) {
+                alert((getT('alerts.exportError') || 'Export error: ') + err.message);
+            }
+        } else {
+            const blob = new Blob([jsonStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    } catch (e) {
+        alert((getT('alerts.exportError') || 'Export error: ') + e.message);
+    }
+});
+
+document.getElementById('btn-import-calendar').addEventListener('click', () => {
+    document.getElementById('file-import-calendar').click();
+});
+
+document.getElementById('file-import-calendar').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+        try {
+            const data = JSON.parse(ev.target.result);
+            if (data.gym_exercises) localStorage.setItem('gym_exercises', data.gym_exercises);
+            if (data.gym_groups) localStorage.setItem('gym_groups', data.gym_groups);
+            if (data.gym_sessions) localStorage.setItem('gym_sessions', data.gym_sessions);
+            if (data.gym_routines) localStorage.setItem('gym_routines', data.gym_routines);
+            alert(getT('alerts.importSuccess') || 'Import successful. App will restart.');
+            window.location.reload();
+        } catch (err) {
+            alert((getT('alerts.readError') || 'Read error: ') + err.message + '\nPreview: ' + String(ev.target.result).substring(0, 100));
+        }
+    };
+    reader.readAsText(file);
 });
