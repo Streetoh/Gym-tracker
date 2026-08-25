@@ -643,6 +643,26 @@ if (typeof defaultExercises !== 'undefined') {
     });
 }
 
+// Deduplicate exercises (in case of old cache issues or ID mismatches)
+const uniqueEx = [];
+const seenNames = new Set();
+state.exercises.forEach(ex => {
+    // Normalize name to catch encoding differences (e.g. básico vs bǭsico)
+    const normName = ex.name.toLowerCase().replace(/[^a-z]/g, '');
+    let existingIdx = uniqueEx.findIndex(e => e.id === ex.id || e.name.toLowerCase().replace(/[^a-z]/g, '') === normName);
+    
+    if (existingIdx === -1) {
+        uniqueEx.push(ex);
+    } else {
+        // Keep the one with an image if there's a conflict, but preserve the old object (which might have PRs)
+        if (ex.imageData && !uniqueEx[existingIdx].imageData) {
+            uniqueEx[existingIdx].imageData = ex.imageData;
+        }
+    }
+});
+state.exercises = uniqueEx;
+saveState();
+
 // UI State
 let openExerciseAccordions = [];
 
@@ -689,7 +709,7 @@ window.manageWorkoutNotification = async (show) => {
     }
 };
 
-const saveState = () => {
+function saveState() {
     localStorage.setItem('gym_exercises', JSON.stringify(state.exercises));
     localStorage.setItem('gym_sessions', JSON.stringify(state.sessions));
     localStorage.setItem('gym_completed', JSON.stringify(state.completedWorkouts));
@@ -4587,30 +4607,19 @@ window.renderExportCalendar = () => {
             });
             cell.appendChild(indContainer);
             
-            const isApk = window.isApkEnv;
-            if (isApk || dStr === selectedDateStr) {
                 const colors = [];
                 if(daySessions.some(s => s.type === 'hypertrophy')) colors.push('#2563EB');
                 if(daySessions.some(s => s.type === 'heavy')) colors.push('#DC2626');
                 if(daySessions.some(s => s.type === 'intensity')) colors.push('#10B981');
+                
                 if (colors.length === 1) {
-                    cell.style.border = `2px solid ${colors[0]}`;
+                    cell.style.border = '2px solid ' + colors[0];
                 } else if (colors.length > 1) {
                     const gradient = colors.join(', ');
-                    cell.style.border = `2px solid transparent`;
-                    cell.style.borderImage = `linear-gradient(to bottom right, ${gradient}) 1`;
+                    cell.style.border = '2px solid transparent';
+                    const bg = cell.classList.contains('today') ? 'var(--color-hypertrophy-glow)' : 'var(--bg-surface)';
+                    cell.style.background = `linear-gradient(${bg}, ${bg}) padding-box, linear-gradient(to bottom right, ${gradient}) border-box`;
                 }
-            }
-            if (dStr === selectedDateStr && !isApk) {
-                cell.style.border = '';
-            }
-        }
-        
-        if (dStr === selectedDateStr) {
-            const isApk = window.isApkEnv;
-            if (isApk) {
-                cell.style.transform = 'scale(1.05)';
-            }
         }
         
         cell.addEventListener('click', () => {
