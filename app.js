@@ -3675,6 +3675,14 @@ document.getElementById('btn-delete-recurring').addEventListener('click', () => 
 
 // Initialization in the end of file
 document.getElementById('finish-workout').addEventListener('click', () => {
+    const confirmMsg = translations[state.language] && translations[state.language].workout && translations[state.language].workout.finishConfirm 
+        ? translations[state.language].workout.finishConfirm 
+        : '¿Finalizar entrenamiento?';
+    
+    if (!confirm(confirmMsg)) {
+        return;
+    }
+
     clearInterval(timerInterval);
     const duration = Date.now() - state.activeWorkoutState.startTime;
     
