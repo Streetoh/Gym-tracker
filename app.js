@@ -5052,7 +5052,7 @@ document.getElementById('header-edit-switch')?.querySelector('input').addEventLi
 // Nav arrows logic
 const navScroll = document.getElementById('bottom-nav');
 const navArrows = document.querySelectorAll('.nav-arrow');
-if(navScroll && navArrows.length === 2 && window.isApkEnv) {
+if(navScroll && navArrows.length === 2) {
   navArrows[0].addEventListener('click', () => navScroll.scrollBy({left: -100, behavior: 'smooth'}));
   navArrows[1].addEventListener('click', () => navScroll.scrollBy({left: 100, behavior: 'smooth'}));
   const checkScroll = () => {
@@ -5221,3 +5221,14 @@ document.getElementById('file-import-calendar').addEventListener('change', (e) =
     };
     reader.readAsText(file);
 });
+
+
+function updateMobileClass() {
+    if (window.innerWidth < 768 || window.isApkEnv) {
+        document.body.classList.add('is-mobile');
+    } else {
+        document.body.classList.remove('is-mobile');
+    }
+}
+window.addEventListener('resize', updateMobileClass);
+updateMobileClass();

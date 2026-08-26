@@ -206,23 +206,23 @@ body {
 .nav-item.active i { transform: translateY(-2px); }
 
 /* NATIVE TWEAKS */
-body.is-apk #app-header {
+body.is-mobile #app-header {
     display: flex;
     flex-direction: column;
     padding: 0;
     align-items: stretch;
 }
-body.is-apk .header-left {
+body.is-mobile .header-left {
     display: none;
 }
-body.is-apk #header-title {
+body.is-mobile #header-title {
     width: 100%;
     text-align: center;
     padding: 16px 20px 8px 20px;
     margin: 0;
     border-bottom: 1px solid var(--border-color);
 }
-body.is-apk .header-right {
+body.is-mobile .header-right {
     display: flex;
     width: 100%;
     justify-content: center;
@@ -232,14 +232,14 @@ body.is-apk .header-right {
 }
 
 /* Nav scroll arrows (APK only) */
-body.is-apk .nav-wrapper {
+body.is-mobile .nav-wrapper {
     position: relative;
     display: flex;
     align-items: stretch;
     background-color: var(--header-bg);
     border-top: 1px solid var(--border-color);
 }
-body.is-apk .nav-arrow {
+body.is-mobile .nav-arrow {
     display: flex !important;
     align-items: center;
     justify-content: center;
@@ -249,7 +249,7 @@ body.is-apk .nav-arrow {
     background: transparent;
     z-index: 25;
 }
-body.is-apk #bottom-nav {
+body.is-mobile #bottom-nav {
     flex: 1;
 }
 
