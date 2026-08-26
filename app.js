@@ -3892,8 +3892,6 @@ document.getElementById('active-workout-banner')?.addEventListener('click', () =
     }
 });
 
-}
-
 // --- PROGRESSION & EVOLUTION ---
 if (!state.evolution) state.evolution = [];
 
