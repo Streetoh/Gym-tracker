@@ -4520,102 +4520,7 @@ const renderExportList = () => {
         if (modeButtons) modeButtons.style.display = 'none';
         if (descText) descText.style.display = 'none';
         if (actionCont) actionCont.style.display = 'none';
-        
-        container.innerHTML = `
-            <div style="padding: 0 16px;">
-                <h2 style="font-size: 18px; color: var(--text-primary); margin-bottom: 8px;">${getT('header.export')}</h2>
-                <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; line-height: 1.5;">${getT('export.desc')}</p>
-                
-                <button id="btn-backup-export" class="btn-secondary" style="width: 100%; padding: 16px; margin-bottom: 16px; font-weight: 600; display: flex; justify-content: center; gap: 8px;"><i class="ph ph-download-simple"></i> ${getT('export.exportBtn')}</button>
-                <button id="btn-backup-import" class="btn-secondary" style="width: 100%; padding: 16px; font-weight: 600; display: flex; justify-content: center; gap: 8px;"><i class="ph ph-upload-simple"></i> ${getT('export.importBtn')}</button>
-            </div>
-            <input type="file" id="file-import-json" accept=".json" style="display: none;">
-        `;
-        
-        document.getElementById('btn-backup-export').addEventListener('click', async () => {
-            try {
-                const data = {
-                    gym_exercises: localStorage.getItem('gym_exercises'),
-                    gym_groups: localStorage.getItem('gym_groups'),
-                    gym_sessions: localStorage.getItem('gym_sessions'),
-                    gym_evolution: localStorage.getItem('gym_evolution'),
-                    gym_routines: localStorage.getItem('gym_routines'),
-                    gym_goals: localStorage.getItem('gym_goals'),
-                    gym_completed: localStorage.getItem('gym_completed')
-                };
-                const jsonStr = JSON.stringify(data);
-                const filename = 'gymtracker_backup_' + new Date().toISOString().split('T')[0] + '.json';
-                
-                if (window.Capacitor && window.Capacitor.Plugins.SaveAs && window.Capacitor.Plugins.Filesystem) {
-                    try {
-                        const { Filesystem } = window.Capacitor.Plugins;
-                        // Write to cache first to avoid memory limits in intents
-                        const cacheResult = await Filesystem.writeFile({
-                            path: 'temp_backup.json',
-                            data: jsonStr,
-                            directory: 'CACHE',
-                            encoding: 'utf8'
-                        });
-                        
-                        // Pass the absolute file path to the native SaveAs plugin
-                        // The uri might be something like "file:///data/user/0/com.gymtracker.app/cache/temp_backup.json"
-                        // Convert "file://" to normal path by removing it
-                        const cachePath = cacheResult.uri.replace(/^file:\/\//, '');
-
-                        await window.Capacitor.Plugins.SaveAs.save({
-                            sourcePath: cachePath,
-                            filename: filename,
-                            mimeType: 'application/json'
-                        });
-                        alert(getT('alerts.backupSuccess') || 'Backup saved');
-                    } catch (e) {
-                        if (e.message !== 'User cancelled') {
-                            alert((getT('alerts.saveError') || 'Save error: ') + e.message);
-                        }
-                    }
-                } else {
-                    const blob = new Blob([jsonStr], { type: 'application/json' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = filename;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                }
-            } catch (e) {
-                console.error(e);
-                alert((getT('alerts.exportError') || 'Export error: ') + e.message);
-            }
-        });
-
-        document.getElementById('btn-backup-import').addEventListener('click', () => {
-            document.getElementById('file-import-json').click();
-        });
-
-        document.getElementById('file-import-json').addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                try {
-                    const data = JSON.parse(ev.target.result);
-                    if (data.gym_exercises) localStorage.setItem('gym_exercises', data.gym_exercises);
-                    if (data.gym_groups) localStorage.setItem('gym_groups', data.gym_groups);
-                    if (data.gym_sessions) localStorage.setItem('gym_sessions', data.gym_sessions);
-                    if (data.gym_evolution) localStorage.setItem('gym_evolution', data.gym_evolution);
-                    if (data.gym_routines) localStorage.setItem('gym_routines', data.gym_routines);
-                    if (data.gym_goals) localStorage.setItem('gym_goals', data.gym_goals);
-                    if (data.gym_completed) localStorage.setItem('gym_completed', data.gym_completed);
-                    alert(getT('alerts.importSuccess') || 'Import successful. App will restart.');
-                    window.location.reload();
-                } catch (err) {
-                    alert((getT('alerts.readError') || 'Read error: ') + err.message + '\nPreview: ' + String(ev.target.result).substring(0, 100));
-                }
-            };
-            reader.readAsText(file);
-        });
+        container.innerHTML = '<div class="empty-state">La generación de PDF no está disponible en la app. Utiliza la copia de seguridad.</div>';
         return;
     }
     
@@ -5240,3 +5145,84 @@ function updateMobileClass() {
 }
 window.addEventListener('resize', updateMobileClass);
 updateMobileClass();
+
+
+// GLOBAL BACKUP LISTENERS
+document.getElementById('btn-backup-export')?.addEventListener('click', async () => {
+    try {
+        const data = {
+            gym_exercises: localStorage.getItem('gym_exercises'),
+            gym_groups: localStorage.getItem('gym_groups'),
+            gym_sessions: localStorage.getItem('gym_sessions'),
+            gym_evolution: localStorage.getItem('gym_evolution'),
+            gym_routines: localStorage.getItem('gym_routines'),
+            gym_goals: localStorage.getItem('gym_goals'),
+            gym_completed: localStorage.getItem('gym_completed')
+        };
+        const jsonStr = JSON.stringify(data);
+        const filename = 'gymtracker_backup_' + new Date().toISOString().split('T')[0] + '.json';
+        
+        if (window.Capacitor && window.Capacitor.Plugins.SaveAs && window.Capacitor.Plugins.Filesystem) {
+            try {
+                const { Filesystem } = window.Capacitor.Plugins;
+                const cacheResult = await Filesystem.writeFile({
+                    path: 'temp_backup.json',
+                    data: jsonStr,
+                    directory: 'CACHE',
+                    encoding: 'utf8'
+                });
+                const cachePath = cacheResult.uri.replace(/^file:\/\//, '');
+                await window.Capacitor.Plugins.SaveAs.save({
+                    sourcePath: cachePath,
+                    filename: filename,
+                    mimeType: 'application/json'
+                });
+                alert(getT('alerts.backupSuccess') || 'Backup saved');
+            } catch (e) {
+                if (e.message !== 'User cancelled') {
+                    alert((getT('alerts.saveError') || 'Save error: ') + e.message);
+                }
+            }
+        } else {
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    } catch (e) {
+        console.error(e);
+        alert((getT('alerts.exportError') || 'Export error: ') + e.message);
+    }
+});
+
+document.getElementById('btn-backup-import')?.addEventListener('click', () => {
+    document.getElementById('file-import-json')?.click();
+});
+
+document.getElementById('file-import-json')?.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+        try {
+            const data = JSON.parse(ev.target.result);
+            if (data.gym_exercises) localStorage.setItem('gym_exercises', data.gym_exercises);
+            if (data.gym_groups) localStorage.setItem('gym_groups', data.gym_groups);
+            if (data.gym_sessions) localStorage.setItem('gym_sessions', data.gym_sessions);
+            if (data.gym_evolution) localStorage.setItem('gym_evolution', data.gym_evolution);
+            if (data.gym_routines) localStorage.setItem('gym_routines', data.gym_routines);
+            if (data.gym_goals) localStorage.setItem('gym_goals', data.gym_goals);
+            if (data.gym_completed) localStorage.setItem('gym_completed', data.gym_completed);
+            alert(getT('alerts.importSuccess') || 'Import successful. App will restart.');
+            window.location.reload();
+        } catch (err) {
+            alert((getT('alerts.readError') || 'Read error: ') + err.message);
+        }
+    };
+    reader.readAsText(file);
+});
