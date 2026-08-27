@@ -5268,7 +5268,7 @@ window.generateDashboard = function(mode) {
         };
     }
 };
-const CURRENT_APP_VERSION = 1;
+const CURRENT_APP_VERSION = 0;
 async function checkForUpdates() {
     try {
         const response = await fetch('https://streetoh.github.io/Gym-tracker/version.json?t=' + new Date().getTime());
