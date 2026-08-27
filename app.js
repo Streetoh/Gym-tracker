@@ -5268,3 +5268,18 @@ window.generateDashboard = function(mode) {
         };
     }
 };
+const CURRENT_APP_VERSION = 1;
+async function checkForUpdates() {
+    try {
+        const response = await fetch('https://streetoh.github.io/Gym-tracker/version.json?t=' + new Date().getTime());
+        if (!response.ok) return;
+        const data = await response.json();
+        if (data.version > CURRENT_APP_VERSION) {
+            document.getElementById('update-changelog').innerText = data.changelog || 'Mejoras de rendimiento y nuevas funciones.';
+            document.getElementById('modal-update').classList.add('active');
+        }
+    } catch (e) {
+        console.log('No se pudo comprobar la versión', e);
+    }
+}
+setTimeout(checkForUpdates, 3000);
