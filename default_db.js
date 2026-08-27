@@ -473,7 +473,7 @@ const defaultExercises = [
     "group": "Tríceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
+    "imageData": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLZyRlDd2_J6f3EP0tXh5odQdlzxEC7vlmR-GnE7RgZQ&s=10",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -486,7 +486,7 @@ const defaultExercises = [
     "group": "Tríceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
+    "imageData": "https://eresfitness.com/wp-content/uploads/30401105-Cable-Bar-High-Pulley-Overhead-Tricep-Extension-female_Upper-Arms_max.webp",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -525,7 +525,7 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/dumbbell-row/dumbbell-row-800.jpg",
+    "imageData": "https://www.sportlife.es/uploads/static/sportlife/upload/images/gallery/5e6a2f990ce694d9588b46af/5e6a30170de6943f583493ec-sesion-landmine-condicion-y-perdida-de-grasa.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -538,7 +538,7 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
+    "imageData": "https://i.pinimg.com/736x/ab/b7/95/abb79534fbdadb6357643c7f54d930be.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -551,7 +551,7 @@ const defaultExercises = [
     "group": "Bíceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://www.lyfta.app/_next/image?url=https%3A%2F%2Flyfta.app%2Fimages%2Fexercises%2F04511101.png&w=640&q=80",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -577,7 +577,7 @@ const defaultExercises = [
     "group": "Hombro",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
+    "imageData": "https://proet-s3-do.fra1.digitaloceanspaces.com/exercise/31994-37450-2621.jpeg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -616,7 +616,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/deadlift/deadlift-800.jpg",
+    "imageData": "https://static.strengthlevel.com/images/exercises/romanian-deadlift/romanian-deadlift-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -642,7 +642,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/lying-leg-curl/lying-leg-curl-800.jpg",
+    "imageData": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBkmqIqD4gZX1JiX-u2gdKRFfCOztCLlHYEdKfPSGsEg&s",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -668,7 +668,7 @@ const defaultExercises = [
     "group": "Pecho",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/bench-press/bench-press-800.jpg",
+    "imageData": "https://cdn.shopify.com/s/files/1/0269/5551/3900/files/Dumbbell-Bench-Press_13090f67-ccfc-4f3a-9bab-e75d753fa9fa_600x600.png?v=1612137970",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -681,7 +681,7 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
+    "imageData": "https://fitcron.com/wp-content/uploads/2021/04/10471301-Cable-Close-Grip-Front-Lat-Pulldown_Back_720.gif",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -694,7 +694,7 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/dumbbell-row/dumbbell-row-800.jpg",
+    "imageData": "https://www.lyfta.app/_next/image?url=%2Fthumbnails%2F32331201.jpg&w=3840&q=75",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -720,7 +720,7 @@ const defaultExercises = [
     "group": "Hombro",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
+    "imageData": "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEj77SMQ4-zRTel5N1_rzW2f6F597oPSSNjFWTRDfCoc0WtimkVUDXChdSHavEuFbqNiEBz6Rz_rV5Vvl-mcAKk64dvVxYXOCBISAyraChyphenhyphenp_mADI46jPnmnmdcnDcCRAt8tU0bJpApdLz0/w1200-h630-p-k-no-nu/pajaro+con+polea.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -733,7 +733,7 @@ const defaultExercises = [
     "group": "Bíceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/dumbbell-curl/dumbbell-curl-800.jpg",
+    "imageData": "https://fitcron.com/wp-content/uploads/2021/04/16071301-Cable-Biceps-Curl-SZ-bar_Upper-arms_720.gif",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -746,7 +746,7 @@ const defaultExercises = [
     "group": "Tríceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
+    "imageData": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStMHxpkUu6N-wG-o5Fn-YgOJ0JmdL9nzCYXPoNe1iCdi-gagc2zjP6PkA&s=10",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -798,7 +798,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/leg-extension/leg-extension-800.jpg",
+    "imageData": "https://www.musculacion.net/images/extension-de-una-pierna-maquina.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -863,7 +863,7 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://preview.redd.it/is-there-rear-delt-fly-machine-in-the-list-v0-qitx8pgpdjig1.jpeg?auto=webp&s=55acf8d58118dbc369f320fdf7451984f1437e34",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -902,7 +902,7 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
+    "imageData": "https://cdn.shopify.com/s/files/1/0269/5551/3900/files/Rope-Pulldown_24c7b22e-bf99-4ade-ba6c-c7b2f20ffa9a_600x600.png?v=1612138283",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -941,7 +941,7 @@ const defaultExercises = [
     "group": "Bíceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/hammer-curl/hammer-curl-800.jpg",
+    "imageData": "https://i.blogs.es/f4b6c6/biceps1/450_1000.webp",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(8-12)",
@@ -954,7 +954,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
+    "imageData": "https://static.strengthlevel.com/images/exercises/cable-kickback/cable-kickback-800.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(6-8)",
@@ -1005,8 +1005,8 @@ const defaultExercises = [
     "name": "Six ways con mancuernas",
     "group": "Hombro",
     "max1RM": "",
-    "youtubeLink": "",
-    "imageData": "",
+    "youtubeLink": "https://www.youtube.com/watch?v=eNUh4_x3Mi4",
+    "imageData": "https://i.ytimg.com/vi/eNUh4_x3Mi4/maxresdefault.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(8-12)",
@@ -1019,7 +1019,7 @@ const defaultExercises = [
     "group": "Bíceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
+    "imageData": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3YImIILzsXVVBfYxf1GcOTC-nscZUmvKews8D6LAv2g&s=10",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(8-12)",
@@ -1032,7 +1032,7 @@ const defaultExercises = [
     "group": "Tríceps",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/cable-crunch/cable-crunch-800.jpg",
+    "imageData": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGz3wIs7BzOhYDo3ppHnT86bMetv89SIL4E0Fx0uNN4w&s=10",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(8-12)",
@@ -1058,7 +1058,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/deadlift/deadlift-800.jpg",
+    "imageData": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxmD4XgC3vt2-usdT0pPJeVV3KMCb4PomRHCt81EPdQTzaEqxhm-XwkR9Q&s=10",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(4-6)",
@@ -1071,7 +1071,7 @@ const defaultExercises = [
     "group": "Abdominales y core",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTjoPyyt1aVKQQnohcFKJGWUsVHTx7yZS4Ln4uuIQ65g&s=10",
     "defaults": {
       "hypertrophy": "(30-60 segundos)",
       "heavy": "(30-60 segundos)",
@@ -1084,7 +1084,7 @@ const defaultExercises = [
     "group": "Espalda",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/incline-bench-press/incline-bench-press-800.jpg",
+    "imageData": "https://static.strengthlevel.com/images/exercises/chest-supported-dumbbell-row/chest-supported-dumbbell-row-800.jpg",
     "defaults": {
       "hypertrophy": "(15-20)",
       "heavy": "(6-8)",
@@ -1097,7 +1097,7 @@ const defaultExercises = [
     "group": "Piernas",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "https://static.strengthlevel.com/images/exercises/single-leg-hip-thrust/single-leg-hip-thrust-800.jpg",
+    "imageData": "https://eliteatleta.com/wp-content/uploads/2023/08/Hip-Thrust-a-una-pierna.jpg",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(4-6)",
@@ -1110,7 +1110,7 @@ const defaultExercises = [
     "group": "Abdominales y core",
     "max1RM": "",
     "youtubeLink": "",
-    "imageData": "",
+    "imageData": "https://fitcron.com/wp-content/uploads/2024/05/11901301-Incline-Twisting-Sit-up-version-2_Waist_720.gif",
     "defaults": {
       "hypertrophy": "(12-15)",
       "heavy": "(8-12)",

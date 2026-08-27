@@ -2638,12 +2638,13 @@ const renderExercises = () => {
     exListContainer.className = 'exercises-list';
     
     let filteredEx = state.exercises;
-    if (window.exercisesSelectedGroup) {
-        filteredEx = filteredEx.filter(ex => ex.group === window.exercisesSelectedGroup);
-    }
     const searchVal = document.getElementById('exercise-search').value.toLowerCase();
     if (searchVal) {
+        // If searching, ignore selected group and search all
         filteredEx = filteredEx.filter(ex => ex.name.toLowerCase().includes(searchVal) || getTrExName(ex.name).toLowerCase().includes(searchVal));
+    } else if (window.exercisesSelectedGroup) {
+        // Only filter by group if NOT searching
+        filteredEx = filteredEx.filter(ex => ex.group === window.exercisesSelectedGroup);
     }
     
     // Sort alphabetically by translated name
@@ -4520,8 +4521,8 @@ const renderExportList = () => {
         if (modeButtons) modeButtons.style.display = 'none';
         if (descText) descText.style.display = 'none';
         if (actionCont) actionCont.style.display = 'none';
-        container.innerHTML = '<div class="empty-state">La generación de PDF no está disponible en la app. Utiliza la copia de seguridad.</div>';
-        return;
+        document.getElementById('export-list-container').style.display = 'none';
+
     }
     
     container.innerHTML = "";
@@ -5269,7 +5270,7 @@ window.generateDashboard = function(mode) {
     }
 };
 
-const CURRENT_APP_VERSION = 2;
+const CURRENT_APP_VERSION = 3;
 async function checkForUpdates() {
     try {
         const response = await fetch('https://streetoh.github.io/Gym-tracker/version.json?t=' + new Date().getTime());
@@ -5314,3 +5315,5 @@ window.forceReloadApp = function() {
 };
 
 setTimeout(checkForUpdates, 3000);
+
+document.getElementById('exercise-search')?.addEventListener('input', () => { renderExercises(); });
