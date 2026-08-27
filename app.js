@@ -1,4 +1,4 @@
-﻿Object.defineProperty(window, 'isApkEnv', {
+Object.defineProperty(window, 'isApkEnv', {
     get: function() {
         if (typeof Capacitor !== 'undefined' && Capacitor.isNativePlatform) return Capacitor.isNativePlatform();
         if (window.Capacitor && window.Capacitor.isNativePlatform) return window.Capacitor.isNativePlatform();
@@ -5269,7 +5269,7 @@ window.generateDashboard = function(mode) {
     }
 };
 
-const CURRENT_APP_VERSION = 1;
+const CURRENT_APP_VERSION = 2;
 async function checkForUpdates() {
     try {
         const response = await fetch('https://streetoh.github.io/Gym-tracker/version.json?t=' + new Date().getTime());
@@ -5292,6 +5292,10 @@ async function checkForUpdates() {
             }
             
             document.getElementById('modal-update').classList.add('active');
+            
+            // Show the persistent header icon
+            const btnUpdate = document.getElementById('btn-header-update');
+            if (btnUpdate) btnUpdate.style.display = 'flex';
         }
     } catch (e) {
         console.log('No se pudo comprobar la versión', e);
