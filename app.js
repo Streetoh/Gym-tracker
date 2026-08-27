@@ -5236,7 +5236,11 @@ window.generateDashboard = function(mode) {
     if (mode === 'manual') {
         window.open('https://streetoh.github.io/Gym-dashboard/', '_blank');
     } else if (mode === 'auto') {
-        const dashboardWindow = window.open('https://streetoh.github.io/Gym-dashboard/', '_blank');
+        const iframeModal = document.getElementById('modal-dashboard-iframe');
+        const iframe = document.getElementById('dashboard-iframe');
+        
+        iframeModal.classList.add('active');
+        iframe.src = 'https://streetoh.github.io/Gym-dashboard/';
         
         const exportData = {
             gym_exercises: localStorage.getItem('gym_exercises') || '[]',
@@ -5244,21 +5248,23 @@ window.generateDashboard = function(mode) {
             gym_completed: localStorage.getItem('gym_completed') || '[]'
         };
 
-        let attempts = 0;
-        const interval = setInterval(() => {
-            attempts++;
-            if (dashboardWindow.closed || attempts > 20) {
-                clearInterval(interval);
-                return;
-            }
-            dashboardWindow.postMessage({ type: 'GYM_TRACKER_DATA', data: exportData }, 'https://streetoh.github.io');
-        }, 500);
+        iframe.onload = function() {
+            let attempts = 0;
+            const interval = setInterval(() => {
+                attempts++;
+                if (attempts > 20) {
+                    clearInterval(interval);
+                    return;
+                }
+                iframe.contentWindow.postMessage({ type: 'GYM_TRACKER_DATA', data: exportData }, 'https://streetoh.github.io');
+            }, 500);
 
-        window.addEventListener('message', function ackListener(event) {
-            if (event.origin === 'https://streetoh.github.io' && event.data === 'GYM_TRACKER_DATA_RECEIVED') {
-                clearInterval(interval);
-                window.removeEventListener('message', ackListener);
-            }
-        });
+            window.addEventListener('message', function ackListener(event) {
+                if (event.origin === 'https://streetoh.github.io' && event.data === 'GYM_TRACKER_DATA_RECEIVED') {
+                    clearInterval(interval);
+                    window.removeEventListener('message', ackListener);
+                }
+            });
+        };
     }
 };
