@@ -656,18 +656,19 @@
 
     <!-- Update Modal -->
     <div id="modal-update" class="modal">
-        <div class="modal-content" style="max-width: 400px; margin: auto; border-radius: 24px; text-align: center;">
+        <div class="modal-content" style="max-width: 450px; padding: 24px; margin: auto; border-radius: 24px; text-align: center;">
             <div class="modal-header" style="justify-content: center; margin-bottom: 16px;">
-                <h3 style="font-size: 18px; font-weight: bold; color: #3b82f6;"><i class="ph ph-rocket-launch" style="margin-right: 8px;"></i>¡Nueva Versión Disponible!</h3>
+                <h3 style="font-size: 18px; font-weight: bold; color: #3b82f6;"><i class="ph ph-rocket-launch" style="margin-right: 8px;"></i>¡Nueva versión disponible!</h3>
             </div>
             <div class="modal-body">
                 <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px;">Hemos lanzado una nueva versión con mejoras y correcciones.</p>
-                <p id="update-changelog" style="color: var(--text-primary); font-size: 13px; background: var(--bg-surface); padding: 12px; border-radius: 8px; margin-bottom: 20px; font-style: italic; border: 1px solid var(--border-color);"></p>
+                <p id="update-changelog" style="color: var(--text-primary); font-size: 14px; background: var(--bg-surface); padding: 12px; border-radius: 8px; margin-bottom: 24px; font-style: italic; border: 1px solid var(--border-color);"></p>
                 
-                <button class="btn-primary full-width" style="margin-bottom: 12px; padding: 16px; background-color: #10b981; border-color: #10b981;" onclick="window.open('https://github.com/Streetoh/Gym-tracker/releases/latest', '_blank')">
-                    <i class="ph ph-download-simple" style="font-size: 24px; margin-bottom: 4px;"></i><br><span style="font-size: 16px;">Descargar Actualización</span>
-                </button>
-                <button class="btn-secondary full-width close-modal" style="padding: 12px; border: none; background: transparent; color: var(--text-secondary);" onclick="document.getElementById('modal-update').classList.remove('active')">Quizás más tarde</button>
+                <div id="update-action-container" style="width: 100%;">
+                    <!-- Botón inyectado por app.js -->
+                </div>
+                
+                <button class="btn-secondary full-width close-modal" style="padding: 14px; border: none; background: transparent; color: var(--text-secondary); width: 100%; white-space: nowrap;" onclick="document.getElementById('modal-update').classList.remove('active')">Quizás más tarde</button>
             </div>
         </div>
     </div>

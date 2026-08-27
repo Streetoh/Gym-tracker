@@ -1,4 +1,4 @@
-Object.defineProperty(window, 'isApkEnv', {
+﻿Object.defineProperty(window, 'isApkEnv', {
     get: function() {
         if (typeof Capacitor !== 'undefined' && Capacitor.isNativePlatform) return Capacitor.isNativePlatform();
         if (window.Capacitor && window.Capacitor.isNativePlatform) return window.Capacitor.isNativePlatform();
@@ -5268,7 +5268,8 @@ window.generateDashboard = function(mode) {
         };
     }
 };
-const CURRENT_APP_VERSION = 0;
+
+const CURRENT_APP_VERSION = 1;
 async function checkForUpdates() {
     try {
         const response = await fetch('https://streetoh.github.io/Gym-tracker/version.json?t=' + new Date().getTime());
@@ -5276,10 +5277,36 @@ async function checkForUpdates() {
         const data = await response.json();
         if (data.version > CURRENT_APP_VERSION) {
             document.getElementById('update-changelog').innerText = data.changelog || 'Mejoras de rendimiento y nuevas funciones.';
+            
+            const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+            const actionContainer = document.getElementById('update-action-container');
+            
+            if (isNative) {
+                actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 12px; padding: 16px; background-color: #10b981; border-color: #10b981; width: 100%;" onclick="window.open('https://github.com/Streetoh/Gym-tracker/releases/latest', '_blank')">
+                        <i class="ph ph-download-simple" style="font-size: 24px; margin-bottom: 4px;"></i><br><span style="font-size: 16px; font-weight: bold;">Descargar actualización</span>
+                    </button>`;
+            } else {
+                actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 12px; padding: 16px; background-color: #10b981; border-color: #10b981; width: 100%;" onclick="forceReloadApp()">
+                        <i class="ph ph-arrows-clockwise" style="font-size: 24px; margin-bottom: 4px;"></i><br><span style="font-size: 16px; font-weight: bold;">Actualizar aplicación</span>
+                    </button>`;
+            }
+            
             document.getElementById('modal-update').classList.add('active');
         }
     } catch (e) {
-        console.log('No se pudo comprobar la versi�n', e);
+        console.log('No se pudo comprobar la versión', e);
     }
 }
+
+window.forceReloadApp = function() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+                registration.update();
+            }
+        });
+    }
+    window.location.reload(true);
+};
+
 setTimeout(checkForUpdates, 3000);
