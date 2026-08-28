@@ -1,4 +1,4 @@
 {
-  "version": 3,
-  "changelog": "Mejoras en el buscador de ejercicios, diseño más amplio y organización interna."
+  "version": "1.1.1",
+  "changelog": "Soporte completo para Dashboard Analítico con Gemini 3.6 Flash, integración y modal de clave API, correcciones de colores en Progresión, panel de medidas corporales redondeado y cuadro de edición de ejercicios mejorado."
 }

@@ -1,3 +1,534 @@
+const exerciseDescTranslations = {
+    "Aperturas con cable en polea baja": {
+        "en": "Keep your torso upright. With slightly bent elbows, raise the cables upward and toward the center of your chest.",
+        "ru": "Держите туловище прямо. Слегка согнутыми локтями поднимите тросы вверх и к центру груди.",
+        "et": "Hoidke kere sirgena. Kergelt painutatud küünarnukkidega tõstke kaablid üles ja rinna keskosa suunas.",
+        "uk": "Тримайте тулуб прямо. Зі злегка зігнутими ліктями підніміть троси вгору і до центру грудей."
+    },
+    "Prensa de piernas (pies elevados, énfasis posterior) (básico de pierna)": {
+        "en": "Place feet high on the platform for greater hip flexion. Push with your heels without locking your knees.",
+        "ru": "Поставьте ноги высоко на платформу. Толкайте пятками, не выпрямляя колени до конца.",
+        "et": "Aseta jalad platvormil kõrgemale. Lükka kandadega, vältides põlvede lukustamist.",
+        "uk": "Поставте ноги високо на платформу. Штовхайте п'ятами, не випрямляючи коліна повністю."
+    },
+    "Zancada inversa dinámica con mancuernas": {
+        "en": "Take a large step backward. Lower under control until the back knee almost touches the floor. Keep chest high.",
+        "ru": "Сделайте широкий шаг назад. Опускайтесь, пока заднее колено почти не коснется пола. Держите грудь высоко.",
+        "et": "Astu lai samm taha. Lase end kontrollitult alla, kuni tagumine põlv peaaegu puudutab maad. Hoia rind üleval.",
+        "uk": "Зробіть широкий крок назад. Опускайтесь, поки заднє коліно майже не торкнеться підлоги. Тримайте груди високо."
+    },
+    "Peso muerto rumano con mancuerna (cadena posterior)": {
+        "en": "Lower by sliding dumbbells close to your legs. Keep a neutral spine and feel the stretch in the hamstrings.",
+        "ru": "Опускайтесь, скользя гантелями по ногам. Держите спину ровно и чувствуйте растяжение в бицепсе бедра.",
+        "et": "Lase alla, hoides hantleid jalgade lähedal. Hoia selg neutraalne ja tunneta venitust reie tagaosas.",
+        "uk": "Опускайтесь, ковзаючи гантелями по ногах. Тримайте спину рівно і відчувайте розтягнення в біцепсі стегна."
+    },
+    "Abductor sentado en máquina": {
+        "en": "Sit with a straight back. Push the pads outward using your glute strength, controlling the eccentric phase.",
+        "ru": "Сядьте с прямой спиной. Выталкивайте подушки наружу за счет силы ягодиц, контролируя возврат.",
+        "et": "Istu sirge seljaga. Lükka polstreid väljapoole tuharalihaste jõul, kontrollides tagasiliikumist.",
+        "uk": "Сядьте з прямою спиною. Виштовхуйте подушки назовні за рахунок сили сідниць, контролюючи повернення."
+    },
+    "Aductor sentado en máquina": {
+        "en": "Bring your legs together deliberately, squeezing the inner thigh. Don't let the weight drop when opening.",
+        "ru": "Сводите ноги вместе, напрягая внутреннюю часть бедра. Не бросайте вес при раскрытии.",
+        "et": "Too jalad kokku, pingutades reie sisekülge. Ära lase raskusel avanedes kukkuda.",
+        "uk": "Зводьте ноги разом, напружуючи внутрішню частину стегна. Не кидайте вагу при розкритті."
+    },
+    "Crunch lateral de rodillas en polea alta": {
+        "en": "Kneel and hold the rope behind your neck. Flex your torso to the side, contracting the obliques without pulling with your arms.",
+        "ru": "Встаньте на колени и держите канат за шеей. Наклоните туловище в сторону, напрягая косые мышцы живота.",
+        "et": "Põlvita ja hoia köit kaela taga. Painuta keha küljele, pingutades kaldlihaseid ilma kätega tõmbamata.",
+        "uk": "Встаньте на коліна і тримайте канат за шиєю. Нахиліть тулуб убік, напружуючи косі м'язи живота."
+    },
+    "Swings con kettlebell": {
+        "en": "Use your hips (hinge) to drive the weight forward, not your arms. Squeeze glutes at the top.",
+        "ru": "Используйте бедра для выталкивания веса вперед, а не руки. Напрягите ягодицы в верхней точке.",
+        "et": "Kasuta puusi raskuse ette lükkamiseks, mitte käsi. Pinguta tuharaid ülaosas.",
+        "uk": "Використовуйте стегна для виштовхування ваги вперед, а не руки. Напружте сідниці у верхній точці."
+    },
+    "Press banca en multipower (básico de pectoral)": {
+        "en": "Align the bar with your mid-chest. Retract scapulae, keep feet planted, and push explosively.",
+        "ru": "Выровняйте штангу по центру груди. Сведите лопатки, упритесь ногами и мощно толкайте.",
+        "et": "Joonda kang rinna keskosaga. Tõmba abaluud kokku, hoia jalad maas ja lükka plahvatuslikult.",
+        "uk": "Вирівняйте штангу по центру грудей. Зведіть лопатки, упріться ногами і потужно штовхайте."
+    },
+    "Aperturas en banco inclinado con mancuernas (pectoral superior)": {
+        "en": "Bench at 30-45 degrees. Lower by opening your arms with a slight elbow bend to avoid bicep stress.",
+        "ru": "Скамья 30-45 градусов. Опускайте, разводя руки с легким изгибом в локте.",
+        "et": "Pink 30-45 kraadi. Lase hantlid alla käsi avades, hoides küünarnukkides väikest painutust.",
+        "uk": "Лава 30-45 градусів. Опускайте, розводячи руки з легким вигином у лікті."
+    },
+    "Aperturas en banco declinado con mancuernas (pectoral inferior)": {
+        "en": "Secure your feet well. Open your chest and bring dumbbells together at the top like hugging a barrel.",
+        "ru": "Хорошо зафиксируйте ноги. Разведите грудь и сведите гантели вверху, словно обнимаете бочку.",
+        "et": "Kinnita jalad korralikult. Ava rind ja too hantlid ülal kokku, nagu kallistaksid tünni.",
+        "uk": "Добре зафіксуйте ноги. Розведіть груди і зведіть гантелі вгорі, немов обіймаєте бочку."
+    },
+    "Curl de bíceps unilateral en polea baja codo detrás del cuerpo": {
+        "en": "Turn your back to the pulley. Let your arm stretch behind your torso and curl, focusing on the bicep.",
+        "ru": "Встаньте спиной к блоку. Позвольте руке вытянуться за туловище и сгибайте, концентрируясь на бицепсе.",
+        "et": "Seisa seljaga ploki poole. Lase käel sirutuda keha taha ja kõverda, keskendudes biitsepsile.",
+        "uk": "Встаньте спиною до блоку. Дозвольте руці витягнутися за тулуб і згинайте, концентруючись на біцепсі."
+    },
+    "Patada de tríceps en polea baja agarre supino": {
+        "en": "Incline your torso, elbow fixed to your ribs. Extend your arm backward with palm facing up.",
+        "ru": "Наклоните туловище, локоть прижат к ребрам. Разогните руку назад ладонью вверх.",
+        "et": "Kalluta keha ette, küünarnukk ribide vastas. Siruta käsi taha, peopesa ülespoole.",
+        "uk": "Нахиліть тулуб, лікоть притиснутий до ребер. Розігніть руку назад долонею вгору."
+    },
+    "Curl martillo en banco inclinado con mancuernas": {
+        "en": "Rest your back on an incline bench for greater stretch. Neutral grip and curl without moving elbows.",
+        "ru": "Обопритесь спиной на наклонную скамью. Нейтральный хват, сгибайте без движения локтей.",
+        "et": "Toeta selg kaldpingile. Neutraalne hoie ja kõverda ilma küünarnukke liigutamata.",
+        "uk": "Зіпріться спиною на похилу лаву. Нейтральний хват, згинайте без руху ліктів."
+    },
+    "Extensión de tríceps sentado a 1 brazo por encima de la cabeza con mancuerna": {
+        "en": "Keep the elbow pointing to the ceiling. Lower the dumbbell behind your neck and fully extend.",
+        "ru": "Локоть смотрит в потолок. Опустите гантель за шею и полностью выпрямите руку.",
+        "et": "Hoia küünarnukk suunatud lakke. Lase hantel kaela taha ja siruta käsi täielikult välja.",
+        "uk": "Лікоть дивиться в стелю. Опустіть гантель за шию і повністю випряміть руку."
+    },
+    "Jalón a 1 brazo al pecho sentado con cable en polea alta (espalda unilateral tracciones verticales)": {
+        "en": "Pull the cable bringing the elbow toward your hip, depressing the shoulder. Control the stretch up.",
+        "ru": "Тяните трос, направляя локоть к бедру и опуская плечо. Контролируйте растяжение вверх.",
+        "et": "Tõmba kaablit, viies küünarnuki puusa poole ja õlg alla. Kontrolli venitust üles minnes.",
+        "uk": "Тягніть трос, направляючи лікоть до стегна і опускаючи плече. Контролюйте розтягнення вгору."
+    },
+    "Remo a 1 brazo sentado con cable en polea baja (espalda unilateral tracciones horizontales)": {
+        "en": "Pull toward your navel maintaining a neutral spine. Squeeze the scapula at the end of the movement.",
+        "ru": "Тяните к пупку, сохраняя спину нейтральной. Сожмите лопатку в конце движения.",
+        "et": "Tõmba naba poole, hoides selg neutraalne. Pinguta abaluud liigutuse lõpus.",
+        "uk": "Тягніть до пупка, зберігаючи спину нейтральною. Стисніть лопатку в кінці руху."
+    },
+    "Hiperextensión lumbar (tradicional) (Espalda baja)": {
+        "en": "Adjust the pad below your hips. Lower your torso and rise by contracting lower back and glutes without hyperextending.",
+        "ru": "Отрегулируйте подушку ниже бедер. Опускайтесь и поднимайтесь за счет поясницы и ягодиц без переразгибания.",
+        "et": "Seadista padi puusadest allapoole. Lase keha alla ja tõuse tuharate ja alaselja jõul ilma üle sirutamata.",
+        "uk": "Відрегулюйте подушку нижче стегон. Опускайтеся і піднімайтеся за рахунок попереку і сідниць без перерозгинання."
+    },
+    "Press militar sentado en máquina (básico de hombro)": {
+        "en": "Align grips with your shoulders. Push up without shrugging your neck and lower under control.",
+        "ru": "Выровняйте рукоятки по уровню плеч. Жмите вверх, не поднимая шею, и опускайте под контролем.",
+        "et": "Joonda käepidemed õlgadega. Lükka üles ilma kaela pingutamata ja lase kontrollitult alla.",
+        "uk": "Вирівняйте рукоятки за рівнем плечей. Тисніть вгору, не піднімаючи шию, і опускайте під контролем."
+    },
+    "Elevación lateral a 1 brazo inclinado con cable en polea baja (hombro medio)": {
+        "en": "Hold a support and lean slightly. Raise the cable to the side with a slight elbow bend.",
+        "ru": "Держитесь за опору и слегка наклонитесь. Поднимайте трос в сторону с легким изгибом в локте.",
+        "et": "Hoia toest kinni ja kalluta veidi. Tõsta kaabel küljele väikese küünarnuki paindega.",
+        "uk": "Тримайтеся за опору і злегка нахиліться. Піднімайте трос убік з легким вигином у лікті."
+    },
+    "Pájaros simultáneos en polea alta (hombro posterior)": {
+        "en": "Cross the cables. Pull back and out, feeling the contraction in the rear shoulder.",
+        "ru": "Скрестите тросы. Тяните назад и наружу, чувствуя сокращение в задней дельте.",
+        "et": "Rista kaablid. Tõmba taha ja välja, tunnetades tagumise õlalihase pingutust.",
+        "uk": "Схрестіть троси. Тягніть назад і назовні, відчуваючи скорочення в задній дельті."
+    },
+    "Sentadilla a cajón en multipower": {
+        "en": "Control the descent until sitting softly on the box; don't drop. Drive up powerfully from zero.",
+        "ru": "Контролируйте спуск, мягко садясь на коробку. Мощно толкайтесь вверх с нуля.",
+        "et": "Kontrolli laskumist, istudes pehmelt kastile. Lükka plahvatuslikult üles.",
+        "uk": "Контролюйте спуск, м'яко сідаючи на коробку. Потужно штовхайтеся вгору з нуля."
+    },
+    "Sentadilla ATG en multipower (énfasis glúteo)": {
+        "en": "Go as low as possible (Ass To Grass) keeping a neutral lumbar. Place feet slightly forward.",
+        "ru": "Приседайте максимально низко (ATG), сохраняя поясницу ровной. Ноги чуть впереди.",
+        "et": "Lasku nii madalale kui võimalik, hoides alaselg neutraalne. Aseta jalad veidi ettepoole.",
+        "uk": "Присідайте максимально низько (ATG), зберігаючи поперек рівним. Ноги трохи попереду."
+    },
+    "Extensión de cuádriceps sentado en máquina (cuádriceps aislado)": {
+        "en": "Align your knee with the machine's axis. Extend legs, contracting hard at the top, and hold for 1 second.",
+        "ru": "Выровняйте колено по оси тренажера. Разгибайте ноги, сильно напрягая вверху.",
+        "et": "Joonda põlv masina teljega. Siruta jalad, pingutades tugevalt ülaosas.",
+        "uk": "Вирівняйте коліно по осі тренажера. Розгинайте ноги, сильно напружуючи вгорі."
+    },
+    "Curl femoral tumbado en máquina (femoral aislado)": {
+        "en": "Keep hips pinned to the pad. Flex knees, bringing the roller toward your glutes.",
+        "ru": "Прижмите таз к скамье. Сгибайте колени, приближая валик к ягодицам.",
+        "et": "Hoia puusad pingi vastas. Kõverda põlvi, tuues rulliku tuharate poole.",
+        "uk": "Притисніть таз до лави. Згинайте коліна, наближаючи валик до сідниць."
+    },
+    "Leñador en polea media": {
+        "en": "Rotate your torso using core strength, keeping arms straight as you pass the cable side to side.",
+        "ru": "Вращайте туловище за счет пресса, держа руки прямыми при движении из стороны в сторону.",
+        "et": "Pööra keha kõhulihaste jõul, hoides käed sirgena kaablit küljelt küljele liigutades.",
+        "uk": "Обертайте тулуб за рахунок преса, тримаючи руки прямими при русі з боку в бік."
+    },
+    "Crunch en V": {
+        "en": "Raise your torso and straight legs simultaneously forming a V. Squeeze core hard at the top.",
+        "ru": "Одновременно поднимите туловище и прямые ноги, образуя V. Сильно напрягите пресс вверху.",
+        "et": "Tõsta torso ja sirged jalad korraga, moodustades V-kuju. Pinguta tugevalt kõhulihaseid.",
+        "uk": "Одночасно підніміть тулуб і прямі ноги, утворюючи V. Сильно напружте прес вгорі."
+    },
+    "Press militar sentado con barra (tradicional) (básico de hombro)": {
+        "en": "Lower bar to chin or upper chest. Press straight up, pushing your head under the bar at the end.",
+        "ru": "Опустите штангу к подбородку. Жмите вверх, выводя голову под штангу в конце.",
+        "et": "Lase kang lõua või rinna ülaosani. Lükka otse üles, viies pea liigutuse lõpus kangi alla.",
+        "uk": "Опустіть штангу до підборіддя. Тисніть вгору, виводячи голову під штангу в кінці."
+    },
+    "Remo con barra en multipower (espalda tracciones horizontales)": {
+        "en": "Torso bent almost parallel to the floor. Pull the bar to the lower abdomen with elbows tucked.",
+        "ru": "Туловище почти параллельно полу. Тяните штангу к низу живота, прижав локти.",
+        "et": "Keha painutatud peaaegu paralleelselt põrandaga. Tõmba kang alakõhuni, hoides küünarnukid keha lähedal.",
+        "uk": "Тулуб майже паралельно підлозі. Тягніть штангу до низу живота, притиснувши лікті."
+    },
+    "Jalón al pecho sentado con barra agarre neutro abierto en polea alta (espalda tracciones verticales)": {
+        "en": "Chest up, retract scapulae and pull bar to clavicle. Don't swing excessively.",
+        "ru": "Грудь вперед, сведите лопатки и тяните к ключице. Не раскачивайтесь.",
+        "et": "Rind ette, tõmba abaluud kokku ja kang rangluuni. Ära kiigu liigselt.",
+        "uk": "Груди вперед, зведіть лопатки і тягніть до ключиці. Не розгойдуйтесь."
+    },
+    "Press banca con mancuernas (pectoral plano y estabilizadores)": {
+        "en": "Feet planted, natural lumbar arch. Lower dumbbells to the sides of your chest and bring together above.",
+        "ru": "Ноги на полу, естественный прогиб. Опустите гантели к бокам груди и сведите вверху.",
+        "et": "Jalad maas, loomulik alaselja kumerus. Lase hantlid rinna kõrvale ja too ülal kokku.",
+        "uk": "Ноги на підлозі, природний прогин. Опустіть гантелі до боків грудей і зведіть вгорі."
+    },
+    "Pájaros sentado con cable en polea media (hombro posterior)": {
+        "en": "Cross cables in front of you. Open arms wide keeping elbows slightly below shoulders.",
+        "ru": "Скрестите тросы перед собой. Разводите руки в стороны, локти чуть ниже уровня плеч.",
+        "et": "Rista kaablid enda ees. Ava käed külgedele, hoides küünarnukid veidi õlgadest madalamal.",
+        "uk": "Схрестіть троси перед собою. Розводьте руки в сторони, лікті трохи нижче рівня плечей."
+    },
+    "Press banca inclinado con mancuernas (Pectoral y estabilizadores)": {
+        "en": "Incline at 30 degrees. Lower deep to stretch the pec, and press at a right angle to the ceiling.",
+        "ru": "Наклон 30 градусов. Опускайте глубоко для растяжки и жмите прямо в потолок.",
+        "et": "Kalle 30 kraadi. Lase sügavale rinnalihase venitamiseks ja lükka otse lae poole.",
+        "uk": "Нахил 30 градусів. Опускайте глибоко для розтяжки і тисніть прямо в стелю."
+    },
+    "Press militar sentado en multipower (Básico multiarticular de hombro)": {
+        "en": "Bench at 80-90 degrees. Lower bar to eye/chin level and press without snapping elbows.",
+        "ru": "Скамья 80-90 градусов. Опускайте штангу до уровня глаз/подбородка и жмите плавно.",
+        "et": "Pink 80-90 kraadi. Lase kang silmade/lõua tasemele ja lükka ilma küünarnukke paugutamata.",
+        "uk": "Лава 80-90 градусів. Опускайте штангу до рівня очей/підборіддя і тисніть плавно."
+    },
+    "Aperturas con cable en polea alta": {
+        "en": "Lean torso slightly forward. Close the cables in front of your lower abs, contracting chest maximally.",
+        "ru": "Слегка наклонитесь вперед. Сводите тросы перед низом живота, максимально сокращая грудь.",
+        "et": "Kalluta veidi ette. Too kaablid alakõhu ees kokku, pingutades rinda maksimaalselt.",
+        "uk": "Злегка нахиліться вперед. Зводьте троси перед низом живота, максимально скорочуючи груди."
+    },
+    "Elevaciones laterales tumbado con cable en polea baja": {
+        "en": "Lie sideways on a bench. Raise the arm to vertical; this angle eliminates dead spots.",
+        "ru": "Лягте боком на скамью. Поднимайте руку вертикально, чтобы исключить мертвые зоны.",
+        "et": "Lama pingil külili. Tõsta käsi vertikaalselt, see nurk eemaldab surnud punktid.",
+        "uk": "Ляжте боком на лаву. Піднімайте руку вертикально, щоб виключити мертві зони."
+    },
+    "Extensión de tríceps con cuerda en polea alta": {
+        "en": "Keep elbows pinned to your sides. Spread the rope apart at the bottom for peak contraction.",
+        "ru": "Локти прижаты к бокам. Разведите концы каната в нижней точке для пикового сокращения.",
+        "et": "Hoia küünarnukid külgedel. Tõmba köis allosas laiali maksimaalseks pingutuseks.",
+        "uk": "Лікті притиснуті до боків. Розведіть кінці каната в нижній точці для пікового скорочення."
+    },
+    "Extensión de tríceps por encima de la cabeza con barra en polea alta": {
+        "en": "Face away from pulley. Flex and extend elbows above your head focusing on the long head.",
+        "ru": "Встаньте спиной к блоку. Сгибайте и разгибайте руки над головой.",
+        "et": "Seisa seljaga ploki poole. Kõverda ja siruta küünarnukke pea kohal.",
+        "uk": "Встаньте спиною до блоку. Згинайте і розгинайте руки над головою."
+    },
+    "Rueda abdominal": {
+        "en": "Keep pelvis tucked (no lumbar curve). Extend as far as you can control, return using abs.",
+        "ru": "Держите таз подкрученным. Раскатывайтесь под контролем, возвращайтесь за счет пресса.",
+        "et": "Hoia vaagen all (ilma alaselja nõguseta). Rulli nii kaugele kui suudad, tagasi tulles kasuta kõhulihaseid.",
+        "uk": "Тримайте таз підкрученим. Розкочуйтеся під контролем, повертайтеся за рахунок преса."
+    },
+    "Peso muerto (tradicional) (básico multiarticular)": {
+        "en": "Bar over mid-foot. Chest up, push the floor away with legs and extend hips simultaneously.",
+        "ru": "Штанга над серединой стопы. Грудь вверх, толкайте пол ногами и выпрямляйте таз.",
+        "et": "Kang jala keskosa kohal. Rind üleval, lükka jalgu põrandast eemale ja siruta puusad korraga.",
+        "uk": "Штанга над серединою стопи. Груди вгору, штовхайте підлогу ногами і випрямляйте таз."
+    },
+    "Remo a 1 brazo con barra (espalda unilateral, tracciones horizontales)": {
+        "en": "Use a Landmine setup. Pull the loaded end toward your hip with elbow close to body.",
+        "ru": "Т-тяга. Тяните нагруженный конец к бедру, локоть близко к телу.",
+        "et": "Kasuta T-kangi seadistust. Tõmba raskusega otsa puusa poole, küünarnukk keha lähedal.",
+        "uk": "Т-тяга. Тягніть навантажений кінець до стегна, лікоть близько до тіла."
+    },
+    "Jalón al pecho sentado con agarre neutro cerrado en polea alta (espalda, tracciones verticales)": {
+        "en": "Pull the grip to your upper chest. Emphasize the lat stretch on the eccentric phase.",
+        "ru": "Тяните рукоятку к верху груди. Подчеркивайте растяжение широчайших при подъеме.",
+        "et": "Tõmba käepide rinna ülaosani. Rõhuta seljalihaste venitust tagasiliikumisel.",
+        "uk": "Тягніть рукоятку до верху грудей. Підкреслюйте розтягнення найширших при підйомі."
+    },
+    "Curl con barra EZ agarre inverso": {
+        "en": "Pronated grip (palms down). Curl the bar up toward your chest to work brachialis and forearms.",
+        "ru": "Хват сверху. Поднимайте штангу к груди для работы брахиалиса и предплечий.",
+        "et": "Pealthoie (peopesad all). Tõsta kang rinna poole biitsepsi ja käsivarte treenimiseks.",
+        "uk": "Хват зверху. Піднімайте штангу до грудей для роботи брахіалісу і передпліч."
+    },
+    "Curl martillo con mancuernas": {
+        "en": "Neutral grip (palms facing). Curl toward your shoulder squeezing hard. Avoid body swing.",
+        "ru": "Нейтральный хват. Сгибайте к плечу, сильно напрягая. Избегайте раскачки.",
+        "et": "Neutraalne hoie. Kõverda õla poole, tugevalt pingutades. Väldi keha kiikumist.",
+        "uk": "Нейтральний хват. Згинайте до плеча, сильно напружуючи. Уникайте розгойдування."
+    },
+    "Facepull con cuerda en polea alta (Hombro posterior)": {
+        "en": "Pull rope toward your eyes/forehead, separating hands and externally rotating shoulders.",
+        "ru": "Тяните канат к уровню глаз/лба, разводя руки в стороны и вращая плечи наружу.",
+        "et": "Tõmba köit silmade/otsaesise poole, eraldades käed ja pöörates õlgu väljapoole.",
+        "uk": "Тягніть канат до рівня очей/лоба, розводячи руки в сторони і обертаючи плечі назовні."
+    },
+    "Sentadilla en multipower": {
+        "en": "Place feet slightly forward. Squat keeping chest up and back neutral until breaking parallel.",
+        "ru": "Ноги слегка вперед. Приседайте с прямой спиной и высокой грудью ниже параллели.",
+        "et": "Aseta jalad veidi ettepoole. Kükita hoides rind üleval ja selg neutraalne alla paralleeli.",
+        "uk": "Ноги злегка вперед. Присідайте з прямою спиною і високими грудьми нижче паралелі."
+    },
+    "Sentadilla búlgara con mancuerna (énfasis en glúteo)": {
+        "en": "Lean torso slightly forward. Drop deep, feeling the glute of the front leg working.",
+        "ru": "Слегка наклоните туловище вперед. Опускайтесь глубоко, чувствуя работу ягодицы передней ноги.",
+        "et": "Kalluta torso veidi ette. Lasku sügavale, tunnetades esimese jala tuharalihase tööd.",
+        "uk": "Злегка нахиліть тулуб вперед. Опускайтеся глибоко, відчуваючи роботу сідниці передньої ноги."
+    },
+    "Peso muerto rumano con barra (tradicional) (cadena posterior)": {
+        "en": "Push hips back as you descend. Keep the bar gliding along your legs with a firm back.",
+        "ru": "Отводите таз назад при спуске. Штанга скользит по ногам, спина прямая.",
+        "et": "Lükka puusad taha laskumisel. Hoia kang mööda jalgu libisemas sirge seljaga.",
+        "uk": "Відводьте таз назад при спуску. Штанга ковзає по ногах, спина пряма."
+    },
+    "Curl femoral a 1 pierna de pie en máquina": {
+        "en": "Align knee with the axis. Flex by bringing heel to glute and control the way down.",
+        "ru": "Колено по оси тренажера. Сгибайте ногу, подтягивая пятку к ягодице, и плавно опускайте.",
+        "et": "Joonda põlv teljega. Kõverda viies kand tuharani ja kontrolli tagasiteed.",
+        "uk": "Коліно по осі тренажера. Згинайте ногу, підтягуючи п'яту до сідниці, і плавно опускайте."
+    },
+    "Press banca inclinado en multipower (básico multiarticular de pectoral)": {
+        "en": "Align bar with your clavicle. Press powerfully and control the descent.",
+        "ru": "Штанга на уровне ключиц. Мощно жмите и контролируйте опускание.",
+        "et": "Joonda kang rangluuga. Lükka tugevalt ja kontrolli laskumist.",
+        "uk": "Штанга на рівні ключиць. Потужно тисніть і контролюйте опускання."
+    },
+    "Jalón al pecho sentado con barra agarre prono medio en polea alta (espalda, tracciones verticales)": {
+        "en": "Palms facing forward. Pull to chest depressing and retracting scapulae. Don't pull behind neck.",
+        "ru": "Хват сверху. Тяните к груди, сводя лопатки. Не тяните за голову.",
+        "et": "Peopesad ette. Tõmba rinnale, viies abaluud kokku ja alla. Ära tõmba kukla taha.",
+        "uk": "Хват зверху. Тягніть до грудей, зводячи лопатки. Не тягніть за голову."
+    },
+    "Remo al pecho agarre supino (espalda, tracciones horizontales)": {
+        "en": "Palms facing up. Pull the bar to your navel to target the lower lats.",
+        "ru": "Хват снизу. Тяните штангу к пупку для работы нижних широчайших.",
+        "et": "Althoie. Tõmba kang naba poole alumiste seljalihaste treenimiseks.",
+        "uk": "Хват знизу. Тягніть штангу до пупка для роботи нижніх найширших."
+    },
+    "Elevaciones laterales con cable en polea baja (deltoides medio)": {
+        "en": "Run cable behind or in front of you. Raise laterally to shoulder height without shrugging.",
+        "ru": "Трос спереди или сзади. Поднимайте в сторону до уровня плеча без участия трапеции.",
+        "et": "Kaabel ees või taga. Tõsta külgmiselt õla kõrgusele ilma õlgu kehitamata.",
+        "uk": "Трос спереду або ззаду. Піднімайте в сторону до рівня плеча без участі трапеції."
+    },
+    "Pájaros con cable en polea baja (deltoides posterior)": {
+        "en": "Cross cables at the bottom. Raise arms diagonally backward for rear delts.",
+        "ru": "Скрестите тросы внизу. Поднимайте руки по диагонали назад для задней дельты.",
+        "et": "Rista kaablid allosas. Tõsta käed diagonaalselt taha tagumise õlalihase jaoks.",
+        "uk": "Схрестіть троси внизу. Піднімайте руки по діагоналі назад для задньої дельти."
+    },
+    "Curl con barra EZ en polea baja": {
+        "en": "Keep elbows glued to your sides. Curl the bar toward your shoulders.",
+        "ru": "Локти прижаты к бокам. Сгибайте руки, поднимая штангу к плечам.",
+        "et": "Hoia küünarnukid külgedel. Kõverda kang õlgade poole.",
+        "uk": "Лікті притиснуті до боків. Згинайте руки, піднімаючи штангу до плечей."
+    },
+    "Extensión de tríceps con barra en polea alta": {
+        "en": "Pronated grip. Lock elbows at your sides and push the bar down to full extension.",
+        "ru": "Хват сверху. Зафиксируйте локти и жмите штангу вниз до полного выпрямления.",
+        "et": "Pealthoie. Lukusta küünarnukid külgedele ja lükka kang lõpuni alla.",
+        "uk": "Хват зверху. Зафіксуйте лікті і тисніть штангу вниз до повного випрямлення."
+    },
+    "Hip thrust (tradicional) (básico de glúteo)": {
+        "en": "Upper back on bench. Extend hips driving through heels and squeeze glutes for a second at top.",
+        "ru": "Лопатки на скамье. Выталкивайте таз пятками и зажмите ягодицы на секунду вверху.",
+        "et": "Ülaselg pingil. Siruta puusad lükates läbi kandade ja pinguta tuharaid ülaosas.",
+        "uk": "Лопатки на лаві. Виштовхуйте таз п'ятами і затисніть сідниці на секунду вгорі."
+    },
+    "Pull through en polea baja (glúteo mayor)": {
+        "en": "Face away from pulley, rope between legs. Hinge hips back and drive forward to standing.",
+        "ru": "Спиной к блоку, канат между ног. Отводите таз назад и возвращайтесь в стойку.",
+        "et": "Seljaga ploki poole, köis jalgade vahel. Vii puusad taha ja tule tagasi püsti.",
+        "uk": "Спиною до блоку, канат між ніг. Відводьте таз назад і повертайтеся в стійку."
+    },
+    "Prensa de piernas (tradicional) (básico de pierna)": {
+        "en": "Feet shoulder-width. Drop deep without letting your lower back round off the seat, press with whole foot.",
+        "ru": "Ноги на ширине плеч. Опускайте глубоко, не отрывая таз от спинки, жмите всей стопой.",
+        "et": "Jalad õlgade laiuselt. Lase sügavale, hoides alaselg vastu tuge, lükka kogu jalaga.",
+        "uk": "Ноги на ширині плечей. Опускайте глибоко, не відриваючи таз від спинки, тисніть всією стопою."
+    },
+    "Extensión de cuádriceps a 1 pierna sentado en máquina": {
+        "en": "Isolate the quad unilaterally. Contract maximally at the top and control the lowering.",
+        "ru": "Изолируйте квадрицепс одной ноги. Максимально сокращайте вверху и контролируйте спуск.",
+        "et": "Isoleeri reielihas ühe jalaga. Pinguta maksimaalselt ülaosas ja kontrolli langetamist.",
+        "uk": "Ізолюйте квадрицепс однієї ноги. Максимально скорочуйте вгорі і контролюйте спуск."
+    },
+    "Plancha lateral (estática, tradicional)": {
+        "en": "Rest on forearm. Keep body in a straight line from head to heels, squeezing the core.",
+        "ru": "Опора на предплечье. Тело в прямую линию, пресс напряжен.",
+        "et": "Toeta käsivarrele. Hoia keha sirge joonena peast kandadeni, pingutades kõhtu.",
+        "uk": "Опора на передпліччя. Тіло в пряму лінію, прес напружений."
+    },
+    "Plancha (tradicional)": {
+        "en": "Forearms and toes on floor. Posterior pelvic tilt to engage core. Don't let hips sag.",
+        "ru": "Опора на предплечья и носки. Подкрутите таз. Не давайте бедрам провисать.",
+        "et": "Käsivarred ja varbad maas. Vaagen all, et aktiveerida kõhulihased. Ära lase puusadel vajuda.",
+        "uk": "Опора на передпліччя і носки. Підкрутіть таз. Не давайте стегнам провисати."
+    },
+    "Press banca con barra (tradicional)": {
+        "en": "Set shoulders, use leg drive. Lower the bar to the sternum and press up.",
+        "ru": "Сведите лопатки, используйте упор ногами. Опустите штангу на грудину и выжмите.",
+        "et": "Fikseeri õlad, kasuta jalgade tõuget. Lase kang rinnakule ja lükka üles.",
+        "uk": "Зведіть лопатки, використовуйте упор ногами. Опустіть штангу на грудину і вичавте."
+    },
+    "Apertura sentado en máquina": {
+        "en": "Maintain a slight elbow bend. Keep chest up and bring arms together in front, squeezing hard.",
+        "ru": "Слегка согните локти. Грудь вперед, сводите руки перед собой, сильно сжимая.",
+        "et": "Hoia väike küünarnuki paine. Rind üleval, too käed ette kokku, tugevalt pingutades.",
+        "uk": "Злегка зігніть лікті. Груди вперед, зводьте руки перед собою, сильно стискаючи."
+    },
+    "Pájaros sentado en máquina": {
+        "en": "Adjust machine for rear delts. Open arms backward without shrugging the traps.",
+        "ru": "Настройте тренажер на задние дельты. Разводите руки назад, не поднимая плечи.",
+        "et": "Seadista masin tagumisele õlale. Ava käed taha, vältides trapetsi pingutamist.",
+        "uk": "Налаштуйте тренажер на задні дельти. Розводьте руки назад, не піднімаючи плечі."
+    },
+    "Curl de bíceps alterno con mancuerna": {
+        "en": "Supinate (turn wrist up) as you curl the dumbbell for peak bicep contraction.",
+        "ru": "Супинируйте (поворачивайте кисть вверх) при подъеме для пикового сокращения бицепса.",
+        "et": "Supineeri (pööra rannet üles) hantlit tõstes maksimaalse biitsepsi kontraktsiooni jaoks.",
+        "uk": "Супінуйте (повертайте кисть вгору) при підйомі для пікового скорочення біцепса."
+    },
+    "Crunch abdominal de rodillas con cuerda en polea alta": {
+        "en": "Curl into a ball bringing forehead to knees using only abs. Don't pull with arms.",
+        "ru": "Скручивайтесь в комок, приближая лоб к коленям только за счет пресса.",
+        "et": "Tõmbu kera, viies otsaesise põlvedeni, kasutades ainult kõhulihaseid. Ära tõmba kätega.",
+        "uk": "Скручуйтеся в грудку, наближаючи лоб до колін тільки за рахунок преса."
+    },
+    "Pullover con barra en polea alta": {
+        "en": "Arms mostly straight. Pull the bar to your hips, focusing on lat stretch and contraction.",
+        "ru": "Руки почти прямые. Тяните штангу к бедрам, концентрируясь на широчайших.",
+        "et": "Käed peaaegu sirged. Tõmba kang puusadele, keskendudes selja venitamisele ja pingutamisele.",
+        "uk": "Руки майже прямі. Тягніть штангу до стегон, концентруючись на найширших."
+    },
+    "Press banca declinado con mancuernas": {
+        "en": "Use decline bench. Touch slightly the sides of your lower chest and press straight up.",
+        "ru": "Наклонная скамья вниз. Касайтесь низа груди и жмите прямо вверх.",
+        "et": "Kasuta allakalde pinki. Puuduta kergelt alumise rinna külgi ja lükka otse üles.",
+        "uk": "Похила лава вниз. Торкайтеся низу грудей і тисніть прямо вгору."
+    },
+    "Elevaciones laterales sentado con mancuernas": {
+        "en": "Sit to avoid momentum. Raise dumbbells out to the sides leaning torso slightly forward.",
+        "ru": "Сядьте, чтобы исключить рывки. Поднимайте гантели в стороны с легким наклоном вперед.",
+        "et": "Istu, et vältida hoogu. Tõsta hantlid külgedele, kallutades keha veidi ette.",
+        "uk": "Сядьте, щоб виключити ривки. Піднімайте гантелі в сторони з легким нахилом вперед."
+    },
+    "Curl de bíceps en banco scott con barra EZ": {
+        "en": "Armpits snug on pad. Lower under control (not to full lockout) and curl up.",
+        "ru": "Подмышки плотно прижаты к подушке. Опускайте плавно (не до конца) и поднимайте.",
+        "et": "Kaenlaalused tihedalt vastu patja. Lase alla kontrollitult (mitte lõpuni sirgu) ja tõsta üles.",
+        "uk": "Пахви щільно притиснуті до подушки. Опускайте плавно (не до кінця) і піднімайте."
+    },
+    "Patada de glúteo a 1 pierna con cable en polea baja": {
+        "en": "Attach ankle strap. Kick straight back squeezing the glute without arching your lower back.",
+        "ru": "Манжета на щиколотке. Отведите ногу назад, напрягая ягодицу, без прогиба в пояснице.",
+        "et": "Kinnita hüppeliigese rihm. Löö otse taha, pingutades tuharat ilma alaselga nõgusaks laskmata.",
+        "uk": "Манжета на щиколотці. Відведіть ногу назад, напружуючи сідницю, без прогину в попереку."
+    },
+    "Prensa de piernas (pies abajo)": {
+        "en": "Place feet low on platform to put maximum emphasis on the quads as knees flex.",
+        "ru": "Ставьте ноги низко на платформе для максимального акцента на квадрицепсы.",
+        "et": "Aseta jalad platvormil alla, et panna maksimaalne rõhk reielihastele põlve paindumisel.",
+        "uk": "Ставте ноги низько на платформі для максимального акценту на квадрицепси."
+    },
+    "Peso muerto rumano a 1 pierna con mancuernas": {
+        "en": "Balance by lifting one straight leg backward. Feel the stretch in the planted leg's hamstring.",
+        "ru": "Балансируйте, отводя прямую ногу назад. Чувствуйте бицепс бедра опорной ноги.",
+        "et": "Tasakaalusta tõstes ühe sirge jala taha. Tunneta venitust maas oleva jala reie tagaosas.",
+        "uk": "Балансуйте, відводячи пряму ногу назад. Відчувайте біцепс стегна опорної ноги."
+    },
+    "Push press (tradicional)": {
+        "en": "Initiate with a slight leg dip and drive the bar explosively overhead.",
+        "ru": "Начните с легкого подседа и мощно вытолкните штангу над головой.",
+        "et": "Alusta kerge põlvepainutusega ja lükka kang plahvatuslikult pea kohale.",
+        "uk": "Почніть з легкого підсідання і потужно виштовхніть штангу над головою."
+    },
+    "Six ways con mancuernas": {
+        "en": "Lateral raise, bring to front, raise up, lower to front, open laterally, and down. Strict control.",
+        "ru": "В сторону, вперед, вверх, вперед, в сторону, вниз. Строгий контроль.",
+        "et": "Külgmine tõste, too ette, tõsta üles, lase ette, ava küljele ja lase alla. Range kontroll.",
+        "uk": "В сторону, вперед, вгору, вперед, в сторону, вниз. Суворий контроль."
+    },
+    "Curl martillo con cuerda en polea baja": {
+        "en": "Neutral grip. Keep elbows tight to obliques and spread the rope slightly at the top.",
+        "ru": "Нейтральный хват. Локти прижаты к бокам, слегка разводите концы каната вверху.",
+        "et": "Neutraalne hoie. Hoia küünarnukid kere vastas ja tõmba köis ülaosas veidi laiali.",
+        "uk": "Нейтральний хват. Лікті притиснуті до боків, злегка розводьте кінці каната вгорі."
+    },
+    "Extensión de tríceps por encima de la cabeza con cuerda en polea alta": {
+        "en": "Face away from pulley. Extend arms forward and up, isolating the tricep long head.",
+        "ru": "Спиной к блоку. Выпрямляйте руки вперед и вверх, изолируя длинную головку трицепса.",
+        "et": "Seljaga ploki poole. Siruta käed ette ja üles, isoleerides triitsepsi pika pea.",
+        "uk": "Спиною до блоку. Випрямляйте руки вперед і вгору, ізолюючи довгу головку трицепса."
+    },
+    "Curl de bíceps con mancuerna": {
+        "en": "Curl both or alternating. Keep elbows from drifting forward.",
+        "ru": "Поднимайте обе гантели вместе или поочередно. Не выводите локти вперед.",
+        "et": "Kõverda mõlemat või vaheldumisi. Hoia küünarnukke ette liikumast.",
+        "uk": "Піднімайте обидві гантелі разом або по черзі. Не виводьте лікті вперед."
+    },
+    "Peso muerto rumano en multipower": {
+        "en": "Use the machine guide to focus purely on pushing hips back and stretching hamstrings.",
+        "ru": "Используйте тренажер, чтобы сосредоточиться только на отведении таза и растяжке.",
+        "et": "Kasuta masina tuge, et keskenduda ainult puusade taha lükkamisele ja reie tagaosa venitamisele.",
+        "uk": "Використовуйте тренажер, щоб зосередитися тільки на відведенні таза і розтяжці."
+    },
+    "Hollowman": {
+        "en": "Lie flat, raise scapulae and legs. Squeeze core hard keeping lumbar curve glued to the floor.",
+        "ru": "Лягте ровно, поднимите лопатки и ноги. Сильно напрягите пресс, поясница прижата к полу.",
+        "et": "Lama sirgelt, tõsta abaluud ja jalad. Pinguta tugevalt kõhtu, hoides alaselg põranda vastas.",
+        "uk": "Ляжте рівно, підніміть лопатки і ноги. Сильно напружте прес, поперек притиснутий до підлоги."
+    },
+    "Remo en banco inclinado con mancuernas": {
+        "en": "Chest supported on a 30-45 deg bench. Pull dumbbells to your hip, squeezing shoulder blades together.",
+        "ru": "Грудь на скамье 30-45 град. Тяните гантели к бедру, сводя лопатки вместе.",
+        "et": "Rind toetatud 30-45 kraadisel pingil. Tõmba hantlid puusa poole, viies abaluud kokku.",
+        "uk": "Груди на лаві 30-45 град. Тягніть гантелі до стегна, зводячи лопатки разом."
+    },
+    "Hip thrust a 1 pierna en máquina": {
+        "en": "Place a single foot. Drive the load pushing your hip hard upward without losing stability.",
+        "ru": "Опора на одну ногу. Мощно выталкивайте вес тазом вверх, не теряя баланс.",
+        "et": "Aseta üks jalg. Lükka raskust puusaga tugevalt üles, kaotamata stabiilsust.",
+        "uk": "Опора на одну ногу. Потужно виштовхуйте вагу тазом вгору, не втрачаючи баланс."
+    },
+    "Crunch abdominal en banco declinado con giro": {
+        "en": "As you rise, twist your torso bringing the elbow to the opposite knee to engage obliques.",
+        "ru": "При подъеме скручивайте туловище, направляя локоть к противоположному колену.",
+        "et": "Üles tõustes pööra keha, viies küünarnukk vastas põlve suunas, et kaasata kaldlihased.",
+        "uk": "При підйомі скручуйте тулуб, направляючи лікоть до протилежного коліна."
+    },
+    "Remo a 1 brazo con mancuerna": {
+        "en": "Hand and knee supported on a bench. Pull the dumbbell back toward your pants pocket.",
+        "ru": "Рука и колено на скамье. Тяните гантель назад, к карману штанов.",
+        "et": "Käsi ja põlv pingile toetatud. Tõmba hantel tagasi püksitasku suunas.",
+        "uk": "Рука і коліно на лаві. Тягніть гантель назад, до кишені штанів."
+    }
+};
+
+function getTrExDesc(originalName, currentDesc) {
+    if (!originalName || !currentDesc) return currentDesc;
+    const lang = (typeof state !== 'undefined' && state.language) ? state.language : 'es';
+    if (lang === 'es') return currentDesc;
+    
+    // Fallback normalization logic
+    const normalize = (str) => str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w\s]/g, "");
+    const target = normalize(originalName);
+    
+    for (const [k, v] of Object.entries(exerciseDescTranslations)) {
+        if (normalize(k) === target) {
+            if (v[lang]) return v[lang];
+            return currentDesc; // fallback to spanish if missing
+        }
+    }
+    
+    return currentDesc; // Fallback to whatever user edited
+}
 Object.defineProperty(window, 'isApkEnv', {
     get: function() {
         if (typeof Capacitor !== 'undefined' && Capacitor.isNativePlatform) return Capacitor.isNativePlatform();
@@ -631,19 +1162,40 @@ let state = {
     evolution: JSON.parse(localStorage.getItem('gym_evolution')) || []
 };
 
+
+// --- HEAL GROUPS (Recuperar grupos perdidos) ---
+if (typeof defaultGroups !== 'undefined') {
+    defaultGroups.forEach(g => {
+        if (!state.groups.includes(g)) state.groups.push(g);
+    });
+}
+state.exercises.forEach(ex => {
+    if (ex.group && !state.groups.includes(ex.group)) {
+        state.groups.push(ex.group);
+    }
+});
+saveState();
+// ---------------------------------------------
 // Reconcile missing default exercises and images
 if (typeof defaultExercises !== 'undefined') {
     defaultExercises.forEach(defEx => {
         let existing = state.exercises.find(ex => ex.id === defEx.id);
         if (!existing) {
             state.exercises.push(defEx);
-        } else if (defEx.imageData && existing.imageData === undefined) {
-            existing.imageData = defEx.imageData;
+        } else {
+            if (defEx.imageData && (!existing.imageData || existing.imageData === '')) {
+                existing.imageData = defEx.imageData;
+            }
+            if (defEx.description && !existing.description) {
+                existing.description = defEx.description;
+            }
         }
     });
 }
 
-// Deduplicate exercises (in case of old cache issues or ID mismatches)
+saveState(); // Save after reconciliation
+  
+  // Deduplicate exercises (in case of old cache issues or ID mismatches)
 const uniqueEx = [];
 const seenNames = new Set();
 state.exercises.forEach(ex => {
@@ -743,7 +1295,20 @@ state.currentWeekStart = getMonday(state.selectedDate);
 const views = document.querySelectorAll('.view');
 const navItems = document.querySelectorAll('.nav-item');
 const headerTitle = document.getElementById('header-title');
+
 const headerAction = document.getElementById('header-action');
+if (headerAction) {
+    headerAction.addEventListener('click', () => {
+        const activeNav = document.querySelector('.nav-item.active');
+        const activeTarget = activeNav ? activeNav.getAttribute('data-target') : 'view-calendar';
+        if (activeTarget === 'view-calendar') {
+            openModal(modalEventType);
+        } else if (activeTarget === 'view-exercises') {
+            openNewExerciseModal();
+        }
+    });
+}
+
 
 // Modals
 const modalEventType = document.getElementById('modal-event-type');
@@ -775,7 +1340,8 @@ navItems.forEach(item => {
             updateWorkoutBanner();
             return;
         } else {
-            document.getElementById('view-workout').classList.remove('active');
+            const vw = document.getElementById('view-workout');
+            if (vw) vw.classList.remove('active');
             updateWorkoutBanner();
         }
         
@@ -787,65 +1353,36 @@ navItems.forEach(item => {
                 view.classList.remove('active');
             }
         });
-        document.getElementById(target).classList.add('active');
+        
+        const activeTargetView = document.getElementById(target);
+        if (activeTargetView) {
+            activeTargetView.classList.add('active');
+        }
         
         headerAction.classList.add('hidden');
-        document.getElementById('header-edit-switch').style.display = target === 'view-calendar' ? 'flex' : 'none';
+        
+        if (typeof updateAiButtonsVisibility === 'function') {
+            updateAiButtonsVisibility();
+        } else {
+            const aiBtn = document.getElementById('btn-ai-settings');
+            const aiClear = document.getElementById('btn-ai-clear');
+            const isAi = target === 'view-ai' && localStorage.getItem('gemini_api_key');
+            if(aiBtn) aiBtn.style.display = isAi ? 'flex' : 'none';
+            if(aiClear) aiClear.style.display = isAi ? 'flex' : 'none';
+        }
+        
+        const editSwitch = document.getElementById('header-edit-switch');
+        if (editSwitch) editSwitch.style.display = target === 'view-calendar' ? 'flex' : 'none';
+        
         if (target === 'view-calendar') {
-            headerTitle.textContent = getT('header.calendar');
+            headerTitle.textContent = getT('header.calendar') || 'Calendario';
             headerAction.classList.remove('hidden');
-            headerAction.innerHTML = `<i class="ph ph-calendar-plus"></i> <span style="font-size:14px; font-weight:600; margin-left:4px;" data-i18n="calendar.createSession">${getT('calendar.createSession')}</span>`;
-            headerAction.style.width = 'auto';
-            headerAction.style.padding = '0 12px';
-            headerAction.style.borderRadius = '16px';
-            headerAction.onclick = () => { editingSessionId = null; openModal(modalEventType); };
-            renderCalendar();
-        } else if (target === 'view-exercises') {
-            headerTitle.textContent = getT('header.exercises');
-            headerAction.classList.remove('hidden');
-            headerAction.innerHTML = `<i class="ph ph-plus"></i> <span style="font-size:14px; font-weight:600; margin-left:4px;">${getT('modals.exercise.title')}</span>`;
-            headerAction.style.width = 'auto';
-            headerAction.style.padding = '0 12px';
-            headerAction.style.borderRadius = '16px';
-            headerAction.onclick = () => {
-                document.getElementById('exercise-id').value = '';
-                document.getElementById('exercise-name').value = '';
-                if(document.getElementById('exercise-max1rm')) document.getElementById('exercise-max1rm').value = '';
-                if(document.getElementById('exercise-pr-hyp')) document.getElementById('exercise-pr-hyp').value = '';
-                if(document.getElementById('exercise-pr-heavy')) document.getElementById('exercise-pr-heavy').value = '';
-                document.getElementById('exercise-youtube').value = '';
-                document.getElementById('exercise-image').value = '';
-                document.getElementById('exercise-image-preview').style.display = 'none';
-                document.getElementById('btn-remove-exercise-image').style.display = 'none';
-                document.getElementById('exercise-image-data').value = '';
-                
-                const select = document.getElementById('exercise-group');
-                select.innerHTML = '';
-                state.groups.forEach(g => {
-                    let gKey = g === 'Abdominales y core' ? 'core' : (g === 'Tríceps' ? 'triceps' : (g === 'Bíceps' ? 'biceps' : g.toLowerCase()));
-                    let trGroup = getT('groups.' + gKey);
-                    trGroup = trGroup !== 'groups.' + g.toLowerCase() ? trGroup : g;
-                    select.innerHTML += `<option value="${g}">${trGroup}</option>`;
-                });
-                
-                document.getElementById('btn-delete-exercise').style.display = 'none';
-                
-                document.getElementById('modal-exercise-title').textContent = getT('modals.exercise.title');
-                openModal(modalExercise);
-            };
-            renderExercises();
-        } else if (target === 'view-history') {
-            headerTitle.textContent = getT('header.history');
-            renderGlobalHistory();
-        } else if (target === 'view-progression') {
-            headerTitle.textContent = getT('header.progression');
-            if (typeof renderProgressionView !== 'undefined') renderProgressionView();
-        } else if (target === 'view-evolution') {
-            headerTitle.textContent = getT('header.evolution');
-            if (typeof renderEvolutionHistory !== 'undefined') renderEvolutionHistory();
-        } else if (target === 'view-export') {
-            headerTitle.textContent = getT('header.export');
-            if (typeof renderExportList !== 'undefined') renderExportList();
+            headerAction.innerHTML = `<i class="ph ph-calendar-plus" style="font-size:18px;"></i> <span style="font-size:14px; font-weight:600; margin-left:6px;" data-i18n="calendar.createSession">${getT('calendar.createSession') || 'Crear sesión'}</span>`;
+        } else if (target === 'view-ai') {
+            headerTitle.textContent = getT('header.ai') || getT('nav.ai') || 'Asistente IA';
+        } else {
+            const cleanId = target.replace('view-', '');
+            headerTitle.textContent = getT('header.' + cleanId) || getT('nav.' + cleanId) || cleanId;
         }
     });
 });
@@ -1027,7 +1564,31 @@ document.getElementById('btn-open-month-picker')?.addEventListener('click', () =
 
 const translations = {
     "es": {
-        "setTypes": {
+        "update": {
+            "title": "¡Nueva versión disponible!",
+            "desc": "Hemos lanzado una nueva versión con mejoras y correcciones.",
+            "download": "Descargar actualización",
+            "reload": "Actualizar aplicación",
+            "later": "Quizás más tarde"
+        },
+        "ai": {
+            "title": "Asistente IA",
+            "inputPlaceholder": "Escribe tu mensaje...",
+            "replyingTo": "Respondiendo a: ",
+            "you": "Tú",
+            "assistant": "Asistente IA",
+            "clearChat": "Vaciar conversación",
+            "confirmClear": "¿Quieres vaciar toda la conversación con el asistente?",
+            "clearSuccess": "Conversación vaciada",
+            "copySuccess": "Mensaje copiado al portapapeles",
+            "deleteKey": "Eliminar Clave API",
+            "confirmDeleteKey": "¿Seguro que quieres eliminar tu Clave API guardada?",
+            "keyDeleted": "Clave API eliminada",
+            "saveKey": "Guardar y Empezar",
+            "invalidKey": "Introduce una API Key válida",
+            "keySaved": "API Key guardada correctamente"
+        },
+"setTypes": {
             "warmup": "Calentamiento",
             "approach": "Aproximación",
             "effective": "Efectiva",
@@ -1036,7 +1597,8 @@ const translations = {
             "dropsetFailure": "Dropset fallo"
         },
         "nav": {
-            "calendar": "Calendario",
+            "ai": "Asistente IA",
+"calendar": "Calendario",
             "exercises": "Ejercicios",
             "history": "Historial",
             "workout": "En curso",
@@ -1045,7 +1607,8 @@ const translations = {
             "export": "Exp / Imp"
         },
         "header": {
-            "title": "Calendario",
+            "ai": "Asistente IA",
+"title": "Calendario",
             "calendar": "Calendario",
             "exercises": "Ejercicios",
             "history": "Historial",
@@ -1083,7 +1646,7 @@ const translations = {
                 "S",
                 "D"
             ],
-            "createSession": "Crear Sesión",
+            "createSession": "Crear sesión",
             "editMode": "Modo Edición",
             "viewMode": "Modo Lectura",
             "emptyDay": "No hay entrenamientos para este día."
@@ -1274,7 +1837,31 @@ const translations = {
         }
     },
     "en": {
-        "setTypes": {
+        "update": {
+            "title": "New Version Available!",
+            "desc": "We released a new version with improvements and bug fixes.",
+            "download": "Download Update",
+            "reload": "Update App",
+            "later": "Maybe Later"
+        },
+        "ai": {
+            "title": "AI Assistant",
+            "inputPlaceholder": "Type your message...",
+            "replyingTo": "Replying to: ",
+            "you": "You",
+            "assistant": "AI Assistant",
+            "clearChat": "Clear conversation",
+            "confirmClear": "Are you sure you want to clear the conversation?",
+            "clearSuccess": "Conversation cleared",
+            "copySuccess": "Message copied to clipboard",
+            "deleteKey": "Delete API Key",
+            "confirmDeleteKey": "Are you sure you want to delete your saved API Key?",
+            "keyDeleted": "API Key deleted",
+            "saveKey": "Save and Start",
+            "invalidKey": "Please enter a valid API Key",
+            "keySaved": "API Key saved successfully"
+        },
+"setTypes": {
             "warmup": "Warm-up",
             "approach": "Approach",
             "effective": "Effective",
@@ -1283,7 +1870,8 @@ const translations = {
             "dropsetFailure": "Dropset failure"
         },
         "nav": {
-            "calendar": "Calendar",
+            "ai": "AI Assistant",
+"calendar": "Calendar",
             "exercises": "Exercises",
             "history": "History",
             "workout": "Workout",
@@ -1292,7 +1880,8 @@ const translations = {
             "export": "Exp / Imp"
         },
         "header": {
-            "title": "Calendar",
+            "ai": "AI Assistant",
+"title": "Calendar",
             "calendar": "Calendar",
             "exercises": "Exercises",
             "history": "History",
@@ -1521,7 +2110,31 @@ const translations = {
         }
     },
     "ru": {
-        "setTypes": {
+        "update": {
+            "title": "Доступна новая версия!",
+            "desc": "Мы выпустили новую версию с улучшениями и исправлениями.",
+            "download": "Скачать обновление",
+            "reload": "Обновить приложение",
+            "later": "Позже"
+        },
+        "ai": {
+            "title": "ИИ Ассистент",
+            "inputPlaceholder": "Введите сообщение...",
+            "replyingTo": "В ответ: ",
+            "you": "Вы",
+            "assistant": "ИИ Ассистент",
+            "clearChat": "Очистить чат",
+            "confirmClear": "Вы уверены, что хотите очистить весь чат?",
+            "clearSuccess": "Чат очищен",
+            "copySuccess": "Сообщение скопировано в буфер",
+            "deleteKey": "Удалить API ключ",
+            "confirmDeleteKey": "Вы уверены, что хотите удалить сохраненный API ключ?",
+            "keyDeleted": "API ключ удален",
+            "saveKey": "Сохранить и начать",
+            "invalidKey": "Введите действительный API ключ",
+            "keySaved": "API ключ успешно сохранен"
+        },
+"setTypes": {
             "warmup": "Разминка",
             "approach": "Подводящий",
             "effective": "Рабочий",
@@ -1530,7 +2143,8 @@ const translations = {
             "dropsetFailure": "Дропсет отказ"
         },
         "nav": {
-            "calendar": "Календарь",
+            "ai": "ИИ Ассистент",
+"calendar": "Календарь",
             "exercises": "Упражнения",
             "history": "История",
             "workout": "Тренировка",
@@ -1539,7 +2153,8 @@ const translations = {
             "export": "Эксп / Имп"
         },
         "header": {
-            "title": "Календарь",
+            "ai": "ИИ Ассистент",
+"title": "Календарь",
             "calendar": "Календарь",
             "exercises": "Упражнения",
             "history": "История",
@@ -1768,7 +2383,31 @@ const translations = {
         }
     },
     "et": {
-        "setTypes": {
+        "update": {
+            "title": "Uus versioon on saadaval!",
+            "desc": "Oleme välja andnud uue versiooni paranduste ja uuendustega.",
+            "download": "Laadi alla uuendus",
+            "reload": "Uuenda rakendust",
+            "later": "Võib-olla hiljem"
+        },
+        "ai": {
+            "title": "AI Assistent",
+            "inputPlaceholder": "Kirjuta oma sõnum...",
+            "replyingTo": "Vastus: ",
+            "you": "Sina",
+            "assistant": "AI Assistent",
+            "clearChat": "Tühjenda vestlus",
+            "confirmClear": "Kas oled kindel, et soovid kogu vestluse kustutada?",
+            "clearSuccess": "Vestlus tühjendatud",
+            "copySuccess": "Sõnum kopeeritud lõikelauale",
+            "deleteKey": "Kustuta API võti",
+            "confirmDeleteKey": "Kas oled kindel, et soovid salvestatud API võtme kustutada?",
+            "keyDeleted": "API võti kustutatud",
+            "saveKey": "Salvesta ja alusta",
+            "invalidKey": "Palun sisesta kehtiv API võti",
+            "keySaved": "API võti edukalt salvestatud"
+        },
+"setTypes": {
             "warmup": "Soojendus",
             "approach": "Lähenemine",
             "effective": "Efektiivne",
@@ -1777,7 +2416,8 @@ const translations = {
             "dropsetFailure": "Dropset suutlikkuseni"
         },
         "nav": {
-            "calendar": "Kalender",
+            "ai": "AI Assistent",
+"calendar": "Kalender",
             "exercises": "Harjutused",
             "history": "Ajalugu",
             "workout": "Treening",
@@ -1786,7 +2426,8 @@ const translations = {
             "export": "Eksp / Imp"
         },
         "header": {
-            "title": "Kalender",
+            "ai": "AI Assistent",
+"title": "Kalender",
             "calendar": "Kalender",
             "exercises": "Harjutused",
             "history": "Ajalugu",
@@ -2015,7 +2656,31 @@ const translations = {
         }
     },
     "uk": {
-        "setTypes": {
+        "update": {
+            "title": "Доступна нова версія!",
+            "desc": "Ми випустили нову версію з покращеннями та виправленнями.",
+            "download": "Завантажити оновлення",
+            "reload": "Оновити додаток",
+            "later": "Можливо пізніше"
+        },
+        "ai": {
+            "title": "ШІ Асистент",
+            "inputPlaceholder": "Введіть повідомлення...",
+            "replyingTo": "У відповідь: ",
+            "you": "Ви",
+            "assistant": "ШІ Асистент",
+            "clearChat": "Очистити чат",
+            "confirmClear": "Ви впевнені, що хочете очистити весь чат?",
+            "clearSuccess": "Чат очищено",
+            "copySuccess": "Повідомлення скопійовано в буфер",
+            "deleteKey": "Видалити API ключ",
+            "confirmDeleteKey": "Ви впевнені, що хочете видалити збережений API ключ?",
+            "keyDeleted": "API ключ видалено",
+            "saveKey": "Зберегти та почати",
+            "invalidKey": "Введіть дійсний API ключ",
+            "keySaved": "API ключ успішно збережено"
+        },
+"setTypes": {
             "warmup": "Розминка",
             "approach": "Підвідний",
             "effective": "Робочий",
@@ -2024,7 +2689,8 @@ const translations = {
             "dropsetFailure": "Дропсет відмова"
         },
         "nav": {
-            "calendar": "Календар",
+            "ai": "ШІ Асистент",
+"calendar": "Календар",
             "exercises": "Вправи",
             "history": "Історія",
             "workout": "Тренування",
@@ -2033,7 +2699,8 @@ const translations = {
             "export": "Експ / Імп"
         },
         "header": {
-            "title": "Календар",
+            "ai": "ШІ Асистент",
+"title": "Календар",
             "calendar": "Календар",
             "exercises": "Вправи",
             "history": "Історія",
@@ -2322,16 +2989,20 @@ const updateLanguageUI = () => {
         const activeView = document.querySelector('.view.active');
         const headerTitle = document.getElementById('header-title');
         if (activeView && headerTitle) {
-            const viewId = activeView.id;
+            const viewId = activeView?.id || 'view-calendar';
             if(viewId === 'view-workout' && state.activeWorkoutState && state.activeWorkoutState.startTime) {
                 headerTitle.textContent = getT('header.workoutActive');
             } else {
-                headerTitle.textContent = getT('header.' + viewId.replace('view-', ''));
+                headerTitle.textContent = getT('header.' + viewId.replace('view-', '')) || getT('nav.' + viewId.replace('view-', ''));
+            if(typeof updateAiButtonsVisibility === 'function') updateAiButtonsVisibility();
             }
-            if (viewId === 'view-exercises') {
-                const headerAction = document.getElementById('header-action');
-                if (headerAction) {
-                    headerAction.innerHTML = `<i class="ph ph-plus"></i> <span style="font-size:14px; font-weight:600; margin-left:4px;">${getT('modals.exercise.title')}</span>`;
+            const headerActionEl = document.getElementById('header-action');
+            if (headerActionEl) {
+                if (viewId === 'view-calendar') {
+                    headerActionEl.classList.remove('hidden');
+                    headerActionEl.innerHTML = `<i class="ph ph-calendar-plus" style="font-size:18px;"></i> <span style="font-size:14px; font-weight:600; margin-left:6px;" data-i18n="calendar.createSession">${getT('calendar.createSession') || 'Crear sesión'}</span>`;
+                } else {
+                    headerActionEl.classList.add('hidden');
                 }
             }
         }
@@ -2589,6 +3260,133 @@ document.getElementById('input-import-excel').addEventListener('change', (e) => 
 });
 
 // --- EXERCISES RENDER ---
+
+
+function parsePRString(prStr) {
+    if (!prStr) return { weight: 0, reps: 0 };
+    if (typeof prStr === 'number') return { weight: prStr, reps: 0 };
+    const str = String(prStr).trim();
+    const match = str.match(/([0-9]+(?:\.[0-9]+)?)\s*(?:kg)?(?:\s*x\s*([0-9]+))?/i);
+    if (!match) return { weight: 0, reps: 0 };
+    const weight = parseFloat(match[1]) || 0;
+    const reps = parseInt(match[2]) || 0;
+    return { weight, reps };
+}
+
+function syncActiveWorkoutInputsFromDOM() {
+    if (!activeSession || !activeSession.exercises) return;
+    const workoutContainer = document.getElementById('workout-content');
+    if (!workoutContainer) return;
+    
+    let exSections = workoutContainer.querySelectorAll('.workout-exercise-section');
+    exSections.forEach((section, exIdx) => {
+        const ex = activeSession.exercises[exIdx];
+        if (ex && ex.sets) {
+            const setRows = section.querySelectorAll('.set-row:not(.header-row)');
+            setRows.forEach((row, sIdx) => {
+                const set = ex.sets[sIdx];
+                if (set) {
+                    const wInput = row.querySelector('.weight-input');
+                    const rInput = row.querySelector('.reps-input');
+                    const tSelect = row.querySelector('.set-type-select');
+                    if (wInput && wInput.value !== '') set.weight = parseFloat(wInput.value) || 0;
+                    if (rInput && rInput.value !== '') set.reps = rInput.value;
+                    if (tSelect) set.type = tSelect.value;
+                }
+            });
+        }
+    });
+}
+
+function recalculatePRs() {
+    if (!state || !state.exercises) return;
+    
+    const allWorkouts = [];
+    if (Array.isArray(state.completedWorkouts)) {
+        allWorkouts.push(...state.completedWorkouts);
+    }
+    if (Array.isArray(state.sessions)) {
+        state.sessions.filter(s => s.completed).forEach(s => {
+            if (!allWorkouts.some(w => w.id === s.id)) {
+                allWorkouts.push(s);
+            }
+        });
+    }
+    if (typeof activeSession !== 'undefined' && activeSession && activeSession.exercises) {
+        allWorkouts.push(activeSession);
+    }
+    
+    state.exercises.forEach(ex => {
+        let maxHeavyWeight = 0;
+        let maxHeavyReps = 0;
+        let maxHypWeight = 0;
+        let maxHypReps = 0;
+        let maxOverallWeight = 0;
+        let maxOverallReps = 0;
+        let best1RM = 0;
+        
+        allWorkouts.forEach(w => {
+            const wType = (w.type || 'hypertrophy').toLowerCase();
+            const isHeavy = wType === 'heavy' || wType === 'pesado';
+            const isHyp = wType === 'hypertrophy' || wType === 'hipertrofia';
+            
+            (w.exercises || []).forEach(wEx => {
+                const matches = (wEx.exerciseId && wEx.exerciseId === ex.id) ||
+                                (wEx.name && ex.name && wEx.name.trim().toLowerCase() === ex.name.trim().toLowerCase());
+                if (matches) {
+                    (wEx.sets || []).forEach(set => {
+                        const weight = parseFloat(set.weight) || 0;
+                        const repsStr = set.reps ? String(set.reps) : (set.targetReps ? String(set.targetReps) : '');
+                        const numReps = parseInt(repsStr) || 0;
+                        
+                        if (weight > 0) {
+                            // 1RM calculation
+                            const est1RM = Math.round(weight * (1 + (numReps || 1) / 30));
+                            if (est1RM > best1RM) best1RM = est1RM;
+                            
+                            // Overall max weight comparison (weight always takes preference over reps)
+                            if (weight > maxOverallWeight || (weight === maxOverallWeight && numReps > maxOverallReps)) {
+                                maxOverallWeight = weight;
+                                maxOverallReps = numReps;
+                            }
+                            
+                            // Session type PRs:
+                            // Weight has absolute priority; if equal weight, higher reps wins.
+                            if (isHeavy) {
+                                if (weight > maxHeavyWeight || (weight === maxHeavyWeight && numReps > maxHeavyReps)) {
+                                    maxHeavyWeight = weight;
+                                    maxHeavyReps = numReps;
+                                }
+                            } else if (isHyp) {
+                                if (weight > maxHypWeight || (weight === maxHypWeight && numReps > maxHypReps)) {
+                                    maxHypWeight = weight;
+                                    maxHypReps = numReps;
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        });
+        
+        if (maxHeavyWeight > 0) {
+            ex.prHeavy = maxHeavyReps > 0 ? `${maxHeavyWeight}kg x ${maxHeavyReps}` : `${maxHeavyWeight}kg`;
+        }
+        if (maxHypWeight > 0) {
+            ex.prHyp = maxHypReps > 0 ? `${maxHypWeight}kg x ${maxHypReps}` : `${maxHypWeight}kg`;
+        }
+        if (maxOverallWeight > 0) {
+            ex.prWeight = maxOverallWeight;
+            ex.prReps = maxOverallReps;
+        }
+        if (best1RM > 0) {
+            ex.max1RM = `${best1RM}kg`;
+        }
+    });
+}
+window.recalculatePRs = recalculatePRs;
+
+
 const renderExercises = () => {
     if(typeof recalculatePRs !== 'undefined') recalculatePRs();
     const container = document.querySelector('.exercise-groups-container');
@@ -2659,20 +3457,31 @@ const renderExercises = () => {
             card.style.cursor = 'pointer';
             card.onclick = (e) => {
                 if(e.target.closest('button')) return;
+                if(e.target.closest('img')) return;
                 editExercise(ex);
             };
             card.innerHTML = `
-                <div class="exercise-info">
-                    <h3 class="exercise-name">${getTrExName(ex.name)}</h3>
-                    <div class="exercise-group-label" style="font-size:12px; opacity:0.8; margin-top:2px;">${ex.group}</div>
-                    <div class="exercise-prs" style="margin-top: 8px;">
-                        <span class="pr-badge pr-hypertrophy">PR Hipertrofia: ${ex.prs && ex.prs.hypertrophy ? ex.prs.hypertrophy.weight + 'kg x ' + ex.prs.hypertrophy.reps : '-'}</span>
-                        <span class="pr-badge pr-heavy">PR Pesado: ${ex.prs && ex.prs.heavy ? ex.prs.heavy.weight + 'kg x ' + ex.prs.heavy.reps : '-'}</span>
+                <div style="display: flex; flex-direction: row; width: 100%; align-items: stretch;">
+                    ${ex.imageData ? `<div style="flex-shrink: 0; margin-right: 16px; display: flex; align-items: center; justify-content: center;"><img src="${ex.imageData}" onclick="event.stopPropagation(); openLightbox('${ex.imageData}')" title="Toca para ampliar" style="width: 140px; height: 140px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'"></div>` : ''}
+                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            <div class="exercise-info" style="flex: 1; min-width: 0; text-align: center;">
+                                <div class="exercise-name" style="font-size: 18px; font-weight: bold; color: var(--text-primary); margin-bottom: 2px;">${getTrExName(ex.name)}</div>
+                                <div class="exercise-group" style="font-size: 13px; color: var(--text-secondary);">${ex.group}</div>
+                                ${(ex.prHeavy || ex.prHyp) ? `
+                                <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin-top:6px;">
+                                    ${ex.prHeavy ? `<span style="background:rgba(220,38,38,0.18); color:#f87171; border:1px solid rgba(220,38,38,0.4); padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700;">🔴 PR Pesado: ${ex.prHeavy}</span>` : ''}
+                                    ${ex.prHyp ? `<span style="background:rgba(37,99,235,0.18); color:#60a5fa; border:1px solid rgba(37,99,235,0.4); padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700;">🔵 PR Hipertrofia: ${ex.prHyp}</span>` : ''}
+                                </div>` : ''}
+                            </div>
+                            <div class="exercise-actions" style="margin-left: 12px; flex-shrink: 0;">
+                                <button class="btn-icon text-danger" onclick="deleteExercise('${ex.id}', event)"><i class="ph ph-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="exercise-desc" style="flex: 1; font-size: 13px; color: var(--text-secondary); line-height: 1.5; display: flex; align-items: center; justify-content: center; text-align: center;">
+                            ${getTrExDesc(ex.name, ex.description) || (getT ? getT('modals.exercise.descPlaceholder') : 'Haz clic para editar y añadir técnica.')}
+                        </div>
                     </div>
-                </div>
-                ${ex.imageData ? `<div style="flex-shrink: 0; margin-left: 12px; margin-right: auto;"><img src="${ex.imageData}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border-color);"></div>` : ''}
-                <div class="exercise-actions">
-                    <button class="btn-icon" onclick="deleteExercise('${ex.id}')" style="color: var(--color-heavy);"><i class="ph ph-trash"></i></button>
                 </div>
             `;
             exListContainer.appendChild(card);
@@ -2721,16 +3530,18 @@ document.getElementById('exercise-image').addEventListener('change', (e) => {
 });
 
 const editExercise = (ex) => {
-    document.getElementById('exercise-id').value = ex.id;
-    document.getElementById('exercise-name').value = ex.name;
-    document.getElementById('exercise-youtube').value = ex.youtubeLink || '';
+    if (typeof recalculatePRs === 'function') recalculatePRs();
+    const freshEx = (state && state.exercises) ? (state.exercises.find(e => e.id === ex.id) || ex) : ex;
+    document.getElementById('exercise-id').value = freshEx.id;
+    document.getElementById('exercise-name').value = freshEx.name;
+    document.getElementById('exercise-youtube').value = freshEx.youtubeLink || '';
     
     const max1rmEl = document.getElementById('exercise-max1rm');
-    if (max1rmEl) max1rmEl.value = ex.max1RM || '';
+    if (max1rmEl) max1rmEl.value = freshEx.max1RM || '';
     const prHypEl = document.getElementById('exercise-pr-hyp');
-    if (prHypEl) prHypEl.value = ex.prHyp || '';
+    if (prHypEl) prHypEl.value = freshEx.prHyp || '';
     const prHeavyEl = document.getElementById('exercise-pr-heavy');
-    if (prHeavyEl) prHeavyEl.value = ex.prHeavy || '';
+    if (prHeavyEl) prHeavyEl.value = freshEx.prHeavy || '';
     
     const select = document.getElementById('exercise-group');
     select.innerHTML = '';
@@ -2743,6 +3554,8 @@ const editExercise = (ex) => {
     
     const imgData = ex.imageData || '';
     document.getElementById('exercise-image-data').value = imgData;
+    const descEl = document.getElementById('exercise-description');
+    if (descEl) descEl.value = ex.description || '';
     const preview = document.getElementById('exercise-image-preview');
     if (imgData) {
         preview.src = imgData;
@@ -2800,6 +3613,7 @@ document.getElementById('btn-save-exercise').addEventListener('click', () => {
             ex.group = group;
             ex.youtubeLink = yLink;
             ex.imageData = iData;
+            ex.description = document.getElementById('exercise-description').value;
             ex.max1RM = max1rm;
             ex.prHyp = prHyp;
             ex.prHeavy = prHeavy;
@@ -2809,6 +3623,7 @@ document.getElementById('btn-save-exercise').addEventListener('click', () => {
         state.exercises.push({
             id: Date.now().toString(),
             name, group, youtubeLink: yLink, imageData: iData,
+            description: document.getElementById('exercise-description').value,
             defaults: { hypertrophy: rH, heavy: rHe, intensity: rI },
             max1RM: max1rm, prHyp: prHyp, prHeavy: prHeavy
         });
@@ -3286,7 +4101,7 @@ const startWorkout = (session) => {
     
     workoutView.classList.add('active');
     document.getElementById('workout-title').textContent = session.name;
-    document.documentElement.style.setProperty('--color-accent', `var(--color-${session.type})`);
+    workoutView.style.setProperty('--color-accent', `var(--color-${session.type})`);
     
     const isActive = !activeSession.completed && state.activeWorkoutState && state.activeWorkoutState.session && state.activeWorkoutState.session.id === session.id;
     
@@ -3550,7 +4365,9 @@ const renderWorkout = () => {
                 const tInput = setRow.querySelector('.set-type-select');
                 
                 tInput.addEventListener('change', (e) => { set.type = e.target.value; autoSaveWorkout(); renderWorkout(); }); 
-                wInput.addEventListener('change', (e) => { set.weight = parseFloat(e.target.value); autoSaveWorkout(); });
+                wInput.addEventListener('input', (e) => { set.weight = parseFloat(e.target.value) || 0; autoSaveWorkout(); });
+                wInput.addEventListener('change', (e) => { set.weight = parseFloat(e.target.value) || 0; autoSaveWorkout(); });
+                rInput.addEventListener('input', (e) => { set.reps = e.target.value; autoSaveWorkout(); });
                 rInput.addEventListener('change', (e) => { set.reps = e.target.value; autoSaveWorkout(); });
                 setRow.querySelector('.calc-dropset-btn')?.addEventListener('click', () => openDropsetCalc(set.weight, wInput));
                 const rDropInput = setRow.querySelector('.reps-drop-input');
@@ -3591,10 +4408,14 @@ const renderWorkout = () => {
         finishExBtn.disabled = !isWorkoutActive;
         if (!isWorkoutActive) finishExBtn.style.opacity = '0.5';
         finishExBtn.addEventListener('click', () => {
+            syncActiveWorkoutInputsFromDOM();
             block.exercises.forEach(e => e.completed = true);
             openExerciseAccordions = openExerciseAccordions.filter(i => i !== block.id && (blockIndex !== 0 || i !== 0));
+            recalculatePRs();
             autoSaveWorkout();
+            saveState();
             renderWorkout();
+            if (typeof renderExercises === 'function') renderExercises();
         });
         body.appendChild(finishExBtn);
         
@@ -3625,7 +4446,7 @@ const renderWorkout = () => {
 
 document.getElementById('close-workout').addEventListener('click', () => {
     workoutView.classList.remove('active');
-    document.documentElement.style.setProperty('--color-accent', 'var(--color-hypertrophy)');
+    workoutView.style.removeProperty('--color-accent');
     if (typeof updateWorkoutBanner !== 'undefined') updateWorkoutBanner();
 });
 
@@ -3676,6 +4497,7 @@ document.getElementById('btn-delete-recurring').addEventListener('click', () => 
 
 // Initialization in the end of file
 document.getElementById('finish-workout').addEventListener('click', () => {
+    syncActiveWorkoutInputsFromDOM();
     const confirmMsg = translations[state.language] && translations[state.language].workout && translations[state.language].workout.finishConfirm 
         ? translations[state.language].workout.finishConfirm 
         : '¿Finalizar entrenamiento?';
@@ -3707,10 +4529,12 @@ document.getElementById('finish-workout').addEventListener('click', () => {
     });
     
     workoutView.classList.remove('active');
+    workoutView.style.removeProperty('--color-accent');
     state.activeWorkoutState = null; // CLEAR active state fully
     if (window.manageWorkoutNotification) window.manageWorkoutNotification(false);
     activeSession = null;
     openExerciseAccordions = [];
+    recalculatePRs();
     saveState();
     renderCalendar();
     alert((getT('alerts.workoutFinished') || 'Workout finished! Duration: ') + formatTimer(duration > 0 ? duration : 0));
@@ -3843,10 +4667,8 @@ document.querySelectorAll('.lang-select-btn').forEach(btn => {
         if (typeof renderProgressionView !== 'undefined') renderProgressionView();
         if (typeof renderEvolutionHistory !== 'undefined') renderEvolutionHistory();
         if (typeof renderExportList !== 'undefined') renderExportList();
-        if (typeof switchView !== 'undefined') {
-            const activeView = document.querySelector('.view.active');
-            if(activeView) switchView(activeView.id);
-        }
+        if (typeof window.renderFullChatHistory === 'function') window.renderFullChatHistory();
+        if (typeof updateAiButtonsVisibility === 'function') updateAiButtonsVisibility();
     });
 });
 
@@ -3927,16 +4749,35 @@ const renderProgressionView = () => {
     const grid = document.getElementById('progression-groups-grid');
     if (!grid) return;
     
-    // Setup buttons
-    document.getElementById('btn-prog-hyp').className = progressionTypeFilter === 'hypertrophy' ? 'btn-primary' : 'btn-secondary';
-    document.getElementById('btn-prog-heavy').className = progressionTypeFilter === 'heavy' ? 'btn-primary' : 'btn-secondary';
-    document.getElementById('btn-prog-int').className = progressionTypeFilter === 'intensity' ? 'btn-primary' : 'btn-secondary';
+    // Setup buttons with correct type colors (Hypertrophy: Blue, Heavy: Red, Intensity: Green)
+    const btnHyp = document.getElementById('btn-prog-hyp');
+    const btnHeavy = document.getElementById('btn-prog-heavy');
+    const btnInt = document.getElementById('btn-prog-int');
+    
+    if (btnHyp) {
+        btnHyp.className = progressionTypeFilter === 'hypertrophy' ? 'btn-primary' : 'btn-secondary';
+        btnHyp.style.backgroundColor = progressionTypeFilter === 'hypertrophy' ? 'var(--color-hypertrophy)' : '';
+        btnHyp.style.borderColor = progressionTypeFilter === 'hypertrophy' ? 'var(--color-hypertrophy)' : '';
+        btnHyp.style.color = progressionTypeFilter === 'hypertrophy' ? '#fff' : 'var(--text-secondary)';
+    }
+    if (btnHeavy) {
+        btnHeavy.className = progressionTypeFilter === 'heavy' ? 'btn-primary' : 'btn-secondary';
+        btnHeavy.style.backgroundColor = progressionTypeFilter === 'heavy' ? 'var(--color-heavy)' : '';
+        btnHeavy.style.borderColor = progressionTypeFilter === 'heavy' ? 'var(--color-heavy)' : '';
+        btnHeavy.style.color = progressionTypeFilter === 'heavy' ? '#fff' : 'var(--text-secondary)';
+    }
+    if (btnInt) {
+        btnInt.className = progressionTypeFilter === 'intensity' ? 'btn-primary' : 'btn-secondary';
+        btnInt.style.backgroundColor = progressionTypeFilter === 'intensity' ? 'var(--color-intensity)' : '';
+        btnInt.style.borderColor = progressionTypeFilter === 'intensity' ? 'var(--color-intensity)' : '';
+        btnInt.style.color = progressionTypeFilter === 'intensity' ? '#fff' : 'var(--text-secondary)';
+    }
     
     grid.innerHTML = '';
     const groups = state.groups.filter(g => g !== 'Sin Grupo');
     groups.forEach(g => {
         const card = document.createElement('div');
-        card.style.background = progressionSelectedGroup === g ? 'var(--primary-color)' : 'var(--bg-surface-elevated)';
+        card.style.background = progressionSelectedGroup === g ? 'var(--color-accent)' : 'var(--bg-surface-elevated)';
         card.style.color = progressionSelectedGroup === g ? '#fff' : 'var(--text-primary)';
         card.style.padding = '12px 8px';
         card.style.borderRadius = '8px';
@@ -3948,7 +4789,6 @@ const renderProgressionView = () => {
         card.style.textAlign = 'center';
         card.style.border = '1px solid var(--border-color)';
         
-        
         const gKey = g === 'Abdominales y core' ? 'core' : (g === 'Tríceps' ? 'triceps' : (g === 'Bíceps' ? 'biceps' : g.toLowerCase()));
         let trG = getT('groups.' + gKey);
         trG = trG !== 'groups.' + gKey ? trG : g;
@@ -3957,7 +4797,6 @@ const renderProgressionView = () => {
         card.onclick = () => {
             progressionSelectedGroup = progressionSelectedGroup === g ? null : g;
             progressionSelectedExId = null;
-            // Clear search when clicking a group
             const searchInput = document.getElementById('progression-search');
             if (searchInput) searchInput.value = '';
             renderProgressionView();
@@ -3988,42 +4827,28 @@ const renderProgressionExerciseList = () => {
     });
     
     if (filtered.length === 0) {
-        list.innerHTML = '<div style="color:var(--text-muted); font-size:12px; padding:8px;">No hay ejercicios.</div>';
+        list.innerHTML = '<div style="color:var(--text-muted); font-size:13px; padding:12px; text-align:center;">No hay ejercicios para esta selección.</div>';
         return;
     }
     
     filtered.forEach(ex => {
         const item = document.createElement('div');
-        item.style.padding = '12px';
-        item.style.background = progressionSelectedExId === ex.id ? 'rgba(37, 99, 235, 0.1)' : 'var(--bg-surface)';
-        item.style.border = progressionSelectedExId === ex.id ? '1px solid var(--primary-color)' : '1px solid var(--border-color)';
+        item.style.padding = '10px 14px';
+        item.style.background = progressionSelectedExId === ex.id ? 'rgba(37, 99, 235, 0.15)' : 'var(--bg-surface)';
+        item.style.border = progressionSelectedExId === ex.id ? '1px solid var(--color-accent)' : '1px solid var(--border-color)';
         item.style.borderRadius = '8px';
         item.style.fontSize = '14px';
         item.style.fontWeight = progressionSelectedExId === ex.id ? '600' : '400';
+        item.style.color = progressionSelectedExId === ex.id ? 'var(--color-accent)' : 'var(--text-primary)';
         item.style.cursor = 'pointer';
-        item.textContent = getTrExName(ex.name);
+        item.style.display = 'flex';
+        item.style.justifyContent = 'space-between';
+        item.style.alignItems = 'center';
+        
+        item.innerHTML = `<span>${getTrExName(ex.name)}</span> ${progressionSelectedExId === ex.id ? '<i class="ph ph-check" style="font-weight:bold;"></i>' : ''}`;
+        
         item.onclick = () => {
             progressionSelectedExId = ex.id;
-            // Clear the search input so the list closes if no group is selected
-            const searchInput = document.getElementById('progression-search');
-            if (searchInput) searchInput.value = '';
-            
-            // To provide feedback to the user, we can display the selected exercise name above the chart
-            let titleEl = document.getElementById('progression-chart-title');
-            if (!titleEl) {
-                titleEl = document.createElement('h3');
-                titleEl.id = 'progression-chart-title';
-                titleEl.style.fontSize = '14px';
-                titleEl.style.marginBottom = '16px';
-                titleEl.style.textAlign = 'center';
-                
-                const chartCanvas = document.getElementById('progression-chart');
-                if (chartCanvas && chartCanvas.parentElement) {
-                    chartCanvas.parentElement.insertBefore(titleEl, chartCanvas);
-                }
-            }
-            if (titleEl) titleEl.textContent = getTrExName(ex.name);
-
             renderProgressionExerciseList();
             updateProgressionChart();
         };
@@ -4038,17 +4863,16 @@ document.getElementById('progression-search')?.addEventListener('input', renderP
         if (id.includes('hyp')) progressionTypeFilter = 'hypertrophy';
         if (id.includes('heavy')) progressionTypeFilter = 'heavy';
         if (id.includes('int')) progressionTypeFilter = 'intensity';
-        
-        document.getElementById('btn-prog-hyp').style.backgroundColor = progressionTypeFilter === 'hypertrophy' ? 'var(--color-hypertrophy)' : '';
-        document.getElementById('btn-prog-heavy').style.backgroundColor = progressionTypeFilter === 'heavy' ? 'var(--color-heavy)' : '';
-        document.getElementById('btn-prog-int').style.backgroundColor = progressionTypeFilter === 'intensity' ? 'var(--color-heavy)' : '';
-        
         renderProgressionView();
     });
 });
 
 const updateProgressionChart = () => {
+    const chartCard = document.getElementById('progression-chart-card');
+    if (!chartCard) return;
+    
     if (!progressionSelectedExId) {
+        chartCard.style.display = 'none';
         if (progressionChartInstance) {
             progressionChartInstance.destroy();
             progressionChartInstance = null;
@@ -4056,22 +4880,63 @@ const updateProgressionChart = () => {
         return;
     }
     
+    chartCard.style.display = 'block';
+    
+    const targetEx = state.exercises.find(e => e.id === progressionSelectedExId);
+    const targetName = targetEx ? targetEx.name.trim().toLowerCase() : '';
+    const typeNames = {
+        hypertrophy: 'Hipertrofia',
+        heavy: 'Pesado',
+        intensity: 'Alta intensidad'
+    };
+    const currentTypeName = typeNames[progressionTypeFilter] || progressionTypeFilter;
+    
+    // Ensure title header exists above canvas
+    let titleEl = document.getElementById('progression-chart-title');
+    if (!titleEl) {
+        titleEl = document.createElement('h3');
+        titleEl.id = 'progression-chart-title';
+        titleEl.style.fontSize = '15px';
+        titleEl.style.fontWeight = '700';
+        titleEl.style.marginBottom = '12px';
+        titleEl.style.textAlign = 'center';
+        titleEl.style.color = 'var(--text-primary)';
+        
+        const chartCanvas = document.getElementById('progression-chart');
+        if (chartCanvas && chartCanvas.parentElement) {
+            chartCanvas.parentElement.insertBefore(titleEl, chartCanvas);
+        }
+    }
+    if (titleEl && targetEx) {
+        titleEl.textContent = `${getTrExName(targetEx.name)} (${currentTypeName})`;
+    }
+    
     const history = [];
-    state.completedWorkouts.forEach(session => {
-        // Apply filter by session type if requested by user
-        if (session.type !== progressionTypeFilter) return;
+    const allDoneSessions = [];
+    if (Array.isArray(state.completedWorkouts)) allDoneSessions.push(...state.completedWorkouts);
+    if (Array.isArray(state.sessions)) {
+        state.sessions.filter(s => s.completed).forEach(s => {
+            if (!allDoneSessions.some(w => w.id === s.id)) allDoneSessions.push(s);
+        });
+    }
+    
+    allDoneSessions.forEach(session => {
+        const sType = (session.type || 'hypertrophy').toLowerCase();
+        const filterType = (progressionTypeFilter || 'hypertrophy').toLowerCase();
+        if (sType !== filterType) return;
         
         const sessionDate = session.date;
         let maxWeight = -1;
         let bestReps = -1;
         let found = false;
         
-        session.exercises.forEach(sesEx => {
-            if (sesEx.exerciseId === progressionSelectedExId) {
-                sesEx.sets.forEach(set => {
+        (session.exercises || []).forEach(sesEx => {
+            const matches = (sesEx.exerciseId && sesEx.exerciseId === progressionSelectedExId) ||
+                            (targetName && sesEx.name && sesEx.name.trim().toLowerCase() === targetName);
+            if (matches) {
+                (sesEx.sets || []).forEach(set => {
                     const weight = parseFloat(set.weight) || 0;
-                    const reps = parseFloat(set.reps) || 0;
-                    // Find effective max weight/reps logic (higher weight prioritized, then reps)
+                    const reps = parseFloat(set.reps) || (parseFloat(set.targetReps) || 0);
                     if (weight > maxWeight || (weight === maxWeight && reps > bestReps)) {
                         maxWeight = weight;
                         bestReps = reps;
@@ -4086,10 +4951,34 @@ const updateProgressionChart = () => {
         }
     });
     
+    const chartCanvas = document.getElementById('progression-chart');
+    let emptyMsg = document.getElementById('progression-empty-msg');
+    
+    if (history.length === 0) {
+        if (chartCanvas) chartCanvas.style.display = 'none';
+        if (progressionChartInstance) {
+            progressionChartInstance.destroy();
+            progressionChartInstance = null;
+        }
+        if (!emptyMsg) {
+            emptyMsg = document.createElement('div');
+            emptyMsg.id = 'progression-empty-msg';
+            chartCard.appendChild(emptyMsg);
+        }
+        emptyMsg.style.display = 'block';
+        emptyMsg.style.cssText = 'text-align:center; padding:24px 16px; color:var(--text-secondary); font-size:14px;';
+        emptyMsg.innerHTML = `No hay sesiones completadas de tipo <strong>${currentTypeName}</strong> para este ejercicio.<br><span style="font-size:12px; color:var(--text-muted); display:block; margin-top:6px;">Prueba seleccionando otro tipo arriba (Hipertrofia, Pesado o Alta intensidad) o completa una sesión en el calendario.</span>`;
+        return;
+    }
+    
+    if (emptyMsg) emptyMsg.style.display = 'none';
+    if (chartCanvas) chartCanvas.style.display = 'block';
+    
     history.sort((a,b) => {
         const parseDate = d => {
-            const [day, month, year] = d.split('/');
-            return new Date(year, month - 1, day);
+            const parts = d.split('/');
+            if (parts.length === 3) return new Date(parts[2], parts[1] - 1, parts[0]);
+            return new Date(d);
         };
         return parseDate(a.date) - parseDate(b.date);
     });
@@ -4098,10 +4987,17 @@ const updateProgressionChart = () => {
     const data = history.map(h => h.weight);
     const repsData = history.map(h => h.reps);
     
-    const ctx = document.getElementById('progression-chart')?.getContext('2d');
+    const ctx = chartCanvas?.getContext('2d');
     if (!ctx) return;
     
     if (progressionChartInstance) progressionChartInstance.destroy();
+    
+    const chartColors = {
+        hypertrophy: { line: '#2563EB', fill: 'rgba(37, 99, 235, 0.15)' },
+        heavy: { line: '#DC2626', fill: 'rgba(220, 38, 38, 0.15)' },
+        intensity: { line: '#10B981', fill: 'rgba(16, 185, 129, 0.15)' }
+    };
+    const c = chartColors[progressionTypeFilter] || chartColors.hypertrophy;
     
     progressionChartInstance = new Chart(ctx, {
         type: 'line',
@@ -4110,13 +5006,13 @@ const updateProgressionChart = () => {
             datasets: [{
                 label: 'Peso Máximo (kg)',
                 data: data,
-                borderColor: '#2563EB',
-                backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                borderColor: c.line,
+                backgroundColor: c.fill,
                 fill: true,
                 tension: 0.3,
-                pointBackgroundColor: '#2563EB',
-                pointRadius: 4,
-                pointHoverRadius: 6
+                pointBackgroundColor: c.line,
+                pointRadius: 5,
+                pointHoverRadius: 7
             }]
         },
         options: {
@@ -4135,12 +5031,12 @@ const updateProgressionChart = () => {
             },
             scales: {
                 x: {
-                    grid: { display: true, color: 'rgba(0,0,0,0.05)' },
+                    grid: { display: true, color: 'rgba(255,255,255,0.05)' },
                     title: { display: true, text: 'Fecha' }
                 },
                 y: { 
                     beginAtZero: true,
-                    grid: { display: true, color: 'rgba(0,0,0,0.05)' },
+                    grid: { display: true, color: 'rgba(255,255,255,0.05)' },
                     title: { display: true, text: 'Kg' }
                 }
             }
@@ -4149,10 +5045,20 @@ const updateProgressionChart = () => {
 };
 
 const renderEvolutionView = () => {
+    const chartCard = document.getElementById('evolution-chart-card');
     const ctx = document.getElementById('evolution-chart')?.getContext('2d');
     if (!ctx) return;
     
     const history = [...state.evolution].sort((a,b) => new Date(a.dateIso) - new Date(b.dateIso));
+    if (history.length < 2) {
+        if (chartCard) chartCard.style.display = 'none';
+        if (evolutionChartInstance) {
+            evolutionChartInstance.destroy();
+            evolutionChartInstance = null;
+        }
+        return;
+    }
+    if (chartCard) chartCard.style.display = 'block';
     
     const labels = history.map(h => {
         const d = new Date(h.dateIso);
@@ -4212,7 +5118,7 @@ const renderEvolutionHistory = () => {
         if (item.m1 || item.m2 || item.m3 || item.m4 || item.m5 || item.m6 || item.m7 || item.m8) {
             const isApk = window.isApkEnv;
             measurementsHtml = `
-            <div style="margin-top: 12px; color: var(--text-secondary); background: var(--bg-background); padding: 8px; border-radius: 4px;">
+            <div style="margin-top: 12px; color: var(--text-secondary); background: var(--bg-background); padding: 14px 16px; border-radius: 14px; border: 1px solid var(--border-color);">
                 ${isApk ? `<div style="margin-bottom: 12px;"><img src="img/body-measurements.png" style="width: 100%; max-height: 200px; object-fit: contain; opacity: 0.8;"></div>` : ''}
                 <div style="display: grid; grid-template-columns: auto auto; gap: 8px 16px; justify-content: start; font-size: 12px;">
                     ${item.m2 ? `<div><strong>${getT('evolution.m2').replace(/^\d+\.\s*/, '')}:</strong> ${item.m2} cm</div>` : '<div></div>'}
@@ -4234,7 +5140,7 @@ const renderEvolutionHistory = () => {
             <div style="display:flex; ${isApk ? 'flex-direction: column;' : 'flex-direction: row;'} gap:8px; margin-top:12px; overflow-x:auto;">`;
             item.photos.forEach(photo => {
                 if (photo) {
-                    photosHtml += `<img src="${photo}" style="height: ${isApk ? 'auto' : '100px'}; width: ${isApk ? '100%' : 'auto'}; max-height: ${isApk ? '300px' : 'none'}; border-radius: 8px; object-fit: cover; cursor: pointer;" onclick="document.getElementById('lightbox-img').src=this.src; document.getElementById('modal-lightbox').style.display='flex';">`;
+                    photosHtml += `<img src="${photo}" style="height: ${isApk ? 'auto' : '100px'}; width: ${isApk ? '100%' : 'auto'}; max-height: ${isApk ? '300px' : 'none'}; border-radius: 8px; object-fit: cover; cursor: pointer;" onclick="document.getElementById('lightbox-img').src=this.src; document.getElementById('modal-lightbox').classList.add('active');">`;
                 }
             });
             photosHtml += `</div>`;
@@ -4243,25 +5149,45 @@ const renderEvolutionHistory = () => {
         const folderId = 'evol-details-' + item.id;
         
         const isApk = window.isApkEnv;
+        div.className = 'exercise-card';
+        div.style.marginBottom = '12px';
+        div.style.overflow = 'hidden';
+        div.style.cursor = 'pointer';
+        div.onclick = (e) => {
+            if(e.target.closest('button') || e.target.closest('img')) return;
+            const d = document.getElementById(folderId); 
+            const i = document.getElementById('icon-' + folderId); 
+            if(d.style.display === 'none') { 
+                d.style.display = 'block'; 
+                if(i) i.classList.replace('ph-caret-down', 'ph-caret-up'); 
+            } else { 
+                d.style.display = 'none'; 
+                if(i) i.classList.replace('ph-caret-up', 'ph-caret-down'); 
+            }
+        };
         div.innerHTML = `
-            <div style="padding: 16px; cursor: pointer;" onclick="const d = document.getElementById('${folderId}'); d.style.display = d.style.display === 'none' ? 'block' : 'none';">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="padding: 16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
                     <div style="display:flex; align-items:center; gap: 8px;">
-                        <i class="ph ph-folder" style="font-size: 20px; color: var(--primary-color);"></i>
-                        <h4 style="margin:0; font-size:16px;">${dateStr}</h4>
+                        <i class="ph ph-calendar-blank" style="font-size: 20px; color: var(--color-accent);"></i>
+                        <h4 style="margin:0; font-size:16px; color: var(--text-primary); font-weight: bold;">${dateStr}</h4>
+                        <i id="icon-${folderId}" class="ph ph-caret-down" style="font-size: 16px; color: var(--text-secondary); margin-left: 4px;"></i>
                     </div>
-                    <button class="btn-icon" style="color: var(--color-heavy); margin-left: 12px; padding: 4px;" onclick="event.stopPropagation(); deleteEvolution('${item.id}')"><i class="ph ph-trash"></i></button>
+                    <button class="btn-icon text-danger" style="margin-left: 12px; padding: 4px;" onclick="event.stopPropagation(); deleteEvolution('${item.id}')"><i class="ph ph-trash"></i></button>
                 </div>
-                <div style="margin-top: 8px; color: var(--text-secondary); font-size: 14px; display: flex; ${isApk ? 'gap: 16px; justify-content: flex-start;' : 'gap: 8px; align-items: center;'}">
-                    <span style="background: var(--bg-surface-elevated); padding: 4px 8px; border-radius: 12px; ${isApk ? 'width: 45%; text-align: left;' : ''}"><strong>Peso:</strong> ${item.weight} kg</span>
-                    ${item.bf ? `<span style="background: var(--bg-surface-elevated); padding: 4px 8px; border-radius: 12px; ${isApk ? 'width: 45%; text-align: left;' : ''}"><strong>Grasa:</strong> ${item.bf}%</span>` : ''}
-                    ${item.photos && item.photos.length > 0 && !isApk ? `<span style="color: var(--text-secondary); font-size: 12px; margin-left: auto;"><i class="ph ph-camera"></i> ${item.photos.length}</span>` : ''}
-                    ${item.photos && item.photos.length > 0 && isApk ? `<div style="width: 100%; text-align: right; margin-top: 4px; font-size: 12px;"><i class="ph ph-camera"></i> ${item.photos.length}</div>` : ''}
+                <div style="color: var(--text-secondary); font-size: 13px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+                    <span style="background: var(--bg-surface-elevated); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border-color);"><strong>Peso:</strong> ${item.weight} kg</span>
+                    ${item.bf ? `<span style="background: var(--bg-surface-elevated); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border-color);"><strong>Grasa:</strong> ${item.bf}%</span>` : ''}
+                    ${item.photos && item.photos.length > 0 ? `<span style="background: var(--bg-surface-elevated); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 4px;"><i class="ph ph-camera"></i> ${item.photos.length}</span>` : ''}
                 </div>
             </div>
-            <div id="${folderId}" style="display:none; padding: 0 16px 16px 16px; border-top: 1px solid var(--border-color);">
-                ${photosHtml}
-                ${measurementsHtml}
+            <div id="${folderId}" style="display:none; padding: 0 16px 16px 16px; border-top: 1px solid var(--border-color); background: var(--bg-surface-elevated); border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
+                <div style="padding-top: 14px;">
+                    <div style="background: var(--bg-background); padding: 14px; border-radius: 14px; border: 1px solid var(--border-color);">
+                        ${photosHtml}
+                        ${measurementsHtml}
+                    </div>
+                </div>
             </div>
         `;
         
@@ -4516,40 +5442,17 @@ const renderExportList = () => {
     
     if (window.isApkEnv) {
         const viewExport = document.getElementById("view-export");
-        const modeButtons = viewExport.querySelector('div:first-child');
-        const descText = viewExport.querySelector('p');
+        const modeButtons = viewExport?.querySelector('div:first-child');
+        const descText = viewExport?.querySelector('p');
         if (modeButtons) modeButtons.style.display = 'none';
         if (descText) descText.style.display = 'none';
         if (actionCont) actionCont.style.display = 'none';
-        document.getElementById('export-list-container').style.display = 'none';
-
+        container.style.display = 'none';
     }
     
     container.innerHTML = "";
     
-    const workouts = state.sessions ? [...state.sessions] : [];
-    if(workouts.length === 0) {
-        container.innerHTML = '<div class="empty-state">No hay entrenamientos planificados para exportar. Añade entrenamientos al calendario primero.</div>';
-        actionCont.style.display = "none";
-        return;
-    }
-    
-    actionCont.style.display = "flex";
-    
-    let renderData = [];
-    if (exportMode === "single") {
-        workouts.forEach(w => renderData.push({ type: 'item', label: w.name, sub: w.type, id: w.id, dateStr: w.date }));
-    } else if (exportMode === "block") {
-        const blocks = {};
-        workouts.forEach(w => {
-            const baseName = w.name ? w.name.replace(/\s+\(.*?\d+\)$/, '').trim() : getT('workout.title');
-            if(!blocks[baseName]) blocks[baseName] = [];
-            blocks[baseName].push(w.id);
-        });
-        Object.keys(blocks).forEach(key => {
-            renderData.push({ type: 'group', label: 'Bloque: ' + key, count: blocks[key].length, ids: blocks[key] });
-        });
-    } else if (exportMode === "calendar") {
+    if (exportMode === "calendar") {
         container.innerHTML = `
             <div class="calendar-header-week" style="margin-bottom: 16px;">
                 <div class="week-navigation" style="display:flex; align-items:center; justify-content:center; width:100%;">
@@ -4560,7 +5463,7 @@ const renderExportList = () => {
             </div>
             <div id="export-weekly-grid" class="weekly-grid"></div>
             <div class="today-sessions">
-                <h3 style="font-size:14px; margin-top:16px; margin-bottom:8px; color:var(--text-secondary);">Plan para el día</h3>
+                <h3 style="font-size:14px; margin-top:16px; margin-bottom:8px; color:var(--text-secondary);" data-i18n="calendar.dayPlan">Plan para el día</h3>
                 <div id="export-day-sessions-list" class="sessions-list"></div>
             </div>
         `;
@@ -4568,16 +5471,41 @@ const renderExportList = () => {
         state.exportWeekStart = state.exportWeekStart || new Date(state.currentWeekStart);
         state.exportSelectedDate = state.exportSelectedDate || new Date(state.selectedDate);
         
-        document.getElementById('export-prev-week').addEventListener('click', () => {
+        document.getElementById('export-prev-week')?.addEventListener('click', () => {
             state.exportWeekStart.setMonth(state.exportWeekStart.getMonth() - 1);
             window.renderExportCalendar();
         });
-        document.getElementById('export-next-week').addEventListener('click', () => {
+        document.getElementById('export-next-week')?.addEventListener('click', () => {
             state.exportWeekStart.setMonth(state.exportWeekStart.getMonth() + 1);
             window.renderExportCalendar();
         });
         window.renderExportCalendar();
-        return; // Skip renderData UI
+        if (actionCont) actionCont.style.display = exportSelected.size > 0 ? "flex" : "none";
+        return;
+    }
+    
+    const workouts = state.sessions ? [...state.sessions] : [];
+    if(workouts.length === 0) {
+        container.innerHTML = '<div class="empty-state">No hay entrenamientos planificados para exportar. Añade entrenamientos al calendario primero.</div>';
+        if (actionCont) actionCont.style.display = "none";
+        return;
+    }
+    
+    if (actionCont) actionCont.style.display = "flex";
+    
+    let renderData = [];
+    if (exportMode === "single") {
+        workouts.forEach(w => renderData.push({ type: 'item', label: w.name, sub: w.type, id: w.id, dateStr: w.date }));
+    } else if (exportMode === "block") {
+        const blocks = {};
+        workouts.forEach(w => {
+            const baseName = w.name ? w.name.replace(/\s+\(.*?\d+\)$/, '').trim() : (getT('workout.title') || 'Entrenamiento');
+            if(!blocks[baseName]) blocks[baseName] = [];
+            blocks[baseName].push(w.id);
+        });
+        Object.keys(blocks).forEach(key => {
+            renderData.push({ type: 'group', label: 'Bloque: ' + key, count: blocks[key].length, ids: blocks[key] });
+        });
     }
     
     renderData.forEach(item => {
@@ -4593,11 +5521,13 @@ const renderExportList = () => {
             let typeName = item.sub === 'hypertrophy' ? 'Hipertrofia' : item.sub === 'heavy' ? 'Pesado' : item.sub === 'intensity' ? 'Alta Intensidad' : 'Objetivo';
             
             div.innerHTML = `
-                <div class="session-info">
-                    <h4>${item.label || "Entrenamiento"}</h4>
-                    <p>${dateStr} &bull; ${typeName}</p>
+                <div style="flex:1;">
+                    <div style="font-weight:600; font-size:15px; color:var(--text-primary);">${item.label}</div>
+                    <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">
+                        <span>📅 ${dateStr}</span> &bull; <span>${typeName}</span>
+                    </div>
                 </div>
-                <input type="checkbox" ${isChecked ? "checked" : ""} style="pointer-events:none;">
+                <input type="checkbox" ${isChecked ? 'checked' : ''} style="pointer-events:none; accent-color:var(--color-accent); width:18px; height:18px;">
             `;
             
             div.addEventListener("click", () => {
@@ -4606,18 +5536,22 @@ const renderExportList = () => {
                 renderExportList();
             });
         } else {
-            const allSelected = item.ids.length > 0 && item.ids.every(id => exportSelected.has(id));
-            div.style.background = allSelected ? "var(--bg-export-selected)" : "var(--bg-surface)";
+            const allChecked = item.ids.every(id => exportSelected.has(id));
+            const someChecked = item.ids.some(id => exportSelected.has(id));
+            div.style.background = allChecked ? "var(--bg-export-selected)" : "var(--bg-surface)";
+            
             div.innerHTML = `
-                <div class="session-info">
-                    <h4>${item.label}</h4>
-                    <p>${item.count} entrenamientos</p>
+                <div style="flex:1;">
+                    <div style="font-weight:600; font-size:15px; color:var(--text-primary);">${item.label}</div>
+                    <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">
+                        <span>${item.count} entrenamientos</span>
+                    </div>
                 </div>
-                <input type="checkbox" ${allSelected ? "checked" : ""} style="pointer-events:none;">
+                <input type="checkbox" ${allChecked ? 'checked' : ''} style="pointer-events:none; accent-color:var(--color-accent); width:18px; height:18px;">
             `;
             
             div.addEventListener("click", () => {
-                if (allSelected) {
+                if(allChecked) {
                     item.ids.forEach(id => exportSelected.delete(id));
                 } else {
                     item.ids.forEach(id => exportSelected.add(id));
@@ -4629,10 +5563,8 @@ const renderExportList = () => {
         container.appendChild(div);
     });
     
-    const labelEl = countEl.parentElement;
-    if(labelEl && labelEl.tagName.toLowerCase() === 'span') {
-        labelEl.innerHTML = `<strong id="export-selected-count">${exportSelected.size}</strong> ${exportSelected.size === 1 ? 'elemento seleccionado' : 'elementos seleccionados'}`;
-    }
+    if(countEl) countEl.textContent = exportSelected.size;
+    if(actionCont) actionCont.style.display = exportSelected.size > 0 ? "flex" : "none";
 };
 
 ["single", "block", "calendar"].forEach(m => {
@@ -4958,7 +5890,7 @@ window.editSession = (sessionId) => {
     openModal(modalAddRoutine);
 };
 
-document.getElementById('header-edit-switch')?.querySelector('input').addEventListener('change', (e) => {
+document.getElementById('header-edit-switch')?.querySelector('input')?.addEventListener('change', (e) => {
     state.calendarEditMode = e.target.checked;
     renderTodaySessions();
 });
@@ -5231,22 +6163,84 @@ window.openDashboardModal = function() {
     document.getElementById('modal-dashboard-options').classList.add('active');
 };
 
+
+window.openDashboardApiKeyModal = function() {
+    const key = localStorage.getItem('gemini_api_key') || localStorage.getItem('dashboard_gemini_api_key') || '';
+    const input = document.getElementById('dashboard-apikey-input');
+    if (input) {
+        input.value = key;
+        input.type = 'password';
+    }
+    const icon = document.getElementById('dashboard-key-vis-icon');
+    if (icon) icon.className = 'ph ph-eye';
+    
+    const modal = document.getElementById('modal-dashboard-apikey');
+    if (modal) modal.classList.add('active');
+};
+
+window.toggleDashboardKeyVisibility = function() {
+    const input = document.getElementById('dashboard-apikey-input');
+    const icon = document.getElementById('dashboard-key-vis-icon');
+    if (!input) return;
+    if (input.type === 'password') {
+        input.type = 'text';
+        if (icon) icon.className = 'ph ph-eye-slash';
+    } else {
+        input.type = 'password';
+        if (icon) icon.className = 'ph ph-eye';
+    }
+};
+
+window.saveDashboardApiKey = function() {
+    const input = document.getElementById('dashboard-apikey-input');
+    const key = input ? input.value.trim() : '';
+    if (!key) {
+        alert('Por favor introduce una clave API válida.');
+        return;
+    }
+    
+    localStorage.setItem('gemini_api_key', key);
+    localStorage.setItem('dashboard_gemini_api_key', key);
+    
+    const modal = document.getElementById('modal-dashboard-apikey');
+    if (modal) modal.classList.remove('active');
+    
+    if (typeof showToast === 'function') showToast('Clave API guardada correctamente');
+    else alert('Clave API guardada correctamente.');
+    
+    // If iframe is currently active, re-sync data with the new key
+    const iframeModal = document.getElementById('modal-dashboard-iframe');
+    const iframe = document.getElementById('dashboard-iframe');
+    if (iframeModal && iframeModal.classList.contains('active') && iframe) {
+        iframe.src = `https://streetoh.github.io/Gym-dashboard/#apiKey=${encodeURIComponent(key)}`;
+    }
+};
+
 window.generateDashboard = function(mode) {
     document.getElementById('modal-dashboard-options').classList.remove('active');
     
+    const key = localStorage.getItem('gemini_api_key') || localStorage.getItem('dashboard_gemini_api_key') || '';
+    
     if (mode === 'manual') {
-        window.open('https://streetoh.github.io/Gym-dashboard/', '_blank');
+        const baseUrl = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') ? 'dashboard.html' : 'https://streetoh.github.io/Gym-dashboard/';
+        const targetUrl = key ? `${baseUrl}#apiKey=${encodeURIComponent(key)}` : baseUrl;
+        window.open(targetUrl, '_blank');
     } else if (mode === 'auto') {
         const iframeModal = document.getElementById('modal-dashboard-iframe');
         const iframe = document.getElementById('dashboard-iframe');
         
         iframeModal.classList.add('active');
-        iframe.src = 'https://streetoh.github.io/Gym-dashboard/';
+        const baseUrl = (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') ? 'dashboard.html' : 'https://streetoh.github.io/Gym-dashboard/';
+        const targetUrl = key ? `${baseUrl}#apiKey=${encodeURIComponent(key)}` : baseUrl;
+        iframe.src = targetUrl;
         
         const exportData = {
             gym_exercises: localStorage.getItem('gym_exercises') || '[]',
             gym_evolution: localStorage.getItem('gym_evolution') || '[]',
-            gym_completed: localStorage.getItem('gym_completed') || '[]'
+            gym_completed: localStorage.getItem('gym_completed') || '[]',
+            apiKey: key,
+            gemini_api_key: key,
+            GEMINI_API_KEY: key
         };
 
         iframe.onload = function() {
@@ -5257,11 +6251,14 @@ window.generateDashboard = function(mode) {
                     clearInterval(interval);
                     return;
                 }
-                iframe.contentWindow.postMessage({ type: 'GYM_TRACKER_DATA', data: exportData }, 'https://streetoh.github.io');
+                try {
+                    iframe.contentWindow.postMessage({ type: 'GYM_TRACKER_DATA', data: exportData }, '*');
+                    iframe.contentWindow.postMessage({ type: 'SET_API_KEY', apiKey: key, key: key }, '*');
+                } catch(e) {}
             }, 500);
 
             window.addEventListener('message', function ackListener(event) {
-                if (event.origin === 'https://streetoh.github.io' && event.data === 'GYM_TRACKER_DATA_RECEIVED') {
+                if (event.data === 'GYM_TRACKER_DATA_RECEIVED') {
                     clearInterval(interval);
                     window.removeEventListener('message', ackListener);
                 }
@@ -5270,29 +6267,49 @@ window.generateDashboard = function(mode) {
     }
 };
 
-const CURRENT_APP_VERSION = 3;
+const CURRENT_APP_VERSION = '1.1.1';
+function compareVersions(v1, v2) {
+    const p1 = String(v1).split('.').map(Number);
+    const p2 = String(v2).split('.').map(Number);
+    for (let i = 0; i < Math.max(p1.length, p2.length); i++) {
+        const n1 = p1[i] || 0;
+        const n2 = p2[i] || 0;
+        if (n1 > n2) return 1;
+        if (n1 < n2) return -1;
+    }
+    return 0;
+}
 async function checkForUpdates() {
     try {
+        if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
+            return; // In localhost development, do not show update modal
+        }
         const response = await fetch('https://streetoh.github.io/Gym-tracker/version.json?t=' + new Date().getTime());
         if (!response.ok) return;
         const data = await response.json();
-        if (data.version > CURRENT_APP_VERSION) {
-            document.getElementById('update-changelog').innerText = data.changelog || 'Mejoras de rendimiento y nuevas funciones.';
+        if (compareVersions(data.version, CURRENT_APP_VERSION) > 0) {
+            const changelogEl = document.getElementById('update-changelog');
+            if (changelogEl) {
+                changelogEl.innerText = data.changelog || 'Mejoras de rendimiento y nuevas funciones.';
+            }
             
             const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
             const actionContainer = document.getElementById('update-action-container');
             
-            if (isNative) {
-                actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 12px; padding: 16px; background-color: #10b981; border-color: #10b981; width: 100%;" onclick="window.open('https://github.com/Streetoh/Gym-tracker/releases/latest', '_blank')">
-                        <i class="ph ph-download-simple" style="font-size: 24px; margin-bottom: 4px;"></i><br><span style="font-size: 16px; font-weight: bold;">Descargar actualización</span>
-                    </button>`;
-            } else {
-                actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 12px; padding: 16px; background-color: #10b981; border-color: #10b981; width: 100%;" onclick="forceReloadApp()">
-                        <i class="ph ph-arrows-clockwise" style="font-size: 24px; margin-bottom: 4px;"></i><br><span style="font-size: 16px; font-weight: bold;">Actualizar aplicación</span>
-                    </button>`;
+            if (actionContainer) {
+                if (isNative) {
+                    actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 12px; padding: 16px; background-color: #10b981; border-color: #10b981; width: 100%;" onclick="window.open('https://github.com/Streetoh/Gym-tracker/releases/latest', '_blank')">
+                            <i class="ph ph-download-simple" style="font-size: 24px; margin-bottom: 4px;"></i><br><span style="font-size: 16px; font-weight: bold;" data-i18n="update.download">${getT('update.download') || 'Descargar actualización'}</span>
+                        </button>`;
+                } else {
+                    actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 12px; padding: 16px; background-color: #10b981; border-color: #10b981; width: 100%;" onclick="forceReloadApp()">
+                            <i class="ph ph-arrows-clockwise" style="font-size: 24px; margin-bottom: 4px;"></i><br><span style="font-size: 16px; font-weight: bold;" data-i18n="update.reload">${getT('update.reload') || 'Actualizar aplicación'}</span>
+                        </button>`;
+                }
             }
             
-            document.getElementById('modal-update').classList.add('active');
+            const modalUpdate = document.getElementById('modal-update');
+            if (modalUpdate) modalUpdate.classList.add('active');
             
             // Show the persistent header icon
             const btnUpdate = document.getElementById('btn-header-update');
@@ -5317,3 +6334,47 @@ window.forceReloadApp = function() {
 setTimeout(checkForUpdates, 3000);
 
 document.getElementById('exercise-search')?.addEventListener('input', () => { renderExercises(); });
+
+
+// ==========================================
+// FINAL INITIALIZATION AT END OF FILE
+// ==========================================
+function initApp() {
+    state.currentWeekStart = getMonday(state.selectedDate);
+    updateLanguageUI();
+    
+    if (typeof renderCalendar === 'function') renderCalendar();
+    if (typeof renderExercises === 'function') renderExercises();
+    if (typeof renderGlobalHistory === 'function') renderGlobalHistory();
+    if (typeof renderProgressionView === 'function') renderProgressionView();
+    if (typeof renderEvolutionHistory === 'function') renderEvolutionHistory();
+    if (typeof renderEvolutionView === 'function') renderEvolutionView();
+    if (typeof renderExportList === 'function') renderExportList();
+
+    if (state.activeWorkoutState) {
+        activeSession = state.sessions.find(ses => ses.id === state.activeWorkoutState.sessionId);
+        if (activeSession) {
+            workoutStartTime = state.activeWorkoutState.startTime;
+            workoutView.classList.add('active');
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimerUI, 1000);
+            updateTimerUI();
+            renderWorkout();
+            if (window.manageWorkoutNotification) window.manageWorkoutNotification(true);
+        } else {
+            state.activeWorkoutState = null;
+            if (window.manageWorkoutNotification) window.manageWorkoutNotification(false);
+        }
+    }
+    
+    const calNav = document.querySelector('.nav-item[data-target="view-calendar"]');
+    if (calNav) {
+        calNav.click();
+    }
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}

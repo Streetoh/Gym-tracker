@@ -1,13 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<script>
-    if ('caches' in window) {
-        caches.keys().then(function(names) {
-            for (let name of names) caches.delete(name);
-        });
-    }
-</script>
+
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -43,8 +37,9 @@
     
     <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
     <!-- SheetJS for Excel Import -->
@@ -60,7 +55,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="styles.css?v=3">
+    <link rel="stylesheet" href="styles.css?v=1787959414325">
 </head>
 <body>
 
@@ -97,6 +92,11 @@
                     <i class="ph ph-export"></i>
                     <span data-i18n="nav.export">Exportar</span>
                 </button>
+
+                <button class="nav-item" data-target="view-ai">
+                    <i class="ph ph-sparkle"></i>
+                    <span data-i18n="nav.ai">Asistente IA</span>
+                </button>
             </nav>
             <div class="nav-arrow" style="display: none;"><i class="ph ph-caret-right"></i></div>
         </div>
@@ -111,9 +111,11 @@
                     <div id="active-workout-banner">
                         <i class="ph-fill ph-barbell" style="font-size: 16px;"></i> <span data-i18n="nav.workout">En curso</span>
                     </div>
-                    <button id="btn-header-update" style="display: none; background-color: #10b981; color: white; border-radius: 12px; width: 38px; height: 38px; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 4px; border: none; cursor: pointer; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);" onclick="document.getElementById('modal-update').classList.add('active')" title="Actualización disponible"><i class="ph ph-rocket-launch" style="font-size: 20px;"></i></button>
+                    <button id="btn-header-update" data-i18n-title="update.title" style="display: none; background-color: #10b981; color: white; border-radius: 12px; width: 38px; height: 38px; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 4px; border: none; cursor: pointer; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);" onclick="document.getElementById('modal-update').classList.add('active')" title="Actualización disponible"><i class="ph ph-rocket-launch" style="font-size: 20px;"></i></button>
                     <button id="btn-header-dashboard" style="background-color: #8b5cf6; color: white; border-radius: 12px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 4px; border: none; cursor: pointer; box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);" onclick="openDashboardModal()" title="Dashboard Analítico"><i class="ph ph-chart-bar" style="font-size: 20px;"></i></button>
-                    <button id="btn-theme-toggle" class="btn-icon" style="color: var(--text-primary); width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i class="ph ph-sun" id="theme-icon"></i></button>
+                    <button id="btn-ai-clear" class="btn-icon" onclick="clearAiChatHistory()" style="display:none; color: var(--text-primary); width: 40px; height: 40px; justify-content: center; align-items: center; border-radius: 50%; background: var(--bg-surface-elevated); margin-right: 4px;" title="Vaciar Chat"><i class="ph ph-trash"></i></button>
+                    <button id="btn-ai-settings" class="btn-icon" onclick="openAiSettings()" style="display:none; color: var(--text-primary); width: 40px; height: 40px; justify-content: center; align-items: center; border-radius: 50%; background: var(--bg-surface-elevated); margin-right: 4px;" title="Ajustes de IA"><i class="ph ph-gear"></i></button>
+                      <button id="btn-theme-toggle" class="btn-icon" style="color: var(--text-primary); width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i class="ph ph-sun" id="theme-icon"></i></button>
                     <button id="btn-language" class="btn-icon" style="color: var(--text-primary); width: auto; padding: 0 12px; border-radius: 16px;"><i class="ph ph-globe"></i> <span id="current-lang-text" style="font-size: 14px; font-weight: 600; margin-left: 4px;">ES</span></button>
                     
                     <button id="header-action" class="hidden"><i class="ph ph-plus"></i> <span style="font-size: 14px; margin-left: 4px; font-weight: 600;" data-i18n="calendar.addSession">Añadir sesión</span></button>
@@ -212,13 +214,11 @@
                     <!-- Injected via JS -->
                 </div>
 
-                <div id="progression-exercise-list" style="display:none; flex-direction:column; gap:8px; margin-bottom:16px; max-height:200px; overflow-y:auto;">
+                <div id="progression-exercise-list" style="display:none; flex-direction:column; gap:8px; margin-bottom:16px; max-height:380px; overflow-y:auto; border: 1px solid var(--border-color); border-radius: 12px; padding: 8px; background: var(--bg-surface-elevated);">
                     <!-- Injected via JS -->
                 </div>
 
-                <div class="card" style="padding: 16px;">
-                    <canvas id="progression-chart"></canvas>
-                </div>
+                <div id="progression-chart-card" class="card" style="display: none; padding: 16px; margin-top: 16px;"><canvas id="progression-chart"></canvas></div>
             </section>
 
             <!-- EVOLUTION VIEW -->
@@ -240,42 +240,45 @@
                         </div>
                     </div>
 
-                    <div style="margin-bottom: 16px; border-top: 1px solid var(--border-color); padding-top: 12px;">
-                        <label style="display:block; font-size: 14px; margin-bottom: 8px; color: var(--text-secondary);" data-i18n="evolution.measurementsTitle">Medidas Corporales (cm)</label>
-                        <div style="display: flex; gap: 16px; align-items: flex-start;">
-                            <img src="img/body-measurements.png?v=4" style="width: 40%; max-width: 140px; border-radius: 8px; border: 1px solid var(--border-color); background: #fff; cursor: pointer;" alt="Referencia de medidas" onclick="document.getElementById('lightbox-img').src=this.src; document.getElementById('modal-lightbox').classList.add('active');">
-                            <div style="flex: 1; display: grid; grid-template-columns: auto auto; gap: 8px 16px; justify-content: start; margin-left: 16px;">
-                                <div style="display:flex; align-items:center; gap:4px;">
-                                    <label style="font-size: 10px; color: var(--text-secondary); width: 65px; text-align: right;" data-i18n="evolution.m2">2. Brazo Izq.</label>
-                                    <input type="number" inputmode="numeric" id="evol-m2" class="form-input" style="padding: 6px 4px; font-size: 12px; text-align: center; width: 60px;">
+                    <div style="margin-bottom: 16px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+                        <label style="display:block; font-size: 15px; font-weight: 600; margin-bottom: 12px; color: var(--text-primary);" data-i18n="evolution.measurementsTitle">Medidas Corporales (cm)</label>
+                        <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: center;">
+                            <div style="flex: 0 0 auto; text-align: center;">
+                                <img src="img/body-measurements.png?v=5" style="width: 220px; max-width: 100%; border-radius: 12px; border: 1px solid var(--border-color); background: #ffffff; padding: 6px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" alt="Referencia de medidas" onclick="document.getElementById('lightbox-img').src=this.src; document.getElementById('modal-lightbox').classList.add('active');" title="Toca para ampliar">
+                                <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Toca para ampliar</div>
+                            </div>
+                            <div style="flex: 1; min-width: 260px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px 16px;">
+                                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                                    <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m1">1. Pecho</label>
+                                    <input type="number" inputmode="decimal" id="evol-m1" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
-                                <div style="display:flex; align-items:center; gap:4px;">
-                                    <label style="font-size: 10px; color: var(--text-secondary); width: 65px; text-align: right;" data-i18n="evolution.m3">3. Brazo Der.</label>
-                                    <input type="number" inputmode="numeric" id="evol-m3" class="form-input" style="padding: 6px 4px; font-size: 12px; text-align: center; width: 60px;">
+                                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                                    <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m2">2. Brazo Izq.</label>
+                                    <input type="number" inputmode="decimal" id="evol-m2" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
-                                <div style="display:flex; align-items:center; gap:4px;">
-                                    <label style="font-size: 10px; color: var(--text-secondary); width: 65px; text-align: right;" data-i18n="evolution.m7">7. Muslo Izq.</label>
-                                    <input type="number" inputmode="numeric" id="evol-m7" class="form-input" style="padding: 6px 4px; font-size: 12px; text-align: center; width: 60px;">
+                                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                                    <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m3">3. Brazo Der.</label>
+                                    <input type="number" inputmode="decimal" id="evol-m3" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
-                                <div style="display:flex; align-items:center; gap:4px;">
-                                    <label style="font-size: 10px; color: var(--text-secondary); width: 65px; text-align: right;" data-i18n="evolution.m8">8. Muslo Der.</label>
-                                    <input type="number" inputmode="numeric" id="evol-m8" class="form-input" style="padding: 6px 4px; font-size: 12px; text-align: center; width: 60px;">
+                                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                                    <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m4">4. Abdomen</label>
+                                    <input type="number" inputmode="decimal" id="evol-m4" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
-                                <div style="display:flex; align-items:center; gap:4px;">
-                                    <label style="font-size: 10px; color: var(--text-secondary); width: 65px; text-align: right;" data-i18n="evolution.m1">1. Pecho</label>
-                                    <input type="number" inputmode="numeric" id="evol-m1" class="form-input" style="padding: 6px 4px; font-size: 12px; text-align: center; width: 60px;">
+                                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                                    <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m5">5. Cintura</label>
+                                    <input type="number" inputmode="decimal" id="evol-m5" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
-                                <div style="display:flex; align-items:center; gap:4px;">
-                                    <label style="font-size: 10px; color: var(--text-secondary); width: 65px; text-align: right;" data-i18n="evolution.m4">4. Abdomen</label>
-                                    <input type="number" inputmode="numeric" id="evol-m4" class="form-input" style="padding: 6px 4px; font-size: 12px; text-align: center; width: 60px;">
+                                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                                    <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m6">6. Caderas</label>
+                                    <input type="number" inputmode="decimal" id="evol-m6" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
-                                <div style="display:flex; align-items:center; gap:4px;">
-                                    <label style="font-size: 10px; color: var(--text-secondary); width: 65px; text-align: right;" data-i18n="evolution.m5">5. Cintura</label>
-                                    <input type="number" inputmode="numeric" id="evol-m5" class="form-input" style="padding: 6px 4px; font-size: 12px; text-align: center; width: 60px;">
+                                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                                    <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m7">7. Muslo Izq.</label>
+                                    <input type="number" inputmode="decimal" id="evol-m7" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
-                                <div style="display:flex; align-items:center; gap:4px;">
-                                    <label style="font-size: 10px; color: var(--text-secondary); width: 65px; text-align: right;" data-i18n="evolution.m6">6. Caderas</label>
-                                    <input type="number" inputmode="numeric" id="evol-m6" class="form-input" style="padding: 6px 4px; font-size: 12px; text-align: center; width: 60px;">
+                                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                                    <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m8">8. Muslo Der.</label>
+                                    <input type="number" inputmode="decimal" id="evol-m8" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
                             </div>
                         </div>
@@ -283,9 +286,7 @@
                     <button id="btn-save-evolution" class="btn-primary" style="width: 100%;" data-i18n="evolution.saveRecord">Guardar Registro</button>
                 </div>
 
-                <div class="card" style="padding: 16px; margin-bottom: 16px;">
-                    <canvas id="evolution-chart"></canvas>
-                </div>
+                <div id="evolution-chart-card" class="card" style="display: none; padding: 16px; margin-bottom: 16px;"><canvas id="evolution-chart"></canvas></div>
 
                 <div id="evolution-history">
                     <!-- Injected via JS -->
@@ -351,7 +352,42 @@
                     <button id="finish-workout" class="btn-primary full-width" data-i18n="workout.finish">Finalizar Entrenamiento</button>
                 </div>
             </section>
-        </main>
+    
+        <!-- AI VIEW -->
+        <div id="view-ai" class="view">
+        <button id="ai-selection-quote-btn" class="chat-selection-tooltip" onclick="quoteSelectedText()"><i class="ph ph-chat-text"></i> <span>Citar selección</span></button>
+            <!-- Setup State -->
+            <div id="ai-setup-container">
+                <i class="ph ph-sparkle" style="font-size: 56px; color: var(--color-accent); margin-bottom: 16px;"></i>
+                <h2 style="margin-bottom: 12px; font-weight: 700;" data-i18n="nav.ai">Asistente IA</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 14px; line-height: 1.5;">
+                    Para usar el asistente inteligente, introduce tu Clave API gratuita de Gemini obtenida en <a href="#" onclick="window.open('https://aistudio.google.com/app/apikey', '_blank'); return false;" style="color: var(--color-accent); font-weight: 600;">Google AI Studio</a>.
+                </p>
+                <input type="password" id="ai-api-key-input" class="form-input" placeholder="Pega tu API Key de Google aquí..." autocomplete="off" style="margin-bottom: 16px; width: 100%; text-align: center;">
+                <button class="btn-primary full-width" onclick="saveAiKey()">Guardar y Empezar</button>
+            </div>
+            
+                        <!-- Chat State -->
+            <div id="ai-chat-container">
+                <div id="ai-chat-messages">
+                    <!-- WhatsApp-like messages injected here -->
+                </div>
+                
+                <div id="ai-reply-preview-bar">
+                    <div class="reply-preview-content">
+                        <span class="reply-preview-author" id="reply-author-label">Respondiendo a:</span>
+                        <span class="reply-preview-text" id="reply-text-label"></span>
+                    </div>
+                    <button class="reply-cancel-btn" onclick="cancelReply()" title="Cancelar respuesta"><i class="ph ph-x"></i></button>
+                </div>
+
+                <div class="ai-input-bar" id="ai-input-bar">
+                    <textarea id="ai-chat-input" rows="1" placeholder="Escribe tu mensaje..." data-i18n-placeholder="ai.inputPlaceholder" autocomplete="off" onkeydown="handleAiChatKeydown(event)" oninput="handleAiChatInput(this)"></textarea>
+                    <button class="ai-send-btn" onclick="sendAiMessage()" title="Enviar"><i class="ph ph-paper-plane-right" style="font-size: 18px;"></i></button>
+                </div>
+            </div>
+        </div>
+    </main>
     </div>
 
     <!-- MODALS -->
@@ -373,7 +409,9 @@
                     <i class="ph ph-sneaker" style="font-size: 24px; margin-bottom: 4px;"></i><br><span data-i18n="modals.add.goal">Objetivo de Pasos (Hoy)</span>
                 </button>
             </div>
-            <button class="btn-primary full-width close-modal" style="margin-top: 16px;" data-i18n="common.cancel">Cancelar</button>
+            <div style="display: flex; justify-content: center; width: 100%; margin-top: 16px;">
+                <button class="btn-secondary close-modal" style="width: auto; min-width: 140px; padding: 8px 28px; font-size: 13px; font-weight: 600; border-radius: 12px;" data-i18n="common.cancel">Cancelar</button>
+            </div>
         </div>
     </div>
 
@@ -508,7 +546,7 @@
 
     <!-- Add/Edit Exercise Modal -->
     <div id="modal-exercise" class="modal">
-        <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-content" style="max-width: 95%; width: 1000px;">
             <div class="modal-header">
                 <h3 id="modal-exercise-title" data-i18n="modals.exercise.title">Nuevo Ejercicio</h3>
                 <button class="close-modal"><i class="ph ph-x"></i></button>
@@ -530,9 +568,13 @@
                     <input type="url" id="exercise-youtube" placeholder="https://youtube.com/... o https://youtu.be/...">
                 </div>
                 <div class="form-group">
+                      <label>Descripción / Técnica</label>
+                      <textarea id="exercise-description" class="custom-exercise-textarea" placeholder="Añade instrucciones de técnica, agarre, postura o notas..." rows="5"></textarea>
+                  </div>
+                  <div class="form-group">
                     <label data-i18n="modals.exercise.image">Imagen Adjunta (Opcional)</label>
                     <input type="file" id="exercise-image" accept="image/*">
-                    <img id="exercise-image-preview" src="" alt="Preview" style="display:none; max-width: 100%; margin-top: 10px; border-radius: 8px; cursor: pointer;">
+                    <img id="exercise-image-preview" src="" alt="Preview" style="display:none; max-width: 100%; margin-top: 10px; border-radius: 8px; cursor: pointer;" onclick="document.getElementById('lightbox-img').src=this.src; document.getElementById('modal-lightbox').classList.add('active');">
                     <button id="btn-remove-exercise-image" type="button" class="btn-secondary" style="display:none; margin-top: 8px; width: 100%;"><i class="ph ph-trash" style="margin-right: 4px;"></i><span data-i18n="common.deleteImage">Eliminar Imagen</span></button>
                     <input type="hidden" id="exercise-image-data">
                 </div>
@@ -622,7 +664,7 @@
                 <button class="btn-secondary full-width lang-select-btn" data-lang="et" style="margin-bottom: 8px;">ET Eesti</button>
                 <button class="btn-secondary full-width lang-select-btn" data-lang="uk">UA Українська</button>
             </div>
-            <button class="btn-primary full-width close-modal" style="margin-top: 16px;" data-i18n="common.cancel">Cancelar</button>
+            <button class="btn-cancel-dynamic close-modal" data-i18n="common.cancel">Cancelar</button>
         </div>
     </div>
 
@@ -639,6 +681,9 @@
                 <button class="btn-secondary full-width" style="margin-bottom: 12px; padding: 16px;" onclick="generateDashboard('manual')">
                     <i class="ph ph-file-json" style="font-size: 24px; margin-bottom: 4px;"></i><br><span>Subir mi propio archivo JSON</span>
                 </button>
+                <button class="btn-secondary full-width" style="margin-bottom: 4px; padding: 12px; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="openDashboardApiKeyModal()">
+                    <i class="ph ph-key" style="font-size: 18px; color: #8b5cf6;"></i><span>Configurar API Key IA de Gemini</span>
+                </button>
             </div>
             <button class="btn-secondary full-width close-modal" style="margin-top: 16px;" data-i18n="common.cancel">Cancelar</button>
         </div>
@@ -646,9 +691,17 @@
 
     <!-- Dashboard Iframe Modal -->
     <div id="modal-dashboard-iframe" class="modal" style="padding: 0; background: #0f172a; flex-direction: column;">
-        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: #1e293b; color: white; width: 100%;">
-            <h3 style="font-size: 18px; font-weight: bold; margin: 0;">Dashboard Analítico</h3>
-            <button class="btn-icon" onclick="document.getElementById('modal-dashboard-iframe').classList.remove('active')" style="color: white; border: none; background: none; font-size: 24px;"><i class="ph ph-x"></i></button>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: #1e293b; color: white; width: 100%; box-sizing: border-box; border-bottom: 1px solid var(--border-color);">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <i class="ph ph-chart-polar" style="font-size: 20px; color: #8b5cf6;"></i>
+                <h3 style="font-size: 17px; font-weight: bold; margin: 0;">Dashboard Analítico</h3>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <button class="btn-secondary" style="padding: 6px 14px; font-size: 12.5px; border-radius: 8px; display: flex; align-items: center; gap: 6px; border: 1px solid #8b5cf6; color: #fff; background: rgba(139, 92, 246, 0.2);" onclick="openDashboardApiKeyModal()">
+                    <i class="ph ph-key"></i> Clave API IA
+                </button>
+                <button class="btn-icon" onclick="document.getElementById('modal-dashboard-iframe').classList.remove('active')" style="color: white; border: none; background: none; font-size: 24px; cursor: pointer;"><i class="ph ph-x"></i></button>
+            </div>
         </div>
         <div style="flex: 1; width: 100%; overflow: hidden;">
             <iframe id="dashboard-iframe" src="" style="width: 100%; height: 100%; border: none;"></iframe>
@@ -659,17 +712,132 @@
     <div id="modal-update" class="modal">
         <div class="modal-content" style="max-width: 450px; padding: 24px; margin: auto; border-radius: 24px; text-align: center;">
             <div class="modal-header" style="justify-content: center; margin-bottom: 16px;">
-                <h3 style="font-size: 18px; font-weight: bold; color: #3b82f6;"><i class="ph ph-rocket-launch" style="margin-right: 8px;"></i>¡Nueva versión disponible!</h3>
+                <h3 style="font-size: 18px; font-weight: bold; color: #10b981;"><i class="ph ph-rocket-launch" style="margin-right: 8px;"></i><span data-i18n="update.title">¡Nueva versión disponible!</span></h3>
             </div>
             <div class="modal-body">
-                <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px;">Hemos lanzado una nueva versión con mejoras y correcciones.</p>
+                <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px;" data-i18n="update.desc">Hemos lanzado una nueva versión con mejoras y correcciones.</p>
                 <p id="update-changelog" style="color: var(--text-primary); font-size: 14px; background: var(--bg-surface); padding: 12px; border-radius: 8px; margin-bottom: 24px; font-style: italic; border: 1px solid var(--border-color);"></p>
                 
                 <div id="update-action-container" style="width: 100%;">
-                    <!-- Botón inyectado por app.js -->
+                    <!-- Botón inyectado por app.js?v=1787959414325 -->
                 </div>
                 
-                <button class="btn-secondary full-width close-modal" style="padding: 14px; border: none; background: transparent; color: var(--text-secondary); width: 100%; white-space: nowrap;" onclick="document.getElementById('modal-update').classList.remove('active')">Quizás más tarde</button>
+                <button class="btn-secondary full-width close-modal" style="padding: 14px; border: none; background: transparent; color: var(--text-secondary); width: 100%; white-space: nowrap;" data-i18n="update.later" onclick="document.getElementById('modal-update').classList.remove('active')">Quizás más tarde</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal AI Settings -->
+    <!-- AI Settings Modal -->
+    <div id="modal-ai-settings" class="modal">
+        <div class="modal-content" style="max-width: 400px; margin: auto; border-radius: 24px; text-align: center;">
+            <div class="modal-header" style="justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="font-size: 18px; font-weight: 700;">Ajustes del Asistente</h3>
+                <button class="btn-icon close-modal"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 12px;">
+                <button class="btn-secondary full-width" style="padding: 14px; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="openAiProfileModal()">
+                    <i class="ph ph-user-circle" style="font-size: 20px; color: var(--color-accent);"></i>
+                    <span>Editar mi Perfil Personal</span>
+                </button>
+                <button class="btn-secondary full-width" style="padding: 14px; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="confirmClearChatFromModal()">
+                    <i class="ph ph-trash" style="font-size: 20px;"></i>
+                    <span>Vaciar conversación</span>
+                </button>
+                <button class="btn-primary full-width" style="padding: 14px; background-color: var(--color-heavy, #dc2626); border-color: var(--color-heavy, #dc2626); display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="confirmResetAiKey()">
+                    <i class="ph ph-key" style="font-size: 20px;"></i>
+                    <span>Eliminar Clave API</span>
+                </button>
+                <button class="btn-secondary full-width close-modal" style="margin-top: 4px;">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- AI Profile Modal -->
+    <div id="modal-ai-profile" class="modal">
+        <div class="modal-content" style="max-width: 440px; margin: auto; border-radius: 24px; text-align: left;">
+            <div class="modal-header" style="justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="font-size: 18px; font-weight: 700; display:flex; align-items:center; gap:8px;">
+                    <i class="ph ph-user-circle" style="color:var(--color-accent);"></i> Mi Perfil Personal IA
+                </h3>
+                <button class="btn-icon close-modal"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 14px;">
+                <div class="form-group">
+                    <label style="font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; display: block;">¿Cómo quieres que te llame el asistente?</label>
+                    <input type="text" id="modal-profile-name" placeholder="Ej. Carlos / Campeón" style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); font-size: 14px;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; display: block;">Objetivo Principal con el entrenamiento</label>
+                    <select id="modal-profile-goal" style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); font-size: 14px;">
+                        <option value="Hipertrofia / Ganancia muscular">Hipertrofia / Ganancia muscular</option>
+                        <option value="Pérdida de grasa / Definición">Pérdida de grasa / Definición</option>
+                        <option value="Fuerza y Rendimiento">Fuerza y Rendimiento</option>
+                        <option value="Salud y Mantenimiento">Salud y Mantenimiento</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="form-group">
+                        <label style="font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; display: block;">Peso actual (kg)</label>
+                        <input type="number" id="modal-profile-weight" placeholder="Ej. 75" style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); font-size: 14px;">
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; display: block;">Altura (cm)</label>
+                        <input type="number" id="modal-profile-height" placeholder="Ej. 178" style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); font-size: 14px;">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label style="font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; display: block;">Nivel de experiencia</label>
+                    <select id="modal-profile-level" style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); font-size: 14px;">
+                        <option value="Principiante">Principiante (&lt; 1 año)</option>
+                        <option value="Intermedio" selected>Intermedio (1 a 3 años)</option>
+                        <option value="Avanzado">Avanzado (&gt; 3 años)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label style="font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; display: block;">Notas / Enfoque especial (Opcional)</label>
+                    <input type="text" id="modal-profile-notes" placeholder="Ej. Quiero priorizar pecho y bíceps" style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); font-size: 14px;">
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 8px;">
+                    <button class="btn-secondary close-modal" style="flex: 1; padding: 12px;" data-i18n="common.cancel">Cancelar</button>
+                    <button class="btn-primary" style="flex: 1; padding: 12px;" onclick="saveAiUserProfileFromModal()"><i class="ph ph-floppy-disk"></i> Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Modal Dashboard API Key -->
+    <div id="modal-dashboard-apikey" class="modal">
+        <div class="modal-content" style="max-width: 440px; margin: auto; border-radius: 24px; text-align: left; padding: 20px;">
+            <div class="modal-header" style="justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <h3 style="font-size: 17px; font-weight: 700; display:flex; align-items:center; gap:8px;">
+                    <i class="ph ph-key" style="color: #8b5cf6;"></i> Clave API IA para el Dashboard
+                </h3>
+                <button class="btn-icon close-modal"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 12px;">
+                <p style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">
+                    Introduce tu clave API de Google Gemini para habilitar el análisis de progreso con IA en el Dashboard.
+                </p>
+                <div class="form-group">
+                    <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; display: block;">Clave API de Gemini</label>
+                    <input type="password" id="dashboard-apikey-input" placeholder="AIzaSy..." style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); font-size: 14px; box-sizing: border-box;">
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <a href="https://aistudio.google.com/app/apikey" target="_blank" style="font-size: 12px; color: #8b5cf6; text-decoration: underline; font-weight: 500;">
+                        Obtener clave API gratis <i class="ph ph-arrow-square-out"></i>
+                    </a>
+                    <button type="button" class="btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="toggleDashboardKeyVisibility()">
+                        <i id="dashboard-key-vis-icon" class="ph ph-eye"></i> Mostrar
+                    </button>
+                </div>
+                <div style="display: flex; gap: 8px; margin-top: 8px;">
+                    <button class="btn-secondary close-modal" style="flex: 1; padding: 12px;" data-i18n="common.cancel">Cancelar</button>
+                    <button class="btn-primary" style="flex: 1; padding: 12px; background: #8b5cf6; border-color: #8b5cf6;" onclick="saveDashboardApiKey()"><i class="ph ph-check"></i> Guardar Clave</button>
+                </div>
             </div>
         </div>
     </div>
@@ -678,7 +846,6 @@
     <div id="print-container" style="display:none;"></div>
 
     <!-- Javascript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
@@ -690,7 +857,8 @@
             });
         }
     </script>
-    <script src="default_db.js"></script>
-    <script src="app.js?v=1787319431103"></script>
+    <script src="default_db.js?v=1787959414325"></script>
+    <script src="app.js?v=1787959414325"></script>
+    <script src="ai_logic.js?v=1787959414325"></script>
 </body>
 </html>
