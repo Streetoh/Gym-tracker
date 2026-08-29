@@ -1513,20 +1513,20 @@ input[type="number"] {
     body:not(.is-mobile) .mobile-drawer-header {
         display: none !important;
     }
-    body:not(.is-mobile) .mobile-drawer-footer {
-        display: none !important;
-    }
     body:not(.is-mobile) .nav-wrapper {
         position: relative !important;
         transform: none !important;
         box-shadow: none !important;
-        width: auto !important;
-        max-width: none !important;
-        height: auto !important;
-        border-right: none !important;
+        width: 250px !important;
+        min-width: 250px !important;
+        max-width: 250px !important;
+        height: 100vh !important;
+        border-right: 1px solid var(--border-color) !important;
+        background: var(--bg-surface) !important;
+        display: flex !important;
         flex-direction: column !important;
         z-index: 10 !important;
-        overflow: visible !important;
+        overflow: hidden !important;
     }
 
     #app-container {
@@ -1538,16 +1538,39 @@ input[type="number"] {
     }
     
     body:not(.is-mobile) #bottom-nav {
-        width: 250px;
-        flex-direction: column;
-        border-top: none;
-        border-right: 1px solid var(--border-color);
-        justify-content: flex-start;
-        padding-top: 32px;
-        position: relative;
-        height: 100vh;
-        z-index: 10;
-        background: var(--bg-surface);
+        width: 100% !important;
+        flex: 1 !important;
+        flex-direction: column !important;
+        border-top: none !important;
+        border-right: none !important;
+        justify-content: flex-start !important;
+        padding-top: 32px !important;
+        padding-bottom: 16px !important;
+        position: relative !important;
+        height: auto !important;
+        z-index: 10 !important;
+        background: transparent !important;
+        overflow-y: auto !important;
+    }
+
+    body:not(.is-mobile) .mobile-drawer-footer {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        padding: 16px 12px !important;
+        border-top: 1px solid var(--border-color) !important;
+        margin-top: auto !important;
+        background: var(--bg-surface-elevated, #1e293b) !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    body:not(.is-mobile) .drawer-version-badge {
+        display: inline-block !important;
+        font-size: 11.5px !important;
+        font-weight: 600 !important;
+        color: var(--text-secondary, #94a3b8) !important;
+        letter-spacing: 0.5px !important;
     }
     
     .nav-item {
