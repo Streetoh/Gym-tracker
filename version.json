@@ -1,4 +1,4 @@
 {
-  "version": "1.1.1",
-  "changelog": "Soporte completo para Dashboard Analítico con Gemini 3.6 Flash, integración y modal de clave API, correcciones de colores en Progresión, panel de medidas corporales redondeado y cuadro de edición de ejercicios mejorado."
+  "version": "1.1.4",
+  "changelog": "Corrección del guardado y visualización de entrenamientos en el Historial, y rediseño de las carpetas de registros de Evolución con cabecera de peso/grasa y desglose lateral de fotos y medidas sin cortes."
 }

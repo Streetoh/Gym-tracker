@@ -55,13 +55,27 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="styles.css?v=1787959414325">
+    <link rel="stylesheet" href="styles.css?v=1787993659838">
 </head>
 <body>
 
     <div id="app-container">
-        <!-- BOTTOM NAVIGATION -->
-        <div class="nav-wrapper">
+        <!-- BACKDROP OVERLAY FOR MOBILE DRAWER -->
+        <div id="mobile-drawer-backdrop" class="mobile-drawer-backdrop"></div>
+
+        <!-- NAVIGATION (DESKTOP SIDEBAR / MOBILE DRAWER) -->
+        <div class="nav-wrapper" id="main-nav-wrapper">
+            <!-- MOBILE DRAWER HEADER -->
+            <div class="mobile-drawer-header">
+                <div class="mobile-drawer-brand">
+                    <i class="ph-bold ph-barbell"></i>
+                    <span>Gym Tracker</span>
+                </div>
+                <button id="btn-close-mobile-drawer" class="btn-icon mobile-drawer-close" aria-label="Cerrar Menú" title="Cerrar Menú">
+                    <i class="ph ph-x"></i>
+                </button>
+            </div>
+
             <div class="nav-arrow" style="display: none;"><i class="ph ph-caret-left"></i></div>
             <nav id="bottom-nav">
                 <button class="nav-item active" data-target="view-calendar">
@@ -99,13 +113,23 @@
                 </button>
             </nav>
             <div class="nav-arrow" style="display: none;"><i class="ph ph-caret-right"></i></div>
+
+            <!-- MOBILE DRAWER FOOTER (APP VERSION) -->
+            <div class="mobile-drawer-footer">
+                <span class="drawer-version-badge" id="mobile-drawer-version">Gym Tracker v1.1.4</span>
+            </div>
         </div>
 
         <!-- MAIN CONTENT -->
         <main id="main-content">
             <!-- HEADER -->
             <header id="app-header">
-                <div class="header-left"></div>
+                <div class="header-left">
+                    <button id="btn-mobile-menu" class="btn-mobile-menu" aria-label="Abrir Menú" title="Menú">
+                        <i class="ph-bold ph-list"></i>
+                        <span data-i18n="nav.menu">Menú</span>
+                    </button>
+                </div>
                 <h1 id="header-title" data-i18n="nav.calendar">Calendario</h1>
                 <div class="header-right">
                     <div id="active-workout-banner">
@@ -131,9 +155,12 @@
             
             <!-- CALENDAR VIEW -->
             <section id="view-calendar" class="view active">
-                <div style="display:flex; gap: 8px; margin: 0 16px 12px 16px;">
-                    <button id="btn-export-calendar" class="btn-secondary" style="flex:1; font-size:12px; padding:8px;"><i class="ph ph-upload-simple"></i> <span data-i18n="export.exportPlanned">Exportar sesiones</span></button>
-                    <button id="btn-import-calendar" class="btn-secondary" style="flex:1; font-size:12px; padding:8px;"><i class="ph ph-download-simple"></i> <span data-i18n="export.importPlanned">Importar sesiones</span></button>
+                <div class="calendar-top-actions">
+                    <div class="calendar-buttons-row">
+                        <button id="btn-export-calendar" class="btn-secondary"><i class="ph ph-upload-simple"></i> <span data-i18n="export.exportPlanned">Exportar sesiones</span></button>
+                        <button id="btn-import-calendar" class="btn-secondary"><i class="ph ph-download-simple"></i> <span data-i18n="export.importPlanned">Importar sesiones</span></button>
+                    </div>
+                    <button id="btn-create-session-calendar" class="btn-primary-calendar"><i class="ph-bold ph-calendar-plus"></i> <span data-i18n="calendar.createSession">Crear sesión</span></button>
                     <input type="file" id="file-import-calendar" accept=".json" style="display: none;">
                 </div>
                 <div class="calendar-header-week">
@@ -719,7 +746,7 @@
                 <p id="update-changelog" style="color: var(--text-primary); font-size: 14px; background: var(--bg-surface); padding: 12px; border-radius: 8px; margin-bottom: 24px; font-style: italic; border: 1px solid var(--border-color);"></p>
                 
                 <div id="update-action-container" style="width: 100%;">
-                    <!-- Botón inyectado por app.js?v=1787959414325 -->
+                    <!-- Botón inyectado por app.js?v=1787993659838 -->
                 </div>
                 
                 <button class="btn-secondary full-width close-modal" style="padding: 14px; border: none; background: transparent; color: var(--text-secondary); width: 100%; white-space: nowrap;" data-i18n="update.later" onclick="document.getElementById('modal-update').classList.remove('active')">Quizás más tarde</button>
@@ -857,8 +884,8 @@
             });
         }
     </script>
-    <script src="default_db.js?v=1787959414325"></script>
-    <script src="app.js?v=1787959414325"></script>
-    <script src="ai_logic.js?v=1787959414325"></script>
+    <script src="default_db.js?v=1787993659838"></script>
+    <script src="app.js?v=1787993659838"></script>
+    <script src="ai_logic.js?v=1787993659838"></script>
 </body>
 </html>

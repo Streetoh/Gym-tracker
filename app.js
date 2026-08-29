@@ -1324,9 +1324,70 @@ const modalDeleteSession = document.getElementById('modal-delete-session');
 const modalLightbox = document.getElementById('modal-lightbox');
 const closeBtns = document.querySelectorAll('.close-modal');
 
+// Calendar top create session button
+const btnCreateSessionCalendar = document.getElementById('btn-create-session-calendar');
+if (btnCreateSessionCalendar) {
+    btnCreateSessionCalendar.addEventListener('click', () => {
+        openModal(modalEventType);
+    });
+}
+
+
+// --- MOBILE DRAWER NAVIGATION LOGIC ---
+function openMobileDrawer() {
+    const wrapper = document.getElementById('main-nav-wrapper') || document.querySelector('.nav-wrapper');
+    const backdrop = document.getElementById('mobile-drawer-backdrop');
+    if (wrapper) wrapper.classList.add('drawer-open');
+    if (backdrop) backdrop.classList.add('active');
+    document.body.classList.add('drawer-is-open');
+}
+
+function closeMobileDrawer() {
+    const wrapper = document.getElementById('main-nav-wrapper') || document.querySelector('.nav-wrapper');
+    const backdrop = document.getElementById('mobile-drawer-backdrop');
+    if (wrapper) wrapper.classList.remove('drawer-open');
+    if (backdrop) backdrop.classList.remove('active');
+    document.body.classList.remove('drawer-is-open');
+}
+
+window.openMobileDrawer = openMobileDrawer;
+window.closeMobileDrawer = closeMobileDrawer;
+
+document.getElementById('btn-mobile-menu')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    openMobileDrawer();
+});
+
+document.getElementById('btn-close-mobile-drawer')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    closeMobileDrawer();
+});
+
+document.getElementById('mobile-drawer-backdrop')?.addEventListener('click', () => {
+    closeMobileDrawer();
+});
+
+window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeMobileDrawer();
+    }
+});
+
+// Update drawer version badge
+function updateDrawerVersionDisplay() {
+    const vEl = document.getElementById('mobile-drawer-version');
+    if (vEl && typeof CURRENT_APP_VERSION !== 'undefined') {
+        vEl.textContent = `Gym Tracker v${CURRENT_APP_VERSION}`;
+    }
+}
+
 // Navigation Logic
 navItems.forEach(item => {
     item.addEventListener('click', () => {
+        // Auto-close mobile drawer when a tab is selected
+        if (typeof closeMobileDrawer === 'function') {
+            closeMobileDrawer();
+        }
         const target = item.getAttribute('data-target');
         
         if (target === 'view-workout') {
@@ -1376,10 +1437,26 @@ navItems.forEach(item => {
         
         if (target === 'view-calendar') {
             headerTitle.textContent = getT('header.calendar') || 'Calendario';
-            headerAction.classList.remove('hidden');
-            headerAction.innerHTML = `<i class="ph ph-calendar-plus" style="font-size:18px;"></i> <span style="font-size:14px; font-weight:600; margin-left:6px;" data-i18n="calendar.createSession">${getT('calendar.createSession') || 'Crear sesión'}</span>`;
+            if (typeof renderCalendar === 'function') renderCalendar();
+        } else if (target === 'view-history') {
+            headerTitle.textContent = getT('header.history') || getT('nav.history') || 'Historial';
+            if (typeof renderGlobalHistory === 'function') renderGlobalHistory();
+        } else if (target === 'view-evolution') {
+            headerTitle.textContent = getT('header.evolution') || getT('nav.evolution') || 'Evolución';
+            if (typeof renderEvolutionHistory === 'function') renderEvolutionHistory();
+            if (typeof renderEvolutionView === 'function') renderEvolutionView();
+        } else if (target === 'view-progression') {
+            headerTitle.textContent = getT('header.progression') || getT('nav.progression') || 'Progresión';
+            if (typeof renderProgressionView === 'function') renderProgressionView();
+        } else if (target === 'view-exercises') {
+            headerTitle.textContent = getT('header.exercises') || getT('nav.exercises') || 'Ejercicios';
+            if (typeof renderExercises === 'function') renderExercises();
+        } else if (target === 'view-export') {
+            headerTitle.textContent = getT('header.export') || getT('nav.export') || 'Exp / Imp';
+            if (typeof renderExportList === 'function') renderExportList();
         } else if (target === 'view-ai') {
             headerTitle.textContent = getT('header.ai') || getT('nav.ai') || 'Asistente IA';
+            if (typeof initAi === 'function') initAi();
         } else {
             const cleanId = target.replace('view-', '');
             headerTitle.textContent = getT('header.' + cleanId) || getT('nav.' + cleanId) || cleanId;
@@ -1597,6 +1674,7 @@ const translations = {
             "dropsetFailure": "Dropset fallo"
         },
         "nav": {
+            "menu": "Menú",
             "ai": "Asistente IA",
 "calendar": "Calendario",
             "exercises": "Ejercicios",
@@ -1870,6 +1948,7 @@ const translations = {
             "dropsetFailure": "Dropset failure"
         },
         "nav": {
+            "menu": "Menu",
             "ai": "AI Assistant",
 "calendar": "Calendar",
             "exercises": "Exercises",
@@ -2143,6 +2222,7 @@ const translations = {
             "dropsetFailure": "Дропсет отказ"
         },
         "nav": {
+            "menu": "Меню",
             "ai": "ИИ Ассистент",
 "calendar": "Календарь",
             "exercises": "Упражнения",
@@ -2689,6 +2769,7 @@ const translations = {
             "dropsetFailure": "Дропсет відмова"
         },
         "nav": {
+            "menu": "Меню",
             "ai": "ШІ Асистент",
 "calendar": "Календар",
             "exercises": "Вправи",
@@ -2998,12 +3079,7 @@ const updateLanguageUI = () => {
             }
             const headerActionEl = document.getElementById('header-action');
             if (headerActionEl) {
-                if (viewId === 'view-calendar') {
-                    headerActionEl.classList.remove('hidden');
-                    headerActionEl.innerHTML = `<i class="ph ph-calendar-plus" style="font-size:18px;"></i> <span style="font-size:14px; font-weight:600; margin-left:6px;" data-i18n="calendar.createSession">${getT('calendar.createSession') || 'Crear sesión'}</span>`;
-                } else {
-                    headerActionEl.classList.add('hidden');
-                }
+                headerActionEl.classList.add('hidden');
             }
         }
     } catch (e) {
@@ -4507,25 +4583,33 @@ document.getElementById('finish-workout').addEventListener('click', () => {
     }
 
     clearInterval(timerInterval);
-    const duration = Date.now() - state.activeWorkoutState.startTime;
+    const duration = Date.now() - (state.activeWorkoutState?.startTime || workoutStartTime || Date.now());
     
     // Save to completed with real current date
     const realDate = formatDate(new Date());
     
     // Mark session as completed in calendar
-    const sessionInCalendar = state.sessions.find(s => s.id === activeSession.id);
-    if(sessionInCalendar) {
-        sessionInCalendar.completed = true;
-        sessionInCalendar.exercises = JSON.parse(JSON.stringify(activeSession.exercises));
+    if (activeSession && activeSession.id) {
+        const sessionInCalendar = state.sessions.find(s => s.id === activeSession.id);
+        if(sessionInCalendar) {
+            sessionInCalendar.completed = true;
+            sessionInCalendar.exercises = JSON.parse(JSON.stringify(activeSession.exercises || []));
+        }
     }
     
+    const sessionData = activeSession || (state.activeWorkoutState && state.activeWorkoutState.session) || { name: 'Entrenamiento', type: 'hypertrophy', exercises: [] };
+    
+    if (!Array.isArray(state.completedWorkouts)) {
+        state.completedWorkouts = [];
+    }
+
     state.completedWorkouts.push({
         id: Date.now().toString(),
         date: realDate,
-        name: activeSession.name,
-        type: activeSession.type,
+        name: sessionData.name || 'Entrenamiento',
+        type: sessionData.type || 'hypertrophy',
         duration: formatTimer(duration > 0 ? duration : 0),
-        exercises: JSON.parse(JSON.stringify(activeSession.exercises))
+        exercises: JSON.parse(JSON.stringify(sessionData.exercises || []))
     });
     
     workoutView.classList.remove('active');
@@ -4537,6 +4621,8 @@ document.getElementById('finish-workout').addEventListener('click', () => {
     recalculatePRs();
     saveState();
     renderCalendar();
+    renderGlobalHistory();
+    if (typeof renderProgressionView === 'function') renderProgressionView();
     alert((getT('alerts.workoutFinished') || 'Workout finished! Duration: ') + formatTimer(duration > 0 ? duration : 0));
 });
 
@@ -4544,29 +4630,31 @@ document.getElementById('finish-workout').addEventListener('click', () => {
 // --- HISTORY LOGIC ---
 const renderGlobalHistory = () => {
     const list = document.getElementById('history-list');
+    if (!list) return;
     list.innerHTML = '';
     
-    if (state.completedWorkouts.length === 0) {
+    if (!Array.isArray(state.completedWorkouts) || state.completedWorkouts.length === 0) {
         list.innerHTML = `<div class="empty-state">Aún no hay entrenamientos completados.</div>`;
         return;
     }
     
     const sorted = [...state.completedWorkouts].reverse();
     
-    sorted.forEach((w, wIndex) => {
+    sorted.forEach((w) => {
+        if (!w) return;
         const item = document.createElement('div');
-        item.classList.add('history-item', `type-${w.type}`);
+        item.classList.add('history-item', `type-${w.type || 'hypertrophy'}`);
         
-        const typeName = w.type === 'hypertrophy' ? 'Hipertrofia' : w.type === 'heavy' ? 'Pesado' : 'Alta Int.';
+        const typeName = w.type === 'hypertrophy' ? (getT('types.hypertrophy') || 'Hipertrofia') : w.type === 'heavy' ? (getT('types.heavy') || 'Pesado') : (getT('types.intensity') || 'Alta Int.');
         
         // Accordion for History
         item.innerHTML = `
             <div class="accordion-header" style="background:transparent;" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('open')">
                 <div style="flex:1;">
-                    <h4 style="margin-bottom:4px; font-size:16px;">${w.name}</h4>
-                    <p style="font-size:12px; color:var(--text-secondary);"><i class="ph ph-calendar"></i> ${w.date} &bull; <i class="ph ph-clock"></i> ${w.duration || '00:00'} &bull; ${typeName}</p>
+                    <h4 style="margin-bottom:4px; font-size:16px;">${w.name || 'Entrenamiento'}</h4>
+                    <p style="font-size:12px; color:var(--text-secondary);"><i class="ph ph-calendar"></i> ${w.date || '-'} &bull; <i class="ph ph-clock"></i> ${w.duration || '00:00'} &bull; ${typeName}</p>
                 </div>
-                <button class="btn-icon delete-history-btn" style="color:var(--color-heavy); margin-right:8px; z-index:10;"><i class="ph ph-trash"></i></button>
+                <button class="btn-icon delete-history-btn" style="color:var(--color-heavy); margin-right:8px; z-index:10;" title="Eliminar"><i class="ph ph-trash"></i></button>
                 <i class="ph ph-caret-down"></i>
             </div>
             <div class="accordion-body"></div>
@@ -4582,16 +4670,23 @@ const renderGlobalHistory = () => {
         });
         
         const body = item.querySelector('.accordion-body');
+        const exercises = Array.isArray(w.exercises) ? w.exercises : [];
         
-        w.exercises.forEach(ex => {
+        exercises.forEach(ex => {
+            if (!ex) return;
             let maxW = 0;
-            ex.sets.forEach(s => { if(s.weight > maxW) maxW = s.weight; });
+            const sets = Array.isArray(ex.sets) ? ex.sets : [];
+            sets.forEach(s => { 
+                if (s && s.weight && Number(s.weight) > maxW) maxW = Number(s.weight); 
+            });
+            
             body.innerHTML += `<div class="history-set" style="margin-top:8px;">
                 <strong style="color:var(--text-primary);">${getTrExName(ex.name)}</strong> 
                 <span style="color:var(--color-accent); font-weight:600;">Max: ${maxW}kg</span>
             </div>`;
             
-            ex.sets.forEach((s, idx) => {
+            sets.forEach((s, idx) => {
+                if (!s) return;
                 body.innerHTML += `<div style="font-size:11px; display:flex; justify-content:space-between; color:var(--text-secondary); padding: 2px 0;">
                     <span>${getT('workout.series') || 'Serie'} ${idx+1} (${getSetTypeT(s.type)})</span> <span>${s.reps || '-'} x ${s.weight || 0}kg</span>
                 </div>`;
@@ -5104,92 +5199,147 @@ const renderEvolutionHistory = () => {
     if (!container) return;
     container.innerHTML = '';
     
-    const history = [...state.evolution].sort((a,b) => new Date(b.dateIso) - new Date(a.dateIso));
+    if (!state.evolution || state.evolution.length === 0) {
+        container.innerHTML = `<div class="empty-state" style="padding: 24px; text-align: center; color: var(--text-secondary);">No hay registros de evolución guardados.</div>`;
+        return;
+    }
+    
+    const history = [...state.evolution].sort((a,b) => new Date(b.dateIso || b.date) - new Date(a.dateIso || a.date));
     
     history.forEach(item => {
         const div = document.createElement('div');
-        div.classList.add('card');
-        div.style.marginBottom = '12px';
+        div.className = 'evolution-item-card';
+        div.style.cssText = `
+            margin-bottom: 12px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-surface);
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            box-sizing: border-box;
+            width: 100%;
+        `;
         
-        const d = new Date(item.dateIso);
+        const d = item.dateIso ? new Date(item.dateIso) : new Date(item.date || Date.now());
         const dateStr = d.toLocaleDateString();
+        const folderId = 'evol-details-' + (item.id || Math.random().toString(36).substr(2, 9));
+        
+        const hasPhotos = Array.isArray(item.photos) && item.photos.filter(Boolean).length > 0;
+        const validPhotos = hasPhotos ? item.photos.filter(Boolean) : [];
+        
+        // Build measurements list
+        const mList1 = [];
+        const mList2 = [];
+        
+        if (item.m1) mList1.push({ label: 'Pecho', val: item.m1 });
+        if (item.m2) mList1.push({ label: 'Brazo I.', val: item.m2 });
+        if (item.m4) mList1.push({ label: 'Abdomen', val: item.m4 });
+        if (item.m7) mList1.push({ label: 'Muslo I.', val: item.m7 });
+        
+        if (item.m5) mList2.push({ label: 'Cintura', val: item.m5 });
+        if (item.m3) mList2.push({ label: 'Brazo D.', val: item.m3 });
+        if (item.m6) mList2.push({ label: 'Caderas', val: item.m6 });
+        if (item.m8) mList2.push({ label: 'Muslo D.', val: item.m8 });
+        
+        const hasMeasurements = mList1.length > 0 || mList2.length > 0;
+        
+        let photosHtml = '';
+        if (validPhotos.length > 0) {
+            photosHtml = `
+                <div class="evol-photos-column" style="flex: 0 0 80px; width: 80px; display: flex; flex-direction: column; gap: 6px;">
+                    ${validPhotos.map(photo => `
+                        <img src="${photo}" 
+                             style="width: 80px; height: 105px; border-radius: 10px; object-fit: cover; cursor: pointer; border: 1px solid var(--border-color); box-shadow: 0 2px 6px rgba(0,0,0,0.25);" 
+                             onclick="event.stopPropagation(); document.getElementById('lightbox-img').src=this.src; document.getElementById('modal-lightbox').classList.add('active');" 
+                             alt="Evolución"
+                             title="Toca para ampliar">
+                    `).join('')}
+                </div>
+            `;
+        }
         
         let measurementsHtml = '';
-        if (item.m1 || item.m2 || item.m3 || item.m4 || item.m5 || item.m6 || item.m7 || item.m8) {
-            const isApk = window.isApkEnv;
+        if (hasMeasurements) {
             measurementsHtml = `
-            <div style="margin-top: 12px; color: var(--text-secondary); background: var(--bg-background); padding: 14px 16px; border-radius: 14px; border: 1px solid var(--border-color);">
-                ${isApk ? `<div style="margin-bottom: 12px;"><img src="img/body-measurements.png" style="width: 100%; max-height: 200px; object-fit: contain; opacity: 0.8;"></div>` : ''}
-                <div style="display: grid; grid-template-columns: auto auto; gap: 8px 16px; justify-content: start; font-size: 12px;">
-                    ${item.m2 ? `<div><strong>${getT('evolution.m2').replace(/^\d+\.\s*/, '')}:</strong> ${item.m2} cm</div>` : '<div></div>'}
-                    ${item.m3 ? `<div><strong>${getT('evolution.m3').replace(/^\d+\.\s*/, '')}:</strong> ${item.m3} cm</div>` : '<div></div>'}
-                    ${item.m7 ? `<div><strong>${getT('evolution.m7').replace(/^\d+\.\s*/, '')}:</strong> ${item.m7} cm</div>` : '<div></div>'}
-                    ${item.m8 ? `<div><strong>${getT('evolution.m8').replace(/^\d+\.\s*/, '')}:</strong> ${item.m8} cm</div>` : '<div></div>'}
-                    ${item.m1 ? `<div><strong>${getT('evolution.m1').replace(/^\d+\.\s*/, '')}:</strong> ${item.m1} cm</div>` : '<div></div>'}
-                    ${item.m4 ? `<div><strong>${getT('evolution.m4').replace(/^\d+\.\s*/, '')}:</strong> ${item.m4} cm</div>` : '<div></div>'}
-                    ${item.m5 ? `<div><strong>${getT('evolution.m5').replace(/^\d+\.\s*/, '')}:</strong> ${item.m5} cm</div>` : '<div></div>'}
-                    ${item.m6 ? `<div><strong>${getT('evolution.m6').replace(/^\d+\.\s*/, '')}:</strong> ${item.m6} cm</div>` : '<div></div>'}
-                </div>
-            </div>`;
-        }
-
-        let photosHtml = '';
-        if (item.photos && item.photos.length > 0) {
-            const isApk = window.isApkEnv;
-            photosHtml = `
-            <div style="display:flex; ${isApk ? 'flex-direction: column;' : 'flex-direction: row;'} gap:8px; margin-top:12px; overflow-x:auto;">`;
-            item.photos.forEach(photo => {
-                if (photo) {
-                    photosHtml += `<img src="${photo}" style="height: ${isApk ? 'auto' : '100px'}; width: ${isApk ? '100%' : 'auto'}; max-height: ${isApk ? '300px' : 'none'}; border-radius: 8px; object-fit: cover; cursor: pointer;" onclick="document.getElementById('lightbox-img').src=this.src; document.getElementById('modal-lightbox').classList.add('active');">`;
-                }
-            });
-            photosHtml += `</div>`;
-        }
-        
-        const folderId = 'evol-details-' + item.id;
-        
-        const isApk = window.isApkEnv;
-        div.className = 'exercise-card';
-        div.style.marginBottom = '12px';
-        div.style.overflow = 'hidden';
-        div.style.cursor = 'pointer';
-        div.onclick = (e) => {
-            if(e.target.closest('button') || e.target.closest('img')) return;
-            const d = document.getElementById(folderId); 
-            const i = document.getElementById('icon-' + folderId); 
-            if(d.style.display === 'none') { 
-                d.style.display = 'block'; 
-                if(i) i.classList.replace('ph-caret-down', 'ph-caret-up'); 
-            } else { 
-                d.style.display = 'none'; 
-                if(i) i.classList.replace('ph-caret-up', 'ph-caret-down'); 
-            }
-        };
-        div.innerHTML = `
-            <div style="padding: 16px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
-                    <div style="display:flex; align-items:center; gap: 8px;">
-                        <i class="ph ph-calendar-blank" style="font-size: 20px; color: var(--color-accent);"></i>
-                        <h4 style="margin:0; font-size:16px; color: var(--text-primary); font-weight: bold;">${dateStr}</h4>
-                        <i id="icon-${folderId}" class="ph ph-caret-down" style="font-size: 16px; color: var(--text-secondary); margin-left: 4px;"></i>
+                <div class="evol-measurements-column" style="flex: 1; min-width: 0; background: var(--bg-surface-elevated); padding: 8px 10px; border-radius: 12px; border: 1px solid var(--border-color); box-sizing: border-box;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px 8px; font-size: 11.5px; color: var(--text-secondary);">
+                        <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+                            ${mList1.map(m => `
+                                <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 2px; overflow: hidden;">
+                                    <span style="font-weight: 500; color: var(--text-secondary); white-space: nowrap;">${m.label}</span>
+                                    <span style="font-weight: 700; color: var(--text-primary); white-space: nowrap; margin-left: 2px;">${m.val}cm</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+                            ${mList2.map(m => `
+                                <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 2px; overflow: hidden;">
+                                    <span style="font-weight: 500; color: var(--text-secondary); white-space: nowrap;">${m.label}</span>
+                                    <span style="font-weight: 700; color: var(--text-primary); white-space: nowrap; margin-left: 2px;">${m.val}cm</span>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
-                    <button class="btn-icon text-danger" style="margin-left: 12px; padding: 4px;" onclick="event.stopPropagation(); deleteEvolution('${item.id}')"><i class="ph ph-trash"></i></button>
                 </div>
-                <div style="color: var(--text-secondary); font-size: 13px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
-                    <span style="background: var(--bg-surface-elevated); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border-color);"><strong>Peso:</strong> ${item.weight} kg</span>
-                    ${item.bf ? `<span style="background: var(--bg-surface-elevated); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border-color);"><strong>Grasa:</strong> ${item.bf}%</span>` : ''}
-                    ${item.photos && item.photos.length > 0 ? `<span style="background: var(--bg-surface-elevated); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 4px;"><i class="ph ph-camera"></i> ${item.photos.length}</span>` : ''}
+            `;
+        } else if (!hasPhotos) {
+            measurementsHtml = `<div style="color: var(--text-secondary); font-size: 13px; font-style: italic;">Sin medidas corporales registradas.</div>`;
+        }
+        
+        div.innerHTML = `
+            <!-- Folder Top Bar (Always Visible) -->
+            <div class="evol-folder-header" style="padding: 13px 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface-elevated); user-select: none;">
+                <div style="display: flex; flex-direction: column; gap: 4px; min-width: 0;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <i class="ph-bold ph-folder" style="font-size: 18px; color: var(--color-accent); flex-shrink: 0;"></i>
+                        <h4 style="margin: 0; font-size: 15.5px; font-weight: 700; color: var(--text-primary);">${dateStr}</h4>
+                        <i id="icon-${folderId}" class="ph-bold ph-caret-down" style="font-size: 13px; color: var(--text-secondary); margin-left: 2px; transition: transform 0.2s ease;"></i>
+                    </div>
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: 13px; color: var(--text-secondary); align-items: center;">
+                        <span><strong style="color: var(--text-muted);">Peso:</strong> <strong style="color: var(--text-primary);">${item.weight || '-'} kg</strong></span>
+                        ${item.bf ? `<span style="color: var(--border-color);">&bull;</span> <span><strong style="color: var(--text-muted);">Grasa:</strong> <strong style="color: var(--text-primary);">${item.bf}%</strong></span>` : ''}
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: 8px;">
+                    ${validPhotos.length > 0 ? `<span style="font-size: 12px; font-weight: 600; color: var(--text-secondary); display: flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.06); padding: 4px 8px; border-radius: 8px;"><i class="ph ph-camera"></i> ${validPhotos.length}</span>` : ''}
+                    <button class="btn-icon delete-evol-btn" style="padding: 6px; color: var(--color-heavy); background: transparent; border: none; cursor: pointer;" title="Eliminar registro"><i class="ph ph-trash" style="font-size: 18px;"></i></button>
                 </div>
             </div>
-            <div id="${folderId}" style="display:none; padding: 0 16px 16px 16px; border-top: 1px solid var(--border-color); background: var(--bg-surface-elevated); border-bottom-left-radius: 16px; border-bottom-right-radius: 16px;">
-                <div style="padding-top: 14px;">
-                    <div style="background: var(--bg-background); padding: 14px; border-radius: 14px; border: 1px solid var(--border-color);">
-                        ${photosHtml}
-                        ${measurementsHtml}
-                    </div>
+            
+            <!-- Folder Expandable Content -->
+            <div id="${folderId}" class="evol-folder-content" style="display: none; padding: 12px 14px; border-top: 1px solid var(--border-color); background: var(--bg-surface);">
+                <div style="display: flex; gap: 12px; align-items: flex-start; width: 100%; box-sizing: border-box;">
+                    ${photosHtml}
+                    ${measurementsHtml}
                 </div>
             </div>
         `;
+        
+        // Toggle folder on click
+        const headerEl = div.querySelector('.evol-folder-header');
+        headerEl.addEventListener('click', (e) => {
+            if (e.target.closest('.delete-evol-btn') || e.target.closest('button')) return;
+            const contentEl = document.getElementById(folderId);
+            const iconEl = document.getElementById('icon-' + folderId);
+            if (!contentEl) return;
+            
+            if (contentEl.style.display === 'none') {
+                contentEl.style.display = 'block';
+                if (iconEl) iconEl.style.transform = 'rotate(180deg)';
+            } else {
+                contentEl.style.display = 'none';
+                if (iconEl) iconEl.style.transform = 'rotate(0deg)';
+            }
+        });
+        
+        // Delete button
+        const delBtn = div.querySelector('.delete-evol-btn');
+        if (delBtn) {
+            delBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                deleteEvolution(item.id);
+            });
+        }
         
         container.appendChild(div);
     });
@@ -5978,6 +6128,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
+        const { App } = window.Capacitor.Plugins;
+        App.addListener('backButton', ({ canGoBack }) => {
+            const wrapper = document.querySelector('.nav-wrapper');
+            if (wrapper && wrapper.classList.contains('drawer-open')) {
+                closeMobileDrawer();
+                return;
+            }
+            const activeModal = document.querySelector('.modal.active');
+            if (activeModal) {
+                activeModal.classList.remove('active');
+                return;
+            }
+            if (canGoBack) {
+                window.history.back();
+            } else {
+                App.exitApp();
+            }
+        });
+    }
+
     const cancelBtn = document.getElementById('btn-cancel-workout');
     if (cancelBtn) {
         cancelBtn.addEventListener('click', () => {
@@ -6267,7 +6438,7 @@ window.generateDashboard = function(mode) {
     }
 };
 
-const CURRENT_APP_VERSION = '1.1.1';
+const CURRENT_APP_VERSION = '1.1.4';
 function compareVersions(v1, v2) {
     const p1 = String(v1).split('.').map(Number);
     const p2 = String(v2).split('.').map(Number);
