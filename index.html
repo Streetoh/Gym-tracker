@@ -135,7 +135,7 @@
                     <div id="active-workout-banner">
                         <i class="ph-fill ph-barbell" style="font-size: 16px;"></i> <span data-i18n="nav.workout">En curso</span>
                     </div>
-                    <button id="btn-header-update" data-i18n-title="update.title" style="display: none; background-color: #10b981; color: white; border-radius: 12px; width: 38px; height: 38px; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 4px; border: none; cursor: pointer; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);" onclick="document.getElementById('modal-update').classList.add('active')" title="Actualización disponible"><i class="ph ph-rocket-launch" style="font-size: 20px;"></i></button>
+                    <button id="btn-header-update" data-i18n-title="update.title" style="display: none; background-color: #10b981; color: white; border-radius: 12px; width: 38px; height: 38px; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 4px; border: none; cursor: pointer; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);" onclick="window.openUpdateModal()" title="Actualización disponible"><i class="ph ph-rocket-launch" style="font-size: 20px;"></i></button>
                     <button id="btn-header-dashboard" style="background-color: #8b5cf6; color: white; border-radius: 12px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 4px; border: none; cursor: pointer; box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);" onclick="openDashboardModal()" title="Dashboard Analítico"><i class="ph ph-chart-bar" style="font-size: 20px;"></i></button>
                     <button id="btn-ai-clear" class="btn-icon" onclick="clearAiChatHistory()" style="display:none; color: var(--text-primary); width: 40px; height: 40px; justify-content: center; align-items: center; border-radius: 50%; background: var(--bg-surface-elevated); margin-right: 4px;" title="Vaciar Chat"><i class="ph ph-trash"></i></button>
                     <button id="btn-ai-settings" class="btn-icon" onclick="openAiSettings()" style="display:none; color: var(--text-primary); width: 40px; height: 40px; justify-content: center; align-items: center; border-radius: 50%; background: var(--bg-surface-elevated); margin-right: 4px;" title="Ajustes de IA"><i class="ph ph-gear"></i></button>
@@ -737,19 +737,30 @@
 
     <!-- Update Modal -->
     <div id="modal-update" class="modal">
-        <div class="modal-content" style="max-width: 450px; padding: 24px; margin: auto; border-radius: 24px; text-align: center;">
-            <div class="modal-header" style="justify-content: center; margin-bottom: 16px;">
-                <h3 style="font-size: 18px; font-weight: bold; color: #10b981;"><i class="ph ph-rocket-launch" style="margin-right: 8px;"></i><span data-i18n="update.title">¡Nueva versión disponible!</span></h3>
+        <div class="modal-content" style="max-width: 480px; padding: 22px; margin: auto; border-radius: 24px; text-align: center; box-sizing: border-box; width: 92%;">
+            <div class="modal-header" style="justify-content: space-between; align-items: center; margin-bottom: 14px; border-bottom: none; padding: 0;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 38px; height: 38px; border-radius: 12px; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 22px; flex-shrink: 0;">
+                        <i class="ph-bold ph-rocket-launch"></i>
+                    </div>
+                    <div style="text-align: left;">
+                        <h3 style="font-size: 17px; font-weight: 700; color: var(--text-primary); margin: 0;" data-i18n="update.title">¡Nueva versión disponible!</h3>
+                        <span id="update-modal-version-tag" style="font-size: 12px; font-weight: 600; color: #10b981;">Versión 1.1.5</span>
+                    </div>
+                </div>
+                <button class="btn-icon close-modal" onclick="document.getElementById('modal-update').classList.remove('active')" style="color: var(--text-secondary);"><i class="ph ph-x" style="font-size: 20px;"></i></button>
             </div>
-            <div class="modal-body">
-                <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px;" data-i18n="update.desc">Hemos lanzado una nueva versión con mejoras y correcciones.</p>
-                <p id="update-changelog" style="color: var(--text-primary); font-size: 14px; background: var(--bg-surface); padding: 12px; border-radius: 8px; margin-bottom: 24px; font-style: italic; border: 1px solid var(--border-color);"></p>
-                
-                <div id="update-action-container" style="width: 100%;">
-                    <!-- Botón inyectado por app.js?v=1787994225989 -->
+            <div class="modal-body" style="padding: 0;">
+                <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 13.5px; text-align: left;" data-i18n="update.desc">Novedades y mejoras de esta actualización:</p>
+                <div id="update-changelog" style="background: var(--bg-surface); padding: 14px 16px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); max-height: 240px; overflow-y: auto;">
+                    <!-- Changelog items inyectados dinámicamente -->
                 </div>
                 
-                <button class="btn-secondary full-width close-modal" style="padding: 14px; border: none; background: transparent; color: var(--text-secondary); width: 100%; white-space: nowrap;" data-i18n="update.later" onclick="document.getElementById('modal-update').classList.remove('active')">Quizás más tarde</button>
+                <div id="update-action-container" style="width: 100%;">
+                    <!-- Botón inyectado por app.js -->
+                </div>
+                
+                <button class="btn-secondary full-width close-modal" style="padding: 12px; border: none; background: transparent; color: var(--text-secondary); width: 100%; white-space: nowrap; font-size: 13.5px; cursor: pointer;" data-i18n="update.later" onclick="document.getElementById('modal-update').classList.remove('active')">Quizás más tarde</button>
             </div>
         </div>
     </div>

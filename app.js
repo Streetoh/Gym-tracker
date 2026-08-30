@@ -6528,6 +6528,71 @@ function compareVersions(v1, v2) {
     }
     return 0;
 }
+window.latestUpdateData = null;
+
+window.renderUpdateModalContent = function(data) {
+    if (!data) return;
+    window.latestUpdateData = data;
+    
+    const versionTag = document.getElementById('update-modal-version-tag');
+    if (versionTag) {
+        versionTag.textContent = `Versión ${data.version || ''}${data.releaseDate ? ' (' + data.releaseDate + ')' : ''}`;
+    }
+    
+    const changelogEl = document.getElementById('update-changelog');
+    if (changelogEl) {
+        let changelogHtml = '';
+        if (Array.isArray(data.changelog)) {
+            changelogHtml = '<ul style="text-align: left; margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.5; color: var(--text-primary); display: flex; flex-direction: column; gap: 8px;">' +
+                data.changelog.map(item => `<li>${item}</li>`).join('') +
+                '</ul>';
+        } else if (typeof data.changelog === 'string' && data.changelog.trim()) {
+            const items = data.changelog.split(/\r?\n|•/).map(s => s.trim()).filter(s => s.length > 0);
+            if (items.length > 1) {
+                changelogHtml = '<ul style="text-align: left; margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.5; color: var(--text-primary); display: flex; flex-direction: column; gap: 8px;">' +
+                    items.map(item => `<li>${item}</li>`).join('') +
+                    '</ul>';
+            } else {
+                changelogHtml = `<p style="margin:0; text-align:left; font-size: 13.5px; line-height: 1.5; color: var(--text-primary);">${data.changelog}</p>`;
+            }
+        } else {
+            changelogHtml = '<p style="margin:0; text-align:left; font-size: 13.5px; color: var(--text-secondary); font-style: italic;">Mejoras de rendimiento y correcciones de errores.</p>';
+        }
+        changelogEl.innerHTML = changelogHtml;
+    }
+    
+    const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
+    const actionContainer = document.getElementById('update-action-container');
+    if (actionContainer) {
+        if (isNative) {
+            actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 10px; padding: 14px; background-color: #10b981; border-color: #10b981; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer;" onclick="window.open('https://github.com/Streetoh/Gym-tracker/releases/latest', '_blank')">
+                    <i class="ph ph-download-simple" style="font-size: 20px;"></i> <span>${getT('update.download') || 'Descargar actualización'}</span>
+                </button>`;
+        } else {
+            actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 10px; padding: 14px; background-color: #10b981; border-color: #10b981; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer;" onclick="forceReloadApp()">
+                    <i class="ph ph-arrows-clockwise" style="font-size: 20px;"></i> <span>${getT('update.reload') || 'Actualizar aplicación'}</span>
+                </button>`;
+        }
+    }
+};
+
+window.openUpdateModal = function(customData) {
+    const dataToUse = customData || window.latestUpdateData || {
+        version: CURRENT_APP_VERSION,
+        releaseDate: "30/08/2026",
+        changelog: [
+            "Cabecera optimizada: Eliminado el interruptor superior de switch de Editar para mayor limpieza visual.",
+            "Edición de sesiones: Añadido selector de fecha al editar cualquier entrenamiento para cambiar su día sin tener que borrarlo.",
+            "Borrado en Evolución: Corregido el problema donde no se eliminaban los registros al pulsar la papelera.",
+            "Asistente IA mejorado: Los entrenamientos planificados por la IA ahora inician con pesos en 0 kg y mantienen las repeticiones exactas.",
+            "Bloques de sesiones en IA: Creación de bloques de 4 semanas con identificador compartido para permitir el borrado conjunto."
+        ]
+    };
+    window.renderUpdateModalContent(dataToUse);
+    const modalUpdate = document.getElementById('modal-update');
+    if (modalUpdate) modalUpdate.classList.add('active');
+};
+
 async function checkForUpdates() {
     try {
         if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
@@ -6536,26 +6601,10 @@ async function checkForUpdates() {
         const response = await fetch('https://streetoh.github.io/Gym-tracker/version.json?t=' + new Date().getTime());
         if (!response.ok) return;
         const data = await response.json();
+        window.latestUpdateData = data;
+        
         if (compareVersions(data.version, CURRENT_APP_VERSION) > 0) {
-            const changelogEl = document.getElementById('update-changelog');
-            if (changelogEl) {
-                changelogEl.innerText = data.changelog || 'Mejoras de rendimiento y nuevas funciones.';
-            }
-            
-            const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
-            const actionContainer = document.getElementById('update-action-container');
-            
-            if (actionContainer) {
-                if (isNative) {
-                    actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 12px; padding: 16px; background-color: #10b981; border-color: #10b981; width: 100%;" onclick="window.open('https://github.com/Streetoh/Gym-tracker/releases/latest', '_blank')">
-                            <i class="ph ph-download-simple" style="font-size: 24px; margin-bottom: 4px;"></i><br><span style="font-size: 16px; font-weight: bold;" data-i18n="update.download">${getT('update.download') || 'Descargar actualización'}</span>
-                        </button>`;
-                } else {
-                    actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 12px; padding: 16px; background-color: #10b981; border-color: #10b981; width: 100%;" onclick="forceReloadApp()">
-                            <i class="ph ph-arrows-clockwise" style="font-size: 24px; margin-bottom: 4px;"></i><br><span style="font-size: 16px; font-weight: bold;" data-i18n="update.reload">${getT('update.reload') || 'Actualizar aplicación'}</span>
-                        </button>`;
-                }
-            }
+            window.renderUpdateModalContent(data);
             
             const modalUpdate = document.getElementById('modal-update');
             if (modalUpdate) modalUpdate.classList.add('active');

@@ -1,4 +1,11 @@
 {
   "version": "1.1.5",
-  "changelog": "Corrección del borrado de registros de evolución, edición de fecha en sesiones existentes, creación precisa de bloques de 4 semanas en Asistente IA con pesos iniciales a cero y borrado conjunto de bloques recurrentes."
+  "releaseDate": "30/08/2026",
+  "changelog": [
+    "Cabecera optimizada: Eliminado el interruptor superior de switch de Editar para mayor limpieza visual.",
+    "Edición de sesiones: Añadido selector de fecha al editar cualquier entrenamiento para cambiar su día sin tener que borrarlo.",
+    "Borrado en Evolución: Corregido el problema donde no se eliminaban los registros al pulsar la papelera.",
+    "Asistente IA mejorado: Los entrenamientos planificados por la IA ahora inician con pesos en 0 kg y mantienen las repeticiones exactas.",
+    "Bloques de sesiones en IA: Creación de bloques de 4 semanas con identificador compartido para permitir el borrado conjunto."
+  ]
 }
