@@ -116,7 +116,7 @@
 
             <!-- MOBILE DRAWER FOOTER (APP VERSION) -->
             <div class="mobile-drawer-footer">
-                <span class="drawer-version-badge" id="mobile-drawer-version">Gym Tracker v1.1.4</span>
+                <span class="drawer-version-badge" id="mobile-drawer-version">Gym Tracker v1.1.5</span>
             </div>
         </div>
 
@@ -143,13 +143,6 @@
                     <button id="btn-language" class="btn-icon" style="color: var(--text-primary); width: auto; padding: 0 12px; border-radius: 16px;"><i class="ph ph-globe"></i> <span id="current-lang-text" style="font-size: 14px; font-weight: 600; margin-left: 4px;">ES</span></button>
                     
                     <button id="header-action" class="hidden"><i class="ph ph-plus"></i> <span style="font-size: 14px; margin-left: 4px; font-weight: 600;" data-i18n="calendar.addSession">Añadir sesión</span></button>
-                    <label id="header-edit-switch" style="display:none; align-items:center; gap:8px; margin-left: 8px; cursor:pointer;">
-                        <span style="font-size:14px; font-weight:600; color:var(--text-primary);" data-i18n="common.edit">Editar</span>
-                        <div class="android-switch">
-                            <input type="checkbox" style="display:none;">
-                            <span class="slider"></span>
-                        </div>
-                    </label>
                 </div>
             </header>
             
@@ -531,6 +524,13 @@
                         <button class="type-btn intensity" data-type="intensity" data-i18n="types.intensity">Alta Int.</button>
                     </div>
                 </div>
+                <div class="form-group" id="routine-date-group">
+                    <label style="display: flex; align-items: center; gap: 6px;">
+                        <i class="ph ph-calendar"></i>
+                        <span data-i18n="modals.routine.date">Fecha de la Sesión</span>
+                    </label>
+                    <input type="date" id="routine-date" class="form-input" style="width: 100%; padding: 10px 12px; font-size: 14px; border-radius: 10px; box-sizing: border-box;">
+                </div>
                 <div class="form-group">
                     <label data-i18n="modals.routine.name">Nombre</label>
                     <input type="text" id="routine-name" placeholder="Ej. Torso Pesado" data-i18n-placeholder="modals.routine.namePlaceholder">
@@ -884,8 +884,8 @@
             });
         }
     </script>
-    <script src="default_db.js?v=1787994225989"></script>
-    <script src="app.js?v=1787994225989"></script>
-    <script src="ai_logic.js?v=1787994225989"></script>
+    <script src="default_db.js?v=1788096600000"></script>
+    <script src="app.js?v=1788096600000"></script>
+    <script src="ai_logic.js?v=1788096600000"></script>
 </body>
 </html>

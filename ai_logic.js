@@ -685,11 +685,11 @@ function buildLiveAppContext() {
     let calendarContext = 'No hay sesiones planificadas.';
     if (state.sessions && state.sessions.length > 0) {
         calendarContext = state.sessions.map(s => {
-            const exSummary = (s.exercises || []).map(e => {
-                const setsCount = (e.sets || []).length;
-                return `${e.name || e.exerciseId} (${setsCount} series)`;
-            }).join(', ');
-            return `- Fecha: ${s.date} | Nombre: "${s.name}" | Tipo: ${s.type} | Ejercicios: [${exSummary}]`;
+            const exDetail = (s.exercises || []).map(e => {
+                const setsDetail = (e.sets || []).map(st => `${st.type || 'Efectiva'}: ${st.targetReps || st.reps || '10'} reps (${st.restTime || '60s'})`).join(', ');
+                return `${e.name || e.exerciseId} [${setsDetail}]`;
+            }).join(' | ');
+            return `- ID: ${s.id} | BlockID: ${s.blockId || 'ninguno'} | Fecha: ${s.date} | Nombre: "${s.name}" | Tipo: ${s.type} | Ejercicios: [${exDetail}]`;
         }).join('\n');
     }
     
@@ -753,10 +753,47 @@ function executeAiGymActions(responseText) {
     try {
         const actionData = JSON.parse(match[1].trim());
         if (actionData.action === 'create_sessions' && Array.isArray(actionData.sessions) && typeof state !== 'undefined') {
+            const blockIdMap = new Map();
+            
+            // Pre-scan to group sessions into shared blockIds if AI provided blockId
+            actionData.sessions.forEach(ses => {
+                if (ses.blockId) {
+                    if (!blockIdMap.has(ses.blockId)) {
+                        blockIdMap.set(ses.blockId, 'blk_' + Date.now().toString() + '_' + Math.random().toString().slice(2, 6));
+                    }
+                }
+            });
+            
+            // If AI didn't explicitly provide blockId on multi-session sequences, detect (Semana X) pattern or matching names
+            if (blockIdMap.size === 0 && actionData.sessions.length > 1) {
+                const nameGroups = new Map();
+                actionData.sessions.forEach(ses => {
+                    const baseName = (ses.name || '').replace(/\s*\((?:Semana|Week|\d+)[^\)]*\)/i, '').trim().toLowerCase();
+                    if (baseName) {
+                        if (!nameGroups.has(baseName)) nameGroups.set(baseName, []);
+                        nameGroups.get(baseName).push(ses);
+                    }
+                });
+                nameGroups.forEach((groupSessions) => {
+                    if (groupSessions.length > 1) {
+                        const generatedBlockId = 'blk_' + Date.now().toString() + '_' + Math.random().toString().slice(2, 6);
+                        groupSessions.forEach(ses => {
+                            if (!ses.blockId) blockIdMap.set(ses, generatedBlockId);
+                        });
+                    }
+                });
+            }
+
             actionData.sessions.forEach(ses => {
                 if (!ses.name || !ses.date) return;
                 
-                const blockId = Date.now().toString() + Math.random().toString().slice(2, 6);
+                let assignedBlockId = null;
+                if (ses.blockId && blockIdMap.has(ses.blockId)) {
+                    assignedBlockId = blockIdMap.get(ses.blockId);
+                } else if (blockIdMap.has(ses)) {
+                    assignedBlockId = blockIdMap.get(ses);
+                }
+                
                 const workoutExercises = [];
                 
                 (ses.exercises || []).forEach(exItem => {
@@ -788,30 +825,30 @@ function executeAiGymActions(responseText) {
                     
                     const sets = (exItem.sets && exItem.sets.length > 0) ? exItem.sets.map(s => ({
                         type: s.type || 'Efectiva',
-                        weight: parseFloat(s.weight) || 0,
-                        reps: s.reps ? String(s.reps) : '',
-                        targetReps: s.reps ? String(s.reps) : '8-12',
+                        weight: 0, // ALWAYS 0 kg on creation so user logs live workout weights
+                        reps: '',
+                        targetReps: s.targetReps ? String(s.targetReps) : (s.reps ? String(s.reps) : '8-12'),
                         repsDrop: '',
                         restTime: s.restTime || '60s'
                     })) : [
-                        { type: 'Calentamiento', weight: 0, reps: '15', targetReps: '15', restTime: '45s' },
-                        { type: 'Aproximación', weight: 0, reps: '10', targetReps: '10', restTime: '45s' },
-                        { type: 'Efectiva', weight: 0, reps: '8-10', targetReps: '8-10', restTime: '60s' }
+                        { type: 'Calentamiento', weight: 0, reps: '', targetReps: '15', restTime: '45s' },
+                        { type: 'Aproximación', weight: 0, reps: '', targetReps: '10', restTime: '45s' },
+                        { type: 'Efectiva', weight: 0, reps: '', targetReps: '8-10', restTime: '60s' }
                     ];
                     
                     workoutExercises.push({
                         exerciseId: exId,
                         name: exName,
-                        supersetId: null,
-                        supersetName: null,
+                        supersetId: exItem.supersetId || null,
+                        supersetName: exItem.supersetName || null,
                         sets: sets,
                         comments: ''
                     });
                 });
                 
                 const newSession = {
-                    id: Date.now().toString() + Math.random().toString().slice(2, 6),
-                    blockId: blockId,
+                    id: Date.now().toString() + '_' + Math.random().toString().slice(2, 6),
+                    blockId: assignedBlockId,
                     date: ses.date,
                     name: ses.name,
                     type: ['hypertrophy', 'heavy', 'intensity', 'goal'].includes(ses.type) ? ses.type : 'hypertrophy',
@@ -908,27 +945,51 @@ FORMATTING AND VISUAL DESIGN GUIDELINES:
 - EXERCISES LISTS:
   * Present exercises in clean numbered lists: '1. **Nombre del ejercicio** — 3 series (8-10 reps) [Grupo muscular]'.
 
-INSTRUCTIONS FOR CREATING / SCHEDULING WORKOUTS IN THE CALENDAR:
-When the user asks you to create, plan, add, or schedule a workout/routine (for today, tomorrow, a specific date DD/MM/YYYY, or multiple days):
+INSTRUCTIONS FOR CREATING, COPYING, OR SCHEDULING WORKOUTS IN THE CALENDAR:
+When the user asks you to create, plan, copy, duplicate, or schedule a workout/routine (for today, tomorrow, a specific date DD/MM/YYYY, or multiple days/weeks):
 1. Explain the routine clearly in your text (exercises, sets, target reps, rest times, technique cues).
 2. AT THE VERY END of your response, output a JSON action block enclosed in triple backticks with tag "json:gym_action".
+3. CRITICAL RULES FOR SESSIONS & BLOCKS:
+   * WEIGHTS: ALWAYS set "weight": 0 for all sets. NEVER include pre-filled weights (e.g. do NOT put 20, 40, 80kg). The user will enter weights in real-time during live workouts.
+   * REPETITIONS: Preserve the exact target repetitions requested or existing in the routine (e.g. "8-10", "10-12", "5", "12-15").
+   * 4-WEEK BLOCKS: When creating or copying a 4-week block, ALL 4 sessions of the block MUST share the exact same "blockId" string (e.g. "block_1"), their names MUST be formatted as "[Nombre de la sesión] (Semana X)" for X = 1, 2, 3, 4, and their dates MUST be spaced exactly 7 days apart.
+   * COPYING SESSIONS/BLOCKS: When the user asks to copy or move an existing session/block to another day, inspect the source session's exercises and sets in the live calendar context above. Copy the EXACT exercise names, supersets, set types, target repetitions, and rest times, setting "weight": 0 and assigning a shared "blockId" for the 4 weeks.
+
 Schema:
 \`\`\`json:gym_action
 {
   "action": "create_sessions",
   "sessions": [
     {
-      "name": "Nombre de la sesión (ej. Pecho y Tríceps Hipertrofia)",
-      "date": "DD/MM/YYYY",
-      "type": "hypertrophy" | "heavy" | "intensity" | "goal",
+      "name": "Pecho y Tríceps (Semana 1)",
+      "date": "04/09/2026",
+      "type": "hypertrophy",
+      "blockId": "block_pecho_1",
       "exercises": [
         {
-          "name": "Nombre exacto o aproximado de un ejercicio de la app",
+          "name": "Press Banca con Barra",
           "sets": [
             { "type": "Calentamiento", "reps": "15", "weight": 0, "restTime": "45s" },
-            { "type": "Aproximación", "reps": "10", "weight": 20, "restTime": "45s" },
-            { "type": "Efectiva", "reps": "8-10", "weight": 40, "restTime": "60s" },
-            { "type": "Efectiva", "reps": "8-10", "weight": 40, "restTime": "60s" }
+            { "type": "Aproximación", "reps": "10", "weight": 0, "restTime": "45s" },
+            { "type": "Efectiva", "reps": "8-10", "weight": 0, "restTime": "60s" },
+            { "type": "Efectiva", "reps": "8-10", "weight": 0, "restTime": "60s" }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pecho y Tríceps (Semana 2)",
+      "date": "11/09/2026",
+      "type": "hypertrophy",
+      "blockId": "block_pecho_1",
+      "exercises": [
+        {
+          "name": "Press Banca con Barra",
+          "sets": [
+            { "type": "Calentamiento", "reps": "15", "weight": 0, "restTime": "45s" },
+            { "type": "Aproximación", "reps": "10", "weight": 0, "restTime": "45s" },
+            { "type": "Efectiva", "reps": "8-10", "weight": 0, "restTime": "60s" },
+            { "type": "Efectiva", "reps": "8-10", "weight": 0, "restTime": "60s" }
           ]
         }
       ]

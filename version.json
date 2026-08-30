@@ -1,4 +1,4 @@
 {
-  "version": "1.1.4",
-  "changelog": "Corrección del guardado y visualización de entrenamientos en el Historial, y rediseño de las carpetas de registros de Evolución con cabecera de peso/grasa y desglose lateral de fotos y medidas sin cortes."
+  "version": "1.1.5",
+  "changelog": "Corrección del borrado de registros de evolución, edición de fecha en sesiones existentes, creación precisa de bloques de 4 semanas en Asistente IA con pesos iniciales a cero y borrado conjunto de bloques recurrentes."
 }

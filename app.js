@@ -1271,7 +1271,41 @@ function saveState() {
 };
 
 const formatDate = (date) => {
-    return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+    if (!date) return '';
+    if (typeof date === 'string' && date.includes('/')) return date;
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return '';
+    return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+};
+
+const dateToInputFormat = (date) => {
+    if (!date) return new Date().toISOString().split('T')[0];
+    if (typeof date === 'string' && date.includes('/')) {
+        const parts = date.split('/');
+        if (parts.length === 3) {
+            const day = parts[0].padStart(2, '0');
+            const month = parts[1].padStart(2, '0');
+            const year = parts[2];
+            return `${year}-${month}-${day}`;
+        }
+    }
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return new Date().toISOString().split('T')[0];
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
+const inputToDate = (inputStr) => {
+    if (!inputStr) return new Date();
+    if (typeof inputStr === 'string' && inputStr.includes('-')) {
+        const parts = inputStr.split('-');
+        if (parts.length === 3) {
+            return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+        }
+    }
+    return new Date(inputStr);
 };
 
 const getMonday = (d) => {
@@ -1432,9 +1466,6 @@ navItems.forEach(item => {
             if(aiClear) aiClear.style.display = isAi ? 'flex' : 'none';
         }
         
-        const editSwitch = document.getElementById('header-edit-switch');
-        if (editSwitch) editSwitch.style.display = target === 'view-calendar' ? 'flex' : 'none';
-        
         if (target === 'view-calendar') {
             headerTitle.textContent = getT('header.calendar') || 'Calendario';
             if (typeof renderCalendar === 'function') renderCalendar();
@@ -1472,6 +1503,7 @@ closeBtns.forEach(btn => btn.addEventListener('click', (e) => closeModal(e.targe
 // Event Type Selection
 window.selectEventType = (type) => {
     closeModal(modalEventType);
+    editingSessionId = null;
     
     // Reset builder state
     if (typeof routineItems !== 'undefined') {
@@ -1482,12 +1514,21 @@ window.selectEventType = (type) => {
         }
     }
     
+    const rName = document.getElementById('routine-name');
+    if (rName) rName.value = '';
+    
+    const rDate = document.getElementById('routine-date');
+    if (rDate) rDate.value = dateToInputFormat(state.selectedDate);
+    
+    const saveBtn = document.getElementById('btn-save-routine');
+    if (saveBtn) saveBtn.textContent = getT('modals.routine.schedule') || 'Programar';
+    
     if(type === 'routine') {
-        document.getElementById('modal-routine-title').textContent = getT('modals.routine.title');
+        document.getElementById('modal-routine-title').textContent = getT('modals.routine.title') || 'Añadir Bloque (4 sem)';
         document.getElementById('routine-duration').value = '4';
         openModal(modalAddRoutine);
     } else if (type === 'workout') {
-        document.getElementById('modal-routine-title').textContent = getT('modals.add.workout');
+        document.getElementById('modal-routine-title').textContent = getT('modals.routine.workoutTitle') || getT('modals.add.workout') || 'Entrenamiento Suelto';
         document.getElementById('routine-duration').value = '1';
         openModal(modalAddRoutine);
     } else if (type === 'goal') {
@@ -1823,6 +1864,10 @@ const translations = {
             },
             "routine": {
                 "title": "Añadir Bloque (4 sem)",
+                "workoutTitle": "Entrenamiento Suelto",
+                "editTitle": "Editar Sesión",
+                "date": "Fecha de la Sesión",
+                "saveChanges": "Guardar Cambios",
                 "type": "Tipo de Sesión",
                 "name": "Nombre",
                 "namePlaceholder": "Ej. Torso Pesado",
@@ -2097,6 +2142,10 @@ const translations = {
             },
             "routine": {
                 "title": "Add Block (4 wk)",
+                "workoutTitle": "Single Workout",
+                "editTitle": "Edit Session",
+                "date": "Session Date",
+                "saveChanges": "Save Changes",
                 "type": "Session Type",
                 "name": "Name",
                 "namePlaceholder": "e.g. Heavy Upper",
@@ -3196,9 +3245,9 @@ const renderTodaySessions = () => {
                 <h4 style="${session.completed ? 'text-decoration: line-through; color: var(--text-muted);' : ''}">${session.name}</h4>
                 <p>${typeName}</p>
             </div>
-            <div class="session-action" style="display:flex; align-items:center; gap:8px;">
-                ${state.calendarEditMode ? `<button class="btn-icon edit-session-btn" style="color:var(--text-primary);"><i class="ph ph-pencil-simple"></i></button>` : ''}
-                <button class="btn-icon delete-session-btn" style="color:var(--color-heavy);"><i class="ph ph-trash"></i></button>
+            <div class="session-action" style="display:flex; align-items:center; gap:6px;">
+                <button class="btn-icon edit-session-btn" title="Editar sesión" style="color:var(--text-secondary); padding:4px;"><i class="ph ph-pencil-simple" style="font-size: 18px;"></i></button>
+                <button class="btn-icon delete-session-btn" title="Eliminar sesión" style="color:var(--color-heavy); padding:4px;"><i class="ph ph-trash" style="font-size: 18px;"></i></button>
                 <i class="${session.completed ? 'ph-check-circle' : session.type === 'goal' ? 'ph-circle' : 'ph-play-circle'}" style="${session.completed ? 'color: var(--color-intensity); font-size:24px;' : 'font-size:24px;'}"></i>
             </div>
         `;
@@ -3209,8 +3258,9 @@ const renderTodaySessions = () => {
             openModal(modalDeleteSession);
         });
         
-        if (state.calendarEditMode) {
-            card.querySelector('.edit-session-btn').addEventListener('click', (e) => {
+        const editBtn = card.querySelector('.edit-session-btn');
+        if (editBtn) {
+            editBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 editSession(session.id);
             });
@@ -3729,7 +3779,7 @@ typeBtns.forEach(btn => {
                         // Or just override all 'Efectiva'/'Al fallo'/'Dropset' with new defaults.
                     }
                     if(['Efectiva', 'Al fallo', 'Dropset', 'Dropset fallo'].includes(set.type)) {
-                        set.reps = ex.dbEx.defaults[selectedBlockType] || '';
+                        set.reps = (ex.dbEx && ex.dbEx.defaults && ex.dbEx.defaults[selectedBlockType]) ? ex.dbEx.defaults[selectedBlockType] : (set.reps || '10');
                     }
                 });
             });
@@ -3921,7 +3971,7 @@ const renderRoutineItems = () => {
                         </select>
                         <div style="display:flex; flex-direction:column; align-items:center;">
                             <span style="font-size:9px; color:var(--text-secondary); line-height:1;">reps</span>
-                            <input type="number" inputmode="numeric" class="set-input set-reps" value="${set.reps || ''}" placeholder="${ex.dbEx.defaults[blockType] || 'reps'}" style="width:50px; padding:4px; border-radius:4px; font-size:12px; height:auto; text-align:center;">
+                            <input type="number" inputmode="numeric" class="set-input set-reps" value="${set.reps || ''}" placeholder="${(ex.dbEx && ex.dbEx.defaults && ex.dbEx.defaults[blockType]) ? ex.dbEx.defaults[blockType] : '10'}" style="width:50px; padding:4px; border-radius:4px; font-size:12px; height:auto; text-align:center;">
                         </div>
                         <button class="btn-icon delete-set"><i class="ph ph-trash"></i></button>
                     `;
@@ -4002,7 +4052,7 @@ document.getElementById('btn-confirm-exercises').addEventListener('click', () =>
     (window.exerciseSelectionOrder || []).forEach(exId => {
         const ex = state.exercises.find(e => e.id === exId);
         if(ex) {
-            const targetReps = ex.defaults[selectedBlockType] || '';
+            const targetReps = (ex.defaults && ex.defaults[selectedBlockType]) || '10';
             const initialSets = [
                 { type: 'Calentamiento', reps: targetReps },
                 { type: 'Aproximación', reps: targetReps },
@@ -4037,13 +4087,13 @@ document.getElementById('btn-create-superset').addEventListener('click', () => {
     routineItems = routineItems.filter(item => !selectedIds.includes(item.id));
     
     // Add new superset
-    const groups = combinedExercises.map(e => e.dbEx.group || 'Sin Grupo');
+    const groups = combinedExercises.map(e => (e.dbEx && e.dbEx.group) || 'Sin Grupo');
     const uniqueGroups = [...new Set(groups)];
     const supersetName = `Superserie de ${uniqueGroups.join(' y ')}`;
     
     // Override sets to 3 Efectivas by default for supersets
     combinedExercises.forEach(ex => {
-        const targetReps = ex.dbEx.defaults[selectedBlockType] || '';
+        const targetReps = (ex.dbEx && ex.dbEx.defaults && ex.dbEx.defaults[selectedBlockType]) || '10';
         ex.sets = [
             { type: 'Efectiva', reps: targetReps },
             { type: 'Efectiva', reps: targetReps },
@@ -4072,41 +4122,54 @@ document.getElementById('btn-save-routine').addEventListener('click', () => {
     const duration = parseInt(document.getElementById('routine-duration').value) || 1;
     if(routineItems.length === 0) return alert(getT('alerts.exerciseRequired') || 'Select at least 1 exercise');
     
-    const startDate = state.selectedDate;
+    const dateInputVal = document.getElementById('routine-date')?.value;
+    const chosenDate = dateInputVal ? inputToDate(dateInputVal) : state.selectedDate;
     
     let workoutExercises = [];
     routineItems.forEach(item => {
-        const supersetId = item.isSuperset ? Date.now() + Math.random().toString() : null;
+        const supersetId = item.isSuperset ? (Date.now() + Math.random().toString()) : null;
         const sName = item.isSuperset ? item.name : null;
         
         item.exercises.forEach(e => {
+            const exName = (e.dbEx && e.dbEx.name) ? e.dbEx.name : (e.name || 'Ejercicio');
             workoutExercises.push({
                 exerciseId: e.exerciseId,
-                name: e.dbEx.name,
+                name: exName,
                 supersetId: supersetId,
                 supersetName: sName,
-                sets: e.sets ? e.sets.map(s => ({ type: s.type, weight: 0, targetReps: s.reps, reps: '', repsDrop: '', restTime: s.restTime })) : [
-                    { type: 'Calentamiento', weight: 0, reps: '', restTime: '45s' },
-                    { type: 'Aproximación', weight: 0, reps: '', restTime: '45s' },
-                    { type: 'Efectiva', weight: 0, reps: '', restTime: '60s' }
+                sets: e.sets ? e.sets.map(s => ({ type: s.type, weight: 0, targetReps: s.reps || s.targetReps || '10', reps: '', repsDrop: '', restTime: s.restTime || '60s' })) : [
+                    { type: 'Calentamiento', weight: 0, reps: '', targetReps: '15', restTime: '45s' },
+                    { type: 'Aproximación', weight: 0, reps: '', targetReps: '10', restTime: '45s' },
+                    { type: 'Efectiva', weight: 0, reps: '', targetReps: '8-10', restTime: '60s' }
                 ],
                 comments: ''
             });
         });
     });
     
-    const blockId = Date.now().toString() + Math.random().toString().slice(2, 6);
-    for (let i = 0; i < duration; i++) {
-        const d = new Date(startDate);
-        d.setDate(d.getDate() + (i * 7));
-        state.sessions.push({
-            id: Date.now().toString() + i,
-            blockId: blockId,
-            date: formatDate(d),
-            name: duration > 1 ? `${name} (${getT('calendar.week')} ${i+1})` : name,
-            type: selectedBlockType,
-            exercises: JSON.parse(JSON.stringify(workoutExercises))
-        });
+    if (editingSessionId) {
+        const existingSession = state.sessions.find(s => s.id === editingSessionId);
+        if (existingSession) {
+            existingSession.name = name;
+            existingSession.type = selectedBlockType;
+            existingSession.date = formatDate(chosenDate);
+            existingSession.exercises = JSON.parse(JSON.stringify(workoutExercises));
+        }
+        editingSessionId = null;
+    } else {
+        const blockId = duration > 1 ? ('blk_' + Date.now().toString() + Math.random().toString().slice(2, 6)) : null;
+        for (let i = 0; i < duration; i++) {
+            const d = new Date(chosenDate);
+            d.setDate(d.getDate() + (i * 7));
+            state.sessions.push({
+                id: Date.now().toString() + '_' + i + '_' + Math.random().toString().slice(2, 5),
+                blockId: blockId,
+                date: formatDate(d),
+                name: duration > 1 ? `${name} (${getT('calendar.week')} ${i+1})` : name,
+                type: selectedBlockType,
+                exercises: JSON.parse(JSON.stringify(workoutExercises))
+            });
+        }
     }
     
     saveState();
@@ -4541,26 +4604,30 @@ document.getElementById('btn-delete-single').addEventListener('click', () => {
 document.getElementById('btn-delete-recurring').addEventListener('click', () => {
     if(sessionToDelete) {
         const parseDateStr = (dStr) => {
+            if (!dStr) return new Date();
             const parts = dStr.split('/');
-            return new Date(parts[2], parts[1] - 1, parts[0]);
+            if (parts.length === 3) return new Date(parts[2], parts[1] - 1, parts[0]);
+            return new Date(dStr);
         };
         const deletedDate = parseDateStr(sessionToDelete.date);
         const dayOfWeek = deletedDate.getDay();
+        const baseName = (sessionToDelete.name || '').replace(/\s*\((?:Semana|Week|\d+)[^\)]*\)/i, '').trim().toLowerCase();
         
         state.sessions = state.sessions.filter(s => {
             const sDate = parseDateStr(s.date);
             if (sDate < deletedDate) return true; // Mantener sesiones pasadas
             
-            if (sessionToDelete.blockId) {
-                if (s.blockId === sessionToDelete.blockId) return false;
-            } else {
-                // Fallback para sesiones creadas antes del cambio
-                const baseName = sessionToDelete.name.replace(/\s+\(.*?\d+\)$/, '');
-                const sBaseName = s.name.replace(/\s+\(.*?\d+\)$/, '');
-                if (s.type === sessionToDelete.type && sBaseName === baseName && sDate.getDay() === dayOfWeek) {
-                    return false;
-                }
+            // Check matching blockId
+            if (sessionToDelete.blockId && s.blockId && s.blockId === sessionToDelete.blockId) {
+                return false;
             }
+            
+            // Check matching base name on same day of week
+            const sBaseName = (s.name || '').replace(/\s*\((?:Semana|Week|\d+)[^\)]*\)/i, '').trim().toLowerCase();
+            if (baseName && sBaseName && baseName === sBaseName && sDate.getDay() === dayOfWeek) {
+                return false;
+            }
+            
             return true;
         });
         
@@ -5142,54 +5209,56 @@ const updateProgressionChart = () => {
 const renderEvolutionView = () => {
     const chartCard = document.getElementById('evolution-chart-card');
     const ctx = document.getElementById('evolution-chart')?.getContext('2d');
-    if (!ctx) return;
     
-    const history = [...state.evolution].sort((a,b) => new Date(a.dateIso) - new Date(b.dateIso));
-    if (history.length < 2) {
-        if (chartCard) chartCard.style.display = 'none';
-        if (evolutionChartInstance) {
-            evolutionChartInstance.destroy();
-            evolutionChartInstance = null;
-        }
-        return;
-    }
-    if (chartCard) chartCard.style.display = 'block';
+    const history = Array.isArray(state.evolution) ? [...state.evolution].sort((a,b) => new Date(a.dateIso || a.date) - new Date(b.dateIso || b.date)) : [];
     
-    const labels = history.map(h => {
-        const d = new Date(h.dateIso);
-        return d.getDate() + '/' + (d.getMonth() + 1);
-    });
-    const weightData = history.map(h => h.weight);
-    
-    if (evolutionChartInstance) evolutionChartInstance.destroy();
-    
-    evolutionChartInstance = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Peso Corporal (kg)',
-                data: weightData,
-                borderColor: '#10B981',
-                backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                fill: true,
-                tension: 0.3,
-                pointBackgroundColor: '#10B981',
-                pointRadius: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            interaction: { mode: 'index', intersect: false },
-            plugins: {
-                legend: { display: false }
-            },
-            scales: {
-                x: { grid: { display: true, color: 'rgba(0,0,0,0.05)' } },
-                y: { beginAtZero: false, grid: { display: true, color: 'rgba(0,0,0,0.05)' }, title: { display: true, text: 'Kg' } }
+    if (ctx) {
+        if (history.length < 2) {
+            if (chartCard) chartCard.style.display = 'none';
+            if (evolutionChartInstance) {
+                evolutionChartInstance.destroy();
+                evolutionChartInstance = null;
             }
+        } else {
+            if (chartCard) chartCard.style.display = 'block';
+            
+            const labels = history.map(h => {
+                const d = new Date(h.dateIso || h.date);
+                return d.getDate() + '/' + (d.getMonth() + 1);
+            });
+            const weightData = history.map(h => h.weight);
+            
+            if (evolutionChartInstance) evolutionChartInstance.destroy();
+            
+            evolutionChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Peso Corporal (kg)',
+                        data: weightData,
+                        borderColor: '#10B981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        pointBackgroundColor: '#10B981',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { grid: { display: true, color: 'rgba(0,0,0,0.05)' } },
+                        y: { beginAtZero: false, grid: { display: true, color: 'rgba(0,0,0,0.05)' }, title: { display: true, text: 'Kg' } }
+                    }
+                }
+            });
         }
-    });
+    }
     
     renderEvolutionHistory();
 };
@@ -5346,9 +5415,11 @@ const renderEvolutionHistory = () => {
 };
 
 window.deleteEvolution = (id) => {
-    if (confirm(getT('common.delete') + '?')) {
-        state.evolution = state.evolution.filter(e => e.id !== id);
+    const confirmMsg = getT('common.delete') ? (getT('common.delete') + '?') : '¿Eliminar este registro?';
+    if (confirm(confirmMsg)) {
+        state.evolution = (state.evolution || []).filter(e => String(e.id) !== String(id));
         saveState();
+        renderEvolutionHistory();
         renderEvolutionView();
     }
 };
@@ -6009,21 +6080,33 @@ window.editSession = (sessionId) => {
     if(!session) return;
     
     editingSessionId = session.id;
+    
+    const modalTitle = document.getElementById('modal-routine-title');
+    if (modalTitle) modalTitle.textContent = getT('modals.routine.editTitle') || 'Editar Sesión';
+    
+    const saveBtn = document.getElementById('btn-save-routine');
+    if (saveBtn) saveBtn.textContent = getT('modals.routine.saveChanges') || 'Guardar Cambios';
+    
     const rn = document.getElementById('routine-name'); if(rn) rn.value = session.name || '';
     const rd = document.getElementById('routine-duration'); if(rd) rd.value = session.duration || 1;
-    const rt = document.getElementById('routine-type'); if(rt) rt.value = session.type || 'hypertrophy';
+    const rDate = document.getElementById('routine-date'); if(rDate) rDate.value = dateToInputFormat(session.date);
+    
+    selectedBlockType = session.type || 'hypertrophy';
+    typeBtns.forEach(btn => {
+        btn.classList.toggle('selected', btn.dataset.type === selectedBlockType);
+    });
     
     routineItems = [];
     const grouped = {};
     (session.exercises || []).forEach(ex => {
-        const id = ex.supersetId || 'single_' + ex.exerciseId;
+        const id = ex.supersetId || 'single_' + (ex.exerciseId || Math.random());
         if(!grouped[id]) grouped[id] = { isSuperset: !!ex.supersetId, name: ex.supersetName || '', exercises: [] };
         
-        const dbEx = state.exercises.find(e => e.id === ex.exerciseId);
+        const dbEx = state.exercises ? state.exercises.find(e => e.id === ex.exerciseId) : null;
         grouped[id].exercises.push({
             exerciseId: ex.exerciseId,
-            dbEx: dbEx,
-            sets: ex.sets.map(s => ({ type: s.type, reps: s.targetReps, restTime: s.restTime }))
+            dbEx: dbEx || { id: ex.exerciseId, name: ex.name, group: 'Sin Grupo' },
+            sets: (ex.sets || []).map(s => ({ type: s.type || 'Efectiva', reps: s.targetReps || s.reps || '10', restTime: s.restTime || '60s' }))
         });
     });
     
@@ -6039,11 +6122,6 @@ window.editSession = (sessionId) => {
     renderRoutineItems();
     openModal(modalAddRoutine);
 };
-
-document.getElementById('header-edit-switch')?.querySelector('input')?.addEventListener('change', (e) => {
-    state.calendarEditMode = e.target.checked;
-    renderTodaySessions();
-});
 
 // Nav arrows logic
 const navScroll = document.getElementById('bottom-nav');
@@ -6438,7 +6516,7 @@ window.generateDashboard = function(mode) {
     }
 };
 
-const CURRENT_APP_VERSION = '1.1.4';
+const CURRENT_APP_VERSION = '1.1.5';
 function compareVersions(v1, v2) {
     const p1 = String(v1).split('.').map(Number);
     const p2 = String(v2).split('.').map(Number);
