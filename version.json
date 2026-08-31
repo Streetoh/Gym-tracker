@@ -1,11 +1,11 @@
 {
-  "version": "1.1.5",
-  "releaseDate": "30/08/2026",
+  "version": "1.1.6",
+  "releaseDate": "31/08/2026",
   "changelog": [
-    "Cabecera optimizada: Eliminado el interruptor superior de switch de Editar para mayor limpieza visual.",
-    "Edición de sesiones: Añadido selector de fecha al editar cualquier entrenamiento para cambiar su día sin tener que borrarlo.",
-    "Borrado en Evolución: Corregido el problema donde no se eliminaban los registros al pulsar la papelera.",
-    "Asistente IA mejorado: Los entrenamientos planificados por la IA ahora inician con pesos en 0 kg y mantienen las repeticiones exactas.",
-    "Bloques de sesiones en IA: Creación de bloques de 4 semanas con identificador compartido para permitir el borrado conjunto."
+    "Creador de rutinas: Corrección para conservar los números de repeticiones escritos al pulsar '+ Añadir serie'.",
+    "Exportación PDF móvil: Descarga directa y fiable en Web Móvil sin páginas en blanco mediante generación en alta resolución.",
+    "Pestaña Exp/Imp: Corrección del contador de seleccionados en la vista Calendario.",
+    "Descripción de bloques: Añadida tarjeta informativa del tipo de bloque (Hipertrofia, Pesados, Alta Intensidad) al inicio de cada sesión.",
+    "Rediseño Dropset y Calculadora %: Casillas de repeticiones y peso apiladas verticalmente, botón verde % de cálculo rápido y modal con opciones del -20%, -30% y -40%."
   ]
 }

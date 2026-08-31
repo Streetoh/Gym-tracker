@@ -1749,7 +1749,6 @@ input[type="number"] {
         border-radius: 4px;
         margin: 0 auto;
     }
-}
 #print-container { display: none; }
 
 #export-weekly-grid .weekly-day { padding: 4px 0; }

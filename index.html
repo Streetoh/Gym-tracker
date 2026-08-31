@@ -116,7 +116,7 @@
 
             <!-- MOBILE DRAWER FOOTER (APP VERSION) -->
             <div class="mobile-drawer-footer">
-                <span class="drawer-version-badge" id="mobile-drawer-version">Gym Tracker v1.1.5</span>
+                <span class="drawer-version-badge" id="mobile-drawer-version">Gym Tracker v1.1.6</span>
             </div>
         </div>
 
@@ -635,26 +635,30 @@
 
     <!-- Dropset Calculator Modal -->
     <div id="modal-dropset-calc" class="modal">
-        <div class="modal-content" style="max-width: 300px; margin: auto; text-align: center; border-radius: 24px;">
-            <div class="modal-header" style="justify-content: center; margin-bottom: 16px;">
-                <h3 data-i18n="modals.dropset.title">Calculadora Dropset</h3>
+        <div class="modal-content" style="max-width: 320px; margin: auto; text-align: center; border-radius: 24px; padding: 22px;">
+            <div class="modal-header" style="justify-content: center; margin-bottom: 14px;">
+                <h3 data-i18n="modals.dropset.title" style="color: #10b981; font-size: 18px; display: flex; align-items: center; gap: 6px;"><i class="ph-bold ph-percent"></i> Calculadora Dropset</h3>
             </div>
             <div class="modal-body">
-                <div style="font-size: 16px; margin-bottom: 20px;">
-                    <span data-i18n="modals.dropset.currentWeight">Peso actual:</span> <strong id="dropset-current-weight">100</strong> kg
+                <div style="font-size: 15px; margin-bottom: 18px; color: var(--text-secondary);">
+                    <span data-i18n="modals.dropset.currentWeight">Peso actual:</span> <strong id="dropset-current-weight" style="color: var(--text-primary); font-size: 18px;">100</strong> kg
                 </div>
-                <div class="dropset-options">
-                    <button class="dropset-option btn-apply-dropset" data-multiplier="0.8">
-                        <span>-20%</span>
-                        <strong id="dropset-20">80 kg</strong>
+                <div class="dropset-options" style="display: flex; flex-direction: column; gap: 8px;">
+                    <button class="dropset-option btn-apply-dropset" data-multiplier="0.8" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface-elevated); cursor: pointer; color: var(--text-primary);">
+                        <span style="font-weight: 700; color: #10b981;">-20%</span>
+                        <strong id="dropset-20" style="font-size: 15px;">80 kg</strong>
                     </button>
-                    <button class="dropset-option btn-apply-dropset" data-multiplier="0.6">
-                        <span>-40%</span>
-                        <strong id="dropset-40">60 kg</strong>
+                    <button class="dropset-option btn-apply-dropset" data-multiplier="0.7" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface-elevated); cursor: pointer; color: var(--text-primary);">
+                        <span style="font-weight: 700; color: #10b981;">-30%</span>
+                        <strong id="dropset-30" style="font-size: 15px;">70 kg</strong>
+                    </button>
+                    <button class="dropset-option btn-apply-dropset" data-multiplier="0.6" style="display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border-color); background: var(--bg-surface-elevated); cursor: pointer; color: var(--text-primary);">
+                        <span style="font-weight: 700; color: #10b981;">-40%</span>
+                        <strong id="dropset-40" style="font-size: 15px;">60 kg</strong>
                     </button>
                 </div>
             </div>
-            <button class="btn-secondary full-width close-modal" style="margin-top: 16px;" data-i18n="common.cancel">Cancelar</button>
+            <button class="btn-secondary full-width close-modal" style="margin-top: 16px; padding: 12px; border-radius: 12px;" data-i18n="common.cancel">Cancelar</button>
         </div>
     </div>
 
@@ -895,8 +899,8 @@
             });
         }
     </script>
-    <script src="default_db.js?v=1788096600000"></script>
-    <script src="app.js?v=1788096600000"></script>
-    <script src="ai_logic.js?v=1788096600000"></script>
+    <script src="default_db.js?v=1788169900000"></script>
+    <script src="app.js?v=1788169900000"></script>
+    <script src="ai_logic.js?v=1788169900000"></script>
 </body>
 </html>
