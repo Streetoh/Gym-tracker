@@ -1,3 +1,38 @@
+
+window.openExternalUrl = function(url) {
+    if (!url) return;
+    try {
+        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Browser) {
+            window.Capacitor.Plugins.Browser.open({ url: url });
+            return;
+        }
+    } catch (e) {
+        console.warn("Capacitor Browser plugin error:", e);
+    }
+    try {
+        var opened = window.open(url, '_system');
+        if (opened) return;
+    } catch (e) {}
+    try {
+        var openedBlank = window.open(url, '_blank');
+        if (openedBlank) return;
+    } catch (e) {}
+    try {
+        var a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function() {
+            if (a.parentNode) a.parentNode.removeChild(a);
+        }, 200);
+        return;
+    } catch (e) {}
+    try {
+        window.location.href = url;
+    } catch (e) {}
+};
 const exerciseDescTranslations = {
     "Aperturas con cable en polea baja": {
         "en": "Keep your torso upright. With slightly bent elbows, raise the cables upward and toward the center of your chest.",
@@ -8013,7 +8048,7 @@ window.renderUpdateModalContent = function(data) {
     if (actionContainer) {
         if (isNewer) {
             if (isNative) {
-                actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 10px; padding: 14px; background-color: #10b981; border-color: #10b981; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer;" onclick="openExternalUrl('https://github.com/Streetoh/Gym-tracker/releases/latest')">
+                actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 10px; padding: 14px; background-color: #10b981; border-color: #10b981; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer;" onclick="openExternalUrl((window.latestUpdateData && window.latestUpdateData.downloadUrl) || 'https://github.com/Streetoh/Gym-tracker/releases/latest')">
                         <i class="ph ph-download-simple" style="font-size: 20px;"></i> <span>${getT('update.download') || 'Descargar actualización'}</span>
                     </button>`;
             } else {
