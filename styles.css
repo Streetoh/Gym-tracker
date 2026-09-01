@@ -1757,6 +1757,7 @@ input[type="number"] {
         border-radius: 4px;
         margin: 0 auto;
     }
+}
 #print-container { display: none; }
 
 #export-weekly-grid .weekly-day { padding: 4px 0; }
@@ -2488,4 +2489,188 @@ body.is-apk .ai-input-bar {
     color: var(--text-muted, #64748b) !important;
     font-style: italic;
     font-size: 13px;
+}
+
+
+/* ============================================================
+   5 NUEVAS FUNCIONALIDADES STYLES
+   ============================================================ */
+
+/* PR BADGE */
+.pr-badge {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 800;
+    border-radius: 6px;
+    padding: 2px 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+    animation: prPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    white-space: nowrap;
+}
+@keyframes prPop {
+    0% { transform: scale(0.6); opacity: 0; }
+    70% { transform: scale(1.15); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* PLATE CALCULATOR BARBELL GRAPHIC */
+.barbell-visual {
+    position: relative;
+    width: 280px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+.barbell-bar {
+    position: absolute;
+    width: 270px;
+    height: 10px;
+    background: linear-gradient(180deg, #e2e8f0, #64748b);
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    z-index: 1;
+}
+.barbell-center-collar {
+    position: absolute;
+    width: 80px;
+    height: 12px;
+    background: #475569;
+    border-radius: 3px;
+    z-index: 2;
+}
+.barbell-collar-left {
+    position: absolute;
+    left: 85px;
+    width: 6px;
+    height: 36px;
+    background: #cbd5e1;
+    border-radius: 2px;
+    z-index: 3;
+}
+.barbell-collar-right {
+    position: absolute;
+    right: 85px;
+    width: 6px;
+    height: 36px;
+    background: #cbd5e1;
+    border-radius: 2px;
+    z-index: 3;
+}
+
+.barbell-sleeve-left {
+    position: absolute;
+    right: calc(100% - 85px);
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    height: 70px;
+    z-index: 4;
+}
+.barbell-sleeve-right {
+    position: absolute;
+    left: calc(100% - 85px);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 70px;
+    z-index: 4;
+}
+.visual-plate {
+    border-radius: 3px;
+    margin: 0 1px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: 800;
+    color: white;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    flex-shrink: 0;
+}
+
+/* Plate Color Standards */
+.plate-25 { background: #ef4444 !important; width: 14px !important; height: 68px !important; }
+.plate-20 { background: #3b82f6 !important; width: 13px !important; height: 62px !important; }
+.plate-15 { background: #eab308 !important; width: 12px !important; height: 54px !important; color: #000 !important; }
+.plate-10 { background: #22c55e !important; width: 11px !important; height: 46px !important; }
+.plate-5  { background: #f8fafc !important; width: 9px !important; height: 38px !important; color: #000 !important; }
+.plate-2-5{ background: #334155 !important; width: 8px !important; height: 30px !important; }
+.plate-1-25{ background: #94a3b8 !important; width: 7px !important; height: 24px !important; }
+
+.plate-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+}
+.plate-bar-btn.active {
+    background: var(--color-accent) !important;
+    border-color: var(--color-accent) !important;
+    color: white !important;
+}
+
+/* PHOTO COMPARISON SLIDER */
+.compare-angle-btn.active, .compare-mode-btn.active {
+    background: var(--color-accent) !important;
+    color: white !important;
+}
+.compare-slider-box {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    user-select: none;
+    touch-action: none;
+}
+.compare-slider-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.compare-slider-before-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    border-right: 2px solid white;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+}
+.compare-slider-divider {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 32px;
+    height: 32px;
+    margin-left: -16px;
+    top: calc(50% - 16px);
+    background: white;
+    color: #0f172a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    cursor: ew-resize;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 10;
 }

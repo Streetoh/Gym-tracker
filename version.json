@@ -1,41 +1,46 @@
 {
-  "version": "1.1.8",
-  "releaseDate": "01/09/2026",
+  "version": "1.1.9",
+  "releaseDate": "02/09/2026",
   "changelog": {
     "es": [
-      "Soporte multiidioma completo: Todos los nuevos botones, textos y ventanas de actualización ahora cambian correctamente de idioma (Español, Inglés, Ruso, Estonio, Ucraniano).",
-      "Descripciones de bloques traducidas: Las tarjetas informativas de Hipertrofia, Pesados y Alta Intensidad ahora se muestran en el idioma activo.",
-      "Calculadora Dropset y alertas traducidas al idioma seleccionado.",
-      "Cronómetro en formato HH:MM:SS para control exacto del tiempo de entrenamiento.",
-      "Bloqueo de tipo de serie durante el entrenamiento y sugerencias inteligentes del último peso levantado."
+      "Calculadora de discos de barra: adaptada para barra olímpica de 25 kg y soporte completo para Multipower / Smith machine (barra de 15 kg), con distribución de discos 100% equilibrada y simétrica.",
+      "Sustitución rápida de ejercicio en vivo: cambia cualquier ejercicio durante el entrenamiento por otra alternativa del mismo grupo muscular manteniendo tus series.",
+      "Detección automática de PR en vivo: insignia de trofeo 🏆 al instante al superar tus marcas históricas de peso o 1RM estimado.",
+      "Tarjeta de resumen al terminar: visualiza tiempo total, volumen levantado (kg), series completadas, nuevos récords superados y opción de copiar resumen.",
+      "Comparador de fotos antes / después: compara tu evolución física frontal, lateral o de espalda en vista lado a lado o con deslizador interactivo.",
+      "Soporte multiidioma completo en todas las nuevas funciones (Español, Inglés, Ruso, Estonio, Ucraniano)."
     ],
     "en": [
-      "Full multi-language support: All new buttons, texts, and update modals now change language seamlessly (Spanish, English, Russian, Estonian, Ukrainian).",
-      "Translated block descriptions: Informational cards for Hypertrophy, Heavy, and High Intensity now display in the active language.",
-      "Dropset calculator and alerts fully translated to the selected language.",
-      "Workout stopwatch in HH:MM:SS format for accurate training time tracking.",
-      "Locked set types during active workout and smart weight suggestions from previous sessions."
+      "Barbell plate calculator: configured for 25kg Olympic bar and full support for Multipower / Smith machine (15kg bar), with 100% balanced and symmetric plate distribution.",
+      "Quick live exercise substitution: replace any exercise during your workout with an alternative from the same muscle group while preserving sets.",
+      "Real-time PR detection: instant 🏆 trophy badge when breaking historical weight or estimated 1RM personal records.",
+      "Workout summary card: modern finish modal showing total duration, volume lifted (kg), completed sets, broken PRs, and share/copy option.",
+      "Before / after photo comparator: compare front, side, and back evolution photos side-by-side or with an interactive slider.",
+      "Full multi-language support across all 5 features (Spanish, English, Russian, Estonian, Ukrainian)."
     ],
     "ru": [
-      "Полная мультиязычная поддержка: Все новые кнопки, тексты и окна обновлений теперь корректно переключают язык (испанский, английский, русский, эстонский, украинский).",
-      "Переведены описания тренировочных блоков: карточки гипертрофии, силового блока и высокой интенсивности теперь отображаются на активном языке.",
-      "Калькулятор дропсетов и оповещения переведены на выбранный язык.",
-      "Секундомер тренировки в формате ЧЧ:ММ:СС для точного учета времени.",
-      "Блокировка изменения типа подхода во время тренировки и умные подсказки последнего рабочего веса."
+      "Калькулятор блинов: настроен для олимпийского грифа 25 кг и полная поддержка тренажера Смита / Мультипауэра (гриф 15 кг) с 100% симметричным распределением.",
+      "Быстрая замена упражнения на тренировке: заменяйте упражнение альтернативой для той же группы мышц с сохранением подходов.",
+      "Автоматическое определение рекордов в реальном времени: золотой трофей 🏆 при превышении максимального веса или расчетного 1ПМ.",
+      "Карточка итогов тренировки: стильное окно с общим временем, поднятым объемом (кг), подходами, рекордами и кнопкой копирования.",
+      "Сравнение фото До / После: сравнение формы спереди, сбоку и со спины рядом или с помощью интерактивного слайдера.",
+      "Полная поддержка всех языков во всех новых функциях (испанский, английский, русский, эстонский, украинский)."
     ],
     "et": [
-      "Täielik mitmekeelne tugi: Kõik uued nupud, tekstid ja uuenduste aknad vahetavad nüüd korrektselt keelt (hispaania, inglise, vene, eesti, ukraina).",
-      "Tõlgitud treeningplokkide kirjeldused: Hüpertroofia, raske ja kõrge intensiivsuse infokaardid kuvatakse aktiivses keeles.",
-      "Dropseti kalkulaator ja teated tõlgitud valitud keelde.",
-      "Treeningu stopper formaadis TT:MM:SS täpse aja jälgimiseks.",
-      "Seeria tüübi lukustamine aktiivse treeningu ajal ja viimati tõstetud raskuse nutikad soovitused."
+      "Kettakalkulaator: kohandatud 25 kg olümpiakangi jaoks ja täielik tugi Multipower / Smith masinale (15 kg kang) 100% sümmeetrilise jaotusega.",
+      "Kiire harjutuse asendamine reaalajas: vaheta harjutus teise sama lihasgrupi harjutuse vastu, säilitades seeriad.",
+      "Reaalajas isiklike rekordite (PR) tuvastamine: kuldne karikas 🏆 kohe, kui ületad oma varasema maksimaalkaalu või hinnangulise 1KM.",
+      "Treeningu kokkuvõtte kaart: näitab koguaega, tõstetud mahtu (kg), sooritatud seeriaid, purustatud rekordeid ja kokkuvõtte kopeerimise võimalust.",
+      "Enne / pärast fotode võrdleja: võrdle füüsilist arengut eest, küljelt või tagant kõrvuti või interaktiivse liuguriga.",
+      "Täielik mitmekeelne tugi kõigis uutes funktsioonides (hispaania, inglise, vene, eesti, ukraina)."
     ],
     "uk": [
-      "Повна багатомовна підтримка: Усі нові кнопки, тексти та вікна оновлень тепер коректно змінюють мову (іспанська, англійська, російська, естонська, українська).",
-      "Перекладено описи тренувальних блоків: картки гіпертрофії, силового блоку та високої інтенсивності тепер відображаються активною мовою.",
-      "Калькулятор дропсетів та сповіщення перекладено вибраною мовою.",
-      "Секундомір тренування у форматі ГГ:ХХ:СС для точного обліку часу.",
-      "Блокування зміни типу підходу під час тренування та розумні підказки останньої робочої ваги."
+      "Калькулятор млинців: налаштовано для олімпійського грифа 25 кг та повна підтримка тренажера Сміта / Мультипауера (гриф 15 кг) зі 100% симетричним розподілом.",
+      "Швидка заміна вправи під час тренування: заміна будь-якої вправи на альтернативу для тієї ж групи м'язів зі збереженням підходів.",
+      "Автоматичне визначення рекордів у реальному часі: золотий кубок 🏆 при побитті історичного рекорду ваги або розрахункового 1ПМ.",
+      "Картка підсумків тренування: стильне модальне вікно із загальним часом, піднятим об'ємом (кг), підходами, новими рекордами та копіюванням підсумку.",
+      "Порівняння фото До / Після: порівняння форми спереду, збоку та зі спини поруч або за допомогою інтерактивного слайдера.",
+      "Повна багатомовна підтримка в усіх нових функціях (іспанська, англійська, російська, естонська, українська)."
     ]
   }
 }

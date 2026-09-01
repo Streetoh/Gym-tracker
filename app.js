@@ -1979,6 +1979,59 @@ const translations = {
             "intensityDesc": "Enfoque en llevar las series al fallo muscular, técnicas de extensión como Dropsets (-20% a -40%) y pausas de descanso breves.",
             "goalTitle": "Sesión Objetivo",
             "goalDesc": "Concéntrate en la progresión de cargas y esfuerzo objetivo según lo planificado."
+        },
+        "plateCalc": {
+            "title": "Calculadora de Discos",
+            "barWeight": "Peso de la barra:",
+            "targetWeight": "Peso objetivo (kg):",
+            "perSide": "Discos a cada lado:",
+            "totalLoaded": "Total cargado:",
+            "balanced": "Distribución 100% simétrica",
+            "weightTooLow": "El peso debe ser mayor al de la barra ({bar}kg)",
+            "btnApply": "Aplicar a la serie",
+            "close": "Cerrar",
+            "barOlympic": "25 kg (Olímpica)",
+            "barMultipower": "15 kg (Multipower)",
+            "barEZ": "10 kg (EZ)"
+        },
+        "replaceEx": {
+            "title": "Sustituir Ejercicio",
+            "subtitle": "Elige una alternativa para {group}:",
+            "search": "Buscar alternativa...",
+            "confirm": "¿Sustituir '{oldEx}' por '{newEx}' conservando las series?",
+            "btnReplace": "Sustituir"
+        },
+        "pr": {
+            "newRecord": "¡RÉCORD!",
+            "weightRecord": "Récord de peso",
+            "est1rmRecord": "Récord 1RM est."
+        },
+        "summary": {
+            "title": "¡Entrenamiento Completado!",
+            "subtitle": "¡Gran trabajo superando tus límites hoy!",
+            "time": "Tiempo Total",
+            "volume": "Volumen Total",
+            "sets": "Series Hechas",
+            "prsTitle": "🏆 Récords Personales Rotos Hoy",
+            "noPrs": "¡Buen entreno! Constancia en cada repetición.",
+            "exList": "Resumen de Ejercicios",
+            "btnShare": "Copiar Resumen",
+            "copied": "¡Resumen copiado al portapapeles!",
+            "btnClose": "Finalizar y Guardar"
+        },
+        "compare": {
+            "title": "Comparador de Fotos",
+            "btnOpen": "Comparar Fotos Antes / Después",
+            "before": "Antes (Fecha inicial)",
+            "after": "Después (Fecha reciente)",
+            "angle": "Ángulo:",
+            "front": "Frontal",
+            "side": "Lateral",
+            "back": "Espalda",
+            "modeSideBySide": "Lado a Lado",
+            "modeSlider": "Deslizador",
+            "noPhotos": "Se necesitan al menos 2 registros con fotos para comparar.",
+            "weightDiff": "Diferencia:"
         }
     },
     "en": {
@@ -2279,6 +2332,59 @@ const translations = {
             "intensityDesc": "Focus on taking sets to muscular failure, intensity techniques like Dropsets (-20% to -40%), and short rest pauses.",
             "goalTitle": "Target Session",
             "goalDesc": "Focus on load progression and target effort as planned."
+        },
+        "plateCalc": {
+            "title": "Plate Calculator",
+            "barWeight": "Bar weight:",
+            "targetWeight": "Target weight (kg):",
+            "perSide": "Plates on each side:",
+            "totalLoaded": "Total loaded:",
+            "balanced": "100% symmetric & balanced",
+            "weightTooLow": "Weight must be greater than bar ({bar}kg)",
+            "btnApply": "Apply to set",
+            "close": "Close",
+            "barOlympic": "25 kg (Olympic)",
+            "barMultipower": "15 kg (Multipower)",
+            "barEZ": "10 kg (EZ)"
+        },
+        "replaceEx": {
+            "title": "Substitute Exercise",
+            "subtitle": "Choose an alternative for {group}:",
+            "search": "Search alternative...",
+            "confirm": "Substitute '{oldEx}' with '{newEx}' keeping the sets?",
+            "btnReplace": "Substitute"
+        },
+        "pr": {
+            "newRecord": "PR!",
+            "weightRecord": "Weight PR",
+            "est1rmRecord": "Est. 1RM PR"
+        },
+        "summary": {
+            "title": "Workout Completed!",
+            "subtitle": "Great job pushing your limits today!",
+            "time": "Total Time",
+            "volume": "Total Volume",
+            "sets": "Completed Sets",
+            "prsTitle": "🏆 Personal Records Broken Today",
+            "noPrs": "Great session! Consistency is key.",
+            "exList": "Exercise Summary",
+            "btnShare": "Copy Summary",
+            "copied": "Summary copied to clipboard!",
+            "btnClose": "Done & Save"
+        },
+        "compare": {
+            "title": "Photo Comparator",
+            "btnOpen": "Compare Before / After Photos",
+            "before": "Before (Initial date)",
+            "after": "After (Recent date)",
+            "angle": "Angle:",
+            "front": "Front",
+            "side": "Side",
+            "back": "Back",
+            "modeSideBySide": "Side by Side",
+            "modeSlider": "Slider",
+            "noPhotos": "At least 2 records with photos are needed to compare.",
+            "weightDiff": "Difference:"
         }
     },
     "ru": {
@@ -2575,6 +2681,59 @@ const translations = {
             "intensityDesc": "Фокус на подходах до мышечного отказа, дропсетах (-20% до -40%) и коротких паузах отдыха.",
             "goalTitle": "Целевая тренировка",
             "goalDesc": "Сосредоточьтесь на прогрессии нагрузок и целевом усилии согласно плану."
+        },
+        "plateCalc": {
+            "title": "Калькулятор блинов",
+            "barWeight": "Вес грифа:",
+            "targetWeight": "Целевой вес (кг):",
+            "perSide": "Блины на каждую сторону:",
+            "totalLoaded": "Итого на штанге:",
+            "balanced": "100% симметрично и сбалансировано",
+            "weightTooLow": "Вес должен быть больше грифа ({bar}кг)",
+            "btnApply": "Применить к подходу",
+            "close": "Закрыть",
+            "barOlympic": "25 кг (Олимпийский)",
+            "barMultipower": "15 кг (Мультипауэр)",
+            "barEZ": "10 кг (EZ)"
+        },
+        "replaceEx": {
+            "title": "Заменить упражнение",
+            "subtitle": "Выберите альтернативу для {group}:",
+            "search": "Поиск замены...",
+            "confirm": "Заменить '{oldEx}' на '{newEx}' с сохранением подходов?",
+            "btnReplace": "Заменить"
+        },
+        "pr": {
+            "newRecord": "РЕКОРД!",
+            "weightRecord": "Рекорд веса",
+            "est1rmRecord": "Рекорд расч. 1ПМ"
+        },
+        "summary": {
+            "title": "Тренировка завершена!",
+            "subtitle": "Отличная работа на пределе сил!",
+            "time": "Общее время",
+            "volume": "Общий объем",
+            "sets": "Подходов",
+            "prsTitle": "🏆 Новые личные рекорды сегодня",
+            "noPrs": "Отличная тренировка! Главное регулярность.",
+            "exList": "Обзор упражнений",
+            "btnShare": "Скопировать итог",
+            "copied": "Итог скопирован в буфер обмена!",
+            "btnClose": "Готово и сохранить"
+        },
+        "compare": {
+            "title": "Сравнение фото",
+            "btnOpen": "Сравнить фото До / После",
+            "before": "До (Начальная дата)",
+            "after": "После (Недавняя дата)",
+            "angle": "Ракурс:",
+            "front": "Спереди",
+            "side": "Сбоку",
+            "back": "Сзади",
+            "modeSideBySide": "Рядом",
+            "modeSlider": "Слайдер",
+            "noPhotos": "Для сравнения нужно минимум 2 записи с фото.",
+            "weightDiff": "Разница:"
         }
     },
     "et": {
@@ -2870,6 +3029,59 @@ const translations = {
             "intensityDesc": "Fookus seeriate lihase ammendumiseni viimisel, tehnikatel nagu Dropset (-20% kuni -40%) ja lühikestel puhkepausidel.",
             "goalTitle": "Eesmärgipärane treening",
             "goalDesc": "Keskendu raskuste progressioonile ja planeeritud sihtpingutusele."
+        },
+        "plateCalc": {
+            "title": "Kettakalkulaator",
+            "barWeight": "Kangi kaal:",
+            "targetWeight": "Sihtkaal (kg):",
+            "perSide": "Kettad kummalegi poolele:",
+            "totalLoaded": "Kokku kangil:",
+            "balanced": "100% sümmeetriline ja tasakaalus",
+            "weightTooLow": "Kaal peab olema suurem kui kangi kaal ({bar}kg)",
+            "btnApply": "Rakenda seeriale",
+            "close": "Sulge",
+            "barOlympic": "25 kg (Olümpia)",
+            "barMultipower": "15 kg (Multipower)",
+            "barEZ": "10 kg (EZ)"
+        },
+        "replaceEx": {
+            "title": "Asenda harjutus",
+            "subtitle": "Vali alternatiiv rühmale {group}:",
+            "search": "Otsi alternatiivi...",
+            "confirm": "Kas asendada '{oldEx}' harjutusega '{newEx}', säilitades seeriad?",
+            "btnReplace": "Asenda"
+        },
+        "pr": {
+            "newRecord": "REKORD!",
+            "weightRecord": "Kaalu rekord",
+            "est1rmRecord": "Hinnangulise 1KM rekord"
+        },
+        "summary": {
+            "title": "Treening lõpetatud!",
+            "subtitle": "Suurepärane töö oma piiride ületamisel!",
+            "time": "Koguaeg",
+            "volume": "Kogumaht",
+            "sets": "Tehtud seeriad",
+            "prsTitle": "🏆 Täna purustatud isiklikud rekordid",
+            "noPrs": "Vägev treening! Järjepidevus viib sihile.",
+            "exList": "Harjutuste kokkuvõte",
+            "btnShare": "Kopeeri kokkuvõte",
+            "copied": "Kokkuvõte kopeeritud lõikelauale!",
+            "btnClose": "Valmis ja salvesta"
+        },
+        "compare": {
+            "title": "Fotode võrdleja",
+            "btnOpen": "Võrdle fotosid Enne / Pärast",
+            "before": "Enne (Alguskuupäev)",
+            "after": "Pärast (Hiljutine kuupäev)",
+            "angle": "Nurk:",
+            "front": "Eest",
+            "side": "Küljelt",
+            "back": "Tagant",
+            "modeSideBySide": "Kõrvuti",
+            "modeSlider": "Liugur",
+            "noPhotos": "Võrdlemiseks on vaja vähemalt 2 fotodega kirjet.",
+            "weightDiff": "Erinevus:"
         }
     },
     "uk": {
@@ -3166,6 +3378,59 @@ const translations = {
             "intensityDesc": "Фокус на підходах до м'язової відмови, дропсетах (-20% до -40%) та коротких паузах відпочинку.",
             "goalTitle": "Цільове тренування",
             "goalDesc": "Зосередьтеся на прогресії навантажень та цільовому зусиллі згідно з планом."
+        },
+        "plateCalc": {
+            "title": "Калькулятор млинців",
+            "barWeight": "Вага грифа:",
+            "targetWeight": "Цільова вага (кг):",
+            "perSide": "Млинці на кожен бік:",
+            "totalLoaded": "Всього на штанзі:",
+            "balanced": "100% симетрично та збалансовано",
+            "weightTooLow": "Вага має бути більшою за вагу грифа ({bar}кг)",
+            "btnApply": "Застосувати до підходу",
+            "close": "Закрити",
+            "barOlympic": "25 кг (Олімпійський)",
+            "barMultipower": "15 кг (Мультипауер)",
+            "barEZ": "10 кг (EZ)"
+        },
+        "replaceEx": {
+            "title": "Замінити вправу",
+            "subtitle": "Оберіть альтернативу для {group}:",
+            "search": "Пошук альтернативи...",
+            "confirm": "Замінити '{oldEx}' на '{newEx}' зі збереженням підходів?",
+            "btnReplace": "Замінити"
+        },
+        "pr": {
+            "newRecord": "РЕКОРД!",
+            "weightRecord": "Рекорд ваги",
+            "est1rmRecord": "Рекорд розрах. 1ПМ"
+        },
+        "summary": {
+            "title": "Тренування завершено!",
+            "subtitle": "Чудова робота на межі можливостей!",
+            "time": "Загальний час",
+            "volume": "Загальний об'єм",
+            "sets": "Виконано підходів",
+            "prsTitle": "🏆 Нові особисті рекорди сьогодні",
+            "noPrs": "Чудове тренування! Головне регулярність.",
+            "exList": "Огляд вправ",
+            "btnShare": "Скопіювати підсумок",
+            "copied": "Підсумок скопійовано в буфер обміну!",
+            "btnClose": "Готово та зберегти"
+        },
+        "compare": {
+            "title": "Порівняння фото",
+            "btnOpen": "Порівняти фото До / Після",
+            "before": "До (Початкова дата)",
+            "after": "Після (Нещодавня дата)",
+            "angle": "Ракурс:",
+            "front": "Спереду",
+            "side": "Збоку",
+            "back": "Ззаду",
+            "modeSideBySide": "Поруч",
+            "modeSlider": "Слайдер",
+            "noPhotos": "Для порівняння потрібно щонайменше 2 записи з фото.",
+            "weightDiff": "Різниця:"
         }
     }
 };
@@ -4582,6 +4847,78 @@ const renderWorkout = () => {
     const blockBanner = document.createElement('div');
     blockBanner.classList.add('workout-block-banner');
     
+    window.isMultipowerExercise = isMultipowerExercise;
+function isMultipowerExercise(ex) {
+    if (!ex || !ex.name) return false;
+    return /multipower|smith/i.test(ex.name);
+}
+
+let activePlateCalcTargetInput = null;
+let activePlateCalcSetObj = null;
+let currentPlateCalcBar = 25;
+
+window.calculateBarbellPlates = calculateBarbellPlates;
+function calculateBarbellPlates(targetWeight, barWeight) {
+    const platesAvailable = [25, 20, 15, 10, 5, 2.5, 1.25];
+    const target = parseFloat(targetWeight) || 0;
+    const bar = parseFloat(barWeight) || 25;
+
+    if (target < bar) {
+        return {
+            barWeight: bar,
+            targetWeight: target,
+            totalLoaded: bar,
+            platesPerSide: [],
+            isTooLow: true
+        };
+    }
+
+    let remPerSide = (target - bar) / 2;
+    const platesPerSide = [];
+
+    for (const p of platesAvailable) {
+        while (remPerSide >= p - 0.001) {
+            platesPerSide.push(p);
+            remPerSide -= p;
+        }
+    }
+
+    const loadedWeightPerSide = platesPerSide.reduce((a, b) => a + b, 0);
+    const totalLoaded = bar + (loadedWeightPerSide * 2);
+
+    return {
+        barWeight: bar,
+        targetWeight: target,
+        totalLoaded: Math.round(totalLoaded * 100) / 100,
+        platesPerSide: platesPerSide,
+        isTooLow: false,
+        remainder: Math.round(remPerSide * 2 * 100) / 100
+    };
+}
+
+window.openPlateCalcModal = function(wInput, setObj, exObj) {
+    activePlateCalcTargetInput = wInput;
+    activePlateCalcSetObj = setObj;
+
+    const initialWeight = parseFloat(wInput ? wInput.value : 0) || 60;
+    const targetInput = document.getElementById('plate-calc-target-weight');
+    if (targetInput) targetInput.value = initialWeight;
+
+    if (exObj && isMultipowerExercise(exObj)) {
+        currentPlateCalcBar = 15;
+    } else if (exObj && /ez|curl.*barra/i.test(exObj.name)) {
+        currentPlateCalcBar = 10;
+    } else {
+        currentPlateCalcBar = 25;
+    }
+
+    setPlateCalcBar(currentPlateCalcBar);
+    recalculatePlates();
+
+    const modal = document.getElementById('modal-plate-calc');
+    if (modal) modal.classList.add('active');
+};
+    
     let bType = activeSession.type || 'hypertrophy';
     let bTitle = getT('blocks.hypertrophyTitle') || 'Bloque de Hipertrofia';
     let bColor = '#2563eb';
@@ -4695,7 +5032,10 @@ const renderWorkout = () => {
                 ${block.type === 'superset' ? `<div style="font-weight:700; color:var(--text-primary); margin-bottom:12px;">${getTrExName(ex.name)}</div>` : ''}
                 <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 12px;">
                     <div class="media-links" style="margin:0; width:100%; display:flex; flex-wrap:wrap; gap:8px;">${mediaHtml}</div>
-                    <button class="history-btn" onclick="openInlineHistory('${ex.exerciseId}')" style="min-width: 80px;"><i class="ph ph-clock-counter-clockwise"></i> Hist.</button>
+                    <div style="display:flex; gap:6px;">
+                        <button type="button" class="btn-secondary substitute-btn" onclick="openReplaceExerciseModal('${ex.exerciseId}', ${exInnerIndex}, ${blockIndex})" style="padding: 4px 8px; font-size: 11.5px; border-radius: 8px; display: inline-flex; align-items: center; gap: 4px; cursor: pointer;" title="${getT('replaceEx.title') || 'Sustituir'}"><i class="ph ph-arrows-left-right"></i> <span>${getT('replaceEx.btnReplace') || 'Sustituir'}</span></button>
+                        <button class="history-btn" onclick="openInlineHistory('${ex.exerciseId}')" style="min-width: 70px;"><i class="ph ph-clock-counter-clockwise"></i> Hist.</button>
+                    </div>
                 </div>
                 
                 <div class="set-row header-row" style="margin-top: 16px;">
@@ -4757,7 +5097,9 @@ const renderWorkout = () => {
                     `;
                 } else {
                     repsHtml = `<input type="number" inputmode="numeric" class="set-input reps-input" value="${set.reps || ''}" placeholder="${targetRepsBase}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>`;
-                    weightHtml = `<input type="number" inputmode="decimal" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>`;
+                    const isBarbell = isBarbellExercise(dbEx || ex);
+                    const plateBtn = isBarbell ? `<button type="button" class="btn-plate-calc" style="background: var(--bg-surface-elevated); color: var(--color-accent); border: 1px solid var(--border-color); border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; flex-shrink: 0;" title="${getT('plateCalc.title') || 'Calculadora de discos'}" ${!isWorkoutActive ? 'disabled' : ''}><i class="ph-bold ph-barbell"></i></button>` : '';
+                    weightHtml = `<div style="display:flex; align-items:center; gap:4px;"><input type="number" inputmode="decimal" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>${plateBtn}</div>`;
                 }
 
                 setRow.innerHTML = `
@@ -4790,16 +5132,38 @@ const renderWorkout = () => {
                 const calcBtn = setRow.querySelector('.btn-dropset-calc');
                 
                 if (wInput) {
-                    wInput.addEventListener('input', (e) => { set.weight = parseFloat(e.target.value) || 0; autoSaveWorkout(); });
-                    wInput.addEventListener('change', (e) => { set.weight = parseFloat(e.target.value) || 0; autoSaveWorkout(); });
+                    wInput.addEventListener('input', (e) => { 
+                        set.weight = parseFloat(e.target.value) || 0; 
+                        checkSetPR(ex.exerciseId, set.weight, set.reps, setRow, setIndex);
+                        autoSaveWorkout(); 
+                    });
+                    wInput.addEventListener('change', (e) => { 
+                        set.weight = parseFloat(e.target.value) || 0; 
+                        checkSetPR(ex.exerciseId, set.weight, set.reps, setRow, setIndex);
+                        autoSaveWorkout(); 
+                    });
+                }
+                const plateBtnEl = setRow.querySelector('.btn-plate-calc');
+                if (plateBtnEl) {
+                    plateBtnEl.addEventListener('click', () => {
+                        openPlateCalcModal(wInput, set, dbEx || ex);
+                    });
                 }
                 if (wDropInput) {
                     wDropInput.addEventListener('input', (e) => { set.weightDrop = parseFloat(e.target.value) || 0; autoSaveWorkout(); });
                     wDropInput.addEventListener('change', (e) => { set.weightDrop = parseFloat(e.target.value) || 0; autoSaveWorkout(); });
                 }
                 if (rInput) {
-                    rInput.addEventListener('input', (e) => { set.reps = e.target.value; autoSaveWorkout(); });
-                    rInput.addEventListener('change', (e) => { set.reps = e.target.value; autoSaveWorkout(); });
+                    rInput.addEventListener('input', (e) => { 
+                        set.reps = e.target.value; 
+                        checkSetPR(ex.exerciseId, set.weight, set.reps, setRow, setIndex);
+                        autoSaveWorkout(); 
+                    });
+                    rInput.addEventListener('change', (e) => { 
+                        set.reps = e.target.value; 
+                        checkSetPR(ex.exerciseId, set.weight, set.reps, setRow, setIndex);
+                        autoSaveWorkout(); 
+                    });
                 }
                 if (rDropInput) {
                     rDropInput.addEventListener('input', (e) => { set.repsDrop = e.target.value; autoSaveWorkout(); });
@@ -4992,8 +5356,675 @@ document.getElementById('finish-workout').addEventListener('click', () => {
     renderCalendar();
     renderGlobalHistory();
     if (typeof renderProgressionView === 'function') renderProgressionView();
-    alert((getT('alerts.workoutFinished') || 'Workout finished! Duration: ') + formatTimer(duration > 0 ? duration : 0));
+    // Show modern workout summary modal
+    showWorkoutSummaryModal(state.completedWorkouts[state.completedWorkouts.length - 1]);
 });
+
+
+
+// ============================================================
+// 1. CALCULADORA DE DISCOS DE BARRA (PLATE CALCULATOR)
+// ============================================================
+window.isBarbellExercise = isBarbellExercise;
+function isBarbellExercise(ex) {
+    if (!ex || !ex.name) return false;
+    const name = (ex.name || '').toLowerCase();
+    if (/mancuerna|dumbbell|polea|cable|maquina|máquina/i.test(name) && !/multipower|smith/i.test(name)) {
+        return false;
+    }
+    if (/barra|barbell|bench press|press banca|sentadilla|peso muerto|squat|deadlift|clean|snatch|remo con barra|curl con barra|multipower|smith/i.test(name)) {
+        return true;
+    }
+    return false;
+}
+
+window.isMultipowerExercise = isMultipowerExercise;
+function isMultipowerExercise(ex) {
+    if (!ex || !ex.name) return false;
+    return /multipower|smith/i.test(ex.name);
+    return false;
+}
+
+let activePlateCalcTargetInput = null;
+let activePlateCalcSetObj = null;
+let currentPlateCalcBar = 25;
+
+window.calculateBarbellPlates = calculateBarbellPlates;
+function calculateBarbellPlates(targetWeight, barWeight) {
+    const platesAvailable = [25, 20, 15, 10, 5, 2.5, 1.25];
+    const target = parseFloat(targetWeight) || 0;
+    const bar = parseFloat(barWeight) || 25;
+
+    if (target < bar) {
+        return {
+            barWeight: bar,
+            targetWeight: target,
+            totalLoaded: bar,
+            platesPerSide: [],
+            isTooLow: true
+        };
+    }
+
+    let remPerSide = (target - bar) / 2;
+    const platesPerSide = [];
+
+    for (const p of platesAvailable) {
+        while (remPerSide >= p - 0.001) {
+            platesPerSide.push(p);
+            remPerSide -= p;
+        }
+    }
+
+    const loadedWeightPerSide = platesPerSide.reduce((a, b) => a + b, 0);
+    const totalLoaded = bar + (loadedWeightPerSide * 2);
+
+    return {
+        barWeight: bar,
+        targetWeight: target,
+        totalLoaded: Math.round(totalLoaded * 100) / 100,
+        platesPerSide: platesPerSide,
+        isTooLow: false,
+        remainder: Math.round(remPerSide * 2 * 100) / 100
+    };
+}
+
+window.openPlateCalcModal = function(wInput, setObj, exObj) {
+    activePlateCalcTargetInput = wInput;
+    activePlateCalcSetObj = setObj;
+
+    const initialWeight = parseFloat(wInput ? wInput.value : 0) || 60;
+    const targetInput = document.getElementById('plate-calc-target-weight');
+    if (targetInput) targetInput.value = initialWeight;
+
+    if (exObj && isMultipowerExercise(exObj)) {
+        currentPlateCalcBar = 15;
+    } else if (exObj && /ez|curl.*barra/i.test(exObj.name)) {
+        currentPlateCalcBar = 10;
+    } else {
+        currentPlateCalcBar = 25;
+    }
+
+    setPlateCalcBar(currentPlateCalcBar);
+    recalculatePlates();
+
+    const modal = document.getElementById('modal-plate-calc');
+    if (modal) modal.classList.add('active');
+};
+
+window.setPlateCalcBar = function(weight) {
+    currentPlateCalcBar = weight;
+    document.querySelectorAll('.plate-bar-btn').forEach(btn => {
+        const bWeight = parseFloat(btn.getAttribute('data-bar'));
+        if (bWeight === weight) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+    recalculatePlates();
+};
+
+window.adjustPlateCalcWeight = function(delta) {
+    const input = document.getElementById('plate-calc-target-weight');
+    if (!input) return;
+    let val = (parseFloat(input.value) || 0) + delta;
+    if (val < 0) val = 0;
+    input.value = Math.round(val * 100) / 100;
+    recalculatePlates();
+};
+
+window.recalculatePlates = function() {
+    const input = document.getElementById('plate-calc-target-weight');
+    const targetVal = parseFloat(input ? input.value : 0) || 0;
+    const res = calculateBarbellPlates(targetVal, currentPlateCalcBar);
+
+    const listEl = document.getElementById('plate-calc-list');
+    const summaryTextEl = document.getElementById('plate-calc-summary-text');
+    const barbellEl = document.getElementById('plate-calc-barbell');
+
+    if (res.isTooLow) {
+        const msg = (getT('plateCalc.weightTooLow') || 'El peso debe ser mayor al de la barra ({bar}kg)').replace('{bar}', res.barWeight);
+        if (listEl) listEl.innerHTML = `<span style="color: #ef4444; font-size: 13px;">${msg}</span>`;
+        if (summaryTextEl) summaryTextEl.textContent = '';
+        if (barbellEl) barbellEl.innerHTML = '<div class="barbell-bar"></div><div class="barbell-center-collar"></div>';
+        return;
+    }
+
+    // Plate color class mapping
+    const plateClassMap = {
+        25: 'plate-25',
+        20: 'plate-20',
+        15: 'plate-15',
+        10: 'plate-10',
+        5: 'plate-5',
+        2.5: 'plate-2-5',
+        1.25: 'plate-1-25'
+    };
+
+    // Render list chips
+    if (listEl) {
+        if (res.platesPerSide.length === 0) {
+            listEl.innerHTML = '<span style="color: var(--text-secondary); font-size: 13px; font-style: italic;">Sin discos (solo barra)</span>';
+        } else {
+            // Count plates
+            const counts = {};
+            res.platesPerSide.forEach(p => counts[p] = (counts[p] || 0) + 1);
+            listEl.innerHTML = Object.keys(counts).map(p => {
+                const cls = plateClassMap[p] || 'plate-20';
+                return `<div class="plate-chip"><span style="width:10px; height:10px; border-radius:50%; display:inline-block;" class="${cls}"></span> ${counts[p]} x ${p} kg</div>`;
+            }).join('');
+        }
+    }
+
+    if (summaryTextEl) {
+        summaryTextEl.textContent = `Barra (${res.barWeight} kg) + 2 x (${(res.totalLoaded - res.barWeight) / 2} kg) = ${res.totalLoaded} kg`;
+    }
+
+    // Render Visual Barbell
+    if (barbellEl) {
+        const leftPlatesHtml = res.platesPerSide.map(p => {
+            const cls = plateClassMap[p] || 'plate-20';
+            return `<div class="visual-plate ${cls}">${p}</div>`;
+        }).join('');
+
+        const rightPlatesHtml = res.platesPerSide.map(p => {
+            const cls = plateClassMap[p] || 'plate-20';
+            return `<div class="visual-plate ${cls}">${p}</div>`;
+        }).join('');
+
+        barbellEl.innerHTML = `
+            <div class="barbell-bar"></div>
+            <div class="barbell-center-collar"></div>
+            <div class="barbell-collar-left"></div>
+            <div class="barbell-collar-right"></div>
+            <div class="barbell-sleeve-left">${leftPlatesHtml}</div>
+            <div class="barbell-sleeve-right">${rightPlatesHtml}</div>
+        `;
+    }
+};
+
+window.applyPlateCalcWeight = function() {
+    const input = document.getElementById('plate-calc-target-weight');
+    const targetVal = parseFloat(input ? input.value : 0) || 0;
+    if (activePlateCalcTargetInput) {
+        activePlateCalcTargetInput.value = targetVal;
+        if (activePlateCalcSetObj) {
+            activePlateCalcSetObj.weight = targetVal;
+        }
+        activePlateCalcTargetInput.dispatchEvent(new Event('input', { bubbles: true }));
+        activePlateCalcTargetInput.dispatchEvent(new Event('change', { bubbles: true }));
+        if (typeof autoSaveWorkout === 'function') autoSaveWorkout();
+    }
+    const modal = document.getElementById('modal-plate-calc');
+    if (modal) modal.classList.remove('active');
+};
+
+
+// ============================================================
+// 2. SUSTITUCIÓN RÁPIDA DE EJERCICIOS EN VIVO
+// ============================================================
+let replaceTargetData = null;
+
+window.openReplaceExerciseModal = function(exerciseId, exInnerIndex, blockIndex) {
+    const currentEx = state.exercises.find(e => e.id === exerciseId);
+    if (!currentEx) return;
+
+    replaceTargetData = {
+        oldExId: exerciseId,
+        exInnerIndex: exInnerIndex,
+        blockIndex: blockIndex,
+        group: currentEx.group || 'Sin Grupo'
+    };
+
+    const subTitle = document.getElementById('replace-exercise-subtitle');
+    if (subTitle) {
+        const tpl = getT('replaceEx.subtitle') || 'Elige una alternativa para {group}:';
+        subTitle.textContent = tpl.replace('{group}', replaceTargetData.group);
+    }
+
+    const searchInput = document.getElementById('replace-exercise-search');
+    if (searchInput) searchInput.value = '';
+
+    filterReplaceExerciseList();
+
+    const modal = document.getElementById('modal-replace-exercise');
+    if (modal) modal.classList.add('active');
+};
+
+window.filterReplaceExerciseList = function() {
+    if (!replaceTargetData) return;
+    const searchVal = (document.getElementById('replace-exercise-search')?.value || '').toLowerCase().trim();
+    const listContainer = document.getElementById('replace-exercise-list');
+    if (!listContainer) return;
+
+    // Filter exercises of the same group, excluding current exercise
+    const candidates = state.exercises.filter(ex => {
+        if (ex.id === replaceTargetData.oldExId) return false;
+        const matchesGroup = (ex.group || 'Sin Grupo').toLowerCase() === replaceTargetData.group.toLowerCase();
+        if (!matchesGroup) return false;
+        if (searchVal) {
+            const nameMatch = (ex.name || '').toLowerCase().includes(searchVal) || getTrExName(ex.name).toLowerCase().includes(searchVal);
+            return nameMatch;
+        }
+        return true;
+    });
+
+    if (candidates.length === 0) {
+        listContainer.innerHTML = `<div class="empty-state" style="padding: 20px; font-size: 13px; color: var(--text-secondary);">No se encontraron alternativas en este grupo.</div>`;
+        return;
+    }
+
+    listContainer.innerHTML = candidates.map(ex => {
+        const trName = getTrExName(ex.name);
+        const imgHtml = ex.imageData ? `<img src="${ex.imageData}" style="width: 44px; height: 44px; object-fit: cover; border-radius: 8px; flex-shrink: 0;">` : `<div style="width: 44px; height: 44px; border-radius: 8px; background: var(--bg-surface-elevated); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 20px; flex-shrink: 0;"><i class="ph ph-barbell"></i></div>`;
+        return `
+            <div class="card" style="padding: 10px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; gap: 10px; border-radius: 12px; transition: transform 0.1s ease;" onclick="confirmReplaceExercise('${ex.id}')">
+                <div style="display: flex; align-items: center; gap: 10px; overflow: hidden;">
+                    ${imgHtml}
+                    <div style="text-align: left; overflow: hidden;">
+                        <div style="font-weight: 700; font-size: 13.5px; color: var(--text-primary); text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">${trName}</div>
+                        <div style="font-size: 11.5px; color: var(--text-secondary);">${ex.group || ''}</div>
+                    </div>
+                </div>
+                <button type="button" class="btn-primary" style="padding: 6px 12px; font-size: 12px; border-radius: 8px; flex-shrink: 0;">${getT('replaceEx.btnReplace') || 'Sustituir'}</button>
+            </div>
+        `;
+    }).join('');
+};
+
+window.confirmReplaceExercise = function(newExId) {
+    if (!replaceTargetData || !activeSession) return;
+    const newEx = state.exercises.find(e => e.id === newExId);
+    const oldEx = state.exercises.find(e => e.id === replaceTargetData.oldExId);
+    if (!newEx) return;
+
+    // Find the exercise in activeSession.exercises
+    const targetSessionEx = activeSession.exercises.find(e => e.exerciseId === replaceTargetData.oldExId);
+    if (!targetSessionEx) return;
+
+    // Replace exercise id and name, keep sets and comments intact
+    targetSessionEx.exerciseId = newEx.id;
+    targetSessionEx.name = newEx.name;
+
+    if (typeof autoSaveWorkout === 'function') autoSaveWorkout();
+    if (typeof renderWorkout === 'function') renderWorkout();
+
+    const modal = document.getElementById('modal-replace-exercise');
+    if (modal) modal.classList.remove('active');
+};
+
+
+// ============================================================
+// 3. DETECCIÓN AUTOMÁTICA DE PR (RÉCORD PERSONAL) EN VIVO
+// ============================================================
+let currentWorkoutPRs = new Map();
+
+window.getHistoricalBest = getHistoricalBest;
+function getHistoricalBest(exerciseId) {
+    let maxWeight = 0;
+    let maxEst1RM = 0;
+
+    if (Array.isArray(state.completedWorkouts)) {
+        state.completedWorkouts.forEach(w => {
+            if (Array.isArray(w.exercises)) {
+                w.exercises.forEach(ex => {
+                    if (ex.id === exerciseId || ex.exerciseId === exerciseId) {
+                        if (Array.isArray(ex.sets)) {
+                            ex.sets.forEach(s => {
+                                const wVal = parseFloat(s.weight) || 0;
+                                const rVal = parseFloat(s.reps) || 0;
+                                if (wVal > maxWeight) maxWeight = wVal;
+                                if (wVal > 0 && rVal > 0) {
+                                    const est = wVal * (1 + (rVal / 30));
+                                    if (est > maxEst1RM) maxEst1RM = est;
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    return { maxWeight, maxEst1RM };
+}
+
+window.checkSetPR = function(exerciseId, weight, reps, setRowEl, setIndex) {
+    const wVal = parseFloat(weight) || 0;
+    const rVal = parseFloat(reps) || 0;
+    const prKey = `${exerciseId}_${setIndex}`;
+
+    const existingBadge = setRowEl?.querySelector('.pr-badge');
+    if (existingBadge) existingBadge.remove();
+
+    if (wVal <= 0) {
+        currentWorkoutPRs.delete(prKey);
+        return;
+    }
+
+    const hist = getHistoricalBest(exerciseId);
+    const dbEx = state.exercises.find(e => e.id === exerciseId);
+    const exName = dbEx ? dbEx.name : 'Ejercicio';
+
+    let isPR = false;
+    let prType = '';
+    let prLabel = '';
+
+    if (hist.maxWeight > 0 && wVal > hist.maxWeight) {
+        isPR = true;
+        prType = 'weight';
+        prLabel = `🏆 ${getT('pr.newRecord') || '¡RÉCORD!'} (${wVal}kg)`;
+    } else if (rVal > 0 && hist.maxEst1RM > 0) {
+        const curEst = wVal * (1 + (rVal / 30));
+        if (curEst > hist.maxEst1RM + 0.5) {
+            isPR = true;
+            prType = '1rm';
+            prLabel = `🏆 ${getT('pr.est1rmRecord') || '1RM'} (${Math.round(curEst)}kg)`;
+        }
+    }
+
+    if (isPR) {
+        currentWorkoutPRs.set(prKey, {
+            exerciseId,
+            exerciseName: exName,
+            weight: wVal,
+            reps: rVal,
+            type: prType,
+            label: prLabel
+        });
+
+        // Append visual PR badge
+        if (setRowEl) {
+            const setNumberEl = setRowEl.querySelector('.set-number');
+            if (setNumberEl) {
+                const badge = document.createElement('span');
+                badge.className = 'pr-badge';
+                badge.innerHTML = `<i class="ph-bold ph-trophy"></i> PR`;
+                badge.title = prLabel;
+                setNumberEl.appendChild(badge);
+            }
+        }
+    } else {
+        currentWorkoutPRs.delete(prKey);
+    }
+};
+
+
+// ============================================================
+// 4. TARJETA DE RESUMEN AL FINALIZAR LA SESIÓN
+// ============================================================
+window.showWorkoutSummaryModal = function(workoutData) {
+    const modal = document.getElementById('modal-workout-summary');
+    if (!modal) return;
+
+    // Set title and subtitle
+    const titleEl = document.getElementById('summary-workout-title');
+    const subtitleEl = document.getElementById('summary-workout-subtitle');
+    if (titleEl) titleEl.textContent = getT('summary.title') || '¡Entrenamiento Completado!';
+    if (subtitleEl) subtitleEl.textContent = `${workoutData.name || 'Entrenamiento'} • ${workoutData.duration || '00:00:00'}`;
+
+    // Compute stats
+    let totalVolume = 0;
+    let completedSetsCount = 0;
+    const exercisesSummary = [];
+
+    if (Array.isArray(workoutData.exercises)) {
+        workoutData.exercises.forEach(ex => {
+            let exMaxWeight = 0;
+            let exCompletedSets = 0;
+            if (Array.isArray(ex.sets)) {
+                ex.sets.forEach(s => {
+                    const w = parseFloat(s.weight) || 0;
+                    const r = parseFloat(s.reps) || 0;
+                    if (w > 0 && r > 0) {
+                        totalVolume += w * r;
+                        completedSetsCount++;
+                        exCompletedSets++;
+                        if (w > exMaxWeight) exMaxWeight = w;
+                    }
+                });
+            }
+            exercisesSummary.push({
+                name: ex.name,
+                setsCount: exCompletedSets,
+                maxWeight: exMaxWeight
+            });
+        });
+    }
+
+    // Set stat values
+    const timeEl = document.getElementById('summary-stat-time');
+    const volEl = document.getElementById('summary-stat-volume');
+    const setsEl = document.getElementById('summary-stat-sets');
+    const prsCountEl = document.getElementById('summary-stat-prs-count');
+
+    if (timeEl) timeEl.textContent = workoutData.duration || '00:00:00';
+    if (volEl) volEl.textContent = `${Math.round(totalVolume).toLocaleString()} kg`;
+    if (setsEl) setsEl.textContent = completedSetsCount;
+
+    const prsArray = Array.from(currentWorkoutPRs.values());
+    if (prsCountEl) prsCountEl.textContent = prsArray.length;
+
+    // Render PRs
+    const prsContainer = document.getElementById('summary-prs-container');
+    const prsList = document.getElementById('summary-prs-list');
+    if (prsContainer && prsList) {
+        if (prsArray.length > 0) {
+            prsContainer.style.display = 'block';
+            prsList.innerHTML = prsArray.map(pr => {
+                return `<div style="font-size: 12.5px; display:flex; justify-content:space-between; color: var(--text-primary);">
+                    <span><b>${getTrExName(pr.exerciseName)}:</b> ${pr.weight} kg x ${pr.reps} reps</span>
+                    <span style="color:#f59e0b; font-weight:800;">${pr.label}</span>
+                </div>`;
+            }).join('');
+        } else {
+            prsContainer.style.display = 'none';
+        }
+    }
+
+    // Render Exercises List
+    const exListEl = document.getElementById('summary-exercises-list');
+    if (exListEl) {
+        exListEl.innerHTML = exercisesSummary.map(item => {
+            return `<div style="background: var(--bg-surface); padding: 8px 12px; border-radius: 10px; display:flex; justify-content:space-between; align-items:center; border: 1px solid var(--border-color); font-size: 13px;">
+                <span style="font-weight: 600;">${getTrExName(item.name)}</span>
+                <span style="color: var(--color-accent); font-weight: 700;">${item.setsCount} series • Max: ${item.maxWeight} kg</span>
+            </div>`;
+        }).join('');
+    }
+
+    // Save summary text for sharing
+    const prsSummaryStr = prsArray.length > 0 ? ('\n🏆 Récords superados:\n' + prsArray.map(p => '• ' + getTrExName(p.exerciseName) + ': ' + p.weight + 'kg x ' + p.reps).join('\n')) : '';
+    window.lastWorkoutSummaryText = `💪 Gym Tracker - ${getT('summary.title') || 'Entrenamiento Completado'}\n📅 ${workoutData.date || new Date().toLocaleDateString()} (${workoutData.name || 'Entrenamiento'})\n⏱️ ${getT('summary.time') || 'Tiempo'}: ${workoutData.duration || '00:00:00'}\n🏋️ ${getT('summary.volume') || 'Volumen'}: ${Math.round(totalVolume).toLocaleString()} kg\n🔢 ${getT('summary.sets') || 'Series'}: ${completedSetsCount}${prsSummaryStr}`;
+
+    modal.classList.add('active');
+    currentWorkoutPRs.clear();
+};
+
+window.copyWorkoutSummaryText = function() {
+    if (window.lastWorkoutSummaryText && navigator.clipboard) {
+        navigator.clipboard.writeText(window.lastWorkoutSummaryText).then(() => {
+            alert(getT('summary.copied') || '¡Resumen copiado al portapapeles!');
+        }).catch(() => {
+            alert(window.lastWorkoutSummaryText);
+        });
+    }
+};
+
+
+// ============================================================
+// 5. COMPARADOR DE FOTOS ANTES / DESPUÉS
+// ============================================================
+let currentCompareAngle = 'front';
+let currentCompareMode = 'side-by-side';
+
+window.openPhotoComparisonModal = function() {
+    const historyWithPhotos = (state.evolution || []).filter(item => {
+        return item.photos && (item.photos.front || item.photos.side || item.photos.back);
+    }).sort((a,b) => new Date(a.dateIso || a.date) - new Date(b.dateIso || b.date));
+
+    if (historyWithPhotos.length < 2) {
+        alert(getT('compare.noPhotos') || 'Se necesitan al menos 2 registros con fotos para comparar.');
+        return;
+    }
+
+    const selBefore = document.getElementById('compare-select-before');
+    const selAfter = document.getElementById('compare-select-after');
+
+    if (selBefore && selAfter) {
+        const optionsHtml = historyWithPhotos.map((item, idx) => {
+            const dStr = item.date || (item.dateIso ? formatDate(new Date(item.dateIso)) : 'Fecha');
+            const wStr = item.weight ? ` (${item.weight} kg)` : '';
+            return `<option value="${item.id}">${dStr}${wStr}</option>`;
+        }).join('');
+
+        selBefore.innerHTML = optionsHtml;
+        selAfter.innerHTML = optionsHtml;
+
+        // Default: Before = oldest (first), After = newest (last)
+        selBefore.selectedIndex = 0;
+        selAfter.selectedIndex = historyWithPhotos.length - 1;
+    }
+
+    setCompareAngle('front');
+    setCompareMode('side-by-side');
+    renderPhotoComparison();
+
+    const modal = document.getElementById('modal-evolution-compare');
+    if (modal) modal.classList.add('active');
+};
+
+window.setCompareAngle = function(angle) {
+    currentCompareAngle = angle;
+    document.querySelectorAll('.compare-angle-btn').forEach(btn => {
+        if (btn.getAttribute('data-angle') === angle) btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+    renderPhotoComparison();
+};
+
+window.setCompareMode = function(mode) {
+    currentCompareMode = mode;
+    document.querySelectorAll('.compare-mode-btn').forEach(btn => {
+        if (btn.getAttribute('data-mode') === mode) btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+    renderPhotoComparison();
+};
+
+window.renderPhotoComparison = function() {
+    const idBefore = document.getElementById('compare-select-before')?.value;
+    const idAfter = document.getElementById('compare-select-after')?.value;
+
+    const itemBefore = (state.evolution || []).find(e => String(e.id) === String(idBefore));
+    const itemAfter = (state.evolution || []).find(e => String(e.id) === String(idAfter));
+
+    const viewport = document.getElementById('compare-viewport-container');
+    const metricsEl = document.getElementById('compare-metrics-container');
+    if (!viewport) return;
+
+    if (!itemBefore || !itemAfter) {
+        viewport.innerHTML = '<div style="color: var(--text-secondary); padding: 20px;">Selecciona dos registros válidos</div>';
+        return;
+    }
+
+    const photoBefore = itemBefore.photos ? itemBefore.photos[currentCompareAngle] : null;
+    const photoAfter = itemAfter.photos ? itemAfter.photos[currentCompareAngle] : null;
+
+    if (!photoBefore && !photoAfter) {
+        viewport.innerHTML = `<div style="color: var(--text-secondary); padding: 20px;">No hay fotos registradas en el ángulo ${currentCompareAngle}.</div>`;
+        return;
+    }
+
+    const dStrBefore = itemBefore.date || (itemBefore.dateIso ? formatDate(new Date(itemBefore.dateIso)) : 'Antes');
+    const dStrAfter = itemAfter.date || (itemAfter.dateIso ? formatDate(new Date(itemAfter.dateIso)) : 'Después');
+
+    if (currentCompareMode === 'side-by-side') {
+        viewport.innerHTML = `
+            <div style="display: grid; grid-template-columns: 1fr 1fr; width: 100%; height: 100%; gap: 4px; padding: 4px; box-sizing: border-box;">
+                <div style="position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #000; border-radius: 10px; overflow: hidden;">
+                    ${photoBefore ? `<img src="${photoBefore}" style="width: 100%; height: 100%; object-fit: contain;">` : '<span style="color:#666; font-size:12px;">Sin foto</span>'}
+                    <span style="position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.7); color: white; padding: 2px 6px; border-radius: 6px; font-size: 11px; font-weight: 700;">${dStrBefore}</span>
+                </div>
+                <div style="position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #000; border-radius: 10px; overflow: hidden;">
+                    ${photoAfter ? `<img src="${photoAfter}" style="width: 100%; height: 100%; object-fit: contain;">` : '<span style="color:#666; font-size:12px;">Sin foto</span>'}
+                    <span style="position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.7); color: white; padding: 2px 6px; border-radius: 6px; font-size: 11px; font-weight: 700;">${dStrAfter}</span>
+                </div>
+            </div>
+        `;
+    } else {
+        // Interactive slider mode
+        const pB = photoBefore || photoAfter;
+        const pA = photoAfter || photoBefore;
+        viewport.innerHTML = `
+            <div class="compare-slider-box" id="compare-slider-box" style="background:#000;">
+                <img src="${pA}" class="compare-slider-img" alt="Después">
+                <span style="position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.7); color: white; padding: 2px 6px; border-radius: 6px; font-size: 11px; font-weight: 700; z-index: 5;">${dStrAfter}</span>
+                <div class="compare-slider-before-wrapper" id="compare-slider-before-wrap">
+                    <img src="${pB}" class="compare-slider-img" alt="Antes">
+                    <span style="position: absolute; bottom: 8px; left: 8px; background: rgba(0,0,0,0.7); color: white; padding: 2px 6px; border-radius: 6px; font-size: 11px; font-weight: 700; z-index: 5;">${dStrBefore}</span>
+                </div>
+                <div class="compare-slider-divider" id="compare-slider-divider">
+                    <i class="ph-bold ph-arrows-left-right"></i>
+                </div>
+            </div>
+        `;
+
+        setupComparisonSlider();
+    }
+
+    // Render Metrics difference
+    if (metricsEl) {
+        const wDiff = (itemAfter.weight && itemBefore.weight) ? (itemAfter.weight - itemBefore.weight).toFixed(1) : null;
+        const bfDiff = (itemAfter.bf && itemBefore.bf) ? (itemAfter.bf - itemBefore.bf).toFixed(1) : null;
+
+        metricsEl.innerHTML = `
+            <div><b>Antes:</b> ${itemBefore.weight || '-'} kg ${itemBefore.bf ? '('+itemBefore.bf+'%)' : ''}</div>
+            <div style="font-weight: 700; color: ${wDiff && parseFloat(wDiff) < 0 ? '#10b981' : 'var(--color-accent)'};">
+                ${wDiff !== null ? (wDiff > 0 ? '+' + wDiff : wDiff) + ' kg' : ''}
+                ${bfDiff !== null ? ' • ' + (bfDiff > 0 ? '+' + bfDiff : bfDiff) + '%' : ''}
+            </div>
+            <div><b>Después:</b> ${itemAfter.weight || '-'} kg ${itemAfter.bf ? '('+itemAfter.bf+'%)' : ''}</div>
+        `;
+    }
+};
+
+function setupComparisonSlider() {
+    const box = document.getElementById('compare-slider-box');
+    const wrap = document.getElementById('compare-slider-before-wrap');
+    const divider = document.getElementById('compare-slider-divider');
+    if (!box || !wrap || !divider) return;
+
+    let isDragging = false;
+
+    function move(clientX) {
+        const rect = box.getBoundingClientRect();
+        let posX = clientX - rect.left;
+        if (posX < 0) posX = 0;
+        if (posX > rect.width) posX = rect.width;
+        const pct = (posX / rect.width) * 100;
+        wrap.style.width = pct + '%';
+        divider.style.left = pct + '%';
+    }
+
+    divider.addEventListener('pointerdown', (e) => {
+        isDragging = true;
+        divider.setPointerCapture(e.pointerId);
+    });
+
+    window.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        move(e.clientX);
+    });
+
+    window.addEventListener('pointerup', () => {
+        isDragging = false;
+    });
+
+    box.addEventListener('click', (e) => {
+        move(e.clientX);
+    });
+}
 
 
 // --- HISTORY LOGIC ---
@@ -6834,7 +7865,7 @@ window.generateDashboard = function(mode) {
     }
 };
 
-const CURRENT_APP_VERSION = '1.1.8';
+const CURRENT_APP_VERSION = '1.1.9';
 function compareVersions(v1, v2) {
     const p1 = String(v1).split('.').map(Number);
     const p2 = String(v2).split('.').map(Number);
@@ -6850,39 +7881,44 @@ window.latestUpdateData = null;
 
 const DEFAULT_APP_CHANGELOG = {
     "es": [
-        "Soporte multiidioma completo: Todos los nuevos botones, textos y ventanas de actualización ahora cambian correctamente de idioma (Español, Inglés, Ruso, Estonio, Ucraniano).",
-        "Descripciones de bloques traducidas: Las tarjetas informativas de Hipertrofia, Pesados y Alta Intensidad ahora se muestran en el idioma activo.",
-        "Calculadora Dropset y alertas traducidas al idioma seleccionado.",
-        "Cronómetro en formato HH:MM:SS para control exacto del tiempo de entrenamiento.",
-        "Bloqueo de tipo de serie durante el entrenamiento y sugerencias inteligentes del último peso levantado."
+        "Calculadora de discos de barra: adaptada para barra olímpica de 25 kg y soporte completo para Multipower / Smith machine (barra de 15 kg), con distribución de discos 100% equilibrada y simétrica.",
+        "Sustitución rápida de ejercicio en vivo: cambia cualquier ejercicio durante el entrenamiento por otra alternativa del mismo grupo muscular manteniendo tus series.",
+        "Detección automática de PR en vivo: insignia de trofeo 🏆 al instante al superar tus marcas históricas de peso o 1RM estimado.",
+        "Tarjeta de resumen al terminar: visualiza tiempo total, volumen levantado (kg), series completadas, nuevos récords superados y opción de copiar resumen.",
+        "Comparador de fotos antes / después: compara tu evolución física frontal, lateral o de espalda en vista lado a lado o con deslizador interactivo.",
+        "Soporte multiidioma completo en todas las nuevas funciones (Español, Inglés, Ruso, Estonio, Ucraniano)."
     ],
     "en": [
-        "Full multi-language support: All new buttons, texts, and update modals now change language seamlessly (Spanish, English, Russian, Estonian, Ukrainian).",
-        "Translated block descriptions: Informational cards for Hypertrophy, Heavy, and High Intensity now display in the active language.",
-        "Dropset calculator and alerts fully translated to the selected language.",
-        "Workout stopwatch in HH:MM:SS format for accurate training time tracking.",
-        "Locked set types during active workout and smart weight suggestions from previous sessions."
+        "Barbell plate calculator: configured for 25kg Olympic bar and full support for Multipower / Smith machine (15kg bar), with 100% balanced and symmetric plate distribution.",
+        "Quick live exercise substitution: replace any exercise during your workout with an alternative from the same muscle group while preserving sets.",
+        "Real-time PR detection: instant 🏆 trophy badge when breaking historical weight or estimated 1RM personal records.",
+        "Workout summary card: modern finish modal showing total duration, volume lifted (kg), completed sets, broken PRs, and share/copy option.",
+        "Before / after photo comparator: compare front, side, and back evolution photos side-by-side or with an interactive slider.",
+        "Full multi-language support across all 5 features (Spanish, English, Russian, Estonian, Ukrainian)."
     ],
     "ru": [
-        "Полная мультиязычная поддержка: Все новые кнопки, тексты и окна обновлений теперь корректно переключают язык (испанский, английский, русский, эстонский, украинский).",
-        "Переведены описания тренировочных блоков: карточки гипертрофии, силового блока и высокой интенсивности теперь отображаются на активном языке.",
-        "Калькулятор дропсетов и оповещения переведены на выбранный язык.",
-        "Секундомер тренировки в формате ЧЧ:ММ:СС для точного учета времени.",
-        "Блокировка изменения типа подхода во время тренировки и умные подсказки последнего рабочего веса."
+        "Калькулятор блинов: настроен для олимпийского грифа 25 кг и полная поддержка тренажера Смита / Мультипауэра (гриф 15 кг) с 100% симметричным распределением.",
+        "Быстрая замена упражнения на тренировке: заменяйте упражнение альтернативой для той же группы мышц с сохранением подходов.",
+        "Автоматическое определение рекордов в реальном времени: золотой трофей 🏆 при превышении максимального веса или расчетного 1ПМ.",
+        "Карточка итогов тренировки: стильное окно с общим временем, поднятым объемом (кг), подходами, рекордами и кнопкой копирования.",
+        "Сравнение фото До / После: сравнение формы спереди, сбоку и со спины рядом или с помощью интерактивного слайдера.",
+        "Полная поддержка всех языков во всех новых функциях (испанский, английский, русский, эстонский, украинский)."
     ],
     "et": [
-        "Täielik mitmekeelne tugi: Kõik uued nupud, tekstid ja uuenduste aknad vahetavad nüüd korrektselt keelt (hispaania, inglise, vene, eesti, ukraina).",
-        "Tõlgitud treeningplokkide kirjeldused: Hüpertroofia, raske ja kõrge intensiivsuse infokaardid kuvatakse aktiivses keeles.",
-        "Dropseti kalkulaator ja teated tõlgitud valitud keelde.",
-        "Treeningu stopper formaadis TT:MM:SS täpse aja jälgimiseks.",
-        "Seeria tüübi lukustamine aktiivse treeningu ajal ja viimati tõstetud raskuse nutikad soovitused."
+        "Kettakalkulaator: kohandatud 25 kg olümpiakangi jaoks ja täielik tugi Multipower / Smith masinale (15 kg kang) 100% sümmeetrilise jaotusega.",
+        "Kiire harjutuse asendamine reaalajas: vaheta harjutus teise sama lihasgrupi harjutuse vastu, säilitades seeriad.",
+        "Reaalajas isiklike rekordite (PR) tuvastamine: kuldne karikas 🏆 kohe, kui ületad oma varasema maksimaalkaalu või hinnangulise 1KM.",
+        "Treeningu kokkuvõtte kaart: näitab koguaega, tõstetud mahtu (kg), sooritatud seeriaid, purustatud rekordeid ja kokkuvõtte kopeerimise võimalust.",
+        "Enne / pärast fotode võrdleja: võrdle füüsilist arengut eest, küljelt või tagant kõrvuti või interaktiivse liuguriga.",
+        "Täielik mitmekeelne tugi kõigis uutes funktsioonides (hispaania, inglise, vene, eesti, ukraina)."
     ],
     "uk": [
-        "Повна багатомовна підтримка: Усі нові кнопки, тексти та вікна оновлень тепер коректно змінюють мову (іспанська, англійська, російська, естонська, українська).",
-        "Перекладено описи тренувальних блоків: картки гіпертрофії, силового блоку та високої інтенсивності тепер відображаються активною мовою.",
-        "Калькулятор дропсетів та сповіщення перекладено вибраною мовою.",
-        "Секундомір тренування у форматі ГГ:ХХ:СС для точного обліку часу.",
-        "Блокування зміни типу підходу під час тренування та розумні підказки останньої робочої ваги."
+        "Калькулятор млинців: налаштовано для олімпійського грифа 25 кг та повна підтримка тренажера Сміта / Мультипауера (гриф 15 кг) зі 100% симетричним розподілом.",
+        "Швидка заміна вправи під час тренування: заміна будь-якої вправи на альтернативу для тієї ж групи м'язів зі збереженням підходів.",
+        "Автоматичне визначення рекордів у реальному часі: золотий кубок 🏆 при побитті історичного рекорду ваги або розрахункового 1ПМ.",
+        "Картка підсумків тренування: стильне модальне вікно із загальним часом, піднятим об'ємом (кг), підходами, новими рекордами та копіюванням підсумку.",
+        "Порівняння фото До / Після: порівняння форми спереду, збоку та зі спини поруч або за допомогою інтерактивного слайдера.",
+        "Повна багатомовна підтримка в усіх нових функціях (іспанська, англійська, російська, естонська, українська)."
     ]
 };
 
@@ -7000,7 +8036,7 @@ window.openUpdateModal = function(customData) {
     }
     const dataToUse = customData || window.latestUpdateData || {
         version: CURRENT_APP_VERSION,
-        releaseDate: "01/09/2026",
+        releaseDate: "02/09/2026",
         changelog: DEFAULT_APP_CHANGELOG
     };
     window.renderUpdateModalContent(dataToUse);
