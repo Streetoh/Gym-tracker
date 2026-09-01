@@ -1684,10 +1684,20 @@ const translations = {
     "es": {
         "update": {
             "title": "¡Nueva versión disponible!",
-            "desc": "Hemos lanzado una nueva versión con mejoras y correcciones.",
+            "desc": "Novedades y mejoras de esta actualización:",
+            "currentTitle": "Novedades de la versión",
+            "upToDateDesc": "Tu aplicación está actualizada a la última versión.",
             "download": "Descargar actualización",
             "reload": "Actualizar aplicación",
-            "later": "Quizás más tarde"
+            "later": "Quizás más tarde",
+            "understood": "Entendido",
+            "checkBtn": "Comprobar actualización",
+            "checking": "Comprobando...",
+            "viewNews": "Ver novedades",
+            "versionLabel": "Versión",
+            "upToDateAlert": "✅ Tu aplicación está al día.\n\nVersión instalada: v{vInstalled}\nVersión en GitHub: v{vGitHub}\n\nNo hay nuevas actualizaciones.",
+            "errorConnect": "No se pudo conectar con GitHub para comprobar la versión. Comprueba tu conexión a internet.",
+            "errorGeneric": "Error al comprobar actualizaciones: "
         },
         "ai": {
             "title": "Asistente IA",
@@ -1706,7 +1716,7 @@ const translations = {
             "invalidKey": "Introduce una API Key válida",
             "keySaved": "API Key guardada correctamente"
         },
-"setTypes": {
+        "setTypes": {
             "warmup": "Calentamiento",
             "approach": "Aproximación",
             "effective": "Efectiva",
@@ -1717,7 +1727,7 @@ const translations = {
         "nav": {
             "menu": "Menú",
             "ai": "Asistente IA",
-"calendar": "Calendario",
+            "calendar": "Calendario",
             "exercises": "Ejercicios",
             "history": "Historial",
             "workout": "En curso",
@@ -1727,7 +1737,7 @@ const translations = {
         },
         "header": {
             "ai": "Asistente IA",
-"title": "Calendario",
+            "title": "Calendario",
             "calendar": "Calendario",
             "exercises": "Ejercicios",
             "history": "Historial",
@@ -1824,7 +1834,8 @@ const translations = {
             "readError": "Error al leer el archivo: ",
             "exportMin": "Por favor, selecciona al menos un entrenamiento para exportar.",
             "exportNotFound": "No se encontraron entrenamientos planificados con los IDs seleccionados.",
-            "workoutFinished": "¡Entrenamiento Finalizado! Duración: "
+            "workoutFinished": "¡Entrenamiento Finalizado! Duración: ",
+            "dropsetEnterWeight": "Introduce primero el peso de la serie para calcular el Dropset."
         },
         "modals": {
             "add": {
@@ -1957,15 +1968,35 @@ const translations = {
         },
         "progression": {
             "searchPlaceholder": "Buscar ejercicio..."
+        },
+        "blocks": {
+            "hypertrophyTitle": "Bloque de Hipertrofia",
+            "hypertrophyDesc": "Enfoque en volumen y esfuerzo moderado-alto (RPE 7-9 / RIR 1-3). Prioriza la técnica estricta y el control excéntrico en todo el rango de movimiento.",
+            "heavyTitle": "Bloque de Pesados / Fuerza",
+            "heavyDesc": "Enfoque en cargas elevadas y series de bajas repeticiones con descansos completos para maximizar la fuerza y adaptación neuromuscular.",
+            "intensityTitle": "Bloque de Alta Intensidad",
+            "intensityDesc": "Enfoque en llevar las series al fallo muscular, técnicas de extensión como Dropsets (-20% a -40%) y pausas de descanso breves.",
+            "goalTitle": "Sesión Objetivo",
+            "goalDesc": "Concéntrate en la progresión de cargas y esfuerzo objetivo según lo planificado."
         }
     },
     "en": {
         "update": {
             "title": "New Version Available!",
-            "desc": "We released a new version with improvements and bug fixes.",
+            "desc": "What's new and improved in this update:",
+            "currentTitle": "Version Highlights",
+            "upToDateDesc": "Your app is up to date with the latest version.",
             "download": "Download Update",
             "reload": "Update App",
-            "later": "Maybe Later"
+            "later": "Maybe Later",
+            "understood": "Got it",
+            "checkBtn": "Check for updates",
+            "checking": "Checking...",
+            "viewNews": "View what's new",
+            "versionLabel": "Version",
+            "upToDateAlert": "✅ Your app is up to date.\n\nInstalled version: v{vInstalled}\nGitHub version: v{vGitHub}\n\nNo new updates available.",
+            "errorConnect": "Could not connect to GitHub to check for updates. Please check your internet connection.",
+            "errorGeneric": "Error checking for updates: "
         },
         "ai": {
             "title": "AI Assistant",
@@ -1984,7 +2015,7 @@ const translations = {
             "invalidKey": "Please enter a valid API Key",
             "keySaved": "API Key saved successfully"
         },
-"setTypes": {
+        "setTypes": {
             "warmup": "Warm-up",
             "approach": "Approach",
             "effective": "Effective",
@@ -1995,7 +2026,7 @@ const translations = {
         "nav": {
             "menu": "Menu",
             "ai": "AI Assistant",
-"calendar": "Calendar",
+            "calendar": "Calendar",
             "exercises": "Exercises",
             "history": "History",
             "workout": "Workout",
@@ -2005,7 +2036,7 @@ const translations = {
         },
         "header": {
             "ai": "AI Assistant",
-"title": "Calendar",
+            "title": "Calendar",
             "calendar": "Calendar",
             "exercises": "Exercises",
             "history": "History",
@@ -2102,7 +2133,8 @@ const translations = {
             "readError": "Error reading file: ",
             "exportMin": "Please select at least one workout to export.",
             "exportNotFound": "No planned workouts found with selected IDs.",
-            "workoutFinished": "Workout Finished! Duration: "
+            "workoutFinished": "Workout Finished! Duration: ",
+            "dropsetEnterWeight": "Enter the set weight first to calculate the Dropset."
         },
         "modals": {
             "add": {
@@ -2235,15 +2267,35 @@ const translations = {
         },
         "progression": {
             "searchPlaceholder": "Search exercise..."
+        },
+        "blocks": {
+            "hypertrophyTitle": "Hypertrophy Block",
+            "hypertrophyDesc": "Focus on volume and moderate-high effort (RPE 7-9 / RIR 1-3). Prioritize strict technique and eccentric control across the full range of motion.",
+            "heavyTitle": "Heavy / Strength Block",
+            "heavyDesc": "Focus on heavy loads and low-rep sets with full rest to maximize strength and neuromuscular adaptation.",
+            "intensityTitle": "High Intensity Block",
+            "intensityDesc": "Focus on taking sets to muscular failure, intensity techniques like Dropsets (-20% to -40%), and short rest pauses.",
+            "goalTitle": "Target Session",
+            "goalDesc": "Focus on load progression and target effort as planned."
         }
     },
     "ru": {
         "update": {
             "title": "Доступна новая версия!",
-            "desc": "Мы выпустили новую версию с улучшениями и исправлениями.",
+            "desc": "Что нового и улучшено в этом обновлении:",
+            "currentTitle": "Что нового в этой версии",
+            "upToDateDesc": "Ваше приложение обновлено до последней версии.",
             "download": "Скачать обновление",
             "reload": "Обновить приложение",
-            "later": "Позже"
+            "later": "Позже",
+            "understood": "Понятно",
+            "checkBtn": "Проверить обновления",
+            "checking": "Проверка...",
+            "viewNews": "Что нового",
+            "versionLabel": "Версия",
+            "upToDateAlert": "✅ Ваше приложение обновлено.\n\nУстановленная версия: v{vInstalled}\nВерсия на GitHub: v{vGitHub}\n\nНовых обновлений нет.",
+            "errorConnect": "Не удалось подключиться к GitHub для проверки обновлений. Проверьте подключение к интернету.",
+            "errorGeneric": "Ошибка при проверке обновлений: "
         },
         "ai": {
             "title": "ИИ Ассистент",
@@ -2262,7 +2314,7 @@ const translations = {
             "invalidKey": "Введите действительный API ключ",
             "keySaved": "API ключ успешно сохранен"
         },
-"setTypes": {
+        "setTypes": {
             "warmup": "Разминка",
             "approach": "Подводящий",
             "effective": "Рабочий",
@@ -2273,7 +2325,7 @@ const translations = {
         "nav": {
             "menu": "Меню",
             "ai": "ИИ Ассистент",
-"calendar": "Календарь",
+            "calendar": "Календарь",
             "exercises": "Упражнения",
             "history": "История",
             "workout": "Тренировка",
@@ -2283,7 +2335,7 @@ const translations = {
         },
         "header": {
             "ai": "ИИ Ассистент",
-"title": "Календарь",
+            "title": "Календарь",
             "calendar": "Календарь",
             "exercises": "Упражнения",
             "history": "История",
@@ -2380,7 +2432,8 @@ const translations = {
             "readError": "Ошибка чтения: ",
             "exportMin": "Выберите тренировку.",
             "exportNotFound": "Не найдено.",
-            "workoutFinished": "Тренировка завершена! Время: "
+            "workoutFinished": "Тренировка завершена! Время: ",
+            "dropsetEnterWeight": "Сначала введите вес подхода для расчета дропсета."
         },
         "modals": {
             "add": {
@@ -2509,15 +2562,35 @@ const translations = {
         },
         "progression": {
             "searchPlaceholder": "Поиск упражнения..."
+        },
+        "blocks": {
+            "hypertrophyTitle": "Блок гипертрофии",
+            "hypertrophyDesc": "Фокус на объеме и умеренно-высоком усилии (RPE 7-9 / RIR 1-3). Приоритет строгой технике и контролю эксцентрики во всем диапазоне движения.",
+            "heavyTitle": "Силовой / Тяжелый блок",
+            "heavyDesc": "Фокус на больших весах и низком числе повторений с полным отдыхом для максимальной силы и нейромышечной адаптации.",
+            "intensityTitle": "Блок высокой интенсивности",
+            "intensityDesc": "Фокус на подходах до мышечного отказа, дропсетах (-20% до -40%) и коротких паузах отдыха.",
+            "goalTitle": "Целевая тренировка",
+            "goalDesc": "Сосредоточьтесь на прогрессии нагрузок и целевом усилии согласно плану."
         }
     },
     "et": {
         "update": {
             "title": "Uus versioon on saadaval!",
-            "desc": "Oleme välja andnud uue versiooni paranduste ja uuendustega.",
+            "desc": "Selle uuenduse uudised ja täiustused:",
+            "currentTitle": "Selle versiooni uuendused",
+            "upToDateDesc": "Teie rakendus on uuendatud viimasele versioonile.",
             "download": "Laadi alla uuendus",
             "reload": "Uuenda rakendust",
-            "later": "Võib-olla hiljem"
+            "later": "Võib-olla hiljem",
+            "understood": "Sain aru",
+            "checkBtn": "Kontrolli uuendusi",
+            "checking": "Kontrollimine...",
+            "viewNews": "Vaata uuendusi",
+            "versionLabel": "Versioon",
+            "upToDateAlert": "✅ Teie rakendus on ajakohane.\n\nPaigaldatud versioon: v{vInstalled}\nGitHubi versioon: v{vGitHub}\n\nUusi uuendusi pole.",
+            "errorConnect": "GitHubiga ei õnnestunud ühendust luua uuenduste kontrollimiseks. Palun kontrollige internetiühendust.",
+            "errorGeneric": "Viga uuenduste kontrollimisel: "
         },
         "ai": {
             "title": "AI Assistent",
@@ -2536,7 +2609,7 @@ const translations = {
             "invalidKey": "Palun sisesta kehtiv API võti",
             "keySaved": "API võti edukalt salvestatud"
         },
-"setTypes": {
+        "setTypes": {
             "warmup": "Soojendus",
             "approach": "Lähenemine",
             "effective": "Efektiivne",
@@ -2546,7 +2619,7 @@ const translations = {
         },
         "nav": {
             "ai": "AI Assistent",
-"calendar": "Kalender",
+            "calendar": "Kalender",
             "exercises": "Harjutused",
             "history": "Ajalugu",
             "workout": "Treening",
@@ -2556,7 +2629,7 @@ const translations = {
         },
         "header": {
             "ai": "AI Assistent",
-"title": "Kalender",
+            "title": "Kalender",
             "calendar": "Kalender",
             "exercises": "Harjutused",
             "history": "Ajalugu",
@@ -2653,7 +2726,8 @@ const translations = {
             "readError": "Viga faili lugemisel: ",
             "exportMin": "Vali treening.",
             "exportNotFound": "Ei leitud.",
-            "workoutFinished": "Treening lõpetatud! Aeg: "
+            "workoutFinished": "Treening lõpetatud! Aeg: ",
+            "dropsetEnterWeight": "Sisesta esmalt seeria raskus dropseti arvutamiseks."
         },
         "modals": {
             "add": {
@@ -2782,15 +2856,35 @@ const translations = {
         },
         "progression": {
             "searchPlaceholder": "Otsi harjutust..."
+        },
+        "blocks": {
+            "hypertrophyTitle": "Hüpertroofia plokk",
+            "hypertrophyDesc": "Fookus mahul ja mõõdukalt kõrgel pingutusel (RPE 7-9 / RIR 1-3). Eelista ranget tehnikat ja ekstsentrilist kontrolli kogu liikumisulatuse vältel.",
+            "heavyTitle": "Raske / Jõuplokk",
+            "heavyDesc": "Fookus suurtel raskustel ja madalatel kordustel koos täieliku puhkusega, et maksimeerida jõudu ja neuromuskulaarset kohanemist.",
+            "intensityTitle": "Kõrge intensiivsuse plokk",
+            "intensityDesc": "Fookus seeriate lihase ammendumiseni viimisel, tehnikatel nagu Dropset (-20% kuni -40%) ja lühikestel puhkepausidel.",
+            "goalTitle": "Eesmärgipärane treening",
+            "goalDesc": "Keskendu raskuste progressioonile ja planeeritud sihtpingutusele."
         }
     },
     "uk": {
         "update": {
             "title": "Доступна нова версія!",
-            "desc": "Ми випустили нову версію з покращеннями та виправленнями.",
+            "desc": "Що нового та покращено в цьому оновленні:",
+            "currentTitle": "Що нового в цій версії",
+            "upToDateDesc": "Ваш додаток оновлено до останньої версії.",
             "download": "Завантажити оновлення",
             "reload": "Оновити додаток",
-            "later": "Можливо пізніше"
+            "later": "Можливо пізніше",
+            "understood": "Зрозуміло",
+            "checkBtn": "Перевірити оновлення",
+            "checking": "Перевірка...",
+            "viewNews": "Що нового",
+            "versionLabel": "Версія",
+            "upToDateAlert": "✅ Ваш додаток оновлено.\n\nВстановлена версія: v{vInstalled}\nВерсія на GitHub: v{vGitHub}\n\nНових оновлень немає.",
+            "errorConnect": "Не вдалося з'єднатися з GitHub для перевірки оновлень. Будь ласка, перевірте підключення до інтернету.",
+            "errorGeneric": "Помилка перевірки оновлень: "
         },
         "ai": {
             "title": "ШІ Асистент",
@@ -2809,7 +2903,7 @@ const translations = {
             "invalidKey": "Введіть дійсний API ключ",
             "keySaved": "API ключ успішно збережено"
         },
-"setTypes": {
+        "setTypes": {
             "warmup": "Розминка",
             "approach": "Підвідний",
             "effective": "Робочий",
@@ -2820,7 +2914,7 @@ const translations = {
         "nav": {
             "menu": "Меню",
             "ai": "ШІ Асистент",
-"calendar": "Календар",
+            "calendar": "Календар",
             "exercises": "Вправи",
             "history": "Історія",
             "workout": "Тренування",
@@ -2830,7 +2924,7 @@ const translations = {
         },
         "header": {
             "ai": "ШІ Асистент",
-"title": "Календар",
+            "title": "Календар",
             "calendar": "Календар",
             "exercises": "Вправи",
             "history": "Історія",
@@ -2927,7 +3021,8 @@ const translations = {
             "readError": "Помилка читання: ",
             "exportMin": "Виберіть тренування.",
             "exportNotFound": "Не знайдено.",
-            "workoutFinished": "Тренування завершено! Час: "
+            "workoutFinished": "Тренування завершено! Час: ",
+            "dropsetEnterWeight": "Спочатку введіть вагу підходу для розрахунку дропсету."
         },
         "modals": {
             "add": {
@@ -3056,6 +3151,16 @@ const translations = {
         },
         "progression": {
             "searchPlaceholder": "Пошук вправи..."
+        },
+        "blocks": {
+            "hypertrophyTitle": "Блок гіпертрофії",
+            "hypertrophyDesc": "Фокус на об'ємі та помірно-високому зусиллі (RPE 7-9 / RIR 1-3). Пріоритет суворої техніки та ексцентричного контролю у всьому діапазоні руху.",
+            "heavyTitle": "Силовий / Важкий блок",
+            "heavyDesc": "Фокус на великих вагах та низькій кількості повторень з повним відпочинком для максимальної сили та нейром'язової адаптації.",
+            "intensityTitle": "Блок високої інтенсивності",
+            "intensityDesc": "Фокус на підходах до м'язової відмови, дропсетах (-20% до -40%) та коротких паузах відпочинку.",
+            "goalTitle": "Цільове тренування",
+            "goalDesc": "Зосередьтеся на прогресії навантажень та цільовому зусиллі згідно з планом."
         }
     }
 };
@@ -3114,6 +3219,21 @@ const updateLanguageUI = () => {
                 }
             }
         });
+        
+        document.querySelectorAll('[data-i18n-title]').forEach(el => {
+            const key = el.getAttribute('data-i18n-title');
+            if (key) {
+                const text = getT(key);
+                if (text && text !== key) {
+                    el.setAttribute('title', text);
+                }
+            }
+        });
+
+        // Re-render update modal if active or if latest data exists
+        if (typeof window.renderUpdateModalContent === 'function' && (window.latestUpdateData || document.getElementById('modal-update')?.classList.contains('active'))) {
+            window.renderUpdateModalContent(window.latestUpdateData);
+        }
 
         // Force header update
         const activeView = document.querySelector('.view.active');
@@ -4365,7 +4485,7 @@ let currentDropsetSetObj = null;
 
 const openDropsetCalc = (weight, inputElem, setObj) => {
     if (!weight || weight <= 0) {
-        alert('Introduce primero el peso de la serie para calcular el Dropset.');
+        alert(getT('alerts.dropsetEnterWeight') || 'Introduce primero el peso de la serie para calcular el Dropset.');
         return;
     }
     currentDropsetTargetWeightInput = inputElem;
@@ -4458,26 +4578,26 @@ const renderWorkout = () => {
     blockBanner.classList.add('workout-block-banner');
     
     let bType = activeSession.type || 'hypertrophy';
-    let bTitle = 'Bloque de Hipertrofia';
+    let bTitle = getT('blocks.hypertrophyTitle') || 'Bloque de Hipertrofia';
     let bColor = '#2563eb';
     let bIcon = 'ph-barbell';
-    let bDesc = 'Enfoque en volumen y esfuerzo moderado-alto (RPE 7-9 / RIR 1-3). Prioriza la técnica estricta y el control excéntrico en todo el rango de movimiento.';
+    let bDesc = getT('blocks.hypertrophyDesc') || 'Enfoque en volumen y esfuerzo moderado-alto (RPE 7-9 / RIR 1-3). Prioriza la técnica estricta y el control excéntrico en todo el rango de movimiento.';
     
     if (bType === 'heavy') {
-        bTitle = 'Bloque de Pesados / Fuerza';
+        bTitle = getT('blocks.heavyTitle') || 'Bloque de Pesados / Fuerza';
         bColor = '#dc2626';
         bIcon = 'ph-shield-check';
-        bDesc = 'Enfoque en cargas elevadas y series de bajas repeticiones con descansos completos para maximizar la fuerza y adaptación neuromuscular.';
+        bDesc = getT('blocks.heavyDesc') || 'Enfoque en cargas elevadas y series de bajas repeticiones con descansos completos para maximizar la fuerza y adaptación neuromuscular.';
     } else if (bType === 'intensity') {
-        bTitle = 'Bloque de Alta Intensidad';
+        bTitle = getT('blocks.intensityTitle') || 'Bloque de Alta Intensidad';
         bColor = '#10b981';
         bIcon = 'ph-fire';
-        bDesc = 'Enfoque en llevar las series al fallo muscular, técnicas de extensión como Dropsets (-20% a -40%) y pausas de descanso breves.';
+        bDesc = getT('blocks.intensityDesc') || 'Enfoque en llevar las series al fallo muscular, técnicas de extensión como Dropsets (-20% a -40%) y pausas de descanso breves.';
     } else if (bType === 'goal' || bType === 'objective') {
-        bTitle = 'Sesión Objetivo';
+        bTitle = getT('blocks.goalTitle') || 'Sesión Objetivo';
         bColor = '#8b5cf6';
         bIcon = 'ph-target';
-        bDesc = 'Concéntrate en la progresión de cargas y esfuerzo objetivo según lo planificado.';
+        bDesc = getT('blocks.goalDesc') || 'Concéntrate en la progresión de cargas y esfuerzo objetivo según lo planificado.';
     }
     
     blockBanner.style.cssText = `background: var(--bg-surface-elevated); border: 1px solid var(--border-color); border-left: 4px solid ${bColor}; border-radius: 12px; padding: 12px 14px; margin-bottom: 20px; text-align: left;`;
@@ -6709,7 +6829,7 @@ window.generateDashboard = function(mode) {
     }
 };
 
-const CURRENT_APP_VERSION = '1.1.7';
+const CURRENT_APP_VERSION = '1.1.8';
 function compareVersions(v1, v2) {
     const p1 = String(v1).split('.').map(Number);
     const p2 = String(v2).split('.').map(Number);
@@ -6729,24 +6849,40 @@ window.renderUpdateModalContent = function(data) {
     
     const versionTag = document.getElementById('update-modal-version-tag');
     if (versionTag) {
-        versionTag.textContent = `Versión ${data.version || ''}${data.releaseDate ? ' (' + data.releaseDate + ')' : ''}`;
+        const vLabel = getT('update.versionLabel') || 'Versión';
+        versionTag.textContent = `${vLabel} ${data.version || ''}${data.releaseDate ? ' (' + data.releaseDate + ')' : ''}`;
+    }
+
+    const isNewer = compareVersions(data.version, CURRENT_APP_VERSION) > 0;
+    const modalTitle = document.querySelector('#modal-update [data-i18n="update.title"]');
+    const modalDesc = document.querySelector('#modal-update [data-i18n="update.desc"]');
+    if (modalTitle) {
+        modalTitle.textContent = isNewer ? (getT('update.title') || '¡Nueva versión disponible!') : (getT('update.currentTitle') || 'Novedades de la versión');
+    }
+    if (modalDesc) {
+        modalDesc.textContent = isNewer ? (getT('update.desc') || 'Novedades y mejoras de esta actualización:') : (getT('update.upToDateDesc') || 'Tu aplicación está actualizada a la última versión.');
     }
     
     const changelogEl = document.getElementById('update-changelog');
     if (changelogEl) {
+        let changelogItems = data.changelog;
+        if (changelogItems && typeof changelogItems === 'object' && !Array.isArray(changelogItems)) {
+            changelogItems = changelogItems[state.language] || changelogItems['es'] || Object.values(changelogItems)[0];
+        }
+
         let changelogHtml = '';
-        if (Array.isArray(data.changelog)) {
+        if (Array.isArray(changelogItems)) {
             changelogHtml = '<ul style="text-align: left; margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.5; color: var(--text-primary); display: flex; flex-direction: column; gap: 8px;">' +
-                data.changelog.map(item => `<li>${item}</li>`).join('') +
+                changelogItems.map(item => `<li>${item}</li>`).join('') +
                 '</ul>';
-        } else if (typeof data.changelog === 'string' && data.changelog.trim()) {
-            const items = data.changelog.split(/\r?\n|•/).map(s => s.trim()).filter(s => s.length > 0);
+        } else if (typeof changelogItems === 'string' && changelogItems.trim()) {
+            const items = changelogItems.split(/\r?\n|•/).map(s => s.trim()).filter(s => s.length > 0);
             if (items.length > 1) {
                 changelogHtml = '<ul style="text-align: left; margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.5; color: var(--text-primary); display: flex; flex-direction: column; gap: 8px;">' +
                     items.map(item => `<li>${item}</li>`).join('') +
                     '</ul>';
             } else {
-                changelogHtml = `<p style="margin:0; text-align:left; font-size: 13.5px; line-height: 1.5; color: var(--text-primary);">${data.changelog}</p>`;
+                changelogHtml = `<p style="margin:0; text-align:left; font-size: 13.5px; line-height: 1.5; color: var(--text-primary);">${changelogItems}</p>`;
             }
         } else {
             changelogHtml = '<p style="margin:0; text-align:left; font-size: 13.5px; color: var(--text-secondary); font-style: italic;">Mejoras de rendimiento y correcciones de errores.</p>';
@@ -6756,14 +6892,27 @@ window.renderUpdateModalContent = function(data) {
     
     const isNative = window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform();
     const actionContainer = document.getElementById('update-action-container');
+    const laterBtn = document.querySelector('#modal-update .close-modal.btn-secondary');
+    if (laterBtn) {
+        laterBtn.textContent = getT('update.later') || 'Quizás más tarde';
+        laterBtn.style.setProperty('display', isNewer ? 'block' : 'none', 'important');
+    }
+
     if (actionContainer) {
-        if (isNative) {
-            actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 10px; padding: 14px; background-color: #10b981; border-color: #10b981; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer;" onclick="window.open('https://github.com/Streetoh/Gym-tracker/releases/latest', '_blank')">
-                    <i class="ph ph-download-simple" style="font-size: 20px;"></i> <span>${getT('update.download') || 'Descargar actualización'}</span>
-                </button>`;
+        if (isNewer) {
+            if (isNative) {
+                actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 10px; padding: 14px; background-color: #10b981; border-color: #10b981; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer;" onclick="openExternalUrl('https://github.com/Streetoh/Gym-tracker/releases/latest')">
+                        <i class="ph ph-download-simple" style="font-size: 20px;"></i> <span>${getT('update.download') || 'Descargar actualización'}</span>
+                    </button>`;
+            } else {
+                actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 10px; padding: 14px; background-color: #10b981; border-color: #10b981; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer;" onclick="forceReloadApp()">
+                        <i class="ph ph-arrows-clockwise" style="font-size: 20px;"></i> <span>${getT('update.reload') || 'Actualizar aplicación'}</span>
+                    </button>`;
+            }
         } else {
-            actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 10px; padding: 14px; background-color: #10b981; border-color: #10b981; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer;" onclick="forceReloadApp()">
-                    <i class="ph ph-arrows-clockwise" style="font-size: 20px;"></i> <span>${getT('update.reload') || 'Actualizar aplicación'}</span>
+            // Already up to date
+            actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 10px; padding: 14px; background-color: #10b981; border-color: #10b981; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer;" onclick="document.getElementById('modal-update').classList.remove('active')">
+                    <i class="ph ph-check-circle" style="font-size: 20px;"></i> <span>${getT('update.understood') || 'Entendido'}</span>
                 </button>`;
         }
     }
@@ -6773,44 +6922,166 @@ window.openUpdateModal = function(customData) {
     const dataToUse = customData || window.latestUpdateData || {
         version: CURRENT_APP_VERSION,
         releaseDate: "01/09/2026",
-        changelog: [
-            "Cronómetro de entrenamiento: Visualización en formato HH:MM:SS para un seguimiento más preciso del tiempo.",
-            "Seguridad en series: Bloqueado el cambio de tipo de serie durante un entrenamiento activo.",
-            "Sugerencias inteligentes de peso: En cada serie se muestra como sugerencia el último peso levantado en ese ejercicio dentro del mismo tipo de sesión (Hipertrofia, Pesados, Alta Intensidad).",
-            "Comentarios en Historial: Los comentarios añadidos a los ejercicios durante la sesión ahora se muestran en el historial de entrenamientos completados.",
-            "Comprobación de actualizaciones en APK: Corrección para la detección y notificación automática de nuevas versiones en dispositivos móviles."
-        ]
+        changelog: {
+            "es": [
+                "Soporte multiidioma completo: Todos los nuevos botones, textos y ventanas de actualización ahora cambian correctamente de idioma (Español, Inglés, Ruso, Estonio, Ucraniano).",
+                "Descripciones de bloques traducidas: Las tarjetas informativas de Hipertrofia, Pesados y Alta Intensidad ahora se muestran en el idioma activo.",
+                "Calculadora Dropset y alertas traducidas al idioma seleccionado.",
+                "Cronómetro en formato HH:MM:SS para control exacto del tiempo de entrenamiento.",
+                "Bloqueo de tipo de serie durante el entrenamiento y sugerencias inteligentes del último peso levantado."
+            ],
+            "en": [
+                "Full multi-language support: All new buttons, texts, and update modals now change language seamlessly (Spanish, English, Russian, Estonian, Ukrainian).",
+                "Translated block descriptions: Informational cards for Hypertrophy, Heavy, and High Intensity now display in the active language.",
+                "Dropset calculator and alerts fully translated to the selected language.",
+                "Workout stopwatch in HH:MM:SS format for accurate training time tracking.",
+                "Locked set types during active workout and smart weight suggestions from previous sessions."
+            ],
+            "ru": [
+                "Полная мультиязычная поддержка: Все новые кнопки, тексты и окна обновлений теперь корректно переключают язык (испанский, английский, русский, эстонский, украинский).",
+                "Переведены описания тренировочных блоков: карточки гипертрофии, силового блока и высокой интенсивности теперь отображаются на активном языке.",
+                "Калькулятор дропсетов и оповещения переведены на выбранный язык.",
+                "Секундомер тренировки в формате ЧЧ:ММ:СС для точного учета времени.",
+                "Блокировка изменения типа подхода во время тренировки и умные подсказки последнего рабочего веса."
+            ],
+            "et": [
+                "Täielik mitmekeelne tugi: Kõik uued nupud, tekstid ja uuenduste aknad vahetavad nüüd korrektselt keelt (hispaania, inglise, vene, eesti, ukraina).",
+                "Tõlgitud treeningplokkide kirjeldused: Hüpertroofia, raske ja kõrge intensiivsuse infokaardid kuvatakse aktiivses keeles.",
+                "Dropseti kalkulaator ja teated tõlgitud valitud keelde.",
+                "Treeningu stopper formaadis TT:MM:SS täpse aja jälgimiseks.",
+                "Seeria tüübi lukustamine aktiivse treeningu ajal ja viimati tõstetud raskuse nutikad soovitused."
+            ],
+            "uk": [
+                "Повна багатомовна підтримка: Усі нові кнопки, тексти та вікна оновлень тепер коректно змінюють мову (іспанська, англійська, російська, естонська, українська).",
+                "Перекладено описи тренувальних блоків: картки гіпертрофії, силового блоку та високої інтенсивності тепер відображаються активною мовою.",
+                "Калькулятор дропсетів та сповіщення перекладено вибраною мовою.",
+                "Секундомір тренування у форматі ГГ:ХХ:СС для точного обліку часу.",
+                "Блокування зміни типу підходу під час тренування та розумні підказки останньої робочої ваги."
+            ]
+        }
     };
     window.renderUpdateModalContent(dataToUse);
     const modalUpdate = document.getElementById('modal-update');
     if (modalUpdate) modalUpdate.classList.add('active');
 };
 
-async function checkForUpdates() {
+async function checkForUpdates(manual = false) {
     try {
-        if (!window.isApkEnv && (window.location.hostname === '127.0.0.1' || window.location.port === '8080' || window.location.port === '5500')) {
+        if (!manual && !window.isApkEnv && (window.location.hostname === '127.0.0.1' || window.location.port === '8080' || window.location.port === '5500')) {
             return; // In localhost development on desktop browser, do not auto show update modal
         }
-        const response = await fetch('https://streetoh.github.io/Gym-tracker/version.json?t=' + new Date().getTime());
-        if (!response.ok) return;
-        const data = await response.json();
+
+        const checkBtn = document.getElementById('btn-manual-check-update');
+        let origBtnHtml = '';
+        if (manual && checkBtn) {
+            origBtnHtml = checkBtn.innerHTML;
+            checkBtn.innerHTML = `<i class="ph ph-spinner ph-spin"></i> <span>${getT('update.checking') || 'Comprobando...'}</span>`;
+            checkBtn.disabled = true;
+        }
+
+        const endpoints = [
+            'https://raw.githubusercontent.com/Streetoh/Gym-tracker/main/version.json?t=' + Date.now(),
+            'https://streetoh.github.io/Gym-tracker/version.json?t=' + Date.now()
+        ];
+
+        let data = null;
+        let lastError = null;
+
+        for (const url of endpoints) {
+            try {
+                // Try Capacitor native HTTP plugin first if available
+                if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.CapacitorHttp) {
+                    try {
+                        const capRes = await window.Capacitor.Plugins.CapacitorHttp.get({
+                            url: url,
+                            headers: { 'Cache-Control': 'no-cache' },
+                            connectTimeout: 6000,
+                            readTimeout: 6000
+                        });
+                        if (capRes && capRes.data) {
+                            data = typeof capRes.data === 'string' ? JSON.parse(capRes.data) : capRes.data;
+                            if (data && data.version) break;
+                        }
+                    } catch (capErr) {
+                        console.warn('CapacitorHttp error, falling back to fetch:', capErr);
+                    }
+                }
+
+                // Standard fetch fallback with timeout
+                const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+                const timeoutId = ctrl ? setTimeout(() => ctrl.abort(), 6000) : null;
+                const response = await fetch(url, {
+                    cache: 'no-store',
+                    signal: ctrl ? ctrl.signal : undefined
+                });
+                if (timeoutId) clearTimeout(timeoutId);
+                if (response && response.ok) {
+                    data = await response.json();
+                    if (data && data.version) break;
+                }
+            } catch (err) {
+                lastError = err;
+                console.warn('Fetch error for url:', url, err);
+            }
+        }
+
+        if (manual && checkBtn) {
+            checkBtn.innerHTML = origBtnHtml;
+            checkBtn.disabled = false;
+        }
+
+        if (!data || !data.version) {
+            if (manual) {
+                alert(getT('update.errorConnect') || 'No se pudo conectar con GitHub para comprobar la versión. Comprueba tu conexión a internet.');
+            }
+            return;
+        }
+
         window.latestUpdateData = data;
-        
-        if (compareVersions(data.version, CURRENT_APP_VERSION) > 0) {
+        const cmp = compareVersions(data.version, CURRENT_APP_VERSION);
+
+        if (cmp > 0) {
+            // New version available!
             window.renderUpdateModalContent(data);
-            
             const modalUpdate = document.getElementById('modal-update');
             if (modalUpdate) modalUpdate.classList.add('active');
             
-            // Show the persistent header icon
             const btnUpdate = document.getElementById('btn-header-update');
             if (btnUpdate) btnUpdate.style.display = 'flex';
+        } else {
+            if (manual) {
+                const upToDateTemplate = getT('update.upToDateAlert') || '✅ Tu aplicación está al día.\n\nVersión instalada: v{vInstalled}\nVersión en GitHub: v{vGitHub}\n\nNo hay nuevas actualizaciones.';
+                const msg = upToDateTemplate.replace('{vInstalled}', CURRENT_APP_VERSION).replace('{vGitHub}', data.version);
+                alert(msg);
+            }
         }
     } catch (e) {
-        console.log('No se pudo comprobar la versión', e);
+        console.error('No se pudo comprobar la versión', e);
+        if (manual) {
+            const checkBtn = document.getElementById('btn-manual-check-update');
+            if (checkBtn) {
+                checkBtn.innerHTML = `<i class="ph ph-arrows-clockwise"></i> <span>${getT('update.checkBtn') || 'Comprobando...'}</span>`;
+                checkBtn.disabled = false;
+            }
+            const errPrefix = getT('update.errorGeneric') || 'Error al comprobar actualizaciones: ';
+            alert(errPrefix + (e.message || e));
+        }
     }
 }
 window.checkForUpdates = checkForUpdates;
+
+function checkFirstRunOfVersion() {
+    const seenVersion = localStorage.getItem('gym_seen_version');
+    if (seenVersion !== CURRENT_APP_VERSION) {
+        localStorage.setItem('gym_seen_version', CURRENT_APP_VERSION);
+        if (seenVersion) {
+            setTimeout(() => {
+                window.openUpdateModal();
+            }, 1200);
+        }
+    }
+}
+checkFirstRunOfVersion();
 
 window.forceReloadApp = function() {
     if ('serviceWorker' in navigator) {

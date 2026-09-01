@@ -1,11 +1,41 @@
 {
-  "version": "1.1.7",
+  "version": "1.1.8",
   "releaseDate": "01/09/2026",
-  "changelog": [
-    "Cronómetro de entrenamiento: Visualización en formato HH:MM:SS para un seguimiento más preciso del tiempo.",
-    "Seguridad en series: Bloqueado el cambio de tipo de serie durante un entrenamiento activo.",
-    "Sugerencias inteligentes de peso: En cada serie se muestra como sugerencia el último peso levantado en ese ejercicio dentro del mismo tipo de sesión (Hipertrofia, Pesados, Alta Intensidad).",
-    "Comentarios en Historial: Los comentarios añadidos a los ejercicios durante la sesión ahora se muestran en el historial de entrenamientos completados.",
-    "Comprobación de actualizaciones en APK: Corrección para la detección y notificación automática de nuevas versiones en dispositivos móviles."
-  ]
+  "changelog": {
+    "es": [
+      "Soporte multiidioma completo: Todos los nuevos botones, textos y ventanas de actualización ahora cambian correctamente de idioma (Español, Inglés, Ruso, Estonio, Ucraniano).",
+      "Descripciones de bloques traducidas: Las tarjetas informativas de Hipertrofia, Pesados y Alta Intensidad ahora se muestran en el idioma activo.",
+      "Calculadora Dropset y alertas traducidas al idioma seleccionado.",
+      "Cronómetro en formato HH:MM:SS para control exacto del tiempo de entrenamiento.",
+      "Bloqueo de tipo de serie durante el entrenamiento y sugerencias inteligentes del último peso levantado."
+    ],
+    "en": [
+      "Full multi-language support: All new buttons, texts, and update modals now change language seamlessly (Spanish, English, Russian, Estonian, Ukrainian).",
+      "Translated block descriptions: Informational cards for Hypertrophy, Heavy, and High Intensity now display in the active language.",
+      "Dropset calculator and alerts fully translated to the selected language.",
+      "Workout stopwatch in HH:MM:SS format for accurate training time tracking.",
+      "Locked set types during active workout and smart weight suggestions from previous sessions."
+    ],
+    "ru": [
+      "Полная мультиязычная поддержка: Все новые кнопки, тексты и окна обновлений теперь корректно переключают язык (испанский, английский, русский, эстонский, украинский).",
+      "Переведены описания тренировочных блоков: карточки гипертрофии, силового блока и высокой интенсивности теперь отображаются на активном языке.",
+      "Калькулятор дропсетов и оповещения переведены на выбранный язык.",
+      "Секундомер тренировки в формате ЧЧ:ММ:СС для точного учета времени.",
+      "Блокировка изменения типа подхода во время тренировки и умные подсказки последнего рабочего веса."
+    ],
+    "et": [
+      "Täielik mitmekeelne tugi: Kõik uued nupud, tekstid ja uuenduste aknad vahetavad nüüd korrektselt keelt (hispaania, inglise, vene, eesti, ukraina).",
+      "Tõlgitud treeningplokkide kirjeldused: Hüpertroofia, raske ja kõrge intensiivsuse infokaardid kuvatakse aktiivses keeles.",
+      "Dropseti kalkulaator ja teated tõlgitud valitud keelde.",
+      "Treeningu stopper formaadis TT:MM:SS täpse aja jälgimiseks.",
+      "Seeria tüübi lukustamine aktiivse treeningu ajal ja viimati tõstetud raskuse nutikad soovitused."
+    ],
+    "uk": [
+      "Повна багатомовна підтримка: Усі нові кнопки, тексти та вікна оновлень тепер коректно змінюють мову (іспанська, англійська, російська, естонська, українська).",
+      "Перекладено описи тренувальних блоків: картки гіпертрофії, силового блоку та високої інтенсивності тепер відображаються активною мовою.",
+      "Калькулятор дропсетів та сповіщення перекладено вибраною мовою.",
+      "Секундомір тренування у форматі ГГ:ХХ:СС для точного обліку часу.",
+      "Блокування зміни типу підходу під час тренування та розумні підказки останньої робочої ваги."
+    ]
+  }
 }
