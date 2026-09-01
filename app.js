@@ -1826,6 +1826,9 @@ const translations = {
             "deleteAllConfirm": "¿Eliminar todos los entrenamientos del historial? Esta acción no se puede deshacer."
         },
         "workout": {
+            "type": "Tipo",
+            "reps": "Reps",
+            "kg": "Kg",
             "title": "Entrenamiento",
             "start": "Iniciar",
             "finish": "Finalizar Entrenamiento",
@@ -2179,6 +2182,9 @@ const translations = {
             "deleteAllConfirm": "Delete all workouts from history? This cannot be undone."
         },
         "workout": {
+            "type": "Type",
+            "reps": "Reps",
+            "kg": "Kg",
             "title": "Workout",
             "start": "Start",
             "finish": "Finish Workout",
@@ -2532,6 +2538,9 @@ const translations = {
             "deleteAllConfirm": "Удалить все тренировки из истории? Это нельзя отменить."
         },
         "workout": {
+            "type": "Тип",
+            "reps": "Повт.",
+            "kg": "Кг",
             "title": "Тренировка",
             "start": "Начать",
             "finish": "Завершить",
@@ -2880,6 +2889,9 @@ const translations = {
             "deleteAllConfirm": "Kustuta kõik treeningud ajaloost? Seda ei saa tagasi võtta."
         },
         "workout": {
+            "type": "Tüüp",
+            "reps": "Kord.",
+            "kg": "Kg",
             "title": "Treening",
             "start": "Alusta",
             "finish": "Lõpeta Treening",
@@ -3229,6 +3241,9 @@ const translations = {
             "deleteAllConfirm": "Видалити всі тренування з історії? Це неможливо скасувати."
         },
         "workout": {
+            "type": "Тип",
+            "reps": "Повт.",
+            "kg": "Кг",
             "title": "Тренування",
             "start": "Почати",
             "finish": "Завершити",
@@ -4874,6 +4889,7 @@ function getLastWeightSuggestion(exerciseId, sessionType, setType, setIndex) {
 }
 
 const renderWorkout = () => {
+
     try {
     const content = document.getElementById('workout-content');
     content.innerHTML = '';
@@ -5075,10 +5091,9 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                 
                 <div class="set-row header-row" style="margin-top: 16px;">
                     <div></div>
-                    <div style="font-size:12px; color:var(--text-secondary); text-align:center;">Tipo</div>
-                    <div style="font-size:12px; color:var(--text-secondary); text-align:center;">Reps</div>
-                    <div style="font-size:12px; color:var(--text-secondary); text-align:center;">Kg</div>
-                    <div></div>
+                    <div style="font-size:12px; color:var(--text-secondary); text-align:center;">${getT('workout.type') || 'Tipo'}</div>
+                    <div style="font-size:12px; color:var(--text-secondary); text-align:center;">${getT('workout.reps') || 'Reps'}</div>
+                    <div style="font-size:12px; color:var(--text-secondary); text-align:center;">${getT('workout.kg') || 'Kg'}</div>
                 </div>
             `;
             
@@ -5117,31 +5132,32 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                 if (isDropset) {
                     repsHtml = `
                         <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;">
-                            <input type="number" inputmode="numeric" class="set-input reps-input" value="${set.reps || ''}" placeholder="${targetRepsBase}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
+                            <input type="number" inputmode="numeric" class="set-input reps-input" value="${set.reps || ''}" placeholder="${targetRepsBase}" style="width: 50px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
                             <input type="number" inputmode="numeric" class="set-input reps-drop-input" value="${set.repsDrop || ''}" placeholder="${targetRepsDrop || (set.type === 'Al fallo' ? 'Fallo' : 'Drop')}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
                         </div>
                     `;
                     weightHtml = `
                         <div style="display: flex; flex-direction: column; gap: 4px;">
                             <div style="display: flex; align-items: center; gap: 4px;">
-                                <input type="number" inputmode="decimal" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
+                                <input type="number" inputmode="decimal" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 50px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
                                 <button type="button" class="btn-dropset-calc" style="background: #10b981; color: white; border: none; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; cursor: pointer; flex-shrink: 0;" title="Calcular Dropset" ${!isWorkoutActive ? 'disabled' : ''}>%</button>
                             </div>
                             <input type="number" inputmode="decimal" class="set-input weight-drop-input" value="${set.weightDrop || ''}" placeholder="${weightDropPlaceholder}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
                         </div>
                     `;
                 } else {
-                    repsHtml = `<input type="number" inputmode="numeric" class="set-input reps-input" value="${set.reps || ''}" placeholder="${targetRepsBase}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>`;
+                    repsHtml = `<input type="number" inputmode="numeric" class="set-input reps-input" value="${set.reps || ''}" placeholder="${targetRepsBase}" style="width: 50px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>`;
                     const isBarbell = isBarbellExercise(dbEx || ex);
-                    const plateBtn = isBarbell ? `<button type="button" class="btn-plate-calc" style="background: var(--bg-surface-elevated); color: var(--color-accent); border: 1px solid var(--border-color); border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; flex-shrink: 0;" title="${getT('plateCalc.title') || 'Calculadora de discos'}" ${!isWorkoutActive ? 'disabled' : ''}><i class="ph-bold ph-barbell"></i></button>` : '';
-                    weightHtml = `<div style="display:flex; align-items:center; gap:4px;"><input type="number" inputmode="decimal" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>${plateBtn}</div>`;
+                    const plateBtn = isBarbell ? `<button type="button" class="btn-plate-calc" style="background: var(--bg-surface-elevated); color: var(--color-accent); border: 1px solid var(--border-color); border-radius: 8px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; flex-shrink: 0;" title="${getT('plateCalc.title') || 'Calculadora de discos'}" ${!isWorkoutActive ? 'disabled' : ''}><i class="ph-bold ph-barbell"></i></button>` : '';
+                    weightHtml = `<div style="display:flex; align-items:center; gap:4px;"><input type="number" inputmode="decimal" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 50px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>${plateBtn}</div>`;
                 }
 
                 setRow.innerHTML = `
                     <div class="set-number" style="margin-top: 8px;">${setIndex + 1}</div>
-                    <div style="display:flex; flex-direction:column; justify-content: flex-start; flex: 1;">
-                        <select class="set-type-select" disabled style="opacity: 0.95; cursor: not-allowed; pointer-events: none;">
-                            <option value="Calentamiento" ${set.type==='Calentamiento'?'selected':''}>${getSetTypeT('Calentamiento')}</option><option value="Aproximación" ${set.type==='Aproximación'?'selected':''}>${getSetTypeT('Aproximación')}</option>
+                    <div style="display:flex; flex-direction:column; justify-content: flex-start; flex: 1; min-width: 0;">
+                        <select class="set-type-select" disabled style="opacity: 0.95; cursor: not-allowed; pointer-events: none; width: 100%;">
+                            <option value="Calentamiento" ${set.type==='Calentamiento'?'selected':''}>${getSetTypeT('Calentamiento')}</option>
+                            <option value="Aproximación" ${set.type==='Aproximación'?'selected':''}>${getSetTypeT('Aproximación')}</option>
                             <option value="Efectiva" ${set.type==='Efectiva'?'selected':''}>${getSetTypeT('Efectiva')}</option>
                             <option value="Al fallo" ${set.type==='Al fallo'?'selected':''}>${getSetTypeT('Al fallo')}</option>
                             <option value="Dropset" ${set.type==='Dropset'?'selected':''}>${getSetTypeT('Dropset')}</option>
@@ -5152,11 +5168,8 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                     <div style="display:flex; flex-direction:column; align-items:center; justify-content: flex-start;">
                         ${repsHtml}
                     </div>
-                    <div style="display:flex; flex-direction:column; align-items:center; justify-content: flex-start; margin-left: 8px;">
+                    <div style="display:flex; flex-direction:column; align-items:flex-end; justify-content: flex-start;">
                         ${weightHtml}
-                    </div>
-                    <div style="display:flex; justify-content: center; margin-top: 4px; padding-left: 8px;">
-                        <button class="btn-icon delete-set" style="padding:4px;"><i class="ph ph-trash"></i></button>
                     </div>
                 `;
                 
@@ -5211,11 +5224,14 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                     });
                 }
                 
-                setRow.querySelector('.delete-set').addEventListener('click', () => {
-                    ex.sets.splice(setIndex, 1);
-                    autoSaveWorkout();
-                    renderWorkout();
-                });
+                const deleteBtn = setRow.querySelector('.delete-set');
+                if (deleteBtn) {
+                    deleteBtn.addEventListener('click', () => {
+                        ex.sets.splice(setIndex, 1);
+                        autoSaveWorkout();
+                        renderWorkout();
+                    });
+                }
                 
                 setsContainer.appendChild(setRow);
                 if (set.restTime && setIndex < ex.sets.length - 1) {
@@ -6828,6 +6844,76 @@ const getBase64Image = (file) => {
     });
 };
 
+
+// ============================================================
+// ENFORCE STRICT NUMERIC KEYPAD & INPUT ON EVOLUTION INPUTS
+// ============================================================
+function setupEvolutionNumericInputs() {
+    const ids = ['evolution-weight', 'evolution-bf', 'evol-m1', 'evol-m2', 'evol-m3', 'evol-m4', 'evol-m5', 'evol-m6', 'evol-m7', 'evol-m8'];
+    ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        // Block non-numeric keystrokes
+        el.addEventListener('keydown', function(e) {
+            // Allow backspace, delete, tab, escape, enter
+            if ([46, 8, 9, 27, 13].indexOf(e.keyCode) !== -1 ||
+                (e.ctrlKey === true || e.metaKey === true) ||
+                (e.keyCode >= 35 && e.keyCode <= 39)) {
+                return;
+            }
+            // Allow 0-9
+            const isDigit = (e.keyCode >= 48 && e.keyCode <= 57) || (e.keyCode >= 96 && e.keyCode <= 105);
+            // Allow dot or comma if not present
+            const isDotOrComma = (e.key === '.' || e.key === ',' || e.keyCode === 190 || e.keyCode === 188 || e.keyCode === 110);
+            if (isDotOrComma) {
+                if (this.value.indexOf('.') !== -1 || this.value.indexOf(',') !== -1) {
+                    e.preventDefault();
+                }
+                return;
+            }
+            if (!isDigit) {
+                e.preventDefault();
+            }
+        });
+
+        // Block non-numeric characters on beforeinput (mobile virtual keypad)
+        el.addEventListener('beforeinput', function(e) {
+            if (e.data) {
+                if (!/^[0-9.,]+$/.test(e.data)) {
+                    e.preventDefault();
+                    return;
+                }
+                if ((e.data.includes('.') || e.data.includes(',')) && (this.value.includes('.') || this.value.includes(','))) {
+                    e.preventDefault();
+                    return;
+                }
+            }
+        });
+
+        // Clean up input value (converts comma to dot and removes non-numeric)
+        el.addEventListener('input', function() {
+            let val = this.value;
+            val = val.replace(/,/g, '.');
+            val = val.replace(/[^0-9.]/g, '');
+            const parts = val.split('.');
+            if (parts.length > 2) {
+                val = parts[0] + '.' + parts.slice(1).join('');
+            }
+            if (this.value !== val) {
+                this.value = val;
+            }
+        });
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupEvolutionNumericInputs);
+} else {
+    setupEvolutionNumericInputs();
+}
+
+
 document.getElementById('btn-save-evolution')?.addEventListener('click', async () => {
     const btn = document.getElementById('btn-save-evolution');
     const originalText = btn.textContent;
@@ -6865,8 +6951,8 @@ document.getElementById('btn-save-evolution')?.addEventListener('click', async (
         state.evolution.push({
             id: Date.now().toString(),
             dateIso: new Date().toISOString(),
-            weight: parseFloat(weight),
-            bf: bf ? parseFloat(bf) : null,
+            weight: parseFloat(String(weight).replace(',', '.')),
+            bf: bf ? parseFloat(String(bf).replace(',', '.')) : null,
             photos: photos,
             m1, m2, m3, m4, m5, m6, m7, m8
         });
@@ -7921,7 +8007,9 @@ const DEFAULT_APP_CHANGELOG = {
         "Detección automática de PR en vivo: insignia de trofeo 🏆 al instante al superar tus marcas históricas de peso o 1RM estimado.",
         "Tarjeta de resumen al terminar: visualiza tiempo total, volumen levantado (kg), series completadas, nuevos récords superados y opción de copiar resumen.",
         "Comparador de fotos antes / después: compara tu evolución física frontal, lateral o de espalda en vista lado a lado o con deslizador interactivo.",
-        "Soporte multiidioma completo en todas las nuevas funciones (Español, Inglés, Ruso, Estonio, Ucraniano)."
+        "Soporte multiidioma completo en todas las nuevas funciones (Español, Inglés, Ruso, Estonio, Ucraniano).",
+        "Pestaña Evolución: teclado estrictamente numérico sin letras para casillas de peso, grasa y medidas corporales en ambas columnas.",
+        "Entrenamiento activo: eliminación del botón de papelera y optimización del diseño de series evitando cualquier solapamiento en casillas."
     ],
     "en": [
         "Barbell plate calculator: configured for 25kg Olympic bar and full support for Multipower / Smith machine (15kg bar), with 100% balanced and symmetric plate distribution.",
@@ -7929,7 +8017,9 @@ const DEFAULT_APP_CHANGELOG = {
         "Real-time PR detection: instant 🏆 trophy badge when breaking historical weight or estimated 1RM personal records.",
         "Workout summary card: modern finish modal showing total duration, volume lifted (kg), completed sets, broken PRs, and share/copy option.",
         "Before / after photo comparator: compare front, side, and back evolution photos side-by-side or with an interactive slider.",
-        "Full multi-language support across all 5 features (Spanish, English, Russian, Estonian, Ukrainian)."
+        "Full multi-language support across all 5 features (Spanish, English, Russian, Estonian, Ukrainian).",
+        "Evolution tab: strictly numeric keypad for weight, body fat, and body measurement inputs across both columns.",
+        "Active workout: removed trash can button and optimized set row layout, completely preventing cell overlapping."
     ],
     "ru": [
         "Калькулятор блинов: настроен для олимпийского грифа 25 кг и полная поддержка тренажера Смита / Мультипауэра (гриф 15 кг) с 100% симметричным распределением.",
@@ -7937,7 +8027,9 @@ const DEFAULT_APP_CHANGELOG = {
         "Автоматическое определение рекордов в реальном времени: золотой трофей 🏆 при превышении максимального веса или расчетного 1ПМ.",
         "Карточка итогов тренировки: стильное окно с общим временем, поднятым объемом (кг), подходами, рекордами и кнопкой копирования.",
         "Сравнение фото До / После: сравнение формы спереди, сбоку и со спины рядом или с помощью интерактивного слайдера.",
-        "Полная поддержка всех языков во всех новых функциях (испанский, английский, русский, эстонский, украинский)."
+        "Полная поддержка всех языков во всех новых функциях (испанский, английский, русский, эстонский, украинский).",
+        "Вкладка Эволюция: строго цифровая клавиатура без букв для веса, жира и замеров тела в обеих колонках.",
+        "Активная тренировка: удалена иконка корзины и оптимизирована сетка подходов, предотвращая любое наложение полей."
     ],
     "et": [
         "Kettakalkulaator: kohandatud 25 kg olümpiakangi jaoks ja täielik tugi Multipower / Smith masinale (15 kg kang) 100% sümmeetrilise jaotusega.",
@@ -7945,7 +8037,9 @@ const DEFAULT_APP_CHANGELOG = {
         "Reaalajas isiklike rekordite (PR) tuvastamine: kuldne karikas 🏆 kohe, kui ületad oma varasema maksimaalkaalu või hinnangulise 1KM.",
         "Treeningu kokkuvõtte kaart: näitab koguaega, tõstetud mahtu (kg), sooritatud seeriaid, purustatud rekordeid ja kokkuvõtte kopeerimise võimalust.",
         "Enne / pärast fotode võrdleja: võrdle füüsilist arengut eest, küljelt või tagant kõrvuti või interaktiivse liuguriga.",
-        "Täielik mitmekeelne tugi kõigis uutes funktsioonides (hispaania, inglise, vene, eesti, ukraina)."
+        "Täielik mitmekeelne tugi kõigis uutes funktsioonides (hispaania, inglise, vene, eesti, ukraina).",
+        "Evolutsiooni vahekaart: rangelt numbriline klaviatuur ilma tähtedeta kaalu, rasvaprotsendi ja kehamõõtude jaoks mõlemas veerus.",
+        "Aktiivne treening: eemaldatud prügikasti ikoon ja optimeeritud seeriate paigutus, vältides väljade kattumist."
     ],
     "uk": [
         "Калькулятор млинців: налаштовано для олімпійського грифа 25 кг та повна підтримка тренажера Сміта / Мультипауера (гриф 15 кг) зі 100% симетричним розподілом.",
@@ -7953,7 +8047,9 @@ const DEFAULT_APP_CHANGELOG = {
         "Автоматичне визначення рекордів у реальному часі: золотий кубок 🏆 при побитті історичного рекорду ваги або розрахункового 1ПМ.",
         "Картка підсумків тренування: стильне модальне вікно із загальним часом, піднятим об'ємом (кг), підходами, новими рекордами та копіюванням підсумку.",
         "Порівняння фото До / Після: порівняння форми спереду, збоку та зі спини поруч або за допомогою інтерактивного слайдера.",
-        "Повна багатомовна підтримка в усіх нових функціях (іспанська, англійська, російська, естонська, українська)."
+        "Повна багатомовна підтримка в усіх нових функціях (іспанська, англійська, російська, естонська, українська).",
+        "Вкладка Еволюція: суворо цифрова клавіатура без літер для ваги, жиру та вимірів тіла в обох колонках.",
+        "Активне тренування: видалено іконку кошика та оптимізовано сітку підходів, повністю запобігаючи накладанню полів."
     ]
 };
 
@@ -8267,3 +8363,5 @@ if (document.readyState === 'loading') {
 } else {
     initApp();
 }
+
+window.renderWorkout = renderWorkout;

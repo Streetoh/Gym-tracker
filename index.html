@@ -312,8 +312,8 @@
                 <div class="card" style="padding: 16px; margin-bottom: 16px;">
                     <h3 style="font-size: 16px; margin-bottom: 12px;" data-i18n="evolution.newRecord">Nuevo Registro</h3>
                     <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-                        <input type="number" inputmode="decimal" id="evolution-weight" placeholder="Peso (kg)" data-i18n-placeholder="evolution.weightPlaceholder" class="form-input" style="flex: 1;">
-                        <input type="number" inputmode="decimal" id="evolution-bf" placeholder="% Grasa" data-i18n-placeholder="evolution.bfPlaceholder" class="form-input" style="flex: 1;">
+                        <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evolution-weight" placeholder="Peso (kg)" data-i18n-placeholder="evolution.weightPlaceholder" class="form-input" style="flex: 1;">
+                        <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evolution-bf" placeholder="% Grasa" data-i18n-placeholder="evolution.bfPlaceholder" class="form-input" style="flex: 1;">
                     </div>
                     <div style="margin-bottom: 12px;">
                         <label style="display:block; font-size: 14px; margin-bottom: 8px; color: var(--text-secondary);" data-i18n="evolution.photosLabel">Fotos (Frontal, Lateral, Espalda)</label>
@@ -334,35 +334,35 @@
                             <div style="flex: 1; min-width: 260px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px 16px;">
                                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
                                     <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m1">1. Pecho</label>
-                                    <input type="number" inputmode="decimal" id="evol-m1" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evol-m1" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
                                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
                                     <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m2">2. Brazo Izq.</label>
-                                    <input type="number" inputmode="decimal" id="evol-m2" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evol-m2" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
                                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
                                     <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m3">3. Brazo Der.</label>
-                                    <input type="number" inputmode="decimal" id="evol-m3" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evol-m3" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
                                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
                                     <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m4">4. Abdomen</label>
-                                    <input type="number" inputmode="decimal" id="evol-m4" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evol-m4" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
                                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
                                     <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m5">5. Cintura</label>
-                                    <input type="number" inputmode="decimal" id="evol-m5" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evol-m5" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
                                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
                                     <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m6">6. Caderas</label>
-                                    <input type="number" inputmode="decimal" id="evol-m6" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evol-m6" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
                                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
                                     <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m7">7. Muslo Izq.</label>
-                                    <input type="number" inputmode="decimal" id="evol-m7" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evol-m7" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
                                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
                                     <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m8">8. Muslo Der.</label>
-                                    <input type="number" inputmode="decimal" id="evol-m8" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evol-m8" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
                             </div>
                         </div>
