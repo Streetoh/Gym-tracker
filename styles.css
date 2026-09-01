@@ -1311,13 +1311,13 @@ button.close-modal.btn-secondary {
 
 .set-row {
     display: grid;
-    grid-template-columns: 24px 1fr 58px auto;
+    grid-template-columns: 24px 1fr 54px 86px;
     gap: 8px;
     align-items: flex-start;
     margin-bottom: 12px;
 }
 .set-row.header-row {
-    grid-template-columns: 24px 1fr 58px auto;
+    grid-template-columns: 24px 1fr 54px 86px;
     margin-bottom: 8px;
 }
 
@@ -1494,7 +1494,7 @@ input[type="number"] {
 
 @media (max-width: 480px) {
     .set-row, .set-row.header-row {
-        grid-template-columns: 20px 1fr 54px auto;
+        grid-template-columns: 20px 1fr 52px 86px;
         gap: 6px;
     }
     .set-type-select {

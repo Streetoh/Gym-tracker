@@ -1256,7 +1256,7 @@ let openExerciseAccordions = [];
 // Utils
 // Notificación de entrenamiento activo
 window.manageWorkoutNotification = async (show) => {
-    if (window.Capacitor && window.Capacitor.Plugins.LocalNotifications) {
+    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.LocalNotifications) {
         const { LocalNotifications } = window.Capacitor.Plugins;
         try {
             if (show) {
@@ -1277,8 +1277,8 @@ window.manageWorkoutNotification = async (show) => {
                     await LocalNotifications.schedule({
                         notifications: [
                             {
-                                title: "Entrenamiento en curso",
-                                body: "Tienes un entrenamiento activo. Pulsa para continuar.",
+                                title: (typeof getT === 'function' && getT('workout.activeNotificationTitle')) || "Entrenamiento en curso",
+                                body: (typeof getT === 'function' && getT('workout.activeNotificationBody')) || "Tienes un entrenamiento activo. Pulsa para continuar.",
                                 id: 1,
                                 ongoing: true,
                                 autoCancel: false,
@@ -1288,7 +1288,25 @@ window.manageWorkoutNotification = async (show) => {
                     });
                 }
             } else {
-                await LocalNotifications.cancel({ notifications: [{ id: 1 }] });
+                // Cancel scheduled notification
+                try {
+                    await LocalNotifications.cancel({ notifications: [{ id: 1 }] });
+                } catch (e) {}
+                try {
+                    if (typeof LocalNotifications.cancelAll === 'function') {
+                        await LocalNotifications.cancelAll();
+                    }
+                } catch (e) {}
+
+                // Remove already delivered notification from Android notification tray/status bar
+                try {
+                    await LocalNotifications.removeDeliveredNotifications({ notifications: [{ id: 1 }] });
+                } catch (e) {}
+                try {
+                    if (typeof LocalNotifications.removeAllDeliveredNotifications === 'function') {
+                        await LocalNotifications.removeAllDeliveredNotifications();
+                    }
+                } catch (e) {}
             }
         } catch (e) {
             console.error("Notification Error:", e);
@@ -1841,6 +1859,7 @@ const translations = {
             "cancelConfirm": "¿Estás seguro de que deseas cancelar el entrenamiento? Se perderán los datos de esta sesión."
         },
         "common": {
+            "githubRepo": "Repositorio GitHub",
             "cancel": "Cancelar",
             "add": "Añadir",
             "delete": "Eliminar",
@@ -2197,6 +2216,7 @@ const translations = {
             "cancelConfirm": "Are you sure you want to cancel? Data will be lost."
         },
         "common": {
+            "githubRepo": "GitHub Repository",
             "cancel": "Cancel",
             "add": "Add",
             "delete": "Delete",
@@ -2553,6 +2573,7 @@ const translations = {
             "cancelConfirm": "Отменить тренировку? Данные будут потеряны."
         },
         "common": {
+            "githubRepo": "Репозиторий GitHub",
             "cancel": "Отмена",
             "add": "Добавить",
             "delete": "Удалить",
@@ -2904,6 +2925,7 @@ const translations = {
             "cancelConfirm": "Oled kindel? Andmed kaovad."
         },
         "common": {
+            "githubRepo": "GitHubi repositoorium",
             "cancel": "Tühista",
             "add": "Lisa",
             "delete": "Kustuta",
@@ -3256,6 +3278,7 @@ const translations = {
             "cancelConfirm": "Скасувати? Дані будуть втрачені."
         },
         "common": {
+            "githubRepo": "Репозиторій GitHub",
             "cancel": "Скасувати",
             "add": "Додати",
             "delete": "Видалити",
@@ -5093,7 +5116,7 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                     <div></div>
                     <div style="font-size:12px; color:var(--text-secondary); text-align:center;">${getT('workout.type') || 'Tipo'}</div>
                     <div style="font-size:12px; color:var(--text-secondary); text-align:center;">${getT('workout.reps') || 'Reps'}</div>
-                    <div style="font-size:12px; color:var(--text-secondary); text-align:center;">${getT('workout.kg') || 'Kg'}</div>
+                    <div style="font-size:12px; color:var(--text-secondary); width: 50px; text-align:center;">${getT('workout.kg') || 'Kg'}</div>
                 </div>
             `;
             
@@ -5139,17 +5162,17 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                     weightHtml = `
                         <div style="display: flex; flex-direction: column; gap: 4px;">
                             <div style="display: flex; align-items: center; gap: 4px;">
-                                <input type="number" inputmode="decimal" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 50px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
+                                <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 50px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
                                 <button type="button" class="btn-dropset-calc" style="background: #10b981; color: white; border: none; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; cursor: pointer; flex-shrink: 0;" title="Calcular Dropset" ${!isWorkoutActive ? 'disabled' : ''}>%</button>
                             </div>
-                            <input type="number" inputmode="decimal" class="set-input weight-drop-input" value="${set.weightDrop || ''}" placeholder="${weightDropPlaceholder}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
+                            <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" class="set-input weight-drop-input" value="${set.weightDrop || ''}" placeholder="${weightDropPlaceholder}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
                         </div>
                     `;
                 } else {
                     repsHtml = `<input type="number" inputmode="numeric" class="set-input reps-input" value="${set.reps || ''}" placeholder="${targetRepsBase}" style="width: 50px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>`;
                     const isBarbell = isBarbellExercise(dbEx || ex);
                     const plateBtn = isBarbell ? `<button type="button" class="btn-plate-calc" style="background: var(--bg-surface-elevated); color: var(--color-accent); border: 1px solid var(--border-color); border-radius: 8px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; flex-shrink: 0;" title="${getT('plateCalc.title') || 'Calculadora de discos'}" ${!isWorkoutActive ? 'disabled' : ''}><i class="ph-bold ph-barbell"></i></button>` : '';
-                    weightHtml = `<div style="display:flex; align-items:center; gap:4px;"><input type="number" inputmode="decimal" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 50px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>${plateBtn}</div>`;
+                    weightHtml = `<div style="display:flex; align-items:center; gap:4px;"><input type="number" step="any" inputmode="numeric" pattern="[0-9]*" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 50px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>${plateBtn}</div>`;
                 }
 
                 setRow.innerHTML = `
@@ -5168,9 +5191,7 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                     <div style="display:flex; flex-direction:column; align-items:center; justify-content: flex-start;">
                         ${repsHtml}
                     </div>
-                    <div style="display:flex; flex-direction:column; align-items:flex-end; justify-content: flex-start;">
-                        ${weightHtml}
-                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:flex-start; justify-content: flex-start;">${weightHtml}</div>
                 `;
                 
                 const wInput = setRow.querySelector('.weight-input');
@@ -7678,6 +7699,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.App) {
         const { App } = window.Capacitor.Plugins;
+        App.addListener('appStateChange', (stateObj) => {
+            if (stateObj && stateObj.isActive) {
+                if (!state || !state.activeWorkoutState) {
+                    if (window.manageWorkoutNotification) window.manageWorkoutNotification(false);
+                }
+            }
+        });
         App.addListener('backButton', ({ canGoBack }) => {
             const wrapper = document.querySelector('.nav-wrapper');
             if (wrapper && wrapper.classList.contains('drawer-open')) {
@@ -8009,7 +8037,9 @@ const DEFAULT_APP_CHANGELOG = {
         "Comparador de fotos antes / después: compara tu evolución física frontal, lateral o de espalda en vista lado a lado o con deslizador interactivo.",
         "Soporte multiidioma completo en todas las nuevas funciones (Español, Inglés, Ruso, Estonio, Ucraniano).",
         "Pestaña Evolución: teclado estrictamente numérico sin letras para casillas de peso, grasa y medidas corporales en ambas columnas.",
-        "Entrenamiento activo: eliminación del botón de papelera y optimización del diseño de series evitando cualquier solapamiento en casillas."
+        "Entrenamiento activo: eliminación del botón de papelera y optimización del diseño de series evitando cualquier solapamiento en casillas.",
+        "Entrenamiento activo: centrado milimétrico de las cabeceras Reps y Kg sobre sus casillas. Calculador de discos: simplificado con botón único de Cerrar.",
+        "Menú lateral: nuevo botón directo al repositorio de GitHub. Notificaciones: eliminación y limpieza automática de la notificación de entrenamiento al finalizar o cancelar la sesión."
     ],
     "en": [
         "Barbell plate calculator: configured for 25kg Olympic bar and full support for Multipower / Smith machine (15kg bar), with 100% balanced and symmetric plate distribution.",
@@ -8019,7 +8049,9 @@ const DEFAULT_APP_CHANGELOG = {
         "Before / after photo comparator: compare front, side, and back evolution photos side-by-side or with an interactive slider.",
         "Full multi-language support across all 5 features (Spanish, English, Russian, Estonian, Ukrainian).",
         "Evolution tab: strictly numeric keypad for weight, body fat, and body measurement inputs across both columns.",
-        "Active workout: removed trash can button and optimized set row layout, completely preventing cell overlapping."
+        "Active workout: removed trash can button and optimized set row layout, completely preventing cell overlapping.",
+        "Active workout: precise centering of Reps and Kg headers over their input cells. Plate calculator: simplified with a single Close button.",
+        "Sidebar menu: new direct button to GitHub repository. Notifications: automatic removal and cleanup of workout notification upon finishing or cancelling a session."
     ],
     "ru": [
         "Калькулятор блинов: настроен для олимпийского грифа 25 кг и полная поддержка тренажера Смита / Мультипауэра (гриф 15 кг) с 100% симметричным распределением.",
@@ -8029,7 +8061,9 @@ const DEFAULT_APP_CHANGELOG = {
         "Сравнение фото До / После: сравнение формы спереди, сбоку и со спины рядом или с помощью интерактивного слайдера.",
         "Полная поддержка всех языков во всех новых функциях (испанский, английский, русский, эстонский, украинский).",
         "Вкладка Эволюция: строго цифровая клавиатура без букв для веса, жира и замеров тела в обеих колонках.",
-        "Активная тренировка: удалена иконка корзины и оптимизирована сетка подходов, предотвращая любое наложение полей."
+        "Активная тренировка: удалена иконка корзины и оптимизирована сетка подходов, предотвращая любое наложение полей.",
+        "Активная тренировка: точное центрирование заголовков Reps и Kg над полями ввода. Калькулятор блинов: упрощен с одной кнопкой Закрыть.",
+        "Боковое меню: новая кнопка перехода в репозиторий GitHub. Уведомления: автоматическое удаление уведомления о тренировке при ее завершении или отмене."
     ],
     "et": [
         "Kettakalkulaator: kohandatud 25 kg olümpiakangi jaoks ja täielik tugi Multipower / Smith masinale (15 kg kang) 100% sümmeetrilise jaotusega.",
@@ -8039,7 +8073,9 @@ const DEFAULT_APP_CHANGELOG = {
         "Enne / pärast fotode võrdleja: võrdle füüsilist arengut eest, küljelt või tagant kõrvuti või interaktiivse liuguriga.",
         "Täielik mitmekeelne tugi kõigis uutes funktsioonides (hispaania, inglise, vene, eesti, ukraina).",
         "Evolutsiooni vahekaart: rangelt numbriline klaviatuur ilma tähtedeta kaalu, rasvaprotsendi ja kehamõõtude jaoks mõlemas veerus.",
-        "Aktiivne treening: eemaldatud prügikasti ikoon ja optimeeritud seeriate paigutus, vältides väljade kattumist."
+        "Aktiivne treening: eemaldatud prügikasti ikoon ja optimeeritud seeriate paigutus, vältides väljade kattumist.",
+        "Aktiivne treening: Reps ja Kg päiste täpne tsentreerimine väljade kohal. Kettakalkulaator: lihtsustatud ainsa Sulge nupuga.",
+        "Külgmenüü: uus otsetee nupp GitHubi repositooriumisse. Teavitused: treeningu teavituse automaatne eemaldamine sessiooni lõpetamisel või tühistamisel."
     ],
     "uk": [
         "Калькулятор млинців: налаштовано для олімпійського грифа 25 кг та повна підтримка тренажера Сміта / Мультипауера (гриф 15 кг) зі 100% симетричним розподілом.",
@@ -8049,7 +8085,9 @@ const DEFAULT_APP_CHANGELOG = {
         "Порівняння фото До / Після: порівняння форми спереду, збоку та зі спини поруч або за допомогою інтерактивного слайдера.",
         "Повна багатомовна підтримка в усіх нових функціях (іспанська, англійська, російська, естонська, українська).",
         "Вкладка Еволюція: суворо цифрова клавіатура без літер для ваги, жиру та вимірів тіла в обох колонках.",
-        "Активне тренування: видалено іконку кошика та оптимізовано сітку підходів, повністю запобігаючи накладанню полів."
+        "Активне тренування: видалено іконку кошика та оптимізовано сітку підходів, повністю запобігаючи накладанню полів.",
+        "Активне тренування: точне центрування заголовків Reps та Kg над полями введення. Калькулятор млинців: спрощено з єдиною кнопкою Закрити.",
+        "Бічне меню: нова кнопка переходу до репозиторію GitHub. Сповіщення: автоматичне видалення сповіщення про тренування при його завершенні або скасуванні."
     ]
 };
 

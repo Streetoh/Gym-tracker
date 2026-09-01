@@ -177,6 +177,9 @@
                 <button id="btn-manual-check-update" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); checkForUpdates(true);">
                     <i class="ph ph-arrows-clockwise"></i> <span data-i18n="update.checkBtn">Comprobar actualización</span>
                 </button>
+                <button id="btn-github-repo" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); openExternalUrl('https://github.com/Streetoh/Gym-tracker');">
+                    <i class="ph-bold ph-github-logo" style="font-size: 15px;"></i> <span data-i18n="common.githubRepo">Repositorio GitHub</span>
+                </button>
             </div>
         </div>
 
@@ -312,8 +315,8 @@
                 <div class="card" style="padding: 16px; margin-bottom: 16px;">
                     <h3 style="font-size: 16px; margin-bottom: 12px;" data-i18n="evolution.newRecord">Nuevo Registro</h3>
                     <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-                        <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evolution-weight" placeholder="Peso (kg)" data-i18n-placeholder="evolution.weightPlaceholder" class="form-input" style="flex: 1;">
-                        <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evolution-bf" placeholder="% Grasa" data-i18n-placeholder="evolution.bfPlaceholder" class="form-input" style="flex: 1;">
+                        <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evolution-weight" placeholder="Peso (kg)" data-i18n-placeholder="evolution.weightPlaceholder" class="form-input" style="flex: 1;">
+                        <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evolution-bf" placeholder="% Grasa" data-i18n-placeholder="evolution.bfPlaceholder" class="form-input" style="flex: 1;">
                     </div>
                     <div style="margin-bottom: 12px;">
                         <label style="display:block; font-size: 14px; margin-bottom: 8px; color: var(--text-secondary);" data-i18n="evolution.photosLabel">Fotos (Frontal, Lateral, Espalda)</label>
@@ -334,35 +337,35 @@
                             <div style="flex: 1; min-width: 260px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px 16px;">
                                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
                                     <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m1">1. Pecho</label>
-                                    <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evol-m1" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m1" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
                                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
                                     <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m2">2. Brazo Izq.</label>
-                                    <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evol-m2" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m2" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
                                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
                                     <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m3">3. Brazo Der.</label>
-                                    <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evol-m3" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m3" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
                                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
                                     <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m4">4. Abdomen</label>
-                                    <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evol-m4" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m4" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
                                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
                                     <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m5">5. Cintura</label>
-                                    <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evol-m5" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m5" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
                                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
                                     <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m6">6. Caderas</label>
-                                    <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evol-m6" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m6" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
                                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
                                     <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m7">7. Muslo Izq.</label>
-                                    <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evol-m7" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m7" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
                                 <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
                                     <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m8">8. Muslo Der.</label>
-                                    <input type="text" inputmode="decimal" pattern="[0-9]*[.,]?[0-9]*" autocomplete="off" autocapitalize="off" spellcheck="false" id="evol-m8" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m8" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
                                 </div>
                             </div>
                         </div>
@@ -914,47 +917,12 @@
         </div>
     </div>
 
-    
-    <!-- Modal Dashboard API Key -->
-    <div id="modal-dashboard-apikey" class="modal">
-        <div class="modal-content" style="max-width: 440px; margin: auto; border-radius: 24px; text-align: left; padding: 20px;">
-            <div class="modal-header" style="justify-content: space-between; align-items: center; margin-bottom: 14px;">
-                <h3 style="font-size: 17px; font-weight: 700; display:flex; align-items:center; gap:8px;">
-                    <i class="ph ph-key" style="color: #8b5cf6;"></i> Clave API IA para el Dashboard
-                </h3>
-                <button class="btn-icon close-modal"><i class="ph ph-x"></i></button>
-            </div>
-            <div class="modal-body" style="display: flex; flex-direction: column; gap: 12px;">
-                <p style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">
-                    Introduce tu clave API de Google Gemini para habilitar el análisis de progreso con IA en el Dashboard.
-                </p>
-                <div class="form-group">
-                    <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px; display: block;">Clave API de Gemini</label>
-                    <input type="password" id="dashboard-apikey-input" placeholder="AIzaSy..." style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); font-size: 14px; box-sizing: border-box;">
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <a href="https://aistudio.google.com/app/apikey" target="_blank" style="font-size: 12px; color: #8b5cf6; text-decoration: underline; font-weight: 500;">
-                        Obtener clave API gratis <i class="ph ph-arrow-square-out"></i>
-                    </a>
-                    <button type="button" class="btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="toggleDashboardKeyVisibility()">
-                        <i id="dashboard-key-vis-icon" class="ph ph-eye"></i> Mostrar
-                    </button>
-                </div>
-                <div style="display: flex; gap: 8px; margin-top: 8px;">
-                    <button class="btn-secondary close-modal" style="flex: 1; padding: 12px;" data-i18n="common.cancel">Cancelar</button>
-                    <button class="btn-primary" style="flex: 1; padding: 12px; background: #8b5cf6; border-color: #8b5cf6;" onclick="saveDashboardApiKey()"><i class="ph ph-check"></i> Guardar Clave</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    
-    <!-- 1. MODAL CALCULADORA DE DISCOS DE BARRA -->
+    <!-- 1. MODAL CALCULADORA DE DISCOS OLÍMPICA -->
     <div id="modal-plate-calc" class="modal">
         <div class="modal-content" style="max-width: 420px; margin: auto; border-radius: 24px; padding: 22px; text-align: center;">
             <div class="modal-header" style="justify-content: space-between; align-items: center; margin-bottom: 14px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(59, 130, 246, 0.15); display: flex; align-items: center; justify-content: center; color: #3b82f6; font-size: 20px;">
+                    <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(59, 130, 246, 0.15); display: flex; align-items: center; justify-content: center; color: var(--color-accent); font-size: 20px;">
                         <i class="ph-bold ph-barbell"></i>
                     </div>
                     <h3 style="font-size: 17px; font-weight: 700; margin: 0;" data-i18n="plateCalc.title">Calculadora de Discos</h3>
@@ -962,10 +930,10 @@
                 <button class="btn-icon close-modal" onclick="document.getElementById('modal-plate-calc').classList.remove('active')"><i class="ph ph-x"></i></button>
             </div>
             <div class="modal-body" style="display: flex; flex-direction: column; gap: 16px;">
-                <!-- Bar weight selector -->
-                <div style="text-align: left;">
-                    <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;" data-i18n="plateCalc.barWeight">Peso de la barra:</label>
-                    <div style="display: flex; gap: 8px; margin-top: 6px;">
+                <!-- Bar Selector -->
+                <div>
+                    <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; display: block;" data-i18n="plateCalc.selectBar">Peso de la Barra</label>
+                    <div style="display: flex; gap: 8px;">
                         <button type="button" class="btn-secondary plate-bar-btn active" data-bar="25" style="flex: 1; padding: 8px; border-radius: 8px; font-size: 12px; font-weight: 600;" onclick="setPlateCalcBar(25)" data-i18n="plateCalc.barOlympic">25 kg (Olímpica)</button>
                         <button type="button" class="btn-secondary plate-bar-btn" data-bar="15" style="flex: 1; padding: 8px; border-radius: 8px; font-size: 12px; font-weight: 600;" onclick="setPlateCalcBar(15)" data-i18n="plateCalc.barMultipower">15 kg (Multipower)</button>
                         <button type="button" class="btn-secondary plate-bar-btn" data-bar="10" style="flex: 1; padding: 8px; border-radius: 8px; font-size: 12px; font-weight: 600;" onclick="setPlateCalcBar(10)" data-i18n="plateCalc.barEZ">10 kg (EZ)</button>
@@ -973,9 +941,9 @@
                 </div>
 
                 <!-- Target Weight Input -->
-                <div style="text-align: left;">
-                    <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase;" data-i18n="plateCalc.targetWeight">Peso total objetivo (kg):</label>
-                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 6px;">
+                <div>
+                    <label style="font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; display: block;" data-i18n="plateCalc.targetWeight">Peso Total Objetivo (kg)</label>
+                    <div style="display: flex; gap: 8px; align-items: center; justify-content: center;">
                         <button type="button" class="btn-secondary" style="width: 42px; height: 42px; font-size: 18px; font-weight: bold; border-radius: 10px;" onclick="adjustPlateCalcWeight(-2.5)">-</button>
                         <input type="number" id="plate-calc-target-weight" class="form-input" style="flex: 1; text-align: center; font-size: 20px; font-weight: 700; height: 42px;" value="80" step="1.25" oninput="recalculatePlates()">
                         <button type="button" class="btn-secondary" style="width: 42px; height: 42px; font-size: 18px; font-weight: bold; border-radius: 10px;" onclick="adjustPlateCalcWeight(2.5)">+</button>
@@ -987,22 +955,18 @@
                     <div id="plate-calc-barbell" class="barbell-visual"></div>
                 </div>
 
-                <!-- Plates Breakdown Text -->
-                <div style="background: var(--bg-surface-elevated); border-radius: 12px; padding: 12px; text-align: left;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                        <span style="font-size: 13px; font-weight: 600; color: var(--text-secondary);" data-i18n="plateCalc.perSide">Discos a cada lado:</span>
-                        <span style="font-size: 11px; background: rgba(16,185,129,0.15); color: #10b981; padding: 2px 8px; border-radius: 12px; font-weight: 700;" data-i18n="plateCalc.balanced">100% Simétrico</span>
-                    </div>
+                <!-- Discos por lado list -->
+                <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; text-align: left;">
+                    <div style="font-size: 12px; font-weight: 700; color: var(--text-primary);" data-i18n="plateCalc.perSide">Discos por cada lado:</div>
                     <div id="plate-calc-list" style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px;">
                         <!-- Plate chips injected here -->
                     </div>
                     <div id="plate-calc-summary-text" style="font-size: 12px; color: var(--text-secondary); margin-top: 8px; border-top: 1px dashed var(--border-color); padding-top: 8px;"></div>
                 </div>
 
-                <!-- Apply Button -->
-                <div style="display: flex; gap: 8px;">
-                    <button type="button" class="btn-secondary close-modal" style="flex: 1; padding: 12px;" onclick="document.getElementById('modal-plate-calc').classList.remove('active')" data-i18n="plateCalc.close">Cerrar</button>
-                    <button type="button" class="btn-primary" style="flex: 2; padding: 12px;" onclick="applyPlateCalcWeight()" data-i18n="plateCalc.btnApply">Aplicar a la serie</button>
+                <!-- Footer button: only Cerrar -->
+                <div style="display: flex; margin-top: 8px;">
+                    <button type="button" class="btn-secondary close-modal full-width" style="width: 100%; padding: 12px; font-weight: 600; border-radius: 12px;" onclick="document.getElementById('modal-plate-calc').classList.remove('active')" data-i18n="plateCalc.close">Cerrar</button>
                 </div>
             </div>
         </div>
