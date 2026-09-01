@@ -3408,8 +3408,13 @@ function syncActiveWorkoutInputsFromDOM() {
     let exFlatIdx = 0;
     exSections.forEach((section) => {
         const ex = activeSession.exercises[exFlatIdx++];
-        if (ex && ex.sets) {
-            const setRows = section.querySelectorAll('.set-row:not(.header-row)');
+        if (ex) {
+            const commentInput = section.querySelector('.exercise-comments input');
+            if (commentInput) {
+                ex.comments = commentInput.value;
+            }
+            if (ex.sets) {
+                const setRows = section.querySelectorAll('.set-row:not(.header-row)');
             setRows.forEach((row, sIdx) => {
                 const set = ex.sets[sIdx];
                 if (set) {
@@ -3426,6 +3431,7 @@ function syncActiveWorkoutInputsFromDOM() {
                 }
             });
         }
+    }
     });
 }
 
@@ -4225,9 +4231,10 @@ let currentDropsetTargetWeightInput = null;
 
 const formatTimer = (ms) => {
     const totalS = Math.floor(ms / 1000);
-    const m = Math.floor(totalS / 60);
+    const h = Math.floor(totalS / 3600);
+    const m = Math.floor((totalS % 3600) / 60);
     const s = totalS % 60;
-    return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 };
 
 const updateTimerUI = () => {
@@ -4318,7 +4325,7 @@ const startWorkout = (session) => {
         if (tc3) tc3.style.display = 'none';
         else document.getElementById('workout-timer').style.display = 'none';
         document.getElementById('workout-footer').style.display = 'none';
-        document.getElementById('workout-timer').textContent = '00:00';
+        document.getElementById('workout-timer').textContent = '00:00:00';
         clearInterval(timerInterval);
     }
     
@@ -4392,6 +4399,54 @@ window.openLightbox = (src) => {
     document.getElementById('lightbox-img').src = src;
     openModal(modalLightbox);
 };
+
+function getLastWeightSuggestion(exerciseId, sessionType, setType, setIndex) {
+    if (!exerciseId || !sessionType) return null;
+    
+    const allCompleted = [];
+    if (Array.isArray(state.completedWorkouts)) {
+        allCompleted.push(...state.completedWorkouts);
+    }
+    if (Array.isArray(state.sessions)) {
+        state.sessions.filter(s => s.completed).forEach(s => {
+            if (!allCompleted.some(w => w.id === s.id)) {
+                allCompleted.push(s);
+            }
+        });
+    }
+    
+    const targetType = (sessionType || 'hypertrophy').toLowerCase();
+    const matchingSessions = allCompleted.filter(w => (w.type || 'hypertrophy').toLowerCase() === targetType);
+    
+    matchingSessions.sort((a, b) => {
+        const timeA = a.id && !isNaN(Number(a.id)) ? Number(a.id) : (new Date(a.date).getTime() || 0);
+        const timeB = b.id && !isNaN(Number(b.id)) ? Number(b.id) : (new Date(b.date).getTime() || 0);
+        return timeB - timeA;
+    });
+    
+    for (const session of matchingSessions) {
+        if (!Array.isArray(session.exercises)) continue;
+        const ex = session.exercises.find(e => e.exerciseId === exerciseId || (e.name && e.name === exerciseId));
+        if (ex && Array.isArray(ex.sets)) {
+            // First check same setIndex and same type
+            if (ex.sets[setIndex] && ex.sets[setIndex].type === setType && ex.sets[setIndex].weight > 0) {
+                return {
+                    weight: ex.sets[setIndex].weight,
+                    weightDrop: ex.sets[setIndex].weightDrop || null
+                };
+            }
+            // Next check any set with the same type in this exercise
+            const setMatch = ex.sets.find(s => s.type === setType && s.weight > 0);
+            if (setMatch) {
+                return {
+                    weight: setMatch.weight,
+                    weightDrop: setMatch.weightDrop || null
+                };
+            }
+        }
+    }
+    return null;
+}
 
 const renderWorkout = () => {
     try {
@@ -4552,6 +4607,9 @@ const renderWorkout = () => {
                 }
 
                 const isDropset = set.type && (set.type.includes('Dropset') || set.type === 'Al fallo');
+                const weightSugg = getLastWeightSuggestion(ex.exerciseId, activeSession.type, set.type, setIndex);
+                const weightPlaceholder = (weightSugg && weightSugg.weight) ? weightSugg.weight : '0';
+                const weightDropPlaceholder = (weightSugg && weightSugg.weightDrop) ? weightSugg.weightDrop : 'Drop kg';
 
                 let repsHtml = '';
                 let weightHtml = '';
@@ -4560,27 +4618,27 @@ const renderWorkout = () => {
                     repsHtml = `
                         <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;">
                             <input type="number" inputmode="numeric" class="set-input reps-input" value="${set.reps || ''}" placeholder="${targetRepsBase}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
-                            <input type="number" inputmode="numeric" class="set-input reps-drop-input" value="${set.repsDrop || ''}" placeholder="${targetRepsDrop || 'Drop'}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
+                            <input type="number" inputmode="numeric" class="set-input reps-drop-input" value="${set.repsDrop || ''}" placeholder="${targetRepsDrop || (set.type === 'Al fallo' ? 'Fallo' : 'Drop')}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
                         </div>
                     `;
                     weightHtml = `
                         <div style="display: flex; flex-direction: column; gap: 4px;">
                             <div style="display: flex; align-items: center; gap: 4px;">
-                                <input type="number" inputmode="decimal" class="set-input weight-input" value="${set.weight || ''}" placeholder="0" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
+                                <input type="number" inputmode="decimal" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
                                 <button type="button" class="btn-dropset-calc" style="background: #10b981; color: white; border: none; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; cursor: pointer; flex-shrink: 0;" title="Calcular Dropset" ${!isWorkoutActive ? 'disabled' : ''}>%</button>
                             </div>
-                            <input type="number" inputmode="decimal" class="set-input weight-drop-input" value="${set.weightDrop || ''}" placeholder="Drop kg" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
+                            <input type="number" inputmode="decimal" class="set-input weight-drop-input" value="${set.weightDrop || ''}" placeholder="${weightDropPlaceholder}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
                         </div>
                     `;
                 } else {
                     repsHtml = `<input type="number" inputmode="numeric" class="set-input reps-input" value="${set.reps || ''}" placeholder="${targetRepsBase}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>`;
-                    weightHtml = `<input type="number" inputmode="decimal" class="set-input weight-input" value="${set.weight || ''}" placeholder="0" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>`;
+                    weightHtml = `<input type="number" inputmode="decimal" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>`;
                 }
 
                 setRow.innerHTML = `
                     <div class="set-number" style="margin-top: 8px;">${setIndex + 1}</div>
                     <div style="display:flex; flex-direction:column; justify-content: flex-start; flex: 1;">
-                        <select class="set-type-select" ${!isWorkoutActive ? 'disabled' : ''}>
+                        <select class="set-type-select" disabled style="opacity: 0.95; cursor: not-allowed; pointer-events: none;">
                             <option value="Calentamiento" ${set.type==='Calentamiento'?'selected':''}>${getSetTypeT('Calentamiento')}</option><option value="Aproximación" ${set.type==='Aproximación'?'selected':''}>${getSetTypeT('Aproximación')}</option>
                             <option value="Efectiva" ${set.type==='Efectiva'?'selected':''}>${getSetTypeT('Efectiva')}</option>
                             <option value="Al fallo" ${set.type==='Al fallo'?'selected':''}>${getSetTypeT('Al fallo')}</option>
@@ -4604,10 +4662,8 @@ const renderWorkout = () => {
                 const wDropInput = setRow.querySelector('.weight-drop-input');
                 const rInput = setRow.querySelector('.reps-input');
                 const rDropInput = setRow.querySelector('.reps-drop-input');
-                const tInput = setRow.querySelector('.set-type-select');
                 const calcBtn = setRow.querySelector('.btn-dropset-calc');
                 
-                tInput.addEventListener('change', (e) => { set.type = e.target.value; autoSaveWorkout(); renderWorkout(); }); 
                 if (wInput) {
                     wInput.addEventListener('input', (e) => { set.weight = parseFloat(e.target.value) || 0; autoSaveWorkout(); });
                     wInput.addEventListener('change', (e) => { set.weight = parseFloat(e.target.value) || 0; autoSaveWorkout(); });
@@ -4626,7 +4682,7 @@ const renderWorkout = () => {
                 }
                 if (calcBtn) {
                     calcBtn.addEventListener('click', () => {
-                        const curW = set.weight || parseFloat(wInput.value) || 0;
+                        const curW = set.weight || parseFloat(wInput.value) || (weightSugg ? weightSugg.weight : 0);
                         openDropsetCalc(curW, wDropInput, set);
                     });
                 }
@@ -4654,7 +4710,9 @@ const renderWorkout = () => {
             const commentDiv = document.createElement('div');
             commentDiv.classList.add('exercise-comments');
             commentDiv.innerHTML = `<input type="text" placeholder="Comentarios ${getTrExName(ex.name)}..." value="${ex.comments || ''}">`;
-            commentDiv.querySelector('input').addEventListener('change', (e) => { ex.comments = e.target.value; autoSaveWorkout(); });
+            const cInput = commentDiv.querySelector('input');
+            cInput.addEventListener('input', (e) => { ex.comments = e.target.value; autoSaveWorkout(); });
+            cInput.addEventListener('change', (e) => { ex.comments = e.target.value; autoSaveWorkout(); });
             exSection.appendChild(commentDiv);
             
             body.appendChild(exSection);
@@ -4870,6 +4928,13 @@ const renderGlobalHistory = () => {
                 <strong style="color:var(--text-primary);">${getTrExName(ex.name)}</strong> 
                 <span style="color:var(--color-accent); font-weight:600;">Max: ${maxW}kg</span>
             </div>`;
+            
+            if (ex.comments && ex.comments.trim()) {
+                body.innerHTML += `<div style="font-size:11.5px; color:var(--text-secondary); margin: 3px 0 6px 0; font-style:italic; background:var(--bg-surface-elevated); padding:4px 8px; border-radius:6px; border-left:3px solid var(--color-accent); display:flex; align-items:center; gap:6px;">
+                    <i class="ph ph-chat-centered-text" style="font-size:13px; color:var(--color-accent);"></i>
+                    <span>${ex.comments.trim()}</span>
+                </div>`;
+            }
             
             sets.forEach((s, idx) => {
                 if (!s) return;
@@ -6644,7 +6709,7 @@ window.generateDashboard = function(mode) {
     }
 };
 
-const CURRENT_APP_VERSION = '1.1.6';
+const CURRENT_APP_VERSION = '1.1.7';
 function compareVersions(v1, v2) {
     const p1 = String(v1).split('.').map(Number);
     const p2 = String(v2).split('.').map(Number);
@@ -6707,13 +6772,13 @@ window.renderUpdateModalContent = function(data) {
 window.openUpdateModal = function(customData) {
     const dataToUse = customData || window.latestUpdateData || {
         version: CURRENT_APP_VERSION,
-        releaseDate: "31/08/2026",
+        releaseDate: "01/09/2026",
         changelog: [
-            "Creador de rutinas: Corrección para conservar los números de repeticiones escritos al pulsar '+ Añadir serie'.",
-            "Exportación PDF móvil: Descarga directa y fiable en Web Móvil sin páginas en blanco mediante generación en alta resolución.",
-            "Pestaña Exp/Imp: Corrección del contador de seleccionados en la vista Calendario.",
-            "Descripción de bloques: Añadida tarjeta informativa del tipo de bloque (Hipertrofia, Pesados, Alta Intensidad) al inicio de cada sesión.",
-            "Rediseño Dropset y Calculadora %: Casillas de repeticiones y peso apiladas verticalmente, botón verde % de cálculo rápido y modal con opciones del -20%, -30% y -40%."
+            "Cronómetro de entrenamiento: Visualización en formato HH:MM:SS para un seguimiento más preciso del tiempo.",
+            "Seguridad en series: Bloqueado el cambio de tipo de serie durante un entrenamiento activo.",
+            "Sugerencias inteligentes de peso: En cada serie se muestra como sugerencia el último peso levantado en ese ejercicio dentro del mismo tipo de sesión (Hipertrofia, Pesados, Alta Intensidad).",
+            "Comentarios en Historial: Los comentarios añadidos a los ejercicios durante la sesión ahora se muestran en el historial de entrenamientos completados.",
+            "Comprobación de actualizaciones en APK: Corrección para la detección y notificación automática de nuevas versiones en dispositivos móviles."
         ]
     };
     window.renderUpdateModalContent(dataToUse);
@@ -6723,8 +6788,8 @@ window.openUpdateModal = function(customData) {
 
 async function checkForUpdates() {
     try {
-        if (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
-            return; // In localhost development, do not show update modal
+        if (!window.isApkEnv && (window.location.hostname === '127.0.0.1' || window.location.port === '8080' || window.location.port === '5500')) {
+            return; // In localhost development on desktop browser, do not auto show update modal
         }
         const response = await fetch('https://streetoh.github.io/Gym-tracker/version.json?t=' + new Date().getTime());
         if (!response.ok) return;
@@ -6745,6 +6810,7 @@ async function checkForUpdates() {
         console.log('No se pudo comprobar la versión', e);
     }
 }
+window.checkForUpdates = checkForUpdates;
 
 window.forceReloadApp = function() {
     if ('serviceWorker' in navigator) {
@@ -6757,7 +6823,13 @@ window.forceReloadApp = function() {
     window.location.reload(true);
 };
 
-setTimeout(checkForUpdates, 3000);
+setTimeout(checkForUpdates, 1500);
+
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+        checkForUpdates();
+    }
+});
 
 document.getElementById('exercise-search')?.addEventListener('input', () => { renderExercises(); });
 

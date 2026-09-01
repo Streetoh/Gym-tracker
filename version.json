@@ -1,11 +1,11 @@
 {
-  "version": "1.1.6",
-  "releaseDate": "31/08/2026",
+  "version": "1.1.7",
+  "releaseDate": "01/09/2026",
   "changelog": [
-    "Creador de rutinas: Corrección para conservar los números de repeticiones escritos al pulsar '+ Añadir serie'.",
-    "Exportación PDF móvil: Descarga directa y fiable en Web Móvil sin páginas en blanco mediante generación en alta resolución.",
-    "Pestaña Exp/Imp: Corrección del contador de seleccionados en la vista Calendario.",
-    "Descripción de bloques: Añadida tarjeta informativa del tipo de bloque (Hipertrofia, Pesados, Alta Intensidad) al inicio de cada sesión.",
-    "Rediseño Dropset y Calculadora %: Casillas de repeticiones y peso apiladas verticalmente, botón verde % de cálculo rápido y modal con opciones del -20%, -30% y -40%."
+    "Cronómetro de entrenamiento: Visualización en formato HH:MM:SS para un seguimiento más preciso del tiempo.",
+    "Seguridad en series: Bloqueado el cambio de tipo de serie durante un entrenamiento activo.",
+    "Sugerencias inteligentes de peso: En cada serie se muestra como sugerencia el último peso levantado en ese ejercicio dentro del mismo tipo de sesión (Hipertrofia, Pesados, Alta Intensidad).",
+    "Comentarios en Historial: Los comentarios añadidos a los ejercicios durante la sesión ahora se muestran en el historial de entrenamientos completados.",
+    "Comprobación de actualizaciones en APK: Corrección para la detección y notificación automática de nuevas versiones en dispositivos móviles."
   ]
 }
