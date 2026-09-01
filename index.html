@@ -55,7 +55,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="styles.css?v=1787994225989">
+    <link rel="stylesheet" href="styles.css?v=1788269000000">
 </head>
 <body>
 
@@ -116,8 +116,8 @@
 
             <!-- MOBILE DRAWER FOOTER (APP VERSION) -->
             <div class="mobile-drawer-footer" style="padding: 12px 16px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px; align-items: center;">
-                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="window.openUpdateModal()" data-i18n-title="update.viewNews" data-i18n-title="update.viewNews" title="Ver novedades">Gym Tracker v1.1.8</span>
-                <button id="btn-manual-check-update" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="checkForUpdates(true)">
+                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); window.openUpdateModal();" data-i18n-title="update.viewNews" title="Ver novedades">Gym Tracker v1.1.8</span>
+                <button id="btn-manual-check-update" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); checkForUpdates(true);">
                     <i class="ph ph-arrows-clockwise"></i> <span data-i18n="update.checkBtn">Comprobar actualización</span>
                 </button>
             </div>
@@ -751,14 +751,14 @@
                         <i class="ph-bold ph-rocket-launch"></i>
                     </div>
                     <div style="text-align: left;">
-                        <h3 style="font-size: 17px; font-weight: 700; color: var(--text-primary); margin: 0;" data-i18n="update.title">¡Nueva versión disponible!</h3>
+                        <h3 id="update-modal-title" style="font-size: 17px; font-weight: 700; color: var(--text-primary); margin: 0;" data-i18n="update.title">¡Nueva versión disponible!</h3>
                         <span id="update-modal-version-tag" style="font-size: 12px; font-weight: 600; color: #10b981;">Versión 1.1.8</span>
                     </div>
                 </div>
                 <button class="btn-icon close-modal" onclick="document.getElementById('modal-update').classList.remove('active')" style="color: var(--text-secondary);"><i class="ph ph-x" style="font-size: 20px;"></i></button>
             </div>
             <div class="modal-body" style="padding: 0;">
-                <p style="color: var(--text-secondary); margin-bottom: 12px; font-size: 13.5px; text-align: left;" data-i18n="update.desc">Novedades y mejoras de esta actualización:</p>
+                <p id="update-modal-desc" style="color: var(--text-secondary); margin-bottom: 12px; font-size: 13.5px; text-align: left;" data-i18n="update.desc">Novedades y mejoras de esta actualización:</p>
                 <div id="update-changelog" style="background: var(--bg-surface); padding: 14px 16px; border-radius: 12px; margin-bottom: 20px; border: 1px solid var(--border-color); max-height: 240px; overflow-y: auto;">
                     <!-- Changelog items inyectados dinámicamente -->
                 </div>

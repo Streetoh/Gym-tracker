@@ -1697,7 +1697,8 @@ const translations = {
             "versionLabel": "Versión",
             "upToDateAlert": "✅ Tu aplicación está al día.\n\nVersión instalada: v{vInstalled}\nVersión en GitHub: v{vGitHub}\n\nNo hay nuevas actualizaciones.",
             "errorConnect": "No se pudo conectar con GitHub para comprobar la versión. Comprueba tu conexión a internet.",
-            "errorGeneric": "Error al comprobar actualizaciones: "
+            "errorGeneric": "Error al comprobar actualizaciones: ",
+            "defaultChangelog": "Mejoras de rendimiento y correcciones de errores."
         },
         "ai": {
             "title": "Asistente IA",
@@ -1996,7 +1997,8 @@ const translations = {
             "versionLabel": "Version",
             "upToDateAlert": "✅ Your app is up to date.\n\nInstalled version: v{vInstalled}\nGitHub version: v{vGitHub}\n\nNo new updates available.",
             "errorConnect": "Could not connect to GitHub to check for updates. Please check your internet connection.",
-            "errorGeneric": "Error checking for updates: "
+            "errorGeneric": "Error checking for updates: ",
+            "defaultChangelog": "Performance improvements and bug fixes."
         },
         "ai": {
             "title": "AI Assistant",
@@ -2295,7 +2297,8 @@ const translations = {
             "versionLabel": "Версия",
             "upToDateAlert": "✅ Ваше приложение обновлено.\n\nУстановленная версия: v{vInstalled}\nВерсия на GitHub: v{vGitHub}\n\nНовых обновлений нет.",
             "errorConnect": "Не удалось подключиться к GitHub для проверки обновлений. Проверьте подключение к интернету.",
-            "errorGeneric": "Ошибка при проверке обновлений: "
+            "errorGeneric": "Ошибка при проверке обновлений: ",
+            "defaultChangelog": "Улучшения производительности и исправления ошибок."
         },
         "ai": {
             "title": "ИИ Ассистент",
@@ -2590,7 +2593,8 @@ const translations = {
             "versionLabel": "Versioon",
             "upToDateAlert": "✅ Teie rakendus on ajakohane.\n\nPaigaldatud versioon: v{vInstalled}\nGitHubi versioon: v{vGitHub}\n\nUusi uuendusi pole.",
             "errorConnect": "GitHubiga ei õnnestunud ühendust luua uuenduste kontrollimiseks. Palun kontrollige internetiühendust.",
-            "errorGeneric": "Viga uuenduste kontrollimisel: "
+            "errorGeneric": "Viga uuenduste kontrollimisel: ",
+            "defaultChangelog": "Jõudluse parandused ja veaparandused."
         },
         "ai": {
             "title": "AI Assistent",
@@ -2884,7 +2888,8 @@ const translations = {
             "versionLabel": "Версія",
             "upToDateAlert": "✅ Ваш додаток оновлено.\n\nВстановлена версія: v{vInstalled}\nВерсія на GitHub: v{vGitHub}\n\nНових оновлень немає.",
             "errorConnect": "Не вдалося з'єднатися з GitHub для перевірки оновлень. Будь ласка, перевірте підключення до інтернету.",
-            "errorGeneric": "Помилка перевірки оновлень: "
+            "errorGeneric": "Помилка перевірки оновлень: ",
+            "defaultChangelog": "Покращення продуктивності та виправлення помилок."
         },
         "ai": {
             "title": "ШІ Асистент",
@@ -6843,19 +6848,101 @@ function compareVersions(v1, v2) {
 }
 window.latestUpdateData = null;
 
+const DEFAULT_APP_CHANGELOG = {
+    "es": [
+        "Soporte multiidioma completo: Todos los nuevos botones, textos y ventanas de actualización ahora cambian correctamente de idioma (Español, Inglés, Ruso, Estonio, Ucraniano).",
+        "Descripciones de bloques traducidas: Las tarjetas informativas de Hipertrofia, Pesados y Alta Intensidad ahora se muestran en el idioma activo.",
+        "Calculadora Dropset y alertas traducidas al idioma seleccionado.",
+        "Cronómetro en formato HH:MM:SS para control exacto del tiempo de entrenamiento.",
+        "Bloqueo de tipo de serie durante el entrenamiento y sugerencias inteligentes del último peso levantado."
+    ],
+    "en": [
+        "Full multi-language support: All new buttons, texts, and update modals now change language seamlessly (Spanish, English, Russian, Estonian, Ukrainian).",
+        "Translated block descriptions: Informational cards for Hypertrophy, Heavy, and High Intensity now display in the active language.",
+        "Dropset calculator and alerts fully translated to the selected language.",
+        "Workout stopwatch in HH:MM:SS format for accurate training time tracking.",
+        "Locked set types during active workout and smart weight suggestions from previous sessions."
+    ],
+    "ru": [
+        "Полная мультиязычная поддержка: Все новые кнопки, тексты и окна обновлений теперь корректно переключают язык (испанский, английский, русский, эстонский, украинский).",
+        "Переведены описания тренировочных блоков: карточки гипертрофии, силового блока и высокой интенсивности теперь отображаются на активном языке.",
+        "Калькулятор дропсетов и оповещения переведены на выбранный язык.",
+        "Секундомер тренировки в формате ЧЧ:ММ:СС для точного учета времени.",
+        "Блокировка изменения типа подхода во время тренировки и умные подсказки последнего рабочего веса."
+    ],
+    "et": [
+        "Täielik mitmekeelne tugi: Kõik uued nupud, tekstid ja uuenduste aknad vahetavad nüüd korrektselt keelt (hispaania, inglise, vene, eesti, ukraina).",
+        "Tõlgitud treeningplokkide kirjeldused: Hüpertroofia, raske ja kõrge intensiivsuse infokaardid kuvatakse aktiivses keeles.",
+        "Dropseti kalkulaator ja teated tõlgitud valitud keelde.",
+        "Treeningu stopper formaadis TT:MM:SS täpse aja jälgimiseks.",
+        "Seeria tüübi lukustamine aktiivse treeningu ajal ja viimati tõstetud raskuse nutikad soovitused."
+    ],
+    "uk": [
+        "Повна багатомовна підтримка: Усі нові кнопки, тексти та вікна оновлень тепер коректно змінюють мову (іспанська, англійська, російська, естонська, українська).",
+        "Перекладено описи тренувальних блоків: картки гіпертрофії, силового блоку та високої інтенсивності тепер відображаються активною мовою.",
+        "Калькулятор дропсетів та сповіщення перекладено вибраною мовою.",
+        "Секундомір тренування у форматі ГГ:ХХ:СС для точного обліку часу.",
+        "Блокування зміни типу підходу під час тренування та розумні підказки останньої робочої ваги."
+    ]
+};
+
+function getChangelogForLanguage(changelogData, lang) {
+    const currentLang = lang || (typeof state !== 'undefined' && state.language) || 'es';
+    
+    // 1. If changelogData is an object with language keys (es, en, ru, et, uk)
+    if (changelogData && typeof changelogData === 'object' && !Array.isArray(changelogData)) {
+        if (changelogData[currentLang] && Array.isArray(changelogData[currentLang]) && changelogData[currentLang].length > 0) {
+            return changelogData[currentLang];
+        }
+        if (DEFAULT_APP_CHANGELOG[currentLang]) {
+            return DEFAULT_APP_CHANGELOG[currentLang];
+        }
+        if (changelogData['es'] && Array.isArray(changelogData['es']) && changelogData['es'].length > 0) {
+            return changelogData['es'];
+        }
+    }
+    
+    // 2. If changelogData is an array of strings
+    if (Array.isArray(changelogData) && changelogData.length > 0) {
+        if (currentLang !== 'es' && DEFAULT_APP_CHANGELOG[currentLang]) {
+            return DEFAULT_APP_CHANGELOG[currentLang];
+        }
+        return changelogData;
+    }
+    
+    // 3. If changelogData is a string
+    if (typeof changelogData === 'string' && changelogData.trim()) {
+        if (currentLang !== 'es' && DEFAULT_APP_CHANGELOG[currentLang]) {
+            return DEFAULT_APP_CHANGELOG[currentLang];
+        }
+        return changelogData.split(/\r?\n|•/).map(s => s.trim()).filter(s => s.length > 0);
+    }
+    
+    // 4. Default to built-in changelog for current language
+    if (DEFAULT_APP_CHANGELOG[currentLang]) {
+        return DEFAULT_APP_CHANGELOG[currentLang];
+    }
+    
+    return [getT('update.defaultChangelog') || 'Mejoras de rendimiento y correcciones de errores.'];
+}
+
 window.renderUpdateModalContent = function(data) {
     if (!data) return;
     window.latestUpdateData = data;
     
+    if (typeof closeMobileDrawer === 'function') {
+        closeMobileDrawer();
+    }
+    
     const versionTag = document.getElementById('update-modal-version-tag');
     if (versionTag) {
         const vLabel = getT('update.versionLabel') || 'Versión';
-        versionTag.textContent = `${vLabel} ${data.version || ''}${data.releaseDate ? ' (' + data.releaseDate + ')' : ''}`;
+        versionTag.textContent = `${vLabel} ${data.version || CURRENT_APP_VERSION}${data.releaseDate ? ' (' + data.releaseDate + ')' : ''}`;
     }
 
-    const isNewer = compareVersions(data.version, CURRENT_APP_VERSION) > 0;
-    const modalTitle = document.querySelector('#modal-update [data-i18n="update.title"]');
-    const modalDesc = document.querySelector('#modal-update [data-i18n="update.desc"]');
+    const isNewer = compareVersions(data.version || CURRENT_APP_VERSION, CURRENT_APP_VERSION) > 0;
+    const modalTitle = document.getElementById('update-modal-title') || document.querySelector('#modal-update [data-i18n="update.title"]');
+    const modalDesc = document.getElementById('update-modal-desc') || document.querySelector('#modal-update [data-i18n="update.desc"]');
     if (modalTitle) {
         modalTitle.textContent = isNewer ? (getT('update.title') || '¡Nueva versión disponible!') : (getT('update.currentTitle') || 'Novedades de la versión');
     }
@@ -6865,27 +6952,16 @@ window.renderUpdateModalContent = function(data) {
     
     const changelogEl = document.getElementById('update-changelog');
     if (changelogEl) {
-        let changelogItems = data.changelog;
-        if (changelogItems && typeof changelogItems === 'object' && !Array.isArray(changelogItems)) {
-            changelogItems = changelogItems[state.language] || changelogItems['es'] || Object.values(changelogItems)[0];
-        }
-
+        const currentLang = (typeof state !== 'undefined' && state.language) || 'es';
+        const changelogItems = getChangelogForLanguage(data.changelog, currentLang);
         let changelogHtml = '';
-        if (Array.isArray(changelogItems)) {
+        if (Array.isArray(changelogItems) && changelogItems.length > 0) {
             changelogHtml = '<ul style="text-align: left; margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.5; color: var(--text-primary); display: flex; flex-direction: column; gap: 8px;">' +
                 changelogItems.map(item => `<li>${item}</li>`).join('') +
                 '</ul>';
-        } else if (typeof changelogItems === 'string' && changelogItems.trim()) {
-            const items = changelogItems.split(/\r?\n|•/).map(s => s.trim()).filter(s => s.length > 0);
-            if (items.length > 1) {
-                changelogHtml = '<ul style="text-align: left; margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.5; color: var(--text-primary); display: flex; flex-direction: column; gap: 8px;">' +
-                    items.map(item => `<li>${item}</li>`).join('') +
-                    '</ul>';
-            } else {
-                changelogHtml = `<p style="margin:0; text-align:left; font-size: 13.5px; line-height: 1.5; color: var(--text-primary);">${changelogItems}</p>`;
-            }
         } else {
-            changelogHtml = '<p style="margin:0; text-align:left; font-size: 13.5px; color: var(--text-secondary); font-style: italic;">Mejoras de rendimiento y correcciones de errores.</p>';
+            const fallbackText = getT('update.defaultChangelog') || 'Mejoras de rendimiento y correcciones de errores.';
+            changelogHtml = `<p style="margin:0; text-align:left; font-size: 13.5px; color: var(--text-secondary); font-style: italic;">${fallbackText}</p>`;
         }
         changelogEl.innerHTML = changelogHtml;
     }
@@ -6919,46 +6995,13 @@ window.renderUpdateModalContent = function(data) {
 };
 
 window.openUpdateModal = function(customData) {
+    if (typeof closeMobileDrawer === 'function') {
+        closeMobileDrawer();
+    }
     const dataToUse = customData || window.latestUpdateData || {
         version: CURRENT_APP_VERSION,
         releaseDate: "01/09/2026",
-        changelog: {
-            "es": [
-                "Soporte multiidioma completo: Todos los nuevos botones, textos y ventanas de actualización ahora cambian correctamente de idioma (Español, Inglés, Ruso, Estonio, Ucraniano).",
-                "Descripciones de bloques traducidas: Las tarjetas informativas de Hipertrofia, Pesados y Alta Intensidad ahora se muestran en el idioma activo.",
-                "Calculadora Dropset y alertas traducidas al idioma seleccionado.",
-                "Cronómetro en formato HH:MM:SS para control exacto del tiempo de entrenamiento.",
-                "Bloqueo de tipo de serie durante el entrenamiento y sugerencias inteligentes del último peso levantado."
-            ],
-            "en": [
-                "Full multi-language support: All new buttons, texts, and update modals now change language seamlessly (Spanish, English, Russian, Estonian, Ukrainian).",
-                "Translated block descriptions: Informational cards for Hypertrophy, Heavy, and High Intensity now display in the active language.",
-                "Dropset calculator and alerts fully translated to the selected language.",
-                "Workout stopwatch in HH:MM:SS format for accurate training time tracking.",
-                "Locked set types during active workout and smart weight suggestions from previous sessions."
-            ],
-            "ru": [
-                "Полная мультиязычная поддержка: Все новые кнопки, тексты и окна обновлений теперь корректно переключают язык (испанский, английский, русский, эстонский, украинский).",
-                "Переведены описания тренировочных блоков: карточки гипертрофии, силового блока и высокой интенсивности теперь отображаются на активном языке.",
-                "Калькулятор дропсетов и оповещения переведены на выбранный язык.",
-                "Секундомер тренировки в формате ЧЧ:ММ:СС для точного учета времени.",
-                "Блокировка изменения типа подхода во время тренировки и умные подсказки последнего рабочего веса."
-            ],
-            "et": [
-                "Täielik mitmekeelne tugi: Kõik uued nupud, tekstid ja uuenduste aknad vahetavad nüüd korrektselt keelt (hispaania, inglise, vene, eesti, ukraina).",
-                "Tõlgitud treeningplokkide kirjeldused: Hüpertroofia, raske ja kõrge intensiivsuse infokaardid kuvatakse aktiivses keeles.",
-                "Dropseti kalkulaator ja teated tõlgitud valitud keelde.",
-                "Treeningu stopper formaadis TT:MM:SS täpse aja jälgimiseks.",
-                "Seeria tüübi lukustamine aktiivse treeningu ajal ja viimati tõstetud raskuse nutikad soovitused."
-            ],
-            "uk": [
-                "Повна багатомовна підтримка: Усі нові кнопки, тексти та вікна оновлень тепер коректно змінюють мову (іспанська, англійська, російська, естонська, українська).",
-                "Перекладено описи тренувальних блоків: картки гіпертрофії, силового блоку та високої інтенсивності тепер відображаються активною мовою.",
-                "Калькулятор дропсетів та сповіщення перекладено вибраною мовою.",
-                "Секундомір тренування у форматі ГГ:ХХ:СС для точного обліку часу.",
-                "Блокування зміни типу підходу під час тренування та розумні підказки останньої робочої ваги."
-            ]
-        }
+        changelog: DEFAULT_APP_CHANGELOG
     };
     window.renderUpdateModalContent(dataToUse);
     const modalUpdate = document.getElementById('modal-update');
@@ -7042,6 +7085,7 @@ async function checkForUpdates(manual = false) {
 
         if (cmp > 0) {
             // New version available!
+            if (typeof closeMobileDrawer === 'function') closeMobileDrawer();
             window.renderUpdateModalContent(data);
             const modalUpdate = document.getElementById('modal-update');
             if (modalUpdate) modalUpdate.classList.add('active');
@@ -7050,6 +7094,11 @@ async function checkForUpdates(manual = false) {
             if (btnUpdate) btnUpdate.style.display = 'flex';
         } else {
             if (manual) {
+                if (typeof closeMobileDrawer === 'function') closeMobileDrawer();
+                window.renderUpdateModalContent(data);
+                const modalUpdate = document.getElementById('modal-update');
+                if (modalUpdate) modalUpdate.classList.add('active');
+
                 const upToDateTemplate = getT('update.upToDateAlert') || '✅ Tu aplicación está al día.\n\nVersión instalada: v{vInstalled}\nVersión en GitHub: v{vGitHub}\n\nNo hay nuevas actualizaciones.';
                 const msg = upToDateTemplate.replace('{vInstalled}', CURRENT_APP_VERSION).replace('{vGitHub}', data.version);
                 alert(msg);

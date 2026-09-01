@@ -1097,7 +1097,15 @@ body.is-apk .nav-arrow {
     pointer-events: none;
     transition: opacity var(--transition-fast);
 }
-.modal.active { opacity: 1; pointer-events: auto; }
+.modal.active { 
+    opacity: 1; 
+    pointer-events: auto; 
+    z-index: 100000 !important; 
+}
+#modal-update,
+#modal-update.active {
+    z-index: 100001 !important;
+}
 .modal-content {
     background: var(--bg-main);
     width: 100%;
