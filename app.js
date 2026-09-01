@@ -1735,6 +1735,47 @@ document.getElementById('btn-open-month-picker')?.addEventListener('click', () =
 
 const translations = {
     "es": {
+        "story": {
+          "title": "Tarjeta para Historias",
+          "createStoryBtn": "Compartir Historia (Instagram / WhatsApp)",
+          "shareBtn": "Compartir",
+          "downloadBtn": "Descargar Imagen",
+          "storyWorkout": "Entrenamiento",
+          "duration": "Tiempo",
+          "volume": "Volumen",
+          "sets": "Series",
+          "prs": "Nuevos Récords",
+          "highlights": "DESTACADOS DE LA SESIÓN",
+          "watermark": "Gym Tracker • Superando límites cada día"
+},
+        "achievements": {
+          "title": "Muro de Logros y Trofeos",
+          "globalProgress": "{count} / {total} Desbloqueados ({pct}%)",
+          "toastUnlocked": "¡Logro Desbloqueado!",
+          "unlockedOn": "Desbloqueado el",
+          "locked": "Bloqueado"
+},
+        "volume": {
+          "title": "Series Semanales Óptimas",
+          "desc": "Series efectivas realizadas esta semana vs rango hipertrófico óptimo (10 a 20 series semanales).",
+          "currentWeek": "Semana Actual",
+          "optimal": "Óptimo",
+          "low": "Bajo estímulo",
+          "high": "Volumen alto"
+},
+        "anatomy": {
+          "title": "Mapa de Fatiga Muscular",
+          "desc": "Estado de fatiga y recuperación estimado según los entrenamientos completados en los últimos 7 días.",
+          "statusLegend": "Nivel de Fatiga:",
+          "fatigued": "Fatigado (<24h)",
+          "recovering": "Recuperando (24-60h)",
+          "ready": "Listo (>60h)",
+          "tapPrompt": "Toca cualquier músculo en la silueta para ver su estado de recuperación y volumen de series.",
+          "statusReady": "Listo para entrenar con alta intensidad",
+          "statusRecov": "En fase de recuperación activa (estímulo moderado)",
+          "statusFatigued": "Fatigado recientemente. Recomendado descansar o entrenar otro grupo",
+          "noData": "Sin registros en los últimos 7 días. Músculo completamente recuperado."
+},
         "update": {
             "title": "¡Nueva versión disponible!",
             "desc": "Novedades y mejoras de esta actualización:",
@@ -2092,6 +2133,47 @@ const translations = {
         }
     },
     "en": {
+        "story": {
+          "title": "Story Card",
+          "createStoryBtn": "Share Story (Instagram / WhatsApp)",
+          "shareBtn": "Share",
+          "downloadBtn": "Download Image",
+          "storyWorkout": "Workout",
+          "duration": "Duration",
+          "volume": "Volume",
+          "sets": "Sets",
+          "prs": "New Records",
+          "highlights": "SESSION HIGHLIGHTS",
+          "watermark": "Gym Tracker • Pushing limits every day"
+},
+        "achievements": {
+          "title": "Achievements & Trophies Wall",
+          "globalProgress": "{count} / {total} Unlocked ({pct}%)",
+          "toastUnlocked": "Achievement Unlocked!",
+          "unlockedOn": "Unlocked on",
+          "locked": "Locked"
+},
+        "volume": {
+          "title": "Optimal Weekly Sets",
+          "desc": "Working sets completed this week vs hypertrophy target range (10-20 weekly sets).",
+          "currentWeek": "Current Week",
+          "optimal": "Optimal",
+          "low": "Low volume",
+          "high": "High volume"
+},
+        "anatomy": {
+          "title": "Muscle Fatigue Map",
+          "desc": "Estimated fatigue and recovery status based on completed workouts in the last 7 days.",
+          "statusLegend": "Fatigue Level:",
+          "fatigued": "Fatigued (<24h)",
+          "recovering": "Recovering (24-60h)",
+          "ready": "Ready (>60h)",
+          "tapPrompt": "Tap any muscle in the silhouette to see recovery status and set volume.",
+          "statusReady": "Ready to train with high intensity",
+          "statusRecov": "In active recovery phase",
+          "statusFatigued": "Recently fatigued. Rest or train another group",
+          "noData": "No sessions in the last 7 days. Fully recovered."
+},
         "update": {
             "title": "New Version Available!",
             "desc": "What's new and improved in this update:",
@@ -2449,6 +2531,47 @@ const translations = {
         }
     },
     "ru": {
+        "story": {
+          "title": "Карточка для Историй",
+          "createStoryBtn": "Поделиться в Истории (Instagram / WhatsApp)",
+          "shareBtn": "Поделиться",
+          "downloadBtn": "Скачать",
+          "storyWorkout": "Тренировка",
+          "duration": "Время",
+          "volume": "Объем",
+          "sets": "Подходы",
+          "prs": "Новые рекорды",
+          "highlights": "ГЛАВНОЕ ЗА ТРЕНИРОВКУ",
+          "watermark": "Gym Tracker • Преодолевая границы каждый день"
+},
+        "achievements": {
+          "title": "Стена достижений и трофеев",
+          "globalProgress": "{count} / {total} Разблокировано ({pct}%)",
+          "toastUnlocked": "Достижение разблокировано!",
+          "unlockedOn": "Получено",
+          "locked": "Заблокировано"
+},
+        "volume": {
+          "title": "Оптимальные подходы за неделю",
+          "desc": "Рабочие подходы за текущую неделю по сравнению с целевым диапазоном.",
+          "currentWeek": "Текущая неделя",
+          "optimal": "Оптимально",
+          "low": "Мало подходов",
+          "high": "Высокий объем"
+},
+        "anatomy": {
+          "title": "Карта мышечной усталости",
+          "desc": "Оценка восстановления по тренировкам за последние 7 дней.",
+          "statusLegend": "Уровень усталости:",
+          "fatigued": "Усталость (<24ч)",
+          "recovering": "Восстановление (24-60ч)",
+          "ready": "Готов (>60ч)",
+          "tapPrompt": "Нажмите на мышцу для просмотра статуса и объема.",
+          "statusReady": "Готов к интенсивной тренировке",
+          "statusRecov": "В процессе восстановления",
+          "statusFatigued": "Недавно тренирован. Рекомендуется отдых",
+          "noData": "Нет тренировок за 7 дней. Полностью восстановлен."
+},
         "update": {
             "title": "Доступна новая версия!",
             "desc": "Что нового и улучшено в этом обновлении:",
@@ -2802,6 +2925,47 @@ const translations = {
         }
     },
     "et": {
+        "story": {
+          "title": "Story kaart",
+          "createStoryBtn": "Jaga Storys (Instagram / WhatsApp)",
+          "shareBtn": "Jaga",
+          "downloadBtn": "Laadi alla",
+          "storyWorkout": "Treening",
+          "duration": "Aeg",
+          "volume": "Maht",
+          "sets": "Seeriad",
+          "prs": "Uued rekordid",
+          "highlights": "TREENINGU TIPP-HETKED",
+          "watermark": "Gym Tracker • Ületades piire iga päev"
+},
+        "achievements": {
+          "title": "Saavutuste sein",
+          "globalProgress": "{count} / {total} Avatud ({pct}%)",
+          "toastUnlocked": "Saavutus avatud!",
+          "unlockedOn": "Avatud",
+          "locked": "Lukus"
+},
+        "volume": {
+          "title": "Nädala optimaalsed seeriad",
+          "desc": "Sel nädalal tehtud seeriad võrreldes hüpertroofia sihttasemega.",
+          "currentWeek": "Käesolev nädal",
+          "optimal": "Optimaalne",
+          "low": "Madal maht",
+          "high": "Kõrge maht"
+},
+        "anatomy": {
+          "title": "Lihaste väsimuse kaart",
+          "desc": "Viimase 7 päeva treeningute põhjal hinnatud taastumise tase.",
+          "statusLegend": "Väsimuse tase:",
+          "fatigued": "Väsinud (<24h)",
+          "recovering": "Taastumas (24-60h)",
+          "ready": "Valmis (>60h)",
+          "tapPrompt": "Puuduta lihast taastumise ja seeriate nägemiseks.",
+          "statusReady": "Valmis treeninguks",
+          "statusRecov": "Aktiivses taastumises",
+          "statusFatigued": "Hiljuti treenitud. Puhka",
+          "noData": "Pole viimase 7 päeva jooksul treenitud."
+},
         "update": {
             "title": "Uus versioon on saadaval!",
             "desc": "Selle uuenduse uudised ja täiustused:",
@@ -3154,6 +3318,47 @@ const translations = {
         }
     },
     "uk": {
+        "story": {
+          "title": "Картка для Історій",
+          "createStoryBtn": "Поділитися в Історії (Instagram / WhatsApp)",
+          "shareBtn": "Поділитися",
+          "downloadBtn": "Завантажити",
+          "storyWorkout": "Тренування",
+          "duration": "Час",
+          "volume": "Об'єм",
+          "sets": "Підходи",
+          "prs": "Нові рекорди",
+          "highlights": "ГОЛОВНЕ ЗА ТРЕНУВАННЯ",
+          "watermark": "Gym Tracker • Долаючи межі щодня"
+},
+        "achievements": {
+          "title": "Стіна досягнень та трофеїв",
+          "globalProgress": "{count} / {total} Розблоковано ({pct}%)",
+          "toastUnlocked": "Досягнення розблоковано!",
+          "unlockedOn": "Отримано",
+          "locked": "Заблоковано"
+},
+        "volume": {
+          "title": "Оптимальні підходи за тиждень",
+          "desc": "Робочі підходи за поточний тиждень порівняно з цільовим діапазоном.",
+          "currentWeek": "Поточний тиждень",
+          "optimal": "Оптимально",
+          "low": "Низький об'єм",
+          "high": "Високий об'єм"
+},
+        "anatomy": {
+          "title": "Карта м'язової втоми",
+          "desc": "Оцінка відновлення за тренуваннями за останні 7 днів.",
+          "statusLegend": "Рівень втоми:",
+          "fatigued": "Втома (<24г)",
+          "recovering": "Відновлення (24-60г)",
+          "ready": "Готовий (>60г)",
+          "tapPrompt": "Натисніть на м'яз для перегляду статусу та об'єму.",
+          "statusReady": "Готовий до тренування",
+          "statusRecov": "У процесі відновлення",
+          "statusFatigued": "Нещодавно треновано. Відпочиньте",
+          "noData": "Немає тренувань за 7 днів. Повністю відновлений."
+},
         "update": {
             "title": "Доступна нова версія!",
             "desc": "Що нового та покращено в цьому оновленні:",
@@ -3986,195 +4191,6 @@ function recalculatePRs() {
 }
 window.recalculatePRs = recalculatePRs;
 
-
-const renderExercises = () => {
-    if(typeof recalculatePRs !== 'undefined') recalculatePRs();
-    const container = document.querySelector('.exercise-groups-container');
-    container.innerHTML = '';
-    
-    if (state.exercises.length === 0) {
-        container.innerHTML = `<div class="empty-state" data-i18n="exercises.empty">No hay ejercicios. Añade uno nuevo.</div>`;
-        return;
-    }
-    
-    // Group grid
-    const grid = document.createElement('div');
-    grid.style.display = 'grid';
-    grid.style.gridTemplateColumns = 'repeat(3, 1fr)';
-    grid.style.gap = '8px';
-    grid.style.marginBottom = '24px';
-    
-    state.groups.forEach(g => {
-        const card = document.createElement('div');
-        let gKey = g === 'Abdominales y core' ? 'core' : (g === 'Tríceps' ? 'triceps' : (g === 'Bíceps' ? 'biceps' : g.toLowerCase()));
-        let trGroup = getT('groups.' + gKey);
-        trGroup = trGroup !== 'groups.' + g.toLowerCase() ? trGroup : g;
-        card.style.background = window.exercisesSelectedGroup === g ? 'var(--color-accent)' : 'var(--bg-surface-elevated)';
-        card.style.color = window.exercisesSelectedGroup === g ? '#fff' : 'var(--text-primary)';
-        card.style.padding = '12px 8px';
-        card.style.borderRadius = '8px';
-        card.style.display = 'flex';
-        card.style.flexDirection = 'column';
-        card.style.alignItems = 'center';
-        card.style.justifyContent = 'center';
-        card.style.cursor = 'pointer';
-        card.style.textAlign = 'center';
-        card.style.border = '1px solid var(--border-color)';
-        
-        card.innerHTML = `<span style="font-size: 26px; margin-bottom: 6px; display: block; line-height: 1;">${typeof getGroupEmoji !== 'undefined' ? getGroupEmoji(g) : '🏋️'}</span><span style="font-size:12px; font-weight:600;">${trGroup}</span>`;
-
-        
-        card.onclick = () => {
-            window.exercisesSelectedGroup = window.exercisesSelectedGroup === g ? null : g;
-            renderExercises();
-        };
-        grid.appendChild(card);
-    });
-    container.appendChild(grid);
-    
-    const exListContainer = document.createElement('div');
-    exListContainer.className = 'exercises-list';
-    
-    let filteredEx = state.exercises;
-    const searchVal = document.getElementById('exercise-search').value.toLowerCase();
-    if (searchVal) {
-        // If searching, ignore selected group and search all
-        filteredEx = filteredEx.filter(ex => ex.name.toLowerCase().includes(searchVal) || getTrExName(ex.name).toLowerCase().includes(searchVal));
-    } else if (window.exercisesSelectedGroup) {
-        // Only filter by group if NOT searching
-        filteredEx = filteredEx.filter(ex => ex.group === window.exercisesSelectedGroup);
-    }
-    
-    // Sort alphabetically by translated name
-    filteredEx.sort((a, b) => getTrExName(a.name).localeCompare(getTrExName(b.name)));
-    
-    if (filteredEx.length === 0) {
-        exListContainer.innerHTML = `<div class="empty-state">No hay ejercicios para esta selección.</div>`;
-    } else {
-        filteredEx.forEach(ex => {
-            const card = document.createElement('div');
-            card.className = 'exercise-card';
-            card.style.cursor = 'pointer';
-            card.onclick = (e) => {
-                if(e.target.closest('button')) return;
-                if(e.target.closest('img')) return;
-                editExercise(ex);
-            };
-            card.innerHTML = `
-                <div style="display: flex; flex-direction: row; width: 100%; align-items: stretch;">
-                    ${ex.imageData ? `<div style="flex-shrink: 0; margin-right: 16px; display: flex; align-items: center; justify-content: center;"><img src="${ex.imageData}" onclick="event.stopPropagation(); openLightbox('${ex.imageData}')" title="Toca para ampliar" style="width: 140px; height: 140px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'"></div>` : ''}
-                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
-                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                            <div class="exercise-info" style="flex: 1; min-width: 0; text-align: center;">
-                                <div class="exercise-name" style="font-size: 18px; font-weight: bold; color: var(--text-primary); margin-bottom: 2px;">${getTrExName(ex.name)}</div>
-                                <div class="exercise-group" style="font-size: 13px; color: var(--text-secondary);">${ex.group}</div>
-                                ${(ex.prHeavy || ex.prHyp) ? `
-                                <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin-top:6px;">
-                                    ${ex.prHeavy ? `<span style="background:rgba(220,38,38,0.18); color:#f87171; border:1px solid rgba(220,38,38,0.4); padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700;">🔴 PR Pesado: ${ex.prHeavy}</span>` : ''}
-                                    ${ex.prHyp ? `<span style="background:rgba(37,99,235,0.18); color:#60a5fa; border:1px solid rgba(37,99,235,0.4); padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700;">🔵 PR Hipertrofia: ${ex.prHyp}</span>` : ''}
-                                </div>` : ''}
-                            </div>
-                            <div class="exercise-actions" style="margin-left: 12px; flex-shrink: 0;">
-                                <button class="btn-icon text-danger" onclick="deleteExercise('${ex.id}', event)"><i class="ph ph-trash"></i></button>
-                            </div>
-                        </div>
-                        <div class="exercise-desc" style="flex: 1; font-size: 13px; color: var(--text-secondary); line-height: 1.5; display: flex; align-items: center; justify-content: center; text-align: center;">
-                            ${getTrExDesc(ex.name, ex.description) || (getT ? getT('modals.exercise.descPlaceholder') : 'Haz clic para editar y añadir técnica.')}
-                        </div>
-                    </div>
-                </div>
-            `;
-            exListContainer.appendChild(card);
-        });
-    }
-    container.appendChild(exListContainer);
-    if(typeof updateLanguageUI !== 'undefined') updateLanguageUI();
-};
-
-
-document.getElementById('btn-remove-exercise-image').addEventListener('click', () => {
-    document.getElementById('exercise-image').value = '';
-    document.getElementById('exercise-image-data').value = '';
-    document.getElementById('exercise-image-preview').style.display = 'none';
-    document.getElementById('btn-remove-exercise-image').style.display = 'none';
-});
-document.getElementById('exercise-image').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if(!file) return;
-    
-    const reader = new FileReader();
-    reader.onload = (event) => {
-        const img = new Image();
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            const MAX_WIDTH = 400;
-            const scaleSize = MAX_WIDTH / img.width;
-            canvas.width = MAX_WIDTH;
-            canvas.height = img.height * scaleSize;
-            
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            
-            const dataUrl = canvas.toDataURL('image/jpeg', 0.6); 
-            document.getElementById('exercise-image-data').value = dataUrl;
-            
-            const preview = document.getElementById('exercise-image-preview');
-            preview.src = dataUrl;
-            preview.style.display = 'block';
-        document.getElementById('btn-remove-exercise-image').style.display = 'flex';
-            document.getElementById('btn-remove-exercise-image').style.display = 'flex';
-        };
-        img.src = event.target.result;
-    };
-    reader.readAsDataURL(file);
-});
-
-const editExercise = (ex) => {
-    if (typeof recalculatePRs === 'function') recalculatePRs();
-    const freshEx = (state && state.exercises) ? (state.exercises.find(e => e.id === ex.id) || ex) : ex;
-    document.getElementById('exercise-id').value = freshEx.id;
-    document.getElementById('exercise-name').value = freshEx.name;
-    document.getElementById('exercise-youtube').value = freshEx.youtubeLink || '';
-    
-    const max1rmEl = document.getElementById('exercise-max1rm');
-    if (max1rmEl) max1rmEl.value = freshEx.max1RM || '';
-    const prHypEl = document.getElementById('exercise-pr-hyp');
-    if (prHypEl) prHypEl.value = freshEx.prHyp || '';
-    const prHeavyEl = document.getElementById('exercise-pr-heavy');
-    if (prHeavyEl) prHeavyEl.value = freshEx.prHeavy || '';
-    
-    const select = document.getElementById('exercise-group');
-    select.innerHTML = '';
-    state.groups.forEach(g => {
-        let gKey = g === 'Abdominales y core' ? 'core' : (g === 'Tríceps' ? 'triceps' : (g === 'Bíceps' ? 'biceps' : g.toLowerCase()));
-        let trGroup = getT('groups.' + gKey);
-        trGroup = trGroup !== 'groups.' + g.toLowerCase() ? trGroup : g;
-        select.innerHTML += `<option value="${g}" ${ex.group === g ? 'selected' : ''}>${trGroup}</option>`;
-    });
-    
-    const imgData = ex.imageData || '';
-    document.getElementById('exercise-image-data').value = imgData;
-    const descEl = document.getElementById('exercise-description');
-    if (descEl) descEl.value = ex.description || '';
-    const preview = document.getElementById('exercise-image-preview');
-    if (imgData) {
-        preview.src = imgData;
-        preview.style.display = 'block';
-        document.getElementById('btn-remove-exercise-image').style.display = 'flex';
-    } else {
-        preview.style.display = 'none';
-        document.getElementById('btn-remove-exercise-image').style.display = 'none';
-    }
-    
-    document.getElementById('exercise-reps-hypertrophy').value = ex.defaults ? ex.defaults.hypertrophy : '10';
-    document.getElementById('exercise-reps-heavy').value = ex.defaults ? ex.defaults.heavy : '5';
-    document.getElementById('exercise-reps-intensity').value = ex.defaults ? ex.defaults.intensity : '8';
-    
-    document.getElementById('btn-delete-exercise').style.display = 'block';
-    
-    document.getElementById('modal-exercise-title').textContent = getT('modals.exercise.editTitle');
-    openModal(modalExercise);
-};
 
 document.getElementById('btn-delete-exercise').addEventListener('click', () => {
     const id = document.getElementById('exercise-id').value;
@@ -5429,7 +5445,11 @@ document.getElementById('finish-workout').addEventListener('click', () => {
     renderGlobalHistory();
     if (typeof renderProgressionView === 'function') renderProgressionView();
     // Show modern workout summary modal
-    showWorkoutSummaryModal(state.completedWorkouts[state.completedWorkouts.length - 1]);
+    const lastCompleted = state.completedWorkouts[state.completedWorkouts.length - 1];
+    showWorkoutSummaryModal(lastCompleted);
+    try {
+        checkAndUnlockAchievements(lastCompleted);
+    } catch(e) {}
 });
 
 
@@ -6126,11 +6146,30 @@ const renderGlobalHistory = () => {
                     <h4 style="margin-bottom:4px; font-size:16px;">${w.name || 'Entrenamiento'}</h4>
                     <p style="font-size:12px; color:var(--text-secondary);"><i class="ph ph-calendar"></i> ${w.date || '-'} &bull; <i class="ph ph-clock"></i> ${w.duration || '00:00'} &bull; ${typeName}</p>
                 </div>
+                <button class="btn-icon share-history-story-btn" style="color:var(--color-accent); margin-right:6px; z-index:10;" title="Crear Historia"><i class="ph-bold ph-camera"></i></button>
                 <button class="btn-icon delete-history-btn" style="color:var(--color-heavy); margin-right:8px; z-index:10;" title="Eliminar"><i class="ph ph-trash"></i></button>
                 <i class="ph ph-caret-down"></i>
             </div>
             <div class="accordion-body"></div>
         `;
+
+        item.querySelector('.share-history-story-btn')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            let totalVol = 0;
+            (w.exercises || []).forEach(ex => {
+                (ex.sets || []).forEach(s => {
+                    totalVol += (parseFloat(s.weight) || 0) * (parseFloat(s.reps) || 0);
+                });
+            });
+            openStoryCardModal({
+                title: w.name || 'Entrenamiento',
+                volume: totalVol.toLocaleString() + ' kg',
+                duration: w.duration || '45m',
+                date: w.date || new Date().toLocaleDateString(),
+                prs: [],
+                exercises: w.exercises || []
+            });
+        });
         
         item.querySelector('.delete-history-btn').addEventListener('click', (e) => {
             e.stopPropagation();
@@ -8014,7 +8053,7 @@ window.generateDashboard = function(mode) {
     }
 };
 
-const CURRENT_APP_VERSION = '1.1.9';
+const CURRENT_APP_VERSION = '1.2.0';
 function compareVersions(v1, v2) {
     const p1 = String(v1).split('.').map(Number);
     const p2 = String(v2).split('.').map(Number);
@@ -8030,64 +8069,19 @@ window.latestUpdateData = null;
 
 const DEFAULT_APP_CHANGELOG = {
     "es": [
-        "Calculadora de discos de barra: adaptada para barra olímpica de 25 kg y soporte completo para Multipower / Smith machine (barra de 15 kg), con distribución de discos 100% equilibrada y simétrica.",
-        "Sustitución rápida de ejercicio en vivo: cambia cualquier ejercicio durante el entrenamiento por otra alternativa del mismo grupo muscular manteniendo tus series.",
-        "Detección automática de PR en vivo: insignia de trofeo 🏆 al instante al superar tus marcas históricas de peso o 1RM estimado.",
-        "Tarjeta de resumen al terminar: visualiza tiempo total, volumen levantado (kg), series completadas, nuevos récords superados y opción de copiar resumen.",
-        "Comparador de fotos antes / después: compara tu evolución física frontal, lateral o de espalda en vista lado a lado o con deslizador interactivo.",
-        "Soporte multiidioma completo en todas las nuevas funciones (Español, Inglés, Ruso, Estonio, Ucraniano).",
-        "Pestaña Evolución: teclado estrictamente numérico sin letras para casillas de peso, grasa y medidas corporales en ambas columnas.",
-        "Entrenamiento activo: eliminación del botón de papelera y optimización del diseño de series evitando cualquier solapamiento en casillas.",
-        "Entrenamiento activo: centrado milimétrico de las cabeceras Reps y Kg sobre sus casillas. Calculador de discos: simplificado con botón único de Cerrar.",
-        "Menú lateral: nuevo botón directo al repositorio de GitHub. Notificaciones: eliminación y limpieza automática de la notificación de entrenamiento al finalizar o cancelar la sesión."
+        "Versión 1.2.0: 1) Mapa Anatómico 2D interactivo con heatmap de recuperación muscular. 2) Monitor de series semanales óptimas por músculo. 3) Muro de 26 logros y medallas desbloqueables con alertas en vivo. 4) Tarjeta de resumen estilizada en 9:16 para Historias de Instagram y WhatsApp. 5) Teclado numérico estricto y alineación de entrenamiento."
     ],
     "en": [
-        "Barbell plate calculator: configured for 25kg Olympic bar and full support for Multipower / Smith machine (15kg bar), with 100% balanced and symmetric plate distribution.",
-        "Quick live exercise substitution: replace any exercise during your workout with an alternative from the same muscle group while preserving sets.",
-        "Real-time PR detection: instant 🏆 trophy badge when breaking historical weight or estimated 1RM personal records.",
-        "Workout summary card: modern finish modal showing total duration, volume lifted (kg), completed sets, broken PRs, and share/copy option.",
-        "Before / after photo comparator: compare front, side, and back evolution photos side-by-side or with an interactive slider.",
-        "Full multi-language support across all 5 features (Spanish, English, Russian, Estonian, Ukrainian).",
-        "Evolution tab: strictly numeric keypad for weight, body fat, and body measurement inputs across both columns.",
-        "Active workout: removed trash can button and optimized set row layout, completely preventing cell overlapping.",
-        "Active workout: precise centering of Reps and Kg headers over their input cells. Plate calculator: simplified with a single Close button.",
-        "Sidebar menu: new direct button to GitHub repository. Notifications: automatic removal and cleanup of workout notification upon finishing or cancelling a session."
+        "Version 1.2.0: 1) Interactive 2D Anatomical Map with muscle recovery heatmap. 2) Optimal weekly working sets tracker per muscle. 3) 26 unlockable achievements & trophies wall with live celebration toasts. 4) Stylized 9:16 story card generator for Instagram and WhatsApp. 5) Strict numeric keypad and alignment fixes."
     ],
     "ru": [
-        "Калькулятор блинов: настроен для олимпийского грифа 25 кг и полная поддержка тренажера Смита / Мультипауэра (гриф 15 кг) с 100% симметричным распределением.",
-        "Быстрая замена упражнения на тренировке: заменяйте упражнение альтернативой для той же группы мышц с сохранением подходов.",
-        "Автоматическое определение рекордов в реальном времени: золотой трофей 🏆 при превышении максимального веса или расчетного 1ПМ.",
-        "Карточка итогов тренировки: стильное окно с общим временем, поднятым объемом (кг), подходами, рекордами и кнопкой копирования.",
-        "Сравнение фото До / После: сравнение формы спереди, сбоку и со спины рядом или с помощью интерактивного слайдера.",
-        "Полная поддержка всех языков во всех новых функциях (испанский, английский, русский, эстонский, украинский).",
-        "Вкладка Эволюция: строго цифровая клавиатура без букв для веса, жира и замеров тела в обеих колонках.",
-        "Активная тренировка: удалена иконка корзины и оптимизирована сетка подходов, предотвращая любое наложение полей.",
-        "Активная тренировка: точное центрирование заголовков Reps и Kg над полями ввода. Калькулятор блинов: упрощен с одной кнопкой Закрыть.",
-        "Боковое меню: новая кнопка перехода в репозиторий GitHub. Уведомления: автоматическое удаление уведомления о тренировке при ее завершении или отмене."
+        "Версия 1.2.0: 1) Интерактивная 2D карта мышц с тепловой картой восстановления. 2) Монитор оптимальных подходов в неделю. 3) Стена из 26 достижений и медалей. 4) Карточка 9:16 для историй Instagram и WhatsApp. 5) Строгая числовая клавиатура."
     ],
     "et": [
-        "Kettakalkulaator: kohandatud 25 kg olümpiakangi jaoks ja täielik tugi Multipower / Smith masinale (15 kg kang) 100% sümmeetrilise jaotusega.",
-        "Kiire harjutuse asendamine reaalajas: vaheta harjutus teise sama lihasgrupi harjutuse vastu, säilitades seeriad.",
-        "Reaalajas isiklike rekordite (PR) tuvastamine: kuldne karikas 🏆 kohe, kui ületad oma varasema maksimaalkaalu või hinnangulise 1KM.",
-        "Treeningu kokkuvõtte kaart: näitab koguaega, tõstetud mahtu (kg), sooritatud seeriaid, purustatud rekordeid ja kokkuvõtte kopeerimise võimalust.",
-        "Enne / pärast fotode võrdleja: võrdle füüsilist arengut eest, küljelt või tagant kõrvuti või interaktiivse liuguriga.",
-        "Täielik mitmekeelne tugi kõigis uutes funktsioonides (hispaania, inglise, vene, eesti, ukraina).",
-        "Evolutsiooni vahekaart: rangelt numbriline klaviatuur ilma tähtedeta kaalu, rasvaprotsendi ja kehamõõtude jaoks mõlemas veerus.",
-        "Aktiivne treening: eemaldatud prügikasti ikoon ja optimeeritud seeriate paigutus, vältides väljade kattumist.",
-        "Aktiivne treening: Reps ja Kg päiste täpne tsentreerimine väljade kohal. Kettakalkulaator: lihtsustatud ainsa Sulge nupuga.",
-        "Külgmenüü: uus otsetee nupp GitHubi repositooriumisse. Teavitused: treeningu teavituse automaatne eemaldamine sessiooni lõpetamisel või tühistamisel."
+        "Versioon 1.2.0: 1) Interaktiivne 2D lihaste kaart taastumise kuumuskaardiga. 2) Nädala optimaalsete seeriate jälgija. 3) 26 avatavat saavutust ja medalit. 4) 9:16 Story kaardi generaator Instagrami ja WhatsAppi jaoks. 5) Numbriklaviatuur."
     ],
     "uk": [
-        "Калькулятор млинців: налаштовано для олімпійського грифа 25 кг та повна підтримка тренажера Сміта / Мультипауера (гриф 15 кг) зі 100% симетричним розподілом.",
-        "Швидка заміна вправи під час тренування: заміна будь-якої вправи на альтернативу для тієї ж групи м'язів зі збереженням підходів.",
-        "Автоматичне визначення рекордів у реальному часі: золотий кубок 🏆 при побитті історичного рекорду ваги або розрахункового 1ПМ.",
-        "Картка підсумків тренування: стильне модальне вікно із загальним часом, піднятим об'ємом (кг), підходами, новими рекордами та копіюванням підсумку.",
-        "Порівняння фото До / Після: порівняння форми спереду, збоку та зі спини поруч або за допомогою інтерактивного слайдера.",
-        "Повна багатомовна підтримка в усіх нових функціях (іспанська, англійська, російська, естонська, українська).",
-        "Вкладка Еволюція: суворо цифрова клавіатура без літер для ваги, жиру та вимірів тіла в обох колонках.",
-        "Активне тренування: видалено іконку кошика та оптимізовано сітку підходів, повністю запобігаючи накладанню полів.",
-        "Активне тренування: точне центрування заголовків Reps та Kg над полями введення. Калькулятор млинців: спрощено з єдиною кнопкою Закрити.",
-        "Бічне меню: нова кнопка переходу до репозиторію GitHub. Сповіщення: автоматичне видалення сповіщення про тренування при його завершенні або скасуванні."
+        "Версія 1.2.0: 1) Інтерактивна 2D карта м'язів з тепловою картою відновлення. 2) Монітор оптимальних підходів на тиждень. 3) Стіна з 26 досягнень та медалей. 4) Картка 9:16 для історій Instagram та WhatsApp. 5) Числова клавіатура."
     ]
 };
 
@@ -8403,3 +8397,768 @@ if (document.readyState === 'loading') {
 }
 
 window.renderWorkout = renderWorkout;
+
+
+// =========================================================================
+// 1. PROGRESSION TABS NAVIGATION
+// =========================================================================
+window.switchProgressionTab = function(tabName) {
+    document.querySelectorAll('.prog-tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.prog-subview').forEach(view => {
+        view.style.display = 'none';
+        view.classList.remove('active');
+    });
+
+    const activeBtn = document.getElementById('tab-btn-prog-' + tabName);
+    const activeView = document.getElementById('prog-subview-' + tabName);
+    if (activeBtn) activeBtn.classList.add('active');
+    if (activeView) {
+        activeView.style.display = 'block';
+        activeView.classList.add('active');
+    }
+
+    if (tabName === 'fatigue') {
+        refreshMuscleFatigueMap();
+        renderWeeklyMuscleVolume();
+    } else if (tabName === 'achievements') {
+        renderAchievementsView();
+    }
+};
+
+// =========================================================================
+// 2. ANATOMICAL MUSCLE FATIGUE MAP
+// =========================================================================
+const ANATOMY_SVG_MARKUP = `
+<div class="anatomical-map-container" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-bottom: 16px;">
+    <!-- VISTA FRONTAL -->
+    <div class="anatomy-view-card" style="flex: 1; min-width: 240px; max-width: 310px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 18px; padding: 14px; text-align: center;">
+        <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Vista Frontal</div>
+        <svg viewBox="0 0 200 360" class="anatomy-svg" style="width: 100%; max-height: 270px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));">
+            <g class="body-base" fill="#1e293b" stroke="#334155" stroke-width="1.5">
+                <ellipse cx="100" cy="30" rx="16" ry="20" />
+                <path d="M92 48 L108 48 L110 60 L90 60 Z" />
+            </g>
+            <path id="mf-delts-left" class="muscle-group" data-muscle="Hombros" d="M68 62 C62 65 52 78 54 94 C56 100 62 102 65 92 C68 84 70 74 72 65 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mf-delts-right" class="muscle-group" data-muscle="Hombros" d="M132 62 C138 65 148 78 146 94 C144 100 138 102 135 92 C132 84 130 74 128 65 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mf-chest-left" class="muscle-group" data-muscle="Pecho" d="M72 65 C78 64 96 66 98 78 C98 90 94 98 75 98 C68 98 67 85 70 75 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mf-chest-right" class="muscle-group" data-muscle="Pecho" d="M128 65 C122 64 104 66 102 78 C102 90 106 98 125 98 C132 98 133 85 130 75 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mf-biceps-left" class="muscle-group" data-muscle="Bíceps" d="M54 97 C50 105 48 118 52 130 C56 134 60 130 63 122 C66 114 64 104 62 96 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mf-biceps-right" class="muscle-group" data-muscle="Bíceps" d="M146 97 C150 105 152 118 148 130 C144 134 140 130 137 122 C134 114 136 104 138 96 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mf-forearms-left" class="muscle-group" data-muscle="Bíceps" d="M50 133 C45 145 42 165 44 175 C48 178 52 172 56 160 C60 148 57 138 54 133 Z" fill="#1e293b" stroke="#334155" stroke-width="1" />
+            <path id="mf-forearms-right" class="muscle-group" data-muscle="Bíceps" d="M150 133 C155 145 158 165 156 175 C152 178 148 172 144 160 C140 148 143 138 146 133 Z" fill="#1e293b" stroke="#334155" stroke-width="1" />
+            <path id="mf-abs" class="muscle-group" data-muscle="Core" d="M78 102 C85 101 115 101 122 102 C125 125 120 148 116 162 C108 165 92 165 84 162 C80 148 75 125 78 102 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mf-quads-left" class="muscle-group" data-muscle="Cuádriceps" d="M76 170 C84 170 96 172 96 195 C96 225 90 248 86 260 C80 262 76 250 72 230 C68 210 70 185 76 170 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mf-quads-right" class="muscle-group" data-muscle="Cuádriceps" d="M124 170 C116 170 104 172 104 195 C104 225 110 248 114 260 C120 262 124 250 128 230 C132 210 130 185 124 170 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mf-calves-left" class="muscle-group" data-muscle="Gemelos" d="M72 272 C78 272 84 275 84 290 C84 315 80 335 78 345 C74 345 70 330 68 310 C66 295 68 280 72 272 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mf-calves-right" class="muscle-group" data-muscle="Gemelos" d="M128 272 C122 272 116 275 116 290 C116 315 120 335 122 345 C126 345 130 330 132 310 C134 295 132 280 128 272 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+        </svg>
+    </div>
+
+    <!-- VISTA DORSAL -->
+    <div class="anatomy-view-card" style="flex: 1; min-width: 240px; max-width: 310px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 18px; padding: 14px; text-align: center;">
+        <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Vista Dorsal</div>
+        <svg viewBox="0 0 200 360" class="anatomy-svg" style="width: 100%; max-height: 270px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));">
+            <g class="body-base" fill="#1e293b" stroke="#334155" stroke-width="1.5">
+                <ellipse cx="100" cy="30" rx="16" ry="20" />
+                <path d="M92 48 L108 48 L110 60 L90 60 Z" />
+            </g>
+            <path id="mb-traps" class="muscle-group" data-muscle="Espalda" d="M90 55 L110 55 L126 65 L100 95 L74 65 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mb-delts-left" class="muscle-group" data-muscle="Hombros" d="M68 64 C62 67 52 80 54 94 C56 100 62 100 66 92 C70 82 72 72 74 65 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mb-delts-right" class="muscle-group" data-muscle="Hombros" d="M132 64 C138 67 148 80 146 94 C144 100 138 100 134 92 C130 82 128 72 126 65 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mb-lats-left" class="muscle-group" data-muscle="Espalda" d="M74 72 C78 88 82 110 96 125 C92 135 84 138 78 132 C70 120 66 98 70 80 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mb-lats-right" class="muscle-group" data-muscle="Espalda" d="M126 72 C122 88 118 110 104 125 C108 135 116 138 122 132 C130 120 134 98 130 80 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mb-triceps-left" class="muscle-group" data-muscle="Tríceps" d="M54 96 C50 106 48 118 52 130 C56 132 60 128 63 120 C66 112 64 102 62 96 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mb-triceps-right" class="muscle-group" data-muscle="Tríceps" d="M146 96 C150 106 152 118 148 130 C144 132 140 128 137 120 C134 112 136 102 138 96 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mb-lumbar" class="muscle-group" data-muscle="Espalda" d="M88 126 C96 124 104 124 112 126 C116 142 114 154 110 162 C104 164 96 164 90 162 C86 154 84 142 88 126 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mb-glutes-left" class="muscle-group" data-muscle="Glúteos" d="M74 165 C82 164 96 166 98 180 C98 198 90 208 76 208 C68 206 66 185 74 165 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mb-glutes-right" class="muscle-group" data-muscle="Glúteos" d="M126 165 C118 164 104 166 102 180 C102 198 110 208 124 208 C132 206 134 185 126 165 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mb-hamstrings-left" class="muscle-group" data-muscle="Isquios" d="M76 210 C86 210 94 214 94 230 C94 245 88 258 84 265 C78 265 74 252 72 235 C70 220 72 212 76 210 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mb-hamstrings-right" class="muscle-group" data-muscle="Isquios" d="M124 210 C114 210 106 214 106 230 C106 245 112 258 116 265 C122 265 126 252 128 235 C130 220 128 212 124 210 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mb-calves-left" class="muscle-group" data-muscle="Gemelos" d="M72 272 C78 272 84 276 84 292 C84 315 80 335 78 345 C74 345 70 330 68 310 C66 295 68 280 72 272 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+            <path id="mb-calves-right" class="muscle-group" data-muscle="Gemelos" d="M128 272 C122 272 116 276 116 292 C116 315 120 335 122 345 C126 345 130 330 132 310 C134 295 132 280 128 272 Z" fill="#334155" stroke="#475569" stroke-width="1" />
+        </svg>
+    </div>
+</div>`;
+
+window.normalizeMuscleName = function(name) {
+    if (!name) return 'Pecho';
+    const n = name.toLowerCase();
+    if (n.includes('pecho') || n.includes('pectoral') || n.includes('press banca') || n.includes('aperturas')) return 'Pecho';
+    if (n.includes('espalda') || n.includes('dorsal') || n.includes('remo') || n.includes('jalón') || n.includes('dominada') || n.includes('trapecio') || n.includes('lumbar')) return 'Espalda';
+    if (n.includes('hombro') || n.includes('deltoides') || n.includes('press militar') || n.includes('lateral')) return 'Hombros';
+    if (n.includes('bíceps') || n.includes('biceps') || n.includes('curl') || n.includes('antebrazo')) return 'Bíceps';
+    if (n.includes('tríceps') || n.includes('triceps') || n.includes('fondos') || n.includes('extensión polea')) return 'Tríceps';
+    if (n.includes('cuádriceps') || n.includes('cuadriceps') || n.includes('sentadilla') || n.includes('prensa') || n.includes('extensión de piernas') || n.includes('pierna')) return 'Cuádriceps';
+    if (n.includes('isquio') || n.includes('femoral') || n.includes('peso muerto') || n.includes('curl femoral')) return 'Isquios';
+    if (n.includes('gemelo') || n.includes('pantorrilla') || n.includes('elevación de talones')) return 'Gemelos';
+    if (n.includes('glúteo') || n.includes('gluteo') || n.includes('hip thrust')) return 'Glúteos';
+    if (n.includes('core') || n.includes('abdomen') || n.includes('abdominal') || n.includes('plancha') || n.includes('crunch')) return 'Core';
+    return 'Pecho';
+};
+
+window.refreshMuscleFatigueMap = function() {
+    const mount = document.getElementById('anatomy-silhouette-mount');
+    if (!mount) return;
+    if (!mount.innerHTML || mount.innerHTML.trim() === '') {
+        mount.innerHTML = ANATOMY_SVG_MARKUP;
+    }
+
+    const completed = state.completedWorkouts || [];
+    const now = Date.now();
+    const muscleStats = {
+        'Pecho': { lastTime: 0, weeklySets: 0 },
+        'Espalda': { lastTime: 0, weeklySets: 0 },
+        'Hombros': { lastTime: 0, weeklySets: 0 },
+        'Bíceps': { lastTime: 0, weeklySets: 0 },
+        'Tríceps': { lastTime: 0, weeklySets: 0 },
+        'Cuádriceps': { lastTime: 0, weeklySets: 0 },
+        'Isquios': { lastTime: 0, weeklySets: 0 },
+        'Gemelos': { lastTime: 0, weeklySets: 0 },
+        'Glúteos': { lastTime: 0, weeklySets: 0 },
+        'Core': { lastTime: 0, weeklySets: 0 }
+    };
+
+    // Calculate start of current week (Monday 00:00:00)
+    const monday = new Date();
+    const day = monday.getDay();
+    const diff = monday.getDate() - day + (day === 0 ? -6 : 1);
+    monday.setDate(diff);
+    monday.setHours(0, 0, 0, 0);
+    const mondayTime = monday.getTime();
+
+    completed.forEach(w => {
+        const wTime = w.completedAt || w.dateTimestamp || (w.date ? new Date(w.date).getTime() : 0);
+        if (!w.exercises) return;
+
+        w.exercises.forEach(ex => {
+            const m = normalizeMuscleName(ex.group || ex.name);
+            if (!muscleStats[m]) muscleStats[m] = { lastTime: 0, weeklySets: 0 };
+
+            if (wTime > muscleStats[m].lastTime) {
+                muscleStats[m].lastTime = wTime;
+            }
+
+            if (wTime >= mondayTime) {
+                const count = (ex.sets || []).filter(s => s.type !== 'Calentamiento' && s.type !== 'Aproximación').length;
+                muscleStats[m].weeklySets += count;
+            }
+        });
+    });
+
+    // Color mapping
+    const getMuscleColor = (mName) => {
+        const stat = muscleStats[mName];
+        if (!stat || !stat.lastTime) return '#10b981'; // Fresh / Ready
+        const hoursAgo = (now - stat.lastTime) / (1000 * 60 * 60);
+        if (hoursAgo < 24) return '#ef4444'; // Fatigued
+        if (hoursAgo < 60) return '#f59e0b'; // Recovering
+        return '#10b981'; // Ready
+    };
+
+    // Apply colors to all SVG muscle paths
+    document.querySelectorAll('.anatomy-svg .muscle-group').forEach(el => {
+        const muscle = el.getAttribute('data-muscle');
+        const color = getMuscleColor(muscle);
+        el.setAttribute('fill', color);
+
+        el.onclick = () => {
+            document.querySelectorAll('.anatomy-svg .muscle-group').forEach(m => m.classList.remove('active'));
+            el.classList.add('active');
+
+            const stat = muscleStats[muscle] || { lastTime: 0, weeklySets: 0 };
+            const detailEl = document.getElementById('anatomy-selected-muscle-detail');
+            if (!detailEl) return;
+
+            let statusText = '';
+            let statusColor = '#10b981';
+            let lastTrainedText = '';
+
+            if (!stat.lastTime) {
+                statusText = getT('anatomy.noData') || 'Sin entrenar en los últimos 7 días. Completamente recuperado.';
+                lastTrainedText = 'Ninguno reciente';
+            } else {
+                const hoursAgo = Math.round((now - stat.lastTime) / (1000 * 60 * 60));
+                if (hoursAgo < 24) {
+                    statusText = getT('anatomy.statusFatigued') || 'Fatigado recientemente. Recomendado descansar.';
+                    statusColor = '#ef4444';
+                    lastTrainedText = 'Hace ' + hoursAgo + ' horas';
+                } else if (hoursAgo < 60) {
+                    statusText = getT('anatomy.statusRecov') || 'En fase de recuperación activa.';
+                    statusColor = '#f59e0b';
+                    lastTrainedText = 'Hace ' + Math.round(hoursAgo / 24) + ' días (' + hoursAgo + 'h)';
+                } else {
+                    statusText = getT('anatomy.statusReady') || 'Listo para entrenar con alta intensidad.';
+                    statusColor = '#10b981';
+                    lastTrainedText = 'Hace ' + Math.round(hoursAgo / 24) + ' días';
+                }
+            }
+
+            detailEl.innerHTML = `
+                <div style="font-weight: 700; font-size: 14px; color: ${statusColor}; margin-bottom: 4px;">${muscle}</div>
+                <div style="font-size: 12px; margin-bottom: 4px;"><strong>Estado:</strong> ${statusText}</div>
+                <div style="display:flex; justify-content:center; gap:16px; font-size: 11px; opacity:0.85;">
+                    <span><strong>Último entreno:</strong> ${lastTrainedText}</span>
+                    <span><strong>Series esta semana:</strong> ${stat.weeklySets} series</span>
+                </div>
+            `;
+        };
+    });
+};
+
+// =========================================================================
+// 3. WEEKLY MUSCLE VOLUME MONITOR
+// =========================================================================
+window.renderWeeklyMuscleVolume = function() {
+    const container = document.getElementById('weekly-volume-bars-container');
+    if (!container) return;
+
+    const completed = state.completedWorkouts || [];
+    const monday = new Date();
+    const day = monday.getDay();
+    const diff = monday.getDate() - day + (day === 0 ? -6 : 1);
+    monday.setDate(diff);
+    monday.setHours(0, 0, 0, 0);
+    const mondayTime = monday.getTime();
+
+    const targets = {
+        'Pecho': 14,
+        'Espalda': 16,
+        'Cuádriceps': 14,
+        'Hombros': 14,
+        'Bíceps': 12,
+        'Tríceps': 12,
+        'Isquios': 12,
+        'Glúteos': 10,
+        'Core': 8,
+        'Gemelos': 8
+    };
+
+    const currentSets = {};
+    Object.keys(targets).forEach(m => currentSets[m] = 0);
+
+    completed.forEach(w => {
+        const wTime = w.completedAt || w.dateTimestamp || (w.date ? new Date(w.date).getTime() : 0);
+        if (wTime >= mondayTime && w.exercises) {
+            w.exercises.forEach(ex => {
+                const m = normalizeMuscleName(ex.group || ex.name);
+                if (currentSets[m] !== undefined) {
+                    const workingSets = (ex.sets || []).filter(s => s.type !== 'Calentamiento' && s.type !== 'Aproximación').length;
+                    currentSets[m] += workingSets;
+                }
+            });
+        }
+    });
+
+    let html = '';
+    Object.entries(targets).forEach(([muscle, target]) => {
+        const done = currentSets[muscle] || 0;
+        const pct = Math.min(Math.round((done / target) * 100), 100);
+        
+        let badgeColor = '#3b82f6';
+        let badgeText = getT('volume.optimal') || 'Óptimo';
+        let barGradient = 'linear-gradient(90deg, #3b82f6, #10b981)';
+
+        if (done < target * 0.6) {
+            badgeColor = '#f59e0b';
+            badgeText = getT('volume.low') || 'Bajo estímulo';
+            barGradient = 'linear-gradient(90deg, #f59e0b, #eab308)';
+        } else if (done > target * 1.3) {
+            badgeColor = '#8b5cf6';
+            badgeText = getT('volume.high') || 'Volumen alto';
+            barGradient = 'linear-gradient(90deg, #10b981, #8b5cf6)';
+        }
+
+        html += `
+            <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-weight: 700; font-size: 13px; color: var(--text-primary);">${muscle}</span>
+                        <span style="font-size: 10px; padding: 2px 6px; border-radius: 6px; background: rgba(59, 130, 246, 0.15); color: ${badgeColor}; font-weight: 600;">${badgeText}</span>
+                    </div>
+                    <span style="font-size: 12px; font-weight: 700; color: var(--text-secondary);">${done} / ${target} series</span>
+                </div>
+                <div style="height: 6px; background: var(--bg-surface); border-radius: 3px; overflow: hidden;">
+                    <div style="height: 100%; width: ${pct}%; background: ${barGradient}; border-radius: 3px; transition: width 0.4s ease;"></div>
+                </div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+};
+
+// =========================================================================
+// 4. ACHIEVEMENTS SYSTEM (26 LOGROS & MEDALLAS)
+// =========================================================================
+const ACHIEVEMENTS_CATALOG = [
+    { id: 'first_workout', title: 'Primer Paso', desc: 'Completa tu primer entrenamiento en la app.', icon: 'ph-sneaker', tier: 'bronze', category: 'streak' },
+    { id: 'strength_60', title: 'Club 60 kg', desc: 'Levanta 60 kg o más en cualquier ejercicio.', icon: 'ph-barbell', tier: 'bronze', category: 'strength' },
+    { id: 'strength_80', title: 'Club 80 kg', desc: 'Levanta 80 kg o más en cualquier ejercicio.', icon: 'ph-barbell', tier: 'silver', category: 'strength' },
+    { id: 'strength_100', title: 'Club 100 kg', desc: '¡Tres dígitos! Levanta 100 kg o más en un ejercicio.', icon: 'ph-trophy', tier: 'gold', category: 'strength' },
+    { id: 'strength_120', title: 'Club 120 kg', desc: 'Fuerza pesada: levanta 120 kg o más.', icon: 'ph-crown', tier: 'diamond', category: 'strength' },
+    { id: 'strength_140', title: 'Club 140 kg+', desc: 'Fuerza de élite: supera los 140 kg en un levantamiento.', icon: 'ph-fire', tier: 'master', category: 'strength' },
+    
+    { id: 'streak_3_week', title: 'Semana de Fuego', desc: 'Completa al menos 3 entrenamientos en la misma semana.', icon: 'ph-flame', tier: 'bronze', category: 'streak' },
+    { id: 'perfect_week', title: 'Semana Perfecta', desc: 'Completa 4 o más entrenamientos en una semana.', icon: 'ph-lightning', tier: 'silver', category: 'streak' },
+    { id: 'workouts_5', title: 'Iniciación Constante', desc: 'Completa 5 entrenamientos registrados en tu historial.', icon: 'ph-medal', tier: 'bronze', category: 'streak' },
+    { id: 'workouts_15', title: 'Hábito Forjado', desc: 'Completa 15 entrenamientos totales.', icon: 'ph-medal', tier: 'silver', category: 'streak' },
+    { id: 'workouts_30', title: 'Guerrero del Hierro', desc: 'Completa 30 entrenamientos en tu trayectoria.', icon: 'ph-medal', tier: 'gold', category: 'streak' },
+    { id: 'workouts_50', title: 'Medio Centenar', desc: 'Alcanza 50 entrenamientos completados.', icon: 'ph-crown', tier: 'diamond', category: 'streak' },
+    { id: 'workouts_100', title: 'Centurión Legendario', desc: '¡100 entrenamientos! Hito reservado a los más disciplinados.', icon: 'ph-trophy', tier: 'master', category: 'streak' },
+
+    { id: 'volume_5k', title: 'Camión Ligero', desc: 'Mueve más de 5.000 kg de volumen total en una sola sesión.', icon: 'ph-truck', tier: 'bronze', category: 'volume' },
+    { id: 'volume_10k', title: 'Grúa Pesada', desc: 'Mueve más de 10.000 kg de volumen total en una sesión.', icon: 'ph-gauge', tier: 'silver', category: 'volume' },
+    { id: 'volume_15k', title: 'Titán del Acero', desc: 'Mueve más de 15.000 kg de volumen en una sesión épica.', icon: 'ph-rocket', tier: 'gold', category: 'volume' },
+    { id: 'volume_total_100k', title: 'Rompedor de Cargas', desc: 'Acumula más de 100.000 kg de volumen total histórico.', icon: 'ph-mountains', tier: 'diamond', category: 'volume' },
+    
+    { id: 'to_failure', title: 'Hasta el Límite', desc: 'Registra tu primera serie llevada "Al fallo".', icon: 'ph-skull', tier: 'bronze', category: 'effort' },
+    { id: 'dropset_done', title: 'Maestro del Dropset', desc: 'Completa una serie Dropset utilizando la calculadora %.', icon: 'ph-percent', tier: 'bronze', category: 'effort' },
+    { id: 'first_pr', title: 'Rompe-Límites', desc: 'Consigue tu primer Récord Personal (PR) histórico.', icon: 'ph-trend-up', tier: 'silver', category: 'pr' },
+    { id: 'pr_triple', title: 'Lluvia de Récords', desc: 'Supera 3 o más récords personales en un solo entrenamiento.', icon: 'ph-sparkle', tier: 'gold', category: 'pr' },
+
+    { id: 'early_bird', title: 'Madrugador', desc: 'Completa un entrenamiento antes de las 9:00 AM.', icon: 'ph-sun-horizon', tier: 'bronze', category: 'lifestyle' },
+    { id: 'night_owl', title: 'Guerrero Nocturno', desc: 'Completa un entrenamiento después de las 20:30 PM.', icon: 'ph-moon-stars', tier: 'bronze', category: 'lifestyle' },
+    { id: 'iron_hour', title: 'Sesión de Hierro', desc: 'Completa un entrenamiento con más de 60 minutos de duración.', icon: 'ph-timer', tier: 'silver', category: 'lifestyle' },
+    { id: 'first_evolution', title: 'Seguimiento Riguroso', desc: 'Guarda tu primer registro de peso o medidas corporales.', icon: 'ph-scales', tier: 'bronze', category: 'lifestyle' },
+    { id: 'full_body_week', title: 'Atleta Completo', desc: 'Entrena pecho, espalda, hombros y piernas en la misma semana.', icon: 'ph-person-simple-run', tier: 'gold', category: 'lifestyle' }
+];
+
+window.loadAchievements = function() {
+    try {
+        const raw = localStorage.getItem('gym_achievements');
+        return raw ? JSON.parse(raw) : { unlocked: {} };
+    } catch(e) {
+        return { unlocked: {} };
+    }
+};
+
+window.saveAchievements = function(data) {
+    try {
+        localStorage.setItem('gym_achievements', JSON.stringify(data));
+    } catch(e) {}
+};
+
+window.checkAndUnlockAchievements = function(latestSessionData) {
+    const data = loadAchievements();
+    const completed = state.completedWorkouts || [];
+    const newlyUnlocked = [];
+
+    const unlock = (id) => {
+        if (!data.unlocked[id]) {
+            data.unlocked[id] = { unlockedAt: Date.now() };
+            const ach = ACHIEVEMENTS_CATALOG.find(a => a.id === id);
+            if (ach) newlyUnlocked.push(ach);
+        }
+    };
+
+    // 1. Total workouts
+    const totalCount = completed.length;
+    if (totalCount >= 1) unlock('first_workout');
+    if (totalCount >= 5) unlock('workouts_5');
+    if (totalCount >= 15) unlock('workouts_15');
+    if (totalCount >= 30) unlock('workouts_30');
+    if (totalCount >= 50) unlock('workouts_50');
+    if (totalCount >= 100) unlock('workouts_100');
+
+    // 2. Max weight lifted
+    let maxWeight = 0;
+    let totalVolumeHist = 0;
+    let hasFailure = false;
+    let hasDropset = false;
+
+    completed.forEach(w => {
+        let sessionVol = 0;
+        (w.exercises || []).forEach(ex => {
+            (ex.sets || []).forEach(s => {
+                const wt = parseFloat(s.weight) || 0;
+                const reps = parseFloat(s.reps) || 0;
+                if (wt > maxWeight) maxWeight = wt;
+                sessionVol += (wt * reps);
+
+                if (s.type === 'Al fallo') hasFailure = true;
+                if (s.weightDrop || s.repsDrop) hasDropset = true;
+            });
+        });
+        totalVolumeHist += sessionVol;
+        if (sessionVol >= 5000) unlock('volume_5k');
+        if (sessionVol >= 10000) unlock('volume_10k');
+        if (sessionVol >= 15000) unlock('volume_15k');
+
+        // Session time & hours
+        if (w.startTime && w.completedAt) {
+            const durMin = (w.completedAt - w.startTime) / 60000;
+            if (durMin >= 60) unlock('iron_hour');
+
+            const dateObj = new Date(w.completedAt);
+            const hour = dateObj.getHours();
+            if (hour < 9) unlock('early_bird');
+            if (hour >= 20 && dateObj.getMinutes() >= 30) unlock('night_owl');
+        }
+    });
+
+    if (maxWeight >= 60) unlock('strength_60');
+    if (maxWeight >= 80) unlock('strength_80');
+    if (maxWeight >= 100) unlock('strength_100');
+    if (maxWeight >= 120) unlock('strength_120');
+    if (maxWeight >= 140) unlock('strength_140');
+
+    if (totalVolumeHist >= 100000) unlock('volume_total_100k');
+    if (hasFailure) unlock('to_failure');
+    if (hasDropset) unlock('dropset_done');
+
+    // 3. PR checks
+    const prRecords = JSON.parse(localStorage.getItem('gym_personal_records') || '{}');
+    if (Object.keys(prRecords).length > 0) unlock('first_pr');
+
+    if (latestSessionData && latestSessionData.newPRs && latestSessionData.newPRs.length >= 3) {
+        unlock('pr_triple');
+    }
+
+    // 4. Weekly workouts count
+    const now = new Date();
+    const day = now.getDay();
+    const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+    const mondayTime = new Date(now.setDate(diff)).setHours(0,0,0,0);
+    const thisWeekWorkouts = completed.filter(w => (w.completedAt || 0) >= mondayTime);
+    if (thisWeekWorkouts.length >= 3) unlock('streak_3_week');
+    if (thisWeekWorkouts.length >= 4) unlock('perfect_week');
+
+    // 5. Full body in a week check
+    const trainedMusclesThisWeek = new Set();
+    thisWeekWorkouts.forEach(w => {
+        (w.exercises || []).forEach(ex => trainedMusclesThisWeek.add(normalizeMuscleName(ex.group || ex.name)));
+    });
+    if (trainedMusclesThisWeek.has('Pecho') && trainedMusclesThisWeek.has('Espalda') && trainedMusclesThisWeek.has('Hombros') && trainedMusclesThisWeek.has('Cuádriceps')) {
+        unlock('full_body_week');
+    }
+
+    // 6. Evolution records check
+    const evol = state.evolution || [];
+    if (evol.length > 0) unlock('first_evolution');
+
+    saveAchievements(data);
+
+    // Trigger toast celebration for newly unlocked
+    if (newlyUnlocked.length > 0) {
+        newlyUnlocked.forEach((ach, index) => {
+            setTimeout(() => showAchievementToast(ach), index * 4200);
+        });
+    }
+
+    return newlyUnlocked;
+};
+
+window.showAchievementToast = function(ach) {
+    const toast = document.getElementById('achievement-celebration-toast');
+    const nameEl = document.getElementById('toast-achievement-name');
+    const descEl = document.getElementById('toast-achievement-desc');
+    if (!toast || !nameEl || !descEl) return;
+
+    nameEl.textContent = ach.title;
+    descEl.textContent = ach.desc;
+
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    setTimeout(() => {
+        toast.style.transform = 'translateX(-50%) translateY(120px)';
+    }, 3800);
+};
+
+window.renderAchievementsView = function() {
+    const mount = document.getElementById('achievements-grid-mount');
+    const countEl = document.getElementById('achievements-global-count');
+    const barEl = document.getElementById('achievements-global-bar');
+    if (!mount) return;
+
+    checkAndUnlockAchievements();
+    const data = loadAchievements();
+    const unlockedCount = Object.keys(data.unlocked).length;
+    const totalCount = ACHIEVEMENTS_CATALOG.length;
+    const pct = Math.round((unlockedCount / totalCount) * 100);
+
+    if (countEl) countEl.textContent = `${unlockedCount} / ${totalCount} Desbloqueados (${pct}%)`;
+    if (barEl) barEl.style.width = pct + '%';
+
+    let html = '';
+    ACHIEVEMENTS_CATALOG.forEach(ach => {
+        const isUnlocked = !!data.unlocked[ach.id];
+        const dateStr = isUnlocked ? new Date(data.unlocked[ach.id].unlockedAt).toLocaleDateString() : '';
+
+        html += `
+            <div class="achievement-card ${isUnlocked ? 'unlocked' : 'locked'}">
+                <div class="achievement-icon-wrapper">
+                    <i class="ph-bold ${ach.icon}"></i>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+                        <span style="font-weight: 700; font-size: 13px; color: var(--text-primary); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${ach.title}</span>
+                        ${isUnlocked ? '<span style="color: #f59e0b; font-size: 12px;"><i class="ph-bold ph-check-circle"></i></span>' : '<span style="color: var(--text-muted); font-size: 11px;"><i class="ph ph-lock"></i></span>'}
+                    </div>
+                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px; line-height: 1.3;">${ach.desc}</div>
+                    ${isUnlocked ? `<div style="font-size: 10px; color: #f59e0b; margin-top: 4px; font-weight: 600;">Desbloqueado el ${dateStr}</div>` : ''}
+                </div>
+            </div>
+        `;
+    });
+
+    mount.innerHTML = html;
+};
+
+// =========================================================================
+// 5. STORY CARD GENERATOR (1080x1920 CANVAS FOR INSTAGRAM & WHATSAPP)
+// =========================================================================
+window.activeStoryData = null;
+
+window.openStoryCardModalFromSummary = function() {
+    const summaryTitle = document.getElementById('summary-workout-title')?.textContent || 'Entrenamiento';
+    const volumeVal = document.getElementById('summary-stat-volume')?.textContent || '0 kg';
+    const timeVal = document.getElementById('summary-stat-time')?.textContent || '45m';
+    const prsList = Array.from(document.querySelectorAll('#summary-prs-list > div')).map(d => d.textContent.trim());
+
+    const sessionData = {
+        title: summaryTitle.replace('¡', '').replace('!', '').trim(),
+        volume: volumeVal,
+        duration: timeVal,
+        date: new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }),
+        prs: prsList,
+        exercises: (activeSession && activeSession.exercises) ? activeSession.exercises : []
+    };
+
+    openStoryCardModal(sessionData);
+};
+
+window.openStoryCardModal = function(sessionData) {
+    window.activeStoryData = sessionData;
+    const modal = document.getElementById('modal-story-card');
+    if (!modal) return;
+
+    modal.classList.add('active');
+    drawStoryCardCanvas(sessionData);
+};
+
+window.drawStoryCardCanvas = function(data) {
+    const canvas = document.getElementById('story-canvas');
+    const previewImg = document.getElementById('story-preview-img');
+    if (!canvas || !previewImg) return;
+
+    const ctx = canvas.getContext('2d');
+    const W = 1080;
+    const H = 1920;
+    canvas.width = W;
+    canvas.height = H;
+
+    // 1. Dark Gradient Background
+    const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+    bgGrad.addColorStop(0, '#060913');
+    bgGrad.addColorStop(0.3, '#0b1120');
+    bgGrad.addColorStop(0.7, '#020617');
+    bgGrad.addColorStop(1, '#000000');
+    ctx.fillStyle = bgGrad;
+    ctx.fillRect(0, 0, W, H);
+
+    // 2. Ambient Mesh Glow
+    const glow1 = ctx.createRadialGradient(250, 400, 10, 250, 400, 450);
+    glow1.addColorStop(0, 'rgba(139, 92, 246, 0.25)');
+    glow1.addColorStop(1, 'rgba(139, 92, 246, 0)');
+    ctx.fillStyle = glow1;
+    ctx.fillRect(0, 0, W, H);
+
+    const glow2 = ctx.createRadialGradient(850, 1200, 10, 850, 1200, 500);
+    glow2.addColorStop(0, 'rgba(16, 185, 129, 0.18)');
+    glow2.addColorStop(1, 'rgba(16, 185, 129, 0)');
+    ctx.fillStyle = glow2;
+    ctx.fillRect(0, 0, W, H);
+
+    // Helper: Rounded Rect
+    const roundRect = (x, y, w, h, r) => {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.arcTo(x + w, y, x + w, y + r, r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.arcTo(x + w, y + h, x + w - r, y + h, r);
+        ctx.lineTo(x + r, y + h);
+        ctx.arcTo(x, y + h, x, y + h - r, r);
+        ctx.lineTo(x, y + r);
+        ctx.arcTo(x, y, x + r, y, r);
+        ctx.closePath();
+    };
+
+    // 3. Header Branding (GYM TRACKER)
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#3b82f6';
+    ctx.font = '800 36px sans-serif';
+    ctx.fillText('🏋️  GYM TRACKER', W / 2, 140);
+
+    // 4. Workout Title & Date
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '900 68px sans-serif';
+    const titleText = (data.title || 'ENTRENAMIENTO').toUpperCase();
+    ctx.fillText(titleText, W / 2, 240);
+
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '500 34px sans-serif';
+    ctx.fillText(data.date || new Date().toLocaleDateString(), W / 2, 310);
+
+    // 5. Stat Cards Grid (4 boxes: Tiempo, Volumen, Series, PRs)
+    const cardW = 440;
+    const cardH = 180;
+    const gapX = 40;
+    const startX = 80;
+    const startY = 400;
+
+    const stats = [
+        { label: 'DURACIÓN', val: data.duration || '45m', icon: '⏱️', color: '#38bdf8' },
+        { label: 'VOLUMEN TOTAL', val: data.volume || '0 kg', icon: '🏋️', color: '#10b981' },
+        { label: 'SERIES TOTALES', val: (data.exercises ? data.exercises.reduce((acc, ex) => acc + (ex.sets ? ex.sets.length : 0), 0) : 16) + ' series', icon: '🔢', color: '#a855f7' },
+        { label: 'RÉCORDS (PRs)', val: (data.prs ? data.prs.length : 0) + ' Nuevos', icon: '🏆', color: '#f59e0b' }
+    ];
+
+    stats.forEach((st, i) => {
+        const row = Math.floor(i / 2);
+        const col = i % 2;
+        const x = startX + col * (cardW + gapX);
+        const y = startY + row * (cardH + 30);
+
+        // Box background
+        ctx.fillStyle = '#1e293b';
+        roundRect(x, y, cardW, cardH, 24);
+        ctx.fill();
+
+        // Border with color tint
+        ctx.strokeStyle = st.color;
+        ctx.lineWidth = 2.5;
+        roundRect(x, y, cardW, cardH, 24);
+        ctx.stroke();
+
+        // Icon & Label
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '700 24px sans-serif';
+        ctx.fillText(`${st.icon} ${st.label}`, x + 30, y + 55);
+
+        // Value
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '900 48px sans-serif';
+        ctx.fillText(st.val, x + 30, y + 130);
+    });
+
+    // 6. Section: Highlights / Exercises list
+    const boxY = 840;
+    const boxH = 760;
+    ctx.fillStyle = '#0f172a';
+    roundRect(80, boxY, 920, boxH, 28);
+    ctx.fill();
+    ctx.strokeStyle = '#334155';
+    ctx.lineWidth = 2;
+    roundRect(80, boxY, 920, boxH, 28);
+    ctx.stroke();
+
+    // Box Header
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#38bdf8';
+    ctx.font = '800 32px sans-serif';
+    ctx.fillText('⚡ RESUMEN DEL ENTRENAMIENTO', W / 2, boxY + 70);
+
+    // List exercises
+    const exs = data.exercises || [];
+    let curY = boxY + 145;
+    const maxShow = 5;
+
+    if (exs.length === 0) {
+        ctx.textAlign = 'center';
+        ctx.fillStyle = '#64748b';
+        ctx.font = '500 34px sans-serif';
+        ctx.fillText('¡Gran esfuerzo completado hoy!', W / 2, boxY + 380);
+    } else {
+        exs.slice(0, maxShow).forEach((ex, idx) => {
+            const bestSet = (ex.sets || []).reduce((best, s) => {
+                const wt = parseFloat(s.weight) || 0;
+                return wt > (best.wt || 0) ? { wt, reps: s.reps } : best;
+            }, { wt: 0, reps: 10 });
+
+            // Exercise row card
+            ctx.fillStyle = '#1e293b';
+            roundRect(110, curY, 860, 100, 16);
+            ctx.fill();
+
+            // Exercise name
+            ctx.textAlign = 'left';
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '700 32px sans-serif';
+            let exName = ex.name || 'Ejercicio';
+            if (exName.length > 30) exName = exName.substring(0, 28) + '...';
+            ctx.fillText(exName, 140, curY + 62);
+
+            // Best set metrics
+            ctx.textAlign = 'right';
+            ctx.fillStyle = '#10b981';
+            ctx.font = '800 32px sans-serif';
+            const setStr = bestSet.wt > 0 ? `${bestSet.wt} kg × ${bestSet.reps}` : `${ex.sets ? ex.sets.length : 0} series`;
+            ctx.fillText(setStr, 940, curY + 62);
+
+            curY += 120;
+        });
+    }
+
+    // 7. Footer Watermark
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#64748b';
+    ctx.font = '600 28px sans-serif';
+    ctx.fillText('🔥 Superando límites cada día • Gym Tracker', W / 2, 1720);
+
+    // Badge at bottom
+    ctx.fillStyle = '#1e293b';
+    roundRect(W / 2 - 160, 1780, 320, 60, 30);
+    ctx.fill();
+    ctx.fillStyle = '#3b82f6';
+    ctx.font = '700 22px sans-serif';
+    ctx.fillText('github.com/Streetoh', W / 2, 1818);
+
+    // Render preview
+    previewImg.src = canvas.toDataURL('image/png');
+};
+
+window.downloadStoryCard = function() {
+    const canvas = document.getElementById('story-canvas');
+    if (!canvas) return;
+    const a = document.createElement('a');
+    a.download = 'gym-tracker-historia.png';
+    a.href = canvas.toDataURL('image/png');
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => a.remove(), 200);
+};
+
+window.shareStoryCard = async function() {
+    const canvas = document.getElementById('story-canvas');
+    if (!canvas) return;
+
+    try {
+        canvas.toBlob(async (blob) => {
+            if (!blob) return downloadStoryCard();
+            const file = new File([blob], 'gym-tracker-historia.png', { type: 'image/png' });
+
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    title: 'Mi Entrenamiento en Gym Tracker',
+                    text: '¡Entrenamiento completado en Gym Tracker! 🔥',
+                    files: [file]
+                });
+            } else if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Share) {
+                // Capacitor native share
+                await window.Capacitor.Plugins.Share.share({
+                    title: 'Gym Tracker Historia',
+                    text: '¡Entrenamiento superado con Gym Tracker! 💪',
+                    dialogTitle: 'Compartir Historia'
+                });
+            } else {
+                downloadStoryCard();
+            }
+        }, 'image/png');
+    } catch(e) {
+        downloadStoryCard();
+    }
+};
+
+// Check achievements upon completing workouts
+const origFinishWorkout = window.finishWorkout;

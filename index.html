@@ -173,7 +173,7 @@
 
             <!-- MOBILE DRAWER FOOTER (APP VERSION) -->
             <div class="mobile-drawer-footer" style="padding: 12px 16px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px; align-items: center;">
-                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); window.openUpdateModal();" data-i18n-title="update.viewNews" title="Ver novedades">Gym Tracker v1.1.9</span>
+                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); window.openUpdateModal();" data-i18n-title="update.viewNews" title="Ver novedades">Gym Tracker v1.2.0</span>
                 <button id="btn-manual-check-update" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); checkForUpdates(true);">
                     <i class="ph ph-arrows-clockwise"></i> <span data-i18n="update.checkBtn">Comprobar actualización</span>
                 </button>
@@ -280,13 +280,28 @@
             <!-- PROGRESSION VIEW -->
             <section id="view-progression" class="view">
                 <h2 style="font-size: 18px; margin-bottom: 8px;" data-i18n="header.progression">Progresión</h2>
-                <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 24px;" data-i18n="progression.desc">Visualiza cómo has mejorado en tus levantamientos a lo largo del tiempo, agrupados por grupo muscular y tipo de entrenamiento.</p>
-                
-                <div style="display:flex; gap: 8px; margin-bottom: 16px;">
-                    <button id="btn-prog-hyp" class="btn-primary" style="flex:1; font-size:12px; padding:8px;" data-i18n="types.hypertrophy">Hipertrofia</button>
-                    <button id="btn-prog-heavy" class="btn-secondary" style="flex:1; font-size:12px; padding:8px;" data-i18n="types.heavy">Pesado</button>
-                    <button id="btn-prog-int" class="btn-secondary" style="flex:1; font-size:12px; padding:8px;" data-i18n="types.intensity">Alta intensidad</button>
+                <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;" data-i18n="progression.desc">Visualiza tus mejoras de fuerza, fatiga muscular acumulada y logros desbloqueados.</p>
+
+                <!-- Sub-navigation tabs -->
+                <div class="prog-tabs-nav" style="display: flex; gap: 8px; margin-bottom: 20px; background: var(--bg-surface); padding: 4px; border-radius: 12px; border: 1px solid var(--border-color);">
+                    <button type="button" id="tab-btn-prog-charts" class="prog-tab-btn active" onclick="switchProgressionTab('charts')" style="flex: 1; padding: 10px 6px; font-size: 12px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                        <i class="ph-bold ph-chart-line-up"></i> <span data-i18n="progression.tabCharts">Fuerza</span>
+                    </button>
+                    <button type="button" id="tab-btn-prog-fatigue" class="prog-tab-btn" onclick="switchProgressionTab('fatigue')" style="flex: 1; padding: 10px 6px; font-size: 12px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                        <i class="ph-bold ph-heartbeat"></i> <span data-i18n="progression.tabFatigue">Fatiga y Volumen</span>
+                    </button>
+                    <button type="button" id="tab-btn-prog-achievements" class="prog-tab-btn" onclick="switchProgressionTab('achievements')" style="flex: 1; padding: 10px 6px; font-size: 12px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                        <i class="ph-bold ph-trophy"></i> <span data-i18n="progression.tabAchievements">Logros</span>
+                    </button>
                 </div>
+
+                <!-- SUB-VIEW 1: CHARTS -->
+                <div id="prog-subview-charts" class="prog-subview active">
+                    <div style="display:flex; gap: 8px; margin-bottom: 16px;">
+                        <button id="btn-prog-hyp" class="btn-primary" style="flex:1; font-size:12px; padding:8px;" data-i18n="types.hypertrophy">Hipertrofia</button>
+                        <button id="btn-prog-heavy" class="btn-secondary" style="flex:1; font-size:12px; padding:8px;" data-i18n="types.heavy">Pesado</button>
+                        <button id="btn-prog-int" class="btn-secondary" style="flex:1; font-size:12px; padding:8px;" data-i18n="types.intensity">Alta intensidad</button>
+                    </div>
 
                 <div class="form-group" style="position: relative; margin-bottom: 16px;">
                     <i class="ph ph-magnifying-glass" style="position: absolute; left: 12px; top: 12px; color: var(--text-muted); font-size:16px;"></i>
@@ -302,6 +317,81 @@
                 </div>
 
                 <div id="progression-chart-card" class="card" style="display: none; padding: 16px; margin-top: 16px;"><canvas id="progression-chart"></canvas></div>
+                </div> <!-- End prog-subview-charts -->
+
+                <!-- SUB-VIEW 2: ANATOMICAL MAP & WEEKLY VOLUME -->
+                <div id="prog-subview-fatigue" class="prog-subview" style="display: none;">
+                    <!-- Anatomical Map Section -->
+                    <div class="card" style="padding: 18px; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                            <h3 style="font-size: 16px; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 8px;">
+                                <i class="ph-bold ph-person-simple" style="color: var(--color-accent); font-size: 20px;"></i>
+                                <span data-i18n="anatomy.title">Mapa de Fatiga Muscular</span>
+                            </h3>
+                            <button type="button" class="btn-secondary" style="font-size: 11px; padding: 4px 10px; border-radius: 6px;" onclick="refreshMuscleFatigueMap()">
+                                <i class="ph ph-arrows-clockwise"></i> <span data-i18n="common.refresh">Actualizar</span>
+                            </button>
+                        </div>
+                        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;" data-i18n="anatomy.desc">Estado de fatiga y recuperación estimado según los entrenamientos completados en los últimos 7 días.</p>
+
+                        <!-- SVG Silhouette Container -->
+                        <div id="anatomy-silhouette-mount"></div>
+
+                        <!-- Legend & Selected Muscle Details -->
+                        <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; padding: 12px; margin-top: 14px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; border-bottom: 1px dashed var(--border-color); padding-bottom: 8px;">
+                                <span style="font-size: 12px; font-weight: 700; color: var(--text-primary);" data-i18n="anatomy.statusLegend">Nivel de Fatiga:</span>
+                                <div style="display: flex; gap: 10px; font-size: 11px; align-items: center;">
+                                    <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #ef4444; display: inline-block;"></span> <span data-i18n="anatomy.fatigued">Fatigado (&lt;24h)</span></span>
+                                    <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span> <span data-i18n="anatomy.recovering">Recuperando (24-60h)</span></span>
+                                    <span style="display: flex; align-items: center; gap: 4px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block;"></span> <span data-i18n="anatomy.ready">Listo (&gt;60h)</span></span>
+                                </div>
+                            </div>
+                            <div id="anatomy-selected-muscle-detail" style="font-size: 12px; color: var(--text-secondary); text-align: center;" data-i18n="anatomy.tapPrompt">
+                                Toca cualquier músculo en la silueta para ver su estado de recuperación y volumen de series.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Weekly Volume by Muscle Section -->
+                    <div class="card" style="padding: 18px; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <h3 style="font-size: 16px; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 8px;">
+                                <i class="ph-bold ph-barbell" style="color: #10b981; font-size: 20px;"></i>
+                                <span data-i18n="volume.title">Series Semanales Óptimas</span>
+                            </h3>
+                            <span id="weekly-volume-range-label" style="font-size: 11px; color: var(--text-secondary); background: var(--bg-surface); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-color);">Semana Actual</span>
+                        </div>
+                        <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 16px;" data-i18n="volume.desc">Series efectivas realizadas esta semana vs rango hipertrófico óptimo (10 a 20 series semanales).</p>
+                        <div id="weekly-volume-bars-container" style="display: flex; flex-direction: column; gap: 12px;"></div>
+                    </div>
+                </div> <!-- End prog-subview-fatigue -->
+
+                <!-- SUB-VIEW 3: ACHIEVEMENTS WALL -->
+                <div id="prog-subview-achievements" class="prog-subview" style="display: none;">
+                    <div class="card" style="padding: 18px; margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                            <div>
+                                <h3 style="font-size: 16px; font-weight: 700; margin: 0 0 4px 0; display: flex; align-items: center; gap: 8px;">
+                                    <i class="ph-bold ph-medal" style="color: #f59e0b; font-size: 20px;"></i>
+                                    <span data-i18n="achievements.title">Muro de Logros y Trofeos</span>
+                                </h3>
+                                <div id="achievements-global-count" style="font-size: 12px; color: var(--text-secondary);">0 / 26 Desbloqueados (0%)</div>
+                            </div>
+                            <div style="width: 44px; height: 44px; border-radius: 12px; background: rgba(245, 158, 11, 0.15); display: flex; align-items: center; justify-content: center; color: #f59e0b; font-size: 24px;">
+                                <i class="ph-bold ph-trophy"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Global progress bar -->
+                        <div style="background: var(--bg-surface); height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 16px;">
+                            <div id="achievements-global-bar" style="height: 100%; width: 0%; background: linear-gradient(90deg, #f59e0b, #10b981); border-radius: 4px; transition: width 0.5s;"></div>
+                        </div>
+
+                        <!-- Achievements Grid Mount -->
+                        <div id="achievements-grid-mount" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px;"></div>
+                    </div>
+                </div> <!-- End prog-subview-achievements -->
             </section>
 
             <!-- EVOLUTION VIEW -->
@@ -816,7 +906,7 @@
                     </div>
                     <div style="text-align: left;">
                         <h3 id="update-modal-title" style="font-size: 17px; font-weight: 700; color: var(--text-primary); margin: 0;" data-i18n="update.title">¡Nueva versión disponible!</h3>
-                        <span id="update-modal-version-tag" style="font-size: 12px; font-weight: 600; color: #10b981;">Versión 1.1.9</span>
+                        <span id="update-modal-version-tag" style="font-size: 12px; font-weight: 600; color: #10b981;">Versión 1.2.0</span>
                     </div>
                 </div>
                 <button class="btn-icon close-modal" onclick="document.getElementById('modal-update').classList.remove('active')" style="color: var(--text-secondary);"><i class="ph ph-x" style="font-size: 20px;"></i></button>
@@ -1122,5 +1212,54 @@
     <script src="default_db.js?v=1788267000000"></script>
     <script src="app.js?v=1788267000000"></script>
     <script src="ai_logic.js?v=1788267000000"></script>
+
+    <!-- MODAL HISTORIA DE ENTRENAMIENTO (9:16 INSTAGRAM / WHATSAPP) -->
+    <div id="modal-story-card" class="modal">
+        <div class="modal-content" style="max-width: 440px; max-height: 94vh; margin: auto; border-radius: 24px; padding: 20px; text-align: center; display: flex; flex-direction: column;">
+            <div class="modal-header" style="justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2)); display: flex; align-items: center; justify-content: center; color: #a855f7; font-size: 20px;">
+                        <i class="ph-bold ph-camera"></i>
+                    </div>
+                    <h3 style="font-size: 17px; font-weight: 700; margin: 0;" data-i18n="story.title">Tarjeta para Historias</h3>
+                </div>
+                <button class="btn-icon close-modal" onclick="document.getElementById('modal-story-card').classList.remove('active')"><i class="ph ph-x"></i></button>
+            </div>
+            
+            <div class="modal-body" style="display: flex; flex-direction: column; align-items: center; gap: 14px; overflow-y: auto;">
+                <!-- Canvas preview container -->
+                <div style="position: relative; width: 100%; max-width: 320px; border-radius: 18px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.6); border: 1px solid var(--border-color); background: #020617;">
+                    <canvas id="story-canvas" width="1080" height="1920" style="display: none;"></canvas>
+                    <img id="story-preview-img" style="width: 100%; display: block; border-radius: 18px; aspect-ratio: 9/16; object-fit: contain;" alt="Historia de entrenamiento">
+                </div>
+
+                <!-- Story action buttons -->
+                <div style="width: 100%; display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" class="btn-primary" style="flex: 1; padding: 12px; font-size: 13px; font-weight: 700; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; background: #10b981; border-color: #10b981;" onclick="shareStoryCard()">
+                            <i class="ph-bold ph-share-network"></i> <span data-i18n="story.shareBtn">Compartir</span>
+                        </button>
+                        <button type="button" class="btn-secondary" style="flex: 1; padding: 12px; font-size: 13px; font-weight: 700; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="downloadStoryCard()">
+                            <i class="ph-bold ph-download-simple"></i> <span data-i18n="story.downloadBtn">Descargar</span>
+                        </button>
+                    </div>
+                    <button type="button" class="btn-secondary close-modal full-width" style="padding: 10px; font-size: 12px; border-radius: 10px;" onclick="document.getElementById('modal-story-card').classList.remove('active')" data-i18n="common.close">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST CELEBRACIÓN DE LOGRO DESBLOQUEADO -->
+    <div id="achievement-celebration-toast" style="position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(120px); background: linear-gradient(135deg, #1e293b, #0f172a); border: 2px solid #f59e0b; border-radius: 18px; padding: 14px 20px; color: white; display: flex; align-items: center; gap: 14px; box-shadow: 0 10px 35px rgba(245, 158, 11, 0.4); z-index: 999999; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; max-width: 90%; min-width: 290px;">
+        <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-size: 24px; color: #fff; flex-shrink: 0; box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);">
+            <i class="ph-bold ph-trophy"></i>
+        </div>
+        <div style="flex: 1;">
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #f59e0b;" data-i18n="achievements.toastUnlocked">¡Logro Desbloqueado!</div>
+            <div id="toast-achievement-name" style="font-size: 14px; font-weight: 700; color: #fff;">Nombre del logro</div>
+            <div id="toast-achievement-desc" style="font-size: 11px; color: #94a3b8;">Descripción del logro</div>
+        </div>
+    </div>
+
 </body>
 </html>

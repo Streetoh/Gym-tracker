@@ -1,66 +1,23 @@
 {
-  "version": "1.1.9",
-  "releaseDate": "02/09/2026",
+  "version": "1.2.0",
+  "versionCode": 120,
+  "downloadUrl": "https://github.com/Streetoh/Gym-tracker/raw/main/Gym%20tracker.apk",
+  "githubUrl": "https://github.com/Streetoh/Gym-tracker",
   "changelog": {
     "es": [
-      "Calculadora de discos de barra: adaptada para barra olímpica de 25 kg y soporte completo para Multipower / Smith machine (barra de 15 kg), con distribución de discos 100% equilibrada y simétrica.",
-      "Sustitución rápida de ejercicio en vivo: cambia cualquier ejercicio durante el entrenamiento por otra alternativa del mismo grupo muscular manteniendo tus series.",
-      "Detección automática de PR en vivo: insignia de trofeo 🏆 al instante al superar tus marcas históricas de peso o 1RM estimado.",
-      "Tarjeta de resumen al terminar: visualiza tiempo total, volumen levantado (kg), series completadas, nuevos récords superados y opción de copiar resumen.",
-      "Comparador de fotos antes / después: compara tu evolución física frontal, lateral o de espalda en vista lado a lado o con deslizador interactivo.",
-      "Soporte multiidioma completo en todas las nuevas funciones (Español, Inglés, Ruso, Estonio, Ucraniano).",
-      "Pestaña Evolución: teclado estrictamente numérico sin letras para casillas de peso, grasa y medidas corporales en ambas columnas.",
-      "Entrenamiento activo: eliminación del botón de papelera y optimización del diseño de series evitando cualquier solapamiento en casillas.",
-      "Entrenamiento activo: centrado milimétrico de las cabeceras Reps y Kg sobre sus casillas. Calculador de discos: simplificado con botón único de Cerrar.",
-      "Menú lateral: nuevo botón directo al repositorio de GitHub. Notificaciones: eliminación y limpieza automática de la notificación de entrenamiento al finalizar o cancelar la sesión."
+      "Versión 1.2.0: 1) Mapa Anatómico 2D interactivo con heatmap de recuperación muscular. 2) Monitor de series semanales óptimas por músculo. 3) Muro de 26 logros y medallas desbloqueables con alertas en vivo. 4) Tarjeta de resumen estilizada en 9:16 para Historias de Instagram y WhatsApp. 5) Teclado numérico estricto y alineación de entrenamiento."
     ],
     "en": [
-      "Barbell plate calculator: configured for 25kg Olympic bar and full support for Multipower / Smith machine (15kg bar), with 100% balanced and symmetric plate distribution.",
-      "Quick live exercise substitution: replace any exercise during your workout with an alternative from the same muscle group while preserving sets.",
-      "Real-time PR detection: instant 🏆 trophy badge when breaking historical weight or estimated 1RM personal records.",
-      "Workout summary card: modern finish modal showing total duration, volume lifted (kg), completed sets, broken PRs, and share/copy option.",
-      "Before / after photo comparator: compare front, side, and back evolution photos side-by-side or with an interactive slider.",
-      "Full multi-language support across all 5 features (Spanish, English, Russian, Estonian, Ukrainian).",
-      "Evolution tab: strictly numeric keypad for weight, body fat, and body measurement inputs across both columns.",
-      "Active workout: removed trash can button and optimized set row layout, completely preventing cell overlapping.",
-      "Active workout: precise centering of Reps and Kg headers over their input cells. Plate calculator: simplified with a single Close button.",
-      "Sidebar menu: new direct button to GitHub repository. Notifications: automatic removal and cleanup of workout notification upon finishing or cancelling a session."
+      "Version 1.2.0: 1) Interactive 2D Anatomical Map with muscle recovery heatmap. 2) Optimal weekly working sets tracker per muscle. 3) 26 unlockable achievements & trophies wall with live celebration toasts. 4) Stylized 9:16 story card generator for Instagram and WhatsApp. 5) Strict numeric keypad and alignment fixes."
     ],
     "ru": [
-      "Калькулятор блинов: настроен для олимпийского грифа 25 кг и полная поддержка тренажера Смита / Мультипауэра (гриф 15 кг) с 100% симметричным распределением.",
-      "Быстрая замена упражнения на тренировке: заменяйте упражнение альтернативой для той же группы мышц с сохранением подходов.",
-      "Автоматическое определение рекордов в реальном времени: золотой трофей 🏆 при превышении максимального веса или расчетного 1ПМ.",
-      "Карточка итогов тренировки: стильное окно с общим временем, поднятым объемом (кг), подходами, рекордами и кнопкой копирования.",
-      "Сравнение фото До / После: сравнение формы спереди, сбоку и со спины рядом или с помощью интерактивного слайдера.",
-      "Полная поддержка всех языков во всех новых функциях (испанский, английский, русский, эстонский, украинский).",
-      "Вкладка Эволюция: строго цифровая клавиатура без букв для веса, жира и замеров тела в обеих колонках.",
-      "Активная тренировка: удалена иконка корзины и оптимизирована сетка подходов, предотвращая любое наложение полей.",
-      "Активная тренировка: точное центрирование заголовков Reps и Kg над полями ввода. Калькулятор блинов: упрощен с одной кнопкой Закрыть.",
-      "Боковое меню: новая кнопка перехода в репозиторий GitHub. Уведомления: автоматическое удаление уведомления о тренировке при ее завершении или отмене."
+      "Версия 1.2.0: 1) Интерактивная 2D карта мышц с тепловой картой восстановления. 2) Монитор оптимальных подходов в неделю. 3) Стена из 26 достижений и медалей. 4) Карточка 9:16 для историй Instagram и WhatsApp. 5) Строгая числовая клавиатура."
     ],
     "et": [
-      "Kettakalkulaator: kohandatud 25 kg olümpiakangi jaoks ja täielik tugi Multipower / Smith masinale (15 kg kang) 100% sümmeetrilise jaotusega.",
-      "Kiire harjutuse asendamine reaalajas: vaheta harjutus teise sama lihasgrupi harjutuse vastu, säilitades seeriad.",
-      "Reaalajas isiklike rekordite (PR) tuvastamine: kuldne karikas 🏆 kohe, kui ületad oma varasema maksimaalkaalu või hinnangulise 1KM.",
-      "Treeningu kokkuvõtte kaart: näitab koguaega, tõstetud mahtu (kg), sooritatud seeriaid, purustatud rekordeid ja kokkuvõtte kopeerimise võimalust.",
-      "Enne / pärast fotode võrdleja: võrdle füüsilist arengut eest, küljelt või tagant kõrvuti või interaktiivse liuguriga.",
-      "Täielik mitmekeelne tugi kõigis uutes funktsioonides (hispaania, inglise, vene, eesti, ukraina).",
-      "Evolutsiooni vahekaart: rangelt numbriline klaviatuur ilma tähtedeta kaalu, rasvaprotsendi ja kehamõõtude jaoks mõlemas veerus.",
-      "Aktiivne treening: eemaldatud prügikasti ikoon ja optimeeritud seeriate paigutus, vältides väljade kattumist.",
-      "Aktiivne treening: Reps ja Kg päiste täpne tsentreerimine väljade kohal. Kettakalkulaator: lihtsustatud ainsa Sulge nupuga.",
-      "Külgmenüü: uus otsetee nupp GitHubi repositooriumisse. Teavitused: treeningu teavituse automaatne eemaldamine sessiooni lõpetamisel või tühistamisel."
+      "Versioon 1.2.0: 1) Interaktiivne 2D lihaste kaart taastumise kuumuskaardiga. 2) Nädala optimaalsete seeriate jälgija. 3) 26 avatavat saavutust ja medalit. 4) 9:16 Story kaardi generaator Instagrami ja WhatsAppi jaoks. 5) Numbriklaviatuur."
     ],
     "uk": [
-      "Калькулятор млинців: налаштовано для олімпійського грифа 25 кг та повна підтримка тренажера Сміта / Мультипауера (гриф 15 кг) зі 100% симетричним розподілом.",
-      "Швидка заміна вправи під час тренування: заміна будь-якої вправи на альтернативу для тієї ж групи м'язів зі збереженням підходів.",
-      "Автоматичне визначення рекордів у реальному часі: золотий кубок 🏆 при побитті історичного рекорду ваги або розрахункового 1ПМ.",
-      "Картка підсумків тренування: стильне модальне вікно із загальним часом, піднятим об'ємом (кг), підходами, новими рекордами та копіюванням підсумку.",
-      "Порівняння фото До / Після: порівняння форми спереду, збоку та зі спини поруч або за допомогою інтерактивного слайдера.",
-      "Повна багатомовна підтримка в усіх нових функціях (іспанська, англійська, російська, естонська, українська).",
-      "Вкладка Еволюція: суворо цифрова клавіатура без літер для ваги, жиру та вимірів тіла в обох колонках.",
-      "Активне тренування: видалено іконку кошика та оптимізовано сітку підходів, повністю запобігаючи накладанню полів.",
-      "Активне тренування: точне центрування заголовків Reps та Kg над полями введення. Калькулятор млинців: спрощено з єдиною кнопкою Закрити.",
-      "Бічне меню: нова кнопка переходу до репозиторію GitHub. Сповіщення: автоматичне видалення сповіщення про тренування при його завершенні або скасуванні."
+      "Версія 1.2.0: 1) Інтерактивна 2D карта м'язів з тепловою картою відновлення. 2) Монітор оптимальних підходів на тиждень. 3) Стіна з 26 досягнень та медалей. 4) Картка 9:16 для історій Instagram та WhatsApp. 5) Числова клавіатура."
     ]
   }
 }

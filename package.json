@@ -1,6 +1,6 @@
 {
   "name": "gym-tracker",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "",
   "main": "app.js",
   "scripts": {
@@ -12,12 +12,16 @@
   "type": "commonjs",
   "dependencies": {
     "@capacitor/android": "^8.5.0",
+    "@capacitor/app": "^8.1.1",
+    "@capacitor/browser": "^8.0.4",
     "@capacitor/cli": "^8.5.0",
     "@capacitor/core": "^8.5.0",
     "@capacitor/filesystem": "^8.1.2",
     "@capacitor/local-notifications": "^8.3.0",
     "@capacitor/share": "^8.0.1",
     "chart.js": "^4.5.1",
-    "html2pdf.js": "^0.14.0"
+    "html2pdf.js": "^0.14.0",
+    "jimp": "^0.22.10",
+    "jsdom": "^30.0.1"
   }
 }
