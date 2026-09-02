@@ -1248,6 +1248,7 @@ state.exercises.forEach(ex => {
     }
 });
 state.exercises = uniqueEx;
+window.state = state;
 saveState();
 
 // UI State
@@ -5018,6 +5019,8 @@ const startWorkout = (session) => {
     document.getElementById('workout-title').textContent = session.name || 'Entrenamiento';
     workoutView.style.setProperty('--color-accent', `var(--color-${session.type || 'hypertrophy'})`); 
     
+    const isActive = !!(state.activeWorkoutState && state.activeWorkoutState.session && state.activeWorkoutState.session.id === session.id); 
+    
     // Recover completed data lazily if needed
     if (activeSession.completed) {
         openExerciseAccordions = [0]; 
@@ -8487,7 +8490,7 @@ window.generateDashboard = function(mode) {
     }
 };
 
-const CURRENT_APP_VERSION = '1.2.4';
+const CURRENT_APP_VERSION = '1.2.5';
 function compareVersions(v1, v2) {
     const p1 = String(v1).split('.').map(Number);
     const p2 = String(v2).split('.').map(Number);
@@ -8503,39 +8506,41 @@ window.latestUpdateData = null;
 
 const DEFAULT_APP_CHANGELOG = {
     "es": [
-        "🫀 **Mapa Anatómico 2D**: Visualiza la fatiga y recuperación muscular en tiempo real (frontal y dorsal).",
-        "📊 **Series Semanales Óptimas**: Control del volumen hipertrófico semanal por grupo muscular.",
-        "🏆 **Muro de Logros**: 26 medallas e insignias desbloqueables con alertas de celebración en vivo.",
-        "📸 **Tarjeta para Historias**: Exporta resúmenes estilizados en 9:16 para Instagram y WhatsApp.",
-        "⌨️ **Teclado Numérico Estricto**: Optimización para introducir números directamente en medidas y series."
+        "📸 **Tarjeta para Historias (PNG Nativo)**: Compartición directa del archivo de imagen a Instagram Stories, WhatsApp y Telegram (sin texto plano).",
+        "💾 **Descarga Directa en Dispositivo**: Botón de guardar imagen en el dispositivo/galería completamente funcional en Android.",
+        "✏️ **Edición de Sesiones Finalizadas**: Rediseño limpio de la cabecera (título arriba, botón de editar y distintivo verde debajo sin textos redundantes).",
+        "🔄 **Sincronización Total con el Historial**: Actualización en tiempo real de pesos y repeticiones en el registro de entrenamientos y marcas personales (PRs).",
+        "ℹ️ **Técnica y Vídeos en Vivo**: Acceso directo a la guía de técnica y ejecución de cada ejercicio durante el entrenamiento.",
+        "⚡ **Corrección en Sesiones Planeadas**: Solucionado el error al abrir entrenamientos pendientes desde el calendario."
     ],
     "en": [
-        "🫀 **2D Anatomical Map**: Track muscle recovery and fatigue in real time (front & back views).",
-        "📊 **Optimal Weekly Sets**: Monitor weekly hypertrophy volume landmarks per muscle.",
-        "🏆 **Achievements Wall**: 26 unlockable trophies and badges with live celebration toasts.",
-        "📸 **Story Cards**: Export stylized 9:16 workout summaries for Instagram and WhatsApp.",
-        "⌨️ **Strict Numeric Keypad**: Large digits keypad directly for weights and measurements."
+        "📸 **Story Cards (Native PNG)**: Share real image files directly to Instagram Stories, WhatsApp, and Telegram without plain text.",
+        "💾 **Direct Device Download**: Working save image to device/gallery button on Android.",
+        "✏️ **Completed Session Editing**: Clean header layout (title on top, edit button & green badge underneath without redundant text).",
+        "🔄 **Full History Sync**: Real-time update of edited weights and reps in the History tab and personal records (PRs).",
+        "ℹ️ **Live Technique Guide**: Quick access to exercise execution guides and videos during active workouts.",
+        "⚡ **Planned Workouts Fix**: Fixed opening scheduled sessions from the calendar."
     ],
     "ru": [
-        "🫀 **2D Карта мышц**: Тепловая карта восстановления и мышечной усталости (вид спереди и сзади).",
-        "📊 **Оптимальные подходы**: Контроль объёма тренировок за неделю по группам мышц.",
-        "🏆 **Стена достижений**: 26 разблокируемых трофеев и медалей.",
-        "📸 **Карточки для историй**: Экспорт итогов тренировки в формате 9:16 для Instagram и WhatsApp.",
-        "⌨️ **Числовая клавиатура**: Быстрый ввод чисел для весов и замеров."
+        "📸 **Карточки для историй**: Экспорт реального PNG-файла в Instagram и WhatsApp без простого текста.",
+        "💾 **Сохранение в галерею**: Скачивание изображения тренировки на устройство.",
+        "✏️ **Редактирование завершенных тренировок**: Чистый заголовок и синхронизация с историей.",
+        "🔄 **Синхронизация с историей**: Обновление весов и повторений в истории и рекордах.",
+        "ℹ️ **Техника упражнений**: Информация и видео выполнения прямо во время тренировки."
     ],
     "et": [
-        "🫀 **2D Lihaste kaart**: Jälgi taastumist ja väsimust reaalajas (ees ja taga).",
-        "📊 **Nädala optimaalsed seeriad**: Hüpertroofia mahu jälgimine lihasrühmade kaupa.",
-        "🏆 **Saavutuste sein**: 26 avatavat trofeed ja medalit.",
-        "📸 **Story kaardid**: Stiilsed 9:16 kokkuvõtted Instagrami ja WhatsAppi jaoks.",
-        "⌨️ **Numbriklaviatuur**: Mugav numbrite sisestamine kaalu ja mõõtude jaoks."
+        "📸 **Story kaardid**: Jaga reaalset PNG-pilti otse Instagrami ja WhatsAppi ilma tavalise tekstita.",
+        "💾 **Salvesta seadmesse**: Laadi treeningu pilt otse seadme galeriisse.",
+        "✏️ **Lõpetatud treeningu muutmine**: Puhas päis ja täielik sünkroonimine ajalooga.",
+        "🔄 **Täielik ajaloo sünkroonimine**: Muudetud raskused ja kordused uuenevad kohe ajaloos ja PR-ides.",
+        "ℹ️ **Harjutuste tehnika**: Video ja tehnika juhend aktiivse treeningu ajal."
     ],
     "uk": [
-        "🫀 **2D Карта м'язів**: Теплова карта відновлення та втоми (вид спереду та ззаду).",
-        "📊 **Оптимальні підходи**: Контроль щотижневого об'єму за групами м'язів.",
-        "🏆 **Стіна досягнень**: 26 трофеїв та медалей з анімаціями.",
-        "📸 **Картка для історій**: Стильні підсумки 9:16 для Instagram та WhatsApp.",
-        "⌨️ **Числова клавіатура**: Зручне введення чисел для ваги та замірів."
+        "📸 **Картка для історій**: Експорт реального PNG-файлу в Instagram та WhatsApp без простого тексту.",
+        "💾 **Збереження в галерею**: Завантаження зображення тренування на пристрій.",
+        "✏️ **Редагування завершених тренувань**: Чистий заголовок та синхронізація з історією.",
+        "🔄 **Синхронізація з історією**: Оновлення ваги та повторень в історії та рекордах.",
+        "ℹ️ **Техніка вправ**: Інформація та відео виконання прямо під час тренування."
     ]
 };
 

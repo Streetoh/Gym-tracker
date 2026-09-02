@@ -1,24 +1,24 @@
 {
-  "version": "1.2.4",
-  "versionCode": 124,
+  "version": "1.2.5",
+  "versionCode": 125,
   "downloadUrl": "https://github.com/Streetoh/Gym-tracker/releases",
   "githubUrl": "https://github.com/Streetoh/Gym-tracker",
   "changelog": {
     "es": [
-      "🛠️ **Edición en Calendario e Historial**: Modifica pesos y repeticiones de sesiones terminadas directamente con sincronización total.",
-      "🏋️ **Pestaña Ejercicios Restaurada**: Cuadrícula completa de grupos, búsqueda instantánea y tarjetas con PRs.",
-      "🔒 **Control de Series en Vivo**: Bloqueo estricto de inputs al finalizar ejercicio con botón para reabrir y modificar.",
-      "💡 **Sugerencias de Repeticiones Limpias**: Visualización en placeholder gris sin autocompletar la casilla.",
-      "📊 **Fatiga y Volumen Corregidos**: Detección precisa de sesiones completadas y actualización simultánea.",
-      "📸 **Comparador de Fotos Optimizado**: Compatibilidad total con fotos de evolución de cualquier fecha."
+      "📸 **Tarjeta para Historias (PNG Nativo)**: Compartición directa del archivo de imagen a Instagram Stories, WhatsApp y Telegram (sin texto plano).",
+      "💾 **Descarga Directa en Dispositivo**: Botón de guardar imagen en el dispositivo/galería completamente funcional en Android.",
+      "✏️ **Edición de Sesiones Finalizadas**: Rediseño limpio de la cabecera (título arriba, botón de editar y distintivo verde debajo sin textos redundantes).",
+      "🔄 **Sincronización Total con el Historial**: Actualización en tiempo real de pesos y repeticiones en el registro de entrenamientos y marcas personales (PRs).",
+      "ℹ️ **Técnica y Vídeos en Vivo**: Acceso directo a la guía de técnica y ejecución de cada ejercicio durante el entrenamiento.",
+      "⚡ **Corrección en Sesiones Planeadas**: Solucionado el error al abrir entrenamientos pendientes desde el calendario."
     ],
     "en": [
-      "🛠️ **Calendar & History Editing**: Edit weights and reps of completed workouts with full two-way synchronization.",
-      "🏋️ **Exercises Tab Restored**: Full group grid, instant search, and exercise cards with personal records.",
-      "🔒 **Live Workout Locking**: Prevent accidental changes on finished exercises with a reopen/modify toggle.",
-      "💡 **Clean Rep Suggestions**: Display suggestions in clean grey placeholders without prefilling inputs.",
-      "📊 **Fatigue & Volume Fixed**: Accurate tracking of completed workouts and synchronous refresh.",
-      "📸 **Photo Comparison Fixed**: Seamless comparison of evolution progress photos."
+      "📸 **Story Cards (Native PNG)**: Share real image files directly to Instagram Stories, WhatsApp, and Telegram without plain text.",
+      "💾 **Direct Device Download**: Working save image to device/gallery button on Android.",
+      "✏️ **Completed Session Editing**: Clean header layout (title on top, edit button & green badge underneath without redundant text).",
+      "🔄 **Full History Sync**: Real-time update of edited weights and reps in the History tab and personal records (PRs).",
+      "ℹ️ **Live Technique Guide**: Quick access to exercise execution guides and videos during active workouts.",
+      "⚡ **Planned Workouts Fix**: Fixed opening scheduled sessions from the calendar."
     ],
     "ru": [
       "🫀 **2D Карта мышц**: Тепловая карта восстановления и мышечной усталости (вид спереди и сзади).",
@@ -43,7 +43,7 @@
     ]
   },
   "releaseNotes": {
-    "es": "v1.2.4:\\n- Solución definitiva para la Tarjeta de Historias: Compartición nativa de imagen real (PNG) en Android (Instagram, WhatsApp, Telegram, etc.) sin enviar texto.\\n- Botón Descargar Imagen en Android configurado para guardar en el dispositivo.\\n- Cabecera limpia en entrenamientos completados sin textos redundantes.",
-    "en": "v1.2.4:\\n- Definitive fix for Story Cards: Native PNG image sharing in Android (Instagram, WhatsApp, Telegram, etc.) without plain text.\\n- Download Image button configured to save to device.\\n- Clean header on finished workouts."
+    "es": "v1.2.5:\\n- Solución definitiva para la Tarjeta de Historias: Compartición nativa de imagen real (PNG) en Android sin enviar texto.\\n- Botón Descargar Imagen en Android para guardar en galería.\\n- Corrección al abrir sesiones planeadas desde el calendario (ReferenceError eliminado).\\n- Sincronización completa con el historial y cabecera limpia en sesiones terminadas.",
+    "en": "v1.2.5:\\n- Definitive fix for Story Cards: Native PNG image sharing in Android without plain text.\\n- Download Image button to save to gallery on Android.\\n- Fixed opening planned sessions from calendar.\\n- Full history synchronization and clean completed session header."
   }
 }
