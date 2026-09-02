@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Tracker - Portal de Entrenador & Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg-base: #090a0f;
+            --bg-surface: #12141c;
+            --bg-surface-elevated: #1a1d28;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(59, 130, 246, 0.3);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-emerald: #10b981;
+            --accent-purple: #8b5cf6;
+            --accent-amber: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* TOP NAVBAR */
+        header.coach-nav {
+            height: 64px;
+            background: var(--bg-surface);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 17px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .brand-badge {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: rgba(59, 130, 246, 0.15);
+            color: var(--accent-blue);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        /* MAIN DASHBOARD LAYOUT */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 310px 1fr 340px;
+            gap: 20px;
+            padding: 24px 28px;
+            flex: 1;
+            max-width: 1700px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        @media (max-width: 1200px) {
+            .dashboard-container {
+                grid-template-columns: 280px 1fr;
+            }
+            .col-right {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+            .col-right {
+                grid-column: span 1;
+            }
+        }
+
+        /* CARD COMPONENT */
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        /* ATHLETE LIST */
+        .athlete-card {
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: var(--bg-surface-elevated);
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .athlete-card:hover {
+            border-color: var(--border-highlight);
+            transform: translateY(-1px);
+        }
+
+        .athlete-card.active {
+            border-color: var(--accent-blue);
+            background: rgba(59, 130, 246, 0.08);
+        }
+
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: var(--bg-surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            color: var(--accent-blue);
+            border: 1px solid var(--border-color);
+        }
+
+        /* ROUTINE BUILDER SET ROW */
+        .builder-exercise-card {
+            background: var(--bg-surface-elevated);
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+
+        .builder-set-row {
+            display: grid;
+            grid-template-columns: 32px 1fr 80px 80px 32px;
+            gap: 10px;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .builder-set-row:last-child {
+            border-bottom: none;
+        }
+
+        input, select {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 7px 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: var(--accent-blue);
+        }
+
+        /* BUTTONS */
+        .btn-primary {
+            background: var(--accent-blue);
+            color: #fff;
+            border: none;
+            padding: 9px 16px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        .btn-emerald {
+            background: var(--accent-emerald);
+        }
+
+        .btn-secondary {
+            background: var(--bg-surface-elevated);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            padding: 9px 14px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+        }
+
+        .btn-secondary:hover {
+            color: var(--text-primary);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <header class="coach-nav">
+        <div class="brand-logo">
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">
+                <i class="ph-bold ph-barbell"></i>
+            </div>
+            <span>Gym Tracker</span>
+            <span class="brand-badge">Coach Portal v1.2.6</span>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <button class="btn-secondary" onclick="exportCurrentProgramJson()">
+                <i class="ph-bold ph-export"></i> Exportar Rutina
+            </button>
+            <button class="btn-primary btn-emerald" onclick="saveCoachChanges()">
+                <i class="ph-bold ph-floppy-disk"></i> Guardar Cambios
+            </button>
+            <a href="index.html" class="btn-secondary" style="text-decoration: none;">
+                <i class="ph-bold ph-device-mobile"></i> Abrir App Móvil
+            </a>
+        </div>
+    </header>
+
+    <!-- MAIN 3-COLUMNS DASHBOARD -->
+    <main class="dashboard-container">
+
+        <!-- COL 1: ATLETAS Y CLIENTES -->
+        <aside class="col-left" style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="card" style="display: flex; flex-direction: column; gap: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                        <i class="ph-bold ph-users" style="color: var(--accent-blue);"></i> Mis Atletas
+                    </h3>
+                    <button class="btn-secondary" style="padding: 5px 8px; font-size: 11.5px;" onclick="addNewAthletePrompt()">
+                        <i class="ph-bold ph-plus"></i> Añadir
+                    </button>
+                </div>
+
+                <!-- Athlete List -->
+                <div id="athletes-list">
+                    <!-- Rendered by JS -->
+                </div>
+
+                <div style="border-top: 1px solid var(--border-color); padding-top: 12px;">
+                    <button class="btn-secondary" style="width: 100%; justify-content: center;" onclick="importAthleteBackupPrompt()">
+                        <i class="ph-bold ph-download-simple"></i> Importar Backup de Atleta
+                    </button>
+                </div>
+            </div>
+
+            <!-- Athlete Profile Summary Card -->
+            <div class="card" id="athlete-profile-card">
+                <div style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 10px;">Resumen del Atleta</div>
+                <div style="font-size: 17px; font-weight: 900;" id="ath-summary-name">Marc Ribas</div>
+                <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;" id="ath-summary-goal">Objetivo: Hipertrofia & Fuerza</div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px;">
+                    <div style="padding: 10px; background: var(--bg-surface-elevated); border-radius: 12px;">
+                        <div style="font-size: 11px; color: var(--text-secondary);">Adherencia</div>
+                        <div style="font-size: 18px; font-weight: 900; color: var(--accent-emerald); margin-top: 2px;" id="ath-summary-adherence">95%</div>
+                    </div>
+                    <div style="padding: 10px; background: var(--bg-surface-elevated); border-radius: 12px;">
+                        <div style="font-size: 11px; color: var(--text-secondary);">Volumen Sem.</div>
+                        <div style="font-size: 18px; font-weight: 900; color: var(--accent-amber); margin-top: 2px;" id="ath-summary-volume">24.500 kg</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 14px; padding: 10px 12px; background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 12px; font-size: 11.5px; color: var(--accent-amber); display: flex; align-items: center; gap: 8px;" id="ath-summary-discomfort">
+                    <i class="ph-bold ph-warning"></i> Molestia activa: Hombro derecho
+                </div>
+            </div>
+        </aside>
+
+        <!-- COL 2: PROGRAM BUILDER & RUTINAS -->
+        <section class="col-center" style="display: flex; flex-direction: column; gap: 16px;">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <h2 style="font-size: 19px; font-weight: 900; display: flex; align-items: center; gap: 8px;">
+                            <i class="ph-bold ph-calendar-plus" style="color: var(--accent-emerald);"></i> Diseñador de Mesociclo
+                        </h2>
+                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 3px;" id="program-subtitle">Programa activo: Torso - Pierna (Frecuencia 2)</div>
+                    </div>
+
+                    <!-- Day Selector Tabs -->
+                    <div style="display: flex; gap: 6px;" id="day-tabs-container">
+                        <button class="btn-primary" style="padding: 6px 12px; font-size: 12px;" onclick="selectDayTab(0)">Día 1: Torso A</button>
+                        <button class="btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="selectDayTab(1)">Día 2: Pierna A</button>
+                        <button class="btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="selectDayTab(2)">Día 3: Torso B</button>
+                    </div>
+                </div>
+
+                <!-- Exercise List for the Selected Day -->
+                <div id="builder-exercises-list">
+                    <!-- Filled by renderBuilderExercises() -->
+                </div>
+
+                <!-- Add Exercise to Day -->
+                <div style="margin-top: 14px; display: flex; gap: 10px;">
+                    <button class="btn-secondary full-width" style="width: 100%; justify-content: center; padding: 12px; font-weight: 700;" onclick="addExerciseToActiveDayPrompt()">
+                        <i class="ph-bold ph-plus-circle" style="font-size: 18px; color: var(--accent-blue);"></i> Añadir Ejercicio a esta Sesión
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- COL 3: ANALÍTICAS DE ESCRITORIO -->
+        <aside class="col-right" style="display: flex; flex-direction: column; gap: 16px;">
+            <!-- Radar / Volume Distribution Chart -->
+            <div class="card">
+                <div style="font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                    <i class="ph-bold ph-chart-donut" style="color: var(--accent-purple);"></i> Volumen Muscular Semanal
+                </div>
+                <div style="position: relative; height: 210px; width: 100%;">
+                    <canvas id="volumeDistributionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Estimated 1RM Progression Card -->
+            <div class="card">
+                <div style="font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                    <i class="ph-bold ph-trend-up" style="color: var(--accent-emerald);"></i> 1RM Estimados Clave
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg-surface-elevated); border-radius: 10px;">
+                        <span style="font-size: 12.5px; font-weight: 600;">Press Banca Plano</span>
+                        <strong style="color: var(--accent-emerald); font-size: 14px;">102.5 kg</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg-surface-elevated); border-radius: 10px;">
+                        <span style="font-size: 12.5px; font-weight: 600;">Sentadilla Libre</span>
+                        <strong style="color: var(--accent-emerald); font-size: 14px;">145.0 kg</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg-surface-elevated); border-radius: 10px;">
+                        <span style="font-size: 12.5px; font-weight: 600;">Peso Muerto Rumano</span>
+                        <strong style="color: var(--accent-emerald); font-size: 14px;">130.0 kg</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coach Notes & Feedback -->
+            <div class="card" style="display: flex; flex-direction: column; gap: 10px;">
+                <div style="font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                    <i class="ph-bold ph-note-pencil" style="color: var(--accent-amber);"></i> Notas y Feedback del Preparador
+                </div>
+                <textarea id="coach-notes-input" style="width: 100%; height: 90px; background: var(--bg-surface-elevated); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; color: var(--text-primary); font-size: 12.5px; outline: none; resize: none;" placeholder="Escribe notas para el atleta...">Priorizar control excéntrico de 3 segundos en press con mancuernas para cuidar la molestia de hombro.</textarea>
+            </div>
+        </aside>
+
+    </main>
+
+    <!-- JS LOGIC -->
+    <script>
+        // Sample State for Coach Portal
+        const coachState = {
+            athletes: [
+                {
+                    id: 'ath_1',
+                    name: 'Marc Ribas',
+                    goal: 'Hipertrofia & Fuerza (Frecuencia 2)',
+                    adherence: '95%',
+                    weeklyVolume: '24.500 kg',
+                    discomfort: 'Molestia activa: Hombro derecho',
+                    program: [
+                        {
+                            dayName: 'Día 1: Torso A',
+                            exercises: [
+                                { name: 'Press de banca plano con barra', sets: [{ type: 'Efectiva', reps: '8', weight: '80', rest: '120' }, { type: 'Efectiva', reps: '8', weight: '80', rest: '120' }] },
+                                { name: 'Remo con apoyo en pecho en máquina', sets: [{ type: 'Efectiva', reps: '10', weight: '65', rest: '90' }, { type: 'Efectiva', reps: '10', weight: '65', rest: '90' }] },
+                                { name: 'Elevaciones laterales con mancuernas', sets: [{ type: 'Efectiva', reps: '15', weight: '12', rest: '60' }, { type: 'Al fallo', reps: '12', weight: '12', rest: '60' }] }
+                            ]
+                        },
+                        {
+                            dayName: 'Día 2: Pierna A',
+                            exercises: [
+                                { name: 'Sentadilla libre con barra', sets: [{ type: 'Efectiva', reps: '6', weight: '120', rest: '150' }, { type: 'Efectiva', reps: '6', weight: '120', rest: '150' }] },
+                                { name: 'Prensa inclinada de piernas', sets: [{ type: 'Efectiva', reps: '10', weight: '200', rest: '90' }] }
+                            ]
+                        },
+                        {
+                            dayName: 'Día 3: Torso B',
+                            exercises: [
+                                { name: 'Press militar con mancuernas agarre neutro', sets: [{ type: 'Efectiva', reps: '10', weight: '24', rest: '90' }] }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: 'ath_2',
+                    name: 'Carlos Mendoza',
+                    goal: 'Fuerza Máxima (Powerbuilding)',
+                    adherence: '91%',
+                    weeklyVolume: '28.200 kg',
+                    discomfort: 'Sin molestias reportadas',
+                    program: []
+                },
+                {
+                    id: 'ath_3',
+                    name: 'Elena Vega',
+                    goal: 'Recomposición Corporal',
+                    adherence: '98%',
+                    weeklyVolume: '18.400 kg',
+                    discomfort: 'Sin molestias reportadas',
+                    program: []
+                }
+            ],
+            selectedAthleteIndex: 0,
+            selectedDayIndex: 0
+        };
+
+        function renderAthletesList() {
+            const container = document.getElementById('athletes-list');
+            container.innerHTML = coachState.athletes.map((ath, idx) => {
+                const isActive = (idx === coachState.selectedAthleteIndex);
+                const initials = ath.name.split(' ').map(n => n[0]).join('');
+                return `
+                    <div class="athlete-card ${isActive ? 'active' : ''}" onclick="selectAthlete(${idx})">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <div class="avatar">${initials}</div>
+                            <div>
+                                <div style="font-weight: 700; font-size: 13.5px;">${ath.name}</div>
+                                <div style="font-size: 11px; color: var(--text-secondary);">${ath.goal.split(' ')[0]}</div>
+                            </div>
+                        </div>
+                        <span style="font-size: 11px; font-weight: 800; color: var(--accent-emerald);">${ath.adherence}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectAthlete(idx) {
+            coachState.selectedAthleteIndex = idx;
+            coachState.selectedDayIndex = 0;
+            const ath = coachState.athletes[idx];
+
+            document.getElementById('ath-summary-name').textContent = ath.name;
+            document.getElementById('ath-summary-goal').textContent = ath.goal;
+            document.getElementById('ath-summary-adherence').textContent = ath.adherence;
+            document.getElementById('ath-summary-volume').textContent = ath.weeklyVolume;
+            
+            const discEl = document.getElementById('ath-summary-discomfort');
+            discEl.innerHTML = `<i class="ph-bold ph-warning"></i> ${ath.discomfort}`;
+            discEl.style.display = ath.discomfort.includes('Sin') ? 'none' : 'flex';
+
+            renderAthletesList();
+            renderDayTabs();
+            renderBuilderExercises();
+        }
+
+        function renderDayTabs() {
+            const container = document.getElementById('day-tabs-container');
+            const ath = coachState.athletes[coachState.selectedAthleteIndex];
+            if (!ath.program || ath.program.length === 0) {
+                container.innerHTML = '<button class="btn-primary" style="padding: 6px 12px; font-size: 12px;">Día 1: General</button>';
+                return;
+            }
+
+            container.innerHTML = ath.program.map((p, idx) => {
+                const isActive = (idx === coachState.selectedDayIndex);
+                return `<button class="${isActive ? 'btn-primary' : 'btn-secondary'}" style="padding: 6px 12px; font-size: 12px;" onclick="selectDayTab(${idx})">${p.dayName}</button>`;
+            }).join('');
+        }
+
+        function selectDayTab(idx) {
+            coachState.selectedDayIndex = idx;
+            renderDayTabs();
+            renderBuilderExercises();
+        }
+
+        function renderBuilderExercises() {
+            const container = document.getElementById('builder-exercises-list');
+            const ath = coachState.athletes[coachState.selectedAthleteIndex];
+            const activeDay = (ath.program && ath.program[coachState.selectedDayIndex]) || { exercises: [] };
+
+            if (!activeDay.exercises || activeDay.exercises.length === 0) {
+                container.innerHTML = `<div class="card" style="text-align: center; color: var(--text-secondary); padding: 30px;">No hay ejercicios programados en este día. Pulsa 'Añadir Ejercicio' abajo.</div>`;
+                return;
+            }
+
+            container.innerHTML = activeDay.exercises.map((ex, exIdx) => {
+                const setRows = (ex.sets || []).map((s, sIdx) => `
+                    <div class="builder-set-row">
+                        <span style="font-weight: 700; font-size: 12px; color: var(--text-secondary);">#${sIdx + 1}</span>
+                        <select style="font-size: 12px;">
+                            <option ${s.type==='Calentamiento'?'selected':''}>Calentamiento</option>
+                            <option ${s.type==='Aproximación'?'selected':''}>Aproximación</option>
+                            <option ${s.type==='Efectiva'?'selected':''}>Efectiva</option>
+                            <option ${s.type==='Al fallo'?'selected':''}>Al fallo</option>
+                        </select>
+                        <input type="text" value="${s.reps || '8'}" style="text-align:center;" placeholder="Reps">
+                        <input type="text" value="${s.weight || '80'} kg" style="text-align:center;" placeholder="Kg">
+                        <button type="button" class="btn-secondary" style="padding: 4px; border:none;" onclick="deleteSet(${exIdx}, ${sIdx})"><i class="ph ph-trash" style="color:#ef4444;"></i></button>
+                    </div>
+                `).join('');
+
+                return `
+                    <div class="builder-exercise-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="font-weight: 800; font-size: 14.5px; color: var(--text-primary);">${ex.name}</div>
+                            <button type="button" class="btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="addSetToExercise(${exIdx})">
+                                <i class="ph-bold ph-plus"></i> Añadir Serie
+                            </button>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 32px 1fr 80px 80px 32px; gap: 10px; font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-bottom: 4px;">
+                            <div>Set</div>
+                            <div>Tipo</div>
+                            <div style="text-align: center;">Reps</div>
+                            <div style="text-align: center;">Carga</div>
+                            <div></div>
+                        </div>
+                        ${setRows}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addSetToExercise(exIdx) {
+            const ath = coachState.athletes[coachState.selectedAthleteIndex];
+            const activeDay = ath.program[coachState.selectedDayIndex];
+            if (activeDay && activeDay.exercises[exIdx]) {
+                activeDay.exercises[exIdx].sets.push({ type: 'Efectiva', reps: '10', weight: '70', rest: '90' });
+                renderBuilderExercises();
+            }
+        }
+
+        function deleteSet(exIdx, sIdx) {
+            const ath = coachState.athletes[coachState.selectedAthleteIndex];
+            const activeDay = ath.program[coachState.selectedDayIndex];
+            if (activeDay && activeDay.exercises[exIdx]) {
+                activeDay.exercises[exIdx].sets.splice(sIdx, 1);
+                renderBuilderExercises();
+            }
+        }
+
+        function addExerciseToActiveDayPrompt() {
+            const exName = prompt('Introduce el nombre del ejercicio (ej. Press inclinado con mancuernas):', 'Press inclinado con mancuernas');
+            if (exName && exName.trim()) {
+                const ath = coachState.athletes[coachState.selectedAthleteIndex];
+                if (!ath.program) ath.program = [];
+                if (!ath.program[coachState.selectedDayIndex]) {
+                    ath.program[coachState.selectedDayIndex] = { dayName: 'Día 1', exercises: [] };
+                }
+                ath.program[coachState.selectedDayIndex].exercises.push({
+                    name: exName.trim(),
+                    sets: [{ type: 'Efectiva', reps: '10', weight: '28', rest: '90' }]
+                });
+                renderBuilderExercises();
+            }
+        }
+
+        function addNewAthletePrompt() {
+            const name = prompt('Nombre del nuevo atleta o cliente:', 'Nuevo Atleta');
+            if (name && name.trim()) {
+                coachState.athletes.push({
+                    id: 'ath_' + Date.now(),
+                    name: name.trim(),
+                    goal: 'Hipertrofia & Fuerza',
+                    adherence: '100%',
+                    weeklyVolume: '0 kg',
+                    discomfort: 'Sin molestias reportadas',
+                    program: [
+                        { dayName: 'Día 1: Torso', exercises: [] },
+                        { dayName: 'Día 2: Pierna', exercises: [] }
+                    ]
+                });
+                selectAthlete(coachState.athletes.length - 1);
+            }
+        }
+
+        function importAthleteBackupPrompt() {
+            alert('Carga un archivo backup.json exportado desde la app Gym Tracker del atleta para analizar automáticamente sus series, marcas personales y volumen.');
+        }
+
+        function exportCurrentProgramJson() {
+            const ath = coachState.athletes[coachState.selectedAthleteIndex];
+            const payload = {
+                exportedBy: 'Gym Tracker Coach Portal',
+                version: '1.2.6',
+                athleteName: ath.name,
+                program: ath.program
+            };
+            const jsonStr = JSON.stringify(payload, null, 2);
+            navigator.clipboard.writeText(jsonStr).then(() => {
+                alert('¡Rutina exportada al portapapeles en formato JSON!\n\nEl atleta puede importarla directamente en su app Gym Tracker en 1 toque.');
+            }).catch(() => {
+                prompt('Copia este código de rutina para tu atleta:', jsonStr);
+            });
+        }
+
+        function saveCoachChanges() {
+            alert('¡Cambios del mesociclo y notas guardados correctamente!');
+        }
+
+        // Init Radar Chart
+        window.addEventListener('DOMContentLoaded', () => {
+            renderAthletesList();
+            renderDayTabs();
+            renderBuilderExercises();
+
+            const ctx = document.getElementById('volumeDistributionChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pecho', 'Espalda', 'Pierna', 'Hombro', 'Brazos'],
+                    datasets: [{
+                        data: [18, 20, 22, 14, 16],
+                        backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#94a3b8', font: { size: 10.5 } }
+                        }
+                    },
+                    cutout: '68%'
+                }
+            });
+        });
+    </script>
+</body>
+</html>
