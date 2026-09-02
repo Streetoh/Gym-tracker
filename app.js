@@ -1277,8 +1277,8 @@ window.manageWorkoutNotification = async (show) => {
                     await LocalNotifications.schedule({
                         notifications: [
                             {
-                                title: (typeof getT === 'function' && getT('workout.activeNotificationTitle')) || "Entrenamiento en curso",
-                                body: (typeof getT === 'function' && getT('workout.activeNotificationBody')) || "Tienes un entrenamiento activo. Pulsa para continuar.",
+                                title: (function(){ const t = typeof getT === 'function' ? getT('workout.activeNotificationTitle') : ''; return (t && t !== 'workout.activeNotificationTitle') ? t : 'Entrenamiento en curso'; })(),
+                                body: (function(){ const b = typeof getT === 'function' ? getT('workout.activeNotificationBody') : ''; return (b && b !== 'workout.activeNotificationBody') ? b : 'Tienes un entrenamiento activo. Pulsa para continuar.'; })(),
                                 id: 1,
                                 ongoing: true,
                                 autoCancel: false,
@@ -1885,6 +1885,22 @@ const translations = {
             "deleteAllConfirm": "¿Eliminar todos los entrenamientos del historial? Esta acción no se puede deshacer."
         },
         "workout": {
+            "activeNotificationTitle": "Тренування триває",
+            "activeNotificationBody": "У вас активне тренування. Натисніть, щоб продовжити.",
+            "reopenExercise": "Відновити вправу",
+            "reopenSuperset": "Відновити суперсет",
+            "activeNotificationTitle": "Treening pooleli",
+            "activeNotificationBody": "Sul on aktiivne treening. Puuduta jätkamiseks.",
+            "reopenExercise": "Taasava harjutus",
+            "reopenSuperset": "Taasava supersett",
+            "activeNotificationTitle": "Тренировка идет",
+            "activeNotificationBody": "У вас активная тренировка. Нажмите, чтобы продолжить.",
+            "reopenExercise": "Возобновить упражнение",
+            "reopenSuperset": "Возобновить суперсет",
+            "activeNotificationTitle": "Entrenamiento en curso",
+            "activeNotificationBody": "Tienes un entrenamiento activo. Pulsa para continuar.",
+            "reopenExercise": "Reabrir Ejercicio",
+            "reopenSuperset": "Reabrir Superserie",
             "type": "Tipo",
             "reps": "Reps",
             "kg": "Kg",
@@ -2283,6 +2299,10 @@ const translations = {
             "deleteAllConfirm": "Delete all workouts from history? This cannot be undone."
         },
         "workout": {
+            "activeNotificationTitle": "Workout in progress",
+            "activeNotificationBody": "You have an active workout. Tap to resume.",
+            "reopenExercise": "Reopen Exercise",
+            "reopenSuperset": "Reopen Superset",
             "type": "Type",
             "reps": "Reps",
             "kg": "Kg",
@@ -4055,6 +4075,183 @@ document.getElementById('input-import-excel').addEventListener('change', (e) => 
 
 // --- EXERCISES RENDER ---
 
+// --- RESTORED EXERCISES RENDER & MANAGEMENT ---
+window.deleteExercise = function(id, event) {
+    if (event) event.stopPropagation();
+    if (confirm((typeof getT === 'function' ? getT('common.delete') : '¿Eliminar') + '?')) {
+        state.exercises = (state.exercises || []).filter(e => e.id !== id);
+        saveState();
+        if (typeof recalculatePRs === 'function') recalculatePRs();
+        renderExercises();
+    }
+};
+
+const editExercise = (ex) => {
+    if (typeof recalculatePRs === 'function') recalculatePRs();
+    const freshEx = (state && state.exercises) ? (state.exercises.find(e => e.id === ex.id) || ex) : ex;
+    document.getElementById('exercise-id').value = freshEx.id;
+    document.getElementById('exercise-name').value = freshEx.name;
+    document.getElementById('exercise-youtube').value = freshEx.youtubeLink || '';
+    
+    const max1rmEl = document.getElementById('exercise-max1rm');
+    if (max1rmEl) max1rmEl.value = freshEx.max1RM || '';
+    const prHypEl = document.getElementById('exercise-pr-hyp');
+    if (prHypEl) prHypEl.value = freshEx.prHyp || '';
+    const prHeavyEl = document.getElementById('exercise-pr-heavy');
+    if (prHeavyEl) prHeavyEl.value = freshEx.prHeavy || '';
+    
+    const select = document.getElementById('exercise-group');
+    if (select) {
+        select.innerHTML = '';
+        (state.groups || []).forEach(g => {
+            let gKey = g === 'Abdominales y core' ? 'core' : (g === 'Tríceps' ? 'triceps' : (g === 'Bíceps' ? 'biceps' : g.toLowerCase()));
+            let trGroup = typeof getT === 'function' ? getT('groups.' + gKey) : g;
+            trGroup = trGroup !== 'groups.' + g.toLowerCase() ? trGroup : g;
+            select.innerHTML += `<option value="${g}" ${ex.group === g ? 'selected' : ''}>${trGroup}</option>`;
+        });
+    }
+    
+    const imgData = ex.imageData || '';
+    document.getElementById('exercise-image-data').value = imgData;
+    const descEl = document.getElementById('exercise-description');
+    if (descEl) descEl.value = ex.description || '';
+    const preview = document.getElementById('exercise-image-preview');
+    const removeImgBtn = document.getElementById('btn-remove-exercise-image');
+    if (imgData && preview) {
+        preview.src = imgData;
+        preview.style.display = 'block';
+        if (removeImgBtn) removeImgBtn.style.display = 'flex';
+    } else if (preview) {
+        preview.style.display = 'none';
+        if (removeImgBtn) removeImgBtn.style.display = 'none';
+    }
+    
+    const repHyp = document.getElementById('exercise-reps-hypertrophy');
+    if (repHyp) repHyp.value = ex.defaults ? ex.defaults.hypertrophy : '10';
+    const repHvy = document.getElementById('exercise-reps-heavy');
+    if (repHvy) repHvy.value = ex.defaults ? ex.defaults.heavy : '5';
+    const repInt = document.getElementById('exercise-reps-intensity');
+    if (repInt) repInt.value = ex.defaults ? ex.defaults.intensity : '8';
+    
+    const delBtn = document.getElementById('btn-delete-exercise');
+    if (delBtn) delBtn.style.display = 'block';
+    
+    const modalTitle = document.getElementById('modal-exercise-title');
+    if (modalTitle && typeof getT === 'function') modalTitle.textContent = getT('modals.exercise.editTitle') || 'Editar Ejercicio';
+    openModal(modalExercise);
+};
+window.editExercise = editExercise;
+
+const renderExercises = () => {
+    if (typeof recalculatePRs !== 'undefined') recalculatePRs();
+    const container = document.querySelector('.exercise-groups-container');
+    if (!container) return;
+    container.innerHTML = '';
+    
+    if (!state.exercises || state.exercises.length === 0) {
+        container.innerHTML = `<div class="empty-state" data-i18n="exercises.empty">${typeof getT === 'function' ? (getT('exercises.empty') || 'No hay ejercicios. Añade uno nuevo.') : 'No hay ejercicios. Añade uno nuevo.'}</div>`;
+        return;
+    }
+    
+    // Group grid
+    const grid = document.createElement('div');
+    grid.style.display = 'grid';
+    grid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+    grid.style.gap = '8px';
+    grid.style.marginBottom = '24px';
+    
+    (state.groups || []).forEach(g => {
+        const card = document.createElement('div');
+        let gKey = g === 'Abdominales y core' ? 'core' : (g === 'Tríceps' ? 'triceps' : (g === 'Bíceps' ? 'biceps' : g.toLowerCase()));
+        let trGroup = typeof getT === 'function' ? getT('groups.' + gKey) : g;
+        trGroup = trGroup !== 'groups.' + g.toLowerCase() ? trGroup : g;
+        card.style.background = window.exercisesSelectedGroup === g ? 'var(--color-accent)' : 'var(--bg-surface-elevated)';
+        card.style.color = window.exercisesSelectedGroup === g ? '#fff' : 'var(--text-primary)';
+        card.style.padding = '12px 8px';
+        card.style.borderRadius = '8px';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.alignItems = 'center';
+        card.style.justifyContent = 'center';
+        card.style.cursor = 'pointer';
+        card.style.textAlign = 'center';
+        card.style.border = '1px solid var(--border-color)';
+        
+        card.innerHTML = `<span style="font-size: 26px; margin-bottom: 6px; display: block; line-height: 1;">${typeof getGroupEmoji !== 'undefined' ? getGroupEmoji(g) : '🏋️'}</span><span style="font-size:12px; font-weight:600;">${trGroup}</span>`;
+        
+        card.onclick = () => {
+            window.exercisesSelectedGroup = window.exercisesSelectedGroup === g ? null : g;
+            renderExercises();
+        };
+        grid.appendChild(card);
+    });
+    container.appendChild(grid);
+    
+    const exListContainer = document.createElement('div');
+    exListContainer.className = 'exercises-list';
+    
+    let filteredEx = state.exercises || [];
+    const searchInput = document.getElementById('exercise-search');
+    const searchVal = searchInput ? searchInput.value.toLowerCase() : '';
+    if (searchVal) {
+        filteredEx = filteredEx.filter(ex => ex.name.toLowerCase().includes(searchVal) || (typeof getTrExName === 'function' && getTrExName(ex.name).toLowerCase().includes(searchVal)));
+    } else if (window.exercisesSelectedGroup) {
+        filteredEx = filteredEx.filter(ex => ex.group === window.exercisesSelectedGroup);
+    }
+    
+    filteredEx.sort((a, b) => {
+        const nameA = typeof getTrExName === 'function' ? getTrExName(a.name) : a.name;
+        const nameB = typeof getTrExName === 'function' ? getTrExName(b.name) : b.name;
+        return nameA.localeCompare(nameB);
+    });
+    
+    if (filteredEx.length === 0) {
+        exListContainer.innerHTML = `<div class="empty-state">No hay ejercicios para esta selección.</div>`;
+    } else {
+        filteredEx.forEach(ex => {
+            const card = document.createElement('div');
+            card.className = 'exercise-card';
+            card.style.cursor = 'pointer';
+            card.onclick = (e) => {
+                if(e.target.closest('button')) return;
+                if(e.target.closest('img')) return;
+                editExercise(ex);
+            };
+            const trName = typeof getTrExName === 'function' ? getTrExName(ex.name) : ex.name;
+            const trDesc = typeof getTrExDesc === 'function' ? getTrExDesc(ex.name, ex.description) : (ex.description || 'Haz clic para editar y añadir técnica.');
+            card.innerHTML = `
+                <div style="display: flex; flex-direction: row; width: 100%; align-items: stretch;">
+                    ${ex.imageData ? `<div style="flex-shrink: 0; margin-right: 16px; display: flex; align-items: center; justify-content: center;"><img src="${ex.imageData}" onclick="event.stopPropagation(); openLightbox('${ex.imageData}')" title="Toca para ampliar" style="width: 140px; height: 140px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border-color); cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'"></div>` : ''}
+                    <div style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+                            <div class="exercise-info" style="flex: 1; min-width: 0; text-align: center;">
+                                <div class="exercise-name" style="font-size: 18px; font-weight: bold; color: var(--text-primary); margin-bottom: 2px;">${trName}</div>
+                                <div class="exercise-group" style="font-size: 13px; color: var(--text-secondary);">${ex.group || 'Sin Grupo'}</div>
+                                ${(ex.prHeavy || ex.prHyp) ? `
+                                <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin-top:6px;">
+                                    ${ex.prHeavy ? `<span style="background:rgba(220,38,38,0.18); color:#f87171; border:1px solid rgba(220,38,38,0.4); padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700;">🔴 PR Pesado: ${ex.prHeavy}</span>` : ''}
+                                    ${ex.prHyp ? `<span style="background:rgba(37,99,235,0.18); color:#60a5fa; border:1px solid rgba(37,99,235,0.4); padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700;">🔵 PR Hipertrofia: ${ex.prHyp}</span>` : ''}
+                                </div>` : ''}
+                            </div>
+                            <div class="exercise-actions" style="margin-left: 12px; flex-shrink: 0;">
+                                <button class="btn-icon text-danger" onclick="deleteExercise('${ex.id}', event)"><i class="ph ph-trash"></i></button>
+                            </div>
+                        </div>
+                        <div class="exercise-desc" style="flex: 1; font-size: 13px; color: var(--text-secondary); line-height: 1.5; display: flex; align-items: center; justify-content: center; text-align: center;">
+                            ${trDesc}
+                        </div>
+                    </div>
+                </div>
+            `;
+            exListContainer.appendChild(card);
+        });
+    }
+    container.appendChild(exListContainer);
+    if (typeof updateLanguageUI !== 'undefined') updateLanguageUI();
+};
+window.renderExercises = renderExercises;
+
+
 
 function parsePRString(prStr) {
     if (!prStr) return { weight: 0, reps: 0 };
@@ -4072,10 +4269,11 @@ function syncActiveWorkoutInputsFromDOM() {
     const workoutContainer = document.getElementById('workout-content');
     if (!workoutContainer) return;
     
-    let exSections = workoutContainer.querySelectorAll('.workout-exercise-inner, .workout-exercise');
-    let exFlatIdx = 0;
+    const exSections = workoutContainer.querySelectorAll('.workout-exercise-inner');
     exSections.forEach((section) => {
-        const ex = activeSession.exercises[exFlatIdx++];
+        const exIdxAttr = section.getAttribute('data-exercise-idx');
+        const exIdx = exIdxAttr !== null ? parseInt(exIdxAttr, 10) : -1;
+        const ex = (exIdx >= 0 && exIdx < activeSession.exercises.length) ? activeSession.exercises[exIdx] : null;
         if (ex) {
             const commentInput = section.querySelector('.exercise-comments input');
             if (commentInput) {
@@ -4083,23 +4281,23 @@ function syncActiveWorkoutInputsFromDOM() {
             }
             if (ex.sets) {
                 const setRows = section.querySelectorAll('.set-row:not(.header-row)');
-            setRows.forEach((row, sIdx) => {
-                const set = ex.sets[sIdx];
-                if (set) {
-                    const wInput = row.querySelector('.weight-input');
-                    const wDropInput = row.querySelector('.weight-drop-input');
-                    const rInput = row.querySelector('.reps-input');
-                    const rDropInput = row.querySelector('.reps-drop-input');
-                    const tSelect = row.querySelector('.set-type-select');
-                    if (wInput && wInput.value !== '') set.weight = parseFloat(wInput.value) || 0;
-                    if (wDropInput && wDropInput.value !== '') set.weightDrop = parseFloat(wDropInput.value) || 0;
-                    if (rInput && rInput.value !== '') set.reps = rInput.value;
-                    if (rDropInput && rDropInput.value !== '') set.repsDrop = rDropInput.value;
-                    if (tSelect) set.type = tSelect.value;
-                }
-            });
+                setRows.forEach((row, sIdx) => {
+                    const set = ex.sets[sIdx];
+                    if (set) {
+                        const wInput = row.querySelector('.weight-input');
+                        const wDropInput = row.querySelector('.weight-drop-input');
+                        const rInput = row.querySelector('.reps-input');
+                        const rDropInput = row.querySelector('.reps-drop-input');
+                        const tSelect = row.querySelector('.set-type-select');
+                        if (wInput && wInput.value !== '') set.weight = parseFloat(wInput.value) || 0;
+                        if (wDropInput && wDropInput.value !== '') set.weightDrop = parseFloat(wDropInput.value) || 0;
+                        if (rInput && rInput.value !== '') set.reps = rInput.value;
+                        if (rDropInput && rDropInput.value !== '') set.repsDrop = rDropInput.value;
+                        if (tSelect && tSelect.value) set.type = tSelect.value;
+                    }
+                });
+            }
         }
-    }
     });
 }
 
@@ -4462,7 +4660,11 @@ const renderRoutineItems = () => {
                         </select>
                         <div style="display:flex; flex-direction:column; align-items:center;">
                             <span style="font-size:9px; color:var(--text-secondary); line-height:1;">reps</span>
-                            <input type="number" inputmode="numeric" class="set-input set-reps" value="${set.reps || ''}" placeholder="${(ex.dbEx && ex.dbEx.defaults && ex.dbEx.defaults[blockType]) ? ex.dbEx.defaults[blockType] : '10'}" style="width:50px; padding:4px; border-radius:4px; font-size:12px; height:auto; text-align:center;">
+                            <input type="number" inputmode="numeric" class="set-input set-reps" value="${set.reps || ''}" placeholder="${(ex.dbEx && ex.dbEx.defaults && ex.dbEx.defaults[blockType]) ? ex.dbEx.defaults[blockType] : '10'}" style="width:48px; padding:4px; border-radius:4px; font-size:12px; height:auto; text-align:center;">
+                        </div>
+                        <div style="display:flex; flex-direction:column; align-items:center;">
+                            <span style="font-size:9px; color:var(--text-secondary); line-height:1;">kg</span>
+                            <input type="number" step="any" inputmode="numeric" class="set-input set-weight" value="${set.weight || ''}" placeholder="0" style="width:48px; padding:4px; border-radius:4px; font-size:12px; height:auto; text-align:center;">
                         </div>
                         <button class="btn-icon delete-set"><i class="ph ph-trash"></i></button>
                     `;
@@ -4473,6 +4675,8 @@ const renderRoutineItems = () => {
                             if (ex.sets[idx]) {
                                 const repsInput = r.querySelector('.set-reps');
                                 if (repsInput) ex.sets[idx].reps = repsInput.value;
+                                const weightInput = r.querySelector('.set-weight');
+                                if (weightInput) ex.sets[idx].weight = parseFloat(weightInput.value) || 0;
                                 const typeSelect = r.querySelector('.set-type');
                                 if (typeSelect) ex.sets[idx].type = typeSelect.value;
                             }
@@ -4482,6 +4686,11 @@ const renderRoutineItems = () => {
                     const repsInput = row.querySelector('.set-reps');
                     repsInput.addEventListener('input', (e) => { set.reps = e.target.value; });
                     repsInput.addEventListener('change', (e) => { set.reps = e.target.value; });
+                    const wBuilderInput = row.querySelector('.set-weight');
+                    if (wBuilderInput) {
+                        wBuilderInput.addEventListener('input', (e) => { set.weight = parseFloat(e.target.value) || 0; });
+                        wBuilderInput.addEventListener('change', (e) => { set.weight = parseFloat(e.target.value) || 0; });
+                    }
 
                     row.querySelector('.set-type').addEventListener('change', (e) => {
                         syncSetsFromDOM();
@@ -4640,6 +4849,34 @@ document.getElementById('btn-save-routine').addEventListener('click', () => {
     const duration = parseInt(document.getElementById('routine-duration').value) || 1;
     if(routineItems.length === 0) return alert(getT('alerts.exerciseRequired') || 'Select at least 1 exercise');
     
+    // Sync all sets from DOM builder before saving
+    const builderUl = document.getElementById('routine-selected-exercises-list');
+    if (builderUl) {
+        const liItems = builderUl.querySelectorAll('li[data-id]');
+        liItems.forEach((li, itemIdx) => {
+            const item = routineItems[itemIdx];
+            if (item && item.exercises) {
+                const exContainers = li.querySelectorAll('.set-row-builder');
+                let rowCounter = 0;
+                item.exercises.forEach(ex => {
+                    if (ex.sets) {
+                        ex.sets.forEach(set => {
+                            const r = exContainers[rowCounter++];
+                            if (r) {
+                                const tSel = r.querySelector('.set-type');
+                                const rIn = r.querySelector('.set-reps');
+                                const wIn = r.querySelector('.set-weight');
+                                if (tSel && tSel.value) set.type = tSel.value;
+                                if (rIn && rIn.value !== '') set.reps = rIn.value;
+                                if (wIn && wIn.value !== '') set.weight = parseFloat(wIn.value) || 0;
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }
+
     const dateInputVal = document.getElementById('routine-date')?.value;
     const chosenDate = dateInputVal ? inputToDate(dateInputVal) : state.selectedDate;
     
@@ -4655,7 +4892,15 @@ document.getElementById('btn-save-routine').addEventListener('click', () => {
                 name: exName,
                 supersetId: supersetId,
                 supersetName: sName,
-                sets: e.sets ? e.sets.map(s => ({ type: s.type, weight: 0, targetReps: s.reps || s.targetReps || '10', reps: '', repsDrop: '', restTime: s.restTime || '60s' })) : [
+                sets: e.sets ? e.sets.map(s => ({
+                    type: s.type,
+                    weight: parseFloat(s.weight) || 0,
+                    targetReps: s.reps || s.targetReps || '10',
+                    reps: editingSessionId ? (s.reps || '') : '',
+                    repsDrop: s.repsDrop || '',
+                    weightDrop: parseFloat(s.weightDrop) || 0,
+                    restTime: s.restTime || '60s'
+                })) : [
                     { type: 'Calentamiento', weight: 0, reps: '', targetReps: '15', restTime: '45s' },
                     { type: 'Aproximación', weight: 0, reps: '', targetReps: '10', restTime: '45s' },
                     { type: 'Efectiva', weight: 0, reps: '', targetReps: '8-10', restTime: '60s' }
@@ -4672,6 +4917,28 @@ document.getElementById('btn-save-routine').addEventListener('click', () => {
             existingSession.type = selectedBlockType;
             existingSession.date = formatDate(chosenDate);
             existingSession.exercises = JSON.parse(JSON.stringify(workoutExercises));
+            
+            // If this session was already completed, update state.completedWorkouts as well!
+            if (existingSession.completed) {
+                let compRecord = (state.completedWorkouts || []).find(w => w.id === existingSession.id || w.sessionId === existingSession.id);
+                if (!compRecord && existingSession.date) {
+                    const [y, m, d] = existingSession.date.split('-');
+                    const fDate = `${d}/${m}/${y}`;
+                    compRecord = (state.completedWorkouts || []).find(w => w.name === existingSession.name && (w.date === fDate || w.date === existingSession.date));
+                }
+                if (compRecord) {
+                    compRecord.name = name;
+                    compRecord.type = selectedBlockType;
+                    compRecord.exercises = JSON.parse(JSON.stringify(workoutExercises));
+                    const newFormattedDate = formatDate(chosenDate);
+                    if (newFormattedDate) compRecord.date = newFormattedDate;
+                }
+                if (typeof recalculatePRs === 'function') recalculatePRs();
+                if (typeof renderGlobalHistory === 'function') renderGlobalHistory();
+                if (typeof refreshMuscleFatigueMap === 'function') refreshMuscleFatigueMap();
+                if (typeof renderWeeklyMuscleVolume === 'function') renderWeeklyMuscleVolume();
+                if (typeof renderAchievementsView === 'function') renderAchievementsView();
+            }
         }
         editingSessionId = null;
     } else {
@@ -5108,8 +5375,10 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                 if(dbEx.imageData) mediaHtml += `<img src="${dbEx.imageData}" onclick="openLightbox('${dbEx.imageData}')" style="max-height: 60px; object-fit: contain; margin-left: 8px;">`;
             }
             
+            const flatExerciseIndex = activeSession.exercises.indexOf(ex);
             const exSection = document.createElement('div');
             exSection.classList.add('workout-exercise-inner');
+            exSection.setAttribute('data-exercise-idx', flatExerciseIndex !== -1 ? flatExerciseIndex : exInnerIndex);
             exSection.style.marginBottom = '24px';
             if (block.type === 'superset') {
                 exSection.style.border = '1px solid var(--border-color)';
@@ -5139,10 +5408,12 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
             const setsContainer = document.createElement('div');
             
             ex.sets.forEach((set, setIndex) => {
-                let targetReps = '';
-                if (set.type === 'Calentamiento') targetReps = '15-20';
-                else if (set.type === 'Aproximación') targetReps = '3-5';
-                else if (dbEx) targetReps = dbEx.defaults[activeSession.type] || '';
+                let targetReps = (set.targetReps !== undefined && set.targetReps !== null && String(set.targetReps).trim() !== '') ? String(set.targetReps) : '';
+                if (!targetReps) {
+                    if (set.type === 'Calentamiento') targetReps = '15-20';
+                    else if (set.type === 'Aproximación') targetReps = '3-5';
+                    else if (dbEx && dbEx.defaults) targetReps = dbEx.defaults[activeSession.type] || '';
+                }
                 
                 const setRow = document.createElement('div');
                 setRow.classList.add('set-row');
@@ -5168,27 +5439,41 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                 let repsHtml = '';
                 let weightHtml = '';
 
+                const isExCompleted = !!ex.completed;
+                const isFieldEditable = isWorkoutActive && !isExCompleted;
+                const disabledAttr = !isFieldEditable ? 'disabled' : '';
+                const disabledStyle = !isFieldEditable ? 'opacity: 0.72; cursor: not-allowed;' : '';
+                
+                // Only show explicit value if user typed it or workout is completed, else keep placeholder as grey suggestion
+                let displayReps = '';
+                if (activeSession.completed || isExCompleted) {
+                    displayReps = set.reps || '';
+                } else if (set.reps && String(set.reps).trim() !== '' && String(set.reps) !== String(targetRepsBase) && String(set.reps) !== String(targetReps)) {
+                    displayReps = set.reps;
+                }
+                let displayDropReps = (activeSession.completed || isExCompleted) ? (set.repsDrop || '') : (set.repsDrop && set.repsDrop !== targetRepsDrop ? set.repsDrop : '');
+
                 if (isDropset) {
                     repsHtml = `
                         <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;">
-                            <input type="number" inputmode="numeric" class="set-input reps-input" value="${set.reps || ''}" placeholder="${targetRepsBase}" style="width: 50px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
-                            <input type="number" inputmode="numeric" class="set-input reps-drop-input" value="${set.repsDrop || ''}" placeholder="${targetRepsDrop || (set.type === 'Al fallo' ? 'Fallo' : 'Drop')}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
+                            <input type="number" inputmode="numeric" class="set-input reps-input" value="${displayReps}" placeholder="${targetRepsBase}" style="width: 50px; height: 32px; text-align: center; font-size: 13px; ${disabledStyle}" ${disabledAttr}>
+                            <input type="number" inputmode="numeric" class="set-input reps-drop-input" value="${displayDropReps}" placeholder="${targetRepsDrop || (set.type === 'Al fallo' ? 'Fallo' : 'Drop')}" style="width: 58px; height: 32px; text-align: center; font-size: 13px; ${disabledStyle}" ${disabledAttr}>
                         </div>
                     `;
                     weightHtml = `
                         <div style="display: flex; flex-direction: column; gap: 4px;">
                             <div style="display: flex; align-items: center; gap: 4px;">
-                                <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 50px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
-                                <button type="button" class="btn-dropset-calc" style="background: #10b981; color: white; border: none; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; cursor: pointer; flex-shrink: 0;" title="Calcular Dropset" ${!isWorkoutActive ? 'disabled' : ''}>%</button>
+                                <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 50px; height: 32px; text-align: center; font-size: 13px; ${disabledStyle}" ${disabledAttr}>
+                                <button type="button" class="btn-dropset-calc" style="background: #10b981; color: white; border: none; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; cursor: pointer; flex-shrink: 0; ${disabledStyle}" title="Calcular Dropset" ${disabledAttr}>%</button>
                             </div>
-                            <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" class="set-input weight-drop-input" value="${set.weightDrop || ''}" placeholder="${weightDropPlaceholder}" style="width: 58px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>
+                            <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" class="set-input weight-drop-input" value="${set.weightDrop || ''}" placeholder="${weightDropPlaceholder}" style="width: 58px; height: 32px; text-align: center; font-size: 13px; ${disabledStyle}" ${disabledAttr}>
                         </div>
                     `;
                 } else {
-                    repsHtml = `<input type="number" inputmode="numeric" class="set-input reps-input" value="${set.reps || ''}" placeholder="${targetRepsBase}" style="width: 50px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>`;
+                    repsHtml = `<input type="number" inputmode="numeric" class="set-input reps-input" value="${displayReps}" placeholder="${targetRepsBase}" style="width: 50px; height: 32px; text-align: center; font-size: 13px; ${disabledStyle}" ${disabledAttr}>`;
                     const isBarbell = isBarbellExercise(dbEx || ex);
-                    const plateBtn = isBarbell ? `<button type="button" class="btn-plate-calc" style="background: var(--bg-surface-elevated); color: var(--color-accent); border: 1px solid var(--border-color); border-radius: 8px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; flex-shrink: 0;" title="${getT('plateCalc.title') || 'Calculadora de discos'}" ${!isWorkoutActive ? 'disabled' : ''}><i class="ph-bold ph-barbell"></i></button>` : '';
-                    weightHtml = `<div style="display:flex; align-items:center; gap:4px;"><input type="number" step="any" inputmode="numeric" pattern="[0-9]*" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 50px; height: 32px; text-align: center; font-size: 13px;" ${!isWorkoutActive ? 'disabled' : ''}>${plateBtn}</div>`;
+                    const plateBtn = isBarbell ? `<button type="button" class="btn-plate-calc" style="background: var(--bg-surface-elevated); color: var(--color-accent); border: 1px solid var(--border-color); border-radius: 8px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; flex-shrink: 0;" title="${getT('plateCalc.title') || 'Calculadora de discos'}" ${disabledAttr} style="background: var(--bg-surface-elevated); color: var(--color-accent); border: 1px solid var(--border-color); border-radius: 8px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; flex-shrink: 0; ${disabledStyle}"><i class="ph-bold ph-barbell"></i></button>` : '';
+                    weightHtml = `<div style="display:flex; align-items:center; gap:4px;"><input type="number" step="any" inputmode="numeric" pattern="[0-9]*" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 50px; height: 32px; text-align: center; font-size: 13px; ${disabledStyle}" ${disabledAttr}>${plateBtn}</div>`;
                 }
 
                 setRow.innerHTML = `
@@ -5295,15 +5580,28 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
             body.appendChild(exSection);
         });
         
-        const finishExBtn = document.createElement('button');
+                const finishExBtn = document.createElement('button');
         finishExBtn.classList.add('btn-secondary', 'full-width');
-        finishExBtn.textContent = block.type === 'superset' ? 'Finalizar Superserie' : 'Finalizar Ejercicio';
+        if (allCompleted) {
+            finishExBtn.innerHTML = '<i class="ph ph-arrow-counter-clockwise"></i> ' + (typeof getT === 'function' ? (block.type === 'superset' ? getT('workout.reopenSuperset') : getT('workout.reopenExercise')) : (block.type === 'superset' ? 'Reabrir Superserie' : 'Reabrir Ejercicio'));
+            finishExBtn.style.borderColor = 'var(--color-accent)';
+            finishExBtn.style.color = 'var(--color-accent)';
+        } else {
+            finishExBtn.innerHTML = '<i class="ph ph-check"></i> ' + (block.type === 'superset' ? 'Finalizar Superserie' : 'Finalizar Ejercicio');
+        }
         finishExBtn.disabled = !isWorkoutActive;
         if (!isWorkoutActive) finishExBtn.style.opacity = '0.5';
         finishExBtn.addEventListener('click', () => {
             syncActiveWorkoutInputsFromDOM();
-            block.exercises.forEach(e => e.completed = true);
-            openExerciseAccordions = openExerciseAccordions.filter(i => i !== block.id && (blockIndex !== 0 || i !== 0));
+            if (allCompleted) {
+                // Reopen exercise to modify
+                block.exercises.forEach(e => e.completed = false);
+                if (!openExerciseAccordions.includes(block.id)) openExerciseAccordions.push(block.id);
+            } else {
+                // Finish exercise and lock
+                block.exercises.forEach(e => e.completed = true);
+                openExerciseAccordions = openExerciseAccordions.filter(i => i !== block.id && (blockIndex !== 0 || i !== 0));
+            }
             recalculatePRs();
             autoSaveWorkout();
             saveState();
@@ -5426,6 +5724,8 @@ document.getElementById('finish-workout').addEventListener('click', () => {
 
     state.completedWorkouts.push({
         id: Date.now().toString(),
+        sessionId: (activeSession && activeSession.id) ? activeSession.id : null,
+        completedAt: Date.now(),
         date: realDate,
         name: sessionData.name || 'Entrenamiento',
         type: sessionData.type || 'hypertrophy',
@@ -5950,10 +6250,49 @@ window.copyWorkoutSummaryText = function() {
 let currentCompareAngle = 'front';
 let currentCompareMode = 'side-by-side';
 
+
+function getEvolutionPhotos(item) {
+    if (!item) return { front: null, side: null, back: null, list: [] };
+    if (item.photosByAngle && typeof item.photosByAngle === 'object') {
+        const list = [item.photosByAngle.front, item.photosByAngle.side, item.photosByAngle.back].filter(Boolean);
+        return {
+            front: item.photosByAngle.front || null,
+            side: item.photosByAngle.side || null,
+            back: item.photosByAngle.back || null,
+            list: list
+        };
+    }
+    if (item.photos && typeof item.photos === 'object' && !Array.isArray(item.photos)) {
+        const list = [item.photos.front, item.photos.side, item.photos.back].filter(Boolean);
+        return {
+            front: item.photos.front || null,
+            side: item.photos.side || null,
+            back: item.photos.back || null,
+            list: list
+        };
+    }
+    if (Array.isArray(item.photos)) {
+        const valid = item.photos.filter(Boolean);
+        return {
+            front: valid[0] || null,
+            side: valid[1] || null,
+            back: valid[2] || null,
+            list: valid
+        };
+    }
+    return { front: null, side: null, back: null, list: [] };
+}
+window.getEvolutionPhotos = getEvolutionPhotos;
+
 window.openPhotoComparisonModal = function() {
-    const historyWithPhotos = (state.evolution || []).filter(item => {
-        return item.photos && (item.photos.front || item.photos.side || item.photos.back);
-    }).sort((a,b) => new Date(a.dateIso || a.date) - new Date(b.dateIso || b.date));
+        const historyWithPhotos = (state.evolution || []).filter(item => {
+        const p = getEvolutionPhotos(item);
+        return p.list && p.list.length > 0;
+    }).sort((a,b) => {
+        const tA = a.dateIso ? new Date(a.dateIso).getTime() : (a.date ? new Date(a.date).getTime() : Number(a.id) || 0);
+        const tB = b.dateIso ? new Date(b.dateIso).getTime() : (b.date ? new Date(b.dateIso).getTime() : Number(b.id) || 0);
+        return tA - tB;
+    });
 
     if (historyWithPhotos.length < 2) {
         alert(getT('compare.noPhotos') || 'Se necesitan al menos 2 registros con fotos para comparar.');
@@ -6020,8 +6359,10 @@ window.renderPhotoComparison = function() {
         return;
     }
 
-    const photoBefore = itemBefore.photos ? itemBefore.photos[currentCompareAngle] : null;
-    const photoAfter = itemAfter.photos ? itemAfter.photos[currentCompareAngle] : null;
+    const pBefore = getEvolutionPhotos(itemBefore);
+    const pAfter = getEvolutionPhotos(itemAfter);
+    const photoBefore = pBefore[currentCompareAngle] || pBefore.list[0] || null;
+    const photoAfter = pAfter[currentCompareAngle] || pAfter.list[0] || null;
 
     if (!photoBefore && !photoAfter) {
         viewport.innerHTML = `<div style="color: var(--text-secondary); padding: 20px;">No hay fotos registradas en el ángulo ${currentCompareAngle}.</div>`;
@@ -6994,10 +7335,12 @@ document.getElementById('btn-save-evolution')?.addEventListener('click', async (
         const sideInput = document.getElementById('evolution-photo-side');
         const backInput = document.getElementById('evolution-photo-back');
         
-        const photos = [];
-        if (frontInput.files[0]) photos.push(await getBase64Image(frontInput.files[0]));
-        if (sideInput.files[0]) photos.push(await getBase64Image(sideInput.files[0]));
-        if (backInput.files[0]) photos.push(await getBase64Image(backInput.files[0]));
+        const photosByAngle = {
+            front: frontInput.files[0] ? await getBase64Image(frontInput.files[0]) : null,
+            side: sideInput.files[0] ? await getBase64Image(sideInput.files[0]) : null,
+            back: backInput.files[0] ? await getBase64Image(backInput.files[0]) : null
+        };
+        const photos = [photosByAngle.front, photosByAngle.side, photosByAngle.back].filter(Boolean);
         
         const m1 = parseFloat(document.getElementById('evol-m1')?.value) || null;
         const m2 = parseFloat(document.getElementById('evol-m2')?.value) || null;
@@ -7014,6 +7357,7 @@ document.getElementById('btn-save-evolution')?.addEventListener('click', async (
             weight: parseFloat(String(weight).replace(',', '.')),
             bf: bf ? parseFloat(String(bf).replace(',', '.')) : null,
             photos: photos,
+            photosByAngle: photosByAngle,
             m1, m2, m3, m4, m5, m6, m7, m8
         });
         
@@ -7607,7 +7951,7 @@ document.getElementById('btn-delete-history')?.addEventListener('click', () => {
 
 window.editSession = (sessionId) => {
     const session = state.sessions.find(s => s.id === sessionId);
-    if(!session) return;
+    if (!session) return;
     
     editingSessionId = session.id;
     
@@ -7626,9 +7970,23 @@ window.editSession = (sessionId) => {
         btn.classList.toggle('selected', btn.dataset.type === selectedBlockType);
     });
     
+    // If session is completed, also look up the real completed exercises
+    let sourceExercises = session.exercises || [];
+    if (session.completed) {
+        let compRecord = (state.completedWorkouts || []).find(w => w.id === session.id || w.sessionId === session.id);
+        if (!compRecord && session.date) {
+            const [y, m, d] = session.date.split('-');
+            const formattedDate = `${d}/${m}/${y}`;
+            compRecord = (state.completedWorkouts || []).find(w => w.name === session.name && (w.date === formattedDate || w.date === session.date));
+        }
+        if (compRecord && compRecord.exercises && compRecord.exercises.length > 0) {
+            sourceExercises = compRecord.exercises;
+        }
+    }
+    
     routineItems = [];
     const grouped = {};
-    (session.exercises || []).forEach(ex => {
+    sourceExercises.forEach(ex => {
         const id = ex.supersetId || 'single_' + (ex.exerciseId || Math.random());
         if(!grouped[id]) grouped[id] = { isSuperset: !!ex.supersetId, name: ex.supersetName || '', exercises: [] };
         
@@ -7636,7 +7994,14 @@ window.editSession = (sessionId) => {
         grouped[id].exercises.push({
             exerciseId: ex.exerciseId,
             dbEx: dbEx || { id: ex.exerciseId, name: ex.name, group: 'Sin Grupo' },
-            sets: (ex.sets || []).map(s => ({ type: s.type || 'Efectiva', reps: s.targetReps || s.reps || '10', restTime: s.restTime || '60s' }))
+            sets: (ex.sets || []).map(s => ({
+                type: s.type || 'Efectiva',
+                reps: s.reps || s.targetReps || '10',
+                weight: s.weight || 0,
+                weightDrop: s.weightDrop || 0,
+                repsDrop: s.repsDrop || '',
+                restTime: s.restTime || '60s'
+            }))
         });
     });
     
@@ -8053,7 +8418,7 @@ window.generateDashboard = function(mode) {
     }
 };
 
-const CURRENT_APP_VERSION = '1.2.0';
+const CURRENT_APP_VERSION = '1.2.1';
 function compareVersions(v1, v2) {
     const p1 = String(v1).split('.').map(Number);
     const p2 = String(v2).split('.').map(Number);
@@ -8069,19 +8434,39 @@ window.latestUpdateData = null;
 
 const DEFAULT_APP_CHANGELOG = {
     "es": [
-        "Versión 1.2.0: 1) Mapa Anatómico 2D interactivo con heatmap de recuperación muscular. 2) Monitor de series semanales óptimas por músculo. 3) Muro de 26 logros y medallas desbloqueables con alertas en vivo. 4) Tarjeta de resumen estilizada en 9:16 para Historias de Instagram y WhatsApp. 5) Teclado numérico estricto y alineación de entrenamiento."
+        "🫀 **Mapa Anatómico 2D**: Visualiza la fatiga y recuperación muscular en tiempo real (frontal y dorsal).",
+        "📊 **Series Semanales Óptimas**: Control del volumen hipertrófico semanal por grupo muscular.",
+        "🏆 **Muro de Logros**: 26 medallas e insignias desbloqueables con alertas de celebración en vivo.",
+        "📸 **Tarjeta para Historias**: Exporta resúmenes estilizados en 9:16 para Instagram y WhatsApp.",
+        "⌨️ **Teclado Numérico Estricto**: Optimización para introducir números directamente en medidas y series."
     ],
     "en": [
-        "Version 1.2.0: 1) Interactive 2D Anatomical Map with muscle recovery heatmap. 2) Optimal weekly working sets tracker per muscle. 3) 26 unlockable achievements & trophies wall with live celebration toasts. 4) Stylized 9:16 story card generator for Instagram and WhatsApp. 5) Strict numeric keypad and alignment fixes."
+        "🫀 **2D Anatomical Map**: Track muscle recovery and fatigue in real time (front & back views).",
+        "📊 **Optimal Weekly Sets**: Monitor weekly hypertrophy volume landmarks per muscle.",
+        "🏆 **Achievements Wall**: 26 unlockable trophies and badges with live celebration toasts.",
+        "📸 **Story Cards**: Export stylized 9:16 workout summaries for Instagram and WhatsApp.",
+        "⌨️ **Strict Numeric Keypad**: Large digits keypad directly for weights and measurements."
     ],
     "ru": [
-        "Версия 1.2.0: 1) Интерактивная 2D карта мышц с тепловой картой восстановления. 2) Монитор оптимальных подходов в неделю. 3) Стена из 26 достижений и медалей. 4) Карточка 9:16 для историй Instagram и WhatsApp. 5) Строгая числовая клавиатура."
+        "🫀 **2D Карта мышц**: Тепловая карта восстановления и мышечной усталости (вид спереди и сзади).",
+        "📊 **Оптимальные подходы**: Контроль объёма тренировок за неделю по группам мышц.",
+        "🏆 **Стена достижений**: 26 разблокируемых трофеев и медалей.",
+        "📸 **Карточки для историй**: Экспорт итогов тренировки в формате 9:16 для Instagram и WhatsApp.",
+        "⌨️ **Числовая клавиатура**: Быстрый ввод чисел для весов и замеров."
     ],
     "et": [
-        "Versioon 1.2.0: 1) Interaktiivne 2D lihaste kaart taastumise kuumuskaardiga. 2) Nädala optimaalsete seeriate jälgija. 3) 26 avatavat saavutust ja medalit. 4) 9:16 Story kaardi generaator Instagrami ja WhatsAppi jaoks. 5) Numbriklaviatuur."
+        "🫀 **2D Lihaste kaart**: Jälgi taastumist ja väsimust reaalajas (ees ja taga).",
+        "📊 **Nädala optimaalsed seeriad**: Hüpertroofia mahu jälgimine lihasrühmade kaupa.",
+        "🏆 **Saavutuste sein**: 26 avatavat trofeed ja medalit.",
+        "📸 **Story kaardid**: Stiilsed 9:16 kokkuvõtted Instagrami ja WhatsAppi jaoks.",
+        "⌨️ **Numbriklaviatuur**: Mugav numbrite sisestamine kaalu ja mõõtude jaoks."
     ],
     "uk": [
-        "Версія 1.2.0: 1) Інтерактивна 2D карта м'язів з тепловою картою відновлення. 2) Монітор оптимальних підходів на тиждень. 3) Стіна з 26 досягнень та медалей. 4) Картка 9:16 для історій Instagram та WhatsApp. 5) Числова клавіатура."
+        "🫀 **2D Карта м'язів**: Теплова карта відновлення та втоми (вид спереду та ззаду).",
+        "📊 **Оптимальні підходи**: Контроль щотижневого об'єму за групами м'язів.",
+        "🏆 **Стіна досягнень**: 26 трофеїв та медалей з анімаціями.",
+        "📸 **Картка для історій**: Стильні підсумки 9:16 для Instagram та WhatsApp.",
+        "⌨️ **Числова клавіатура**: Зручне введення чисел для ваги та замірів."
     ]
 };
 
@@ -8154,10 +8539,64 @@ window.renderUpdateModalContent = function(data) {
         const currentLang = (typeof state !== 'undefined' && state.language) || 'es';
         const changelogItems = getChangelogForLanguage(data.changelog, currentLang);
         let changelogHtml = '';
-        if (Array.isArray(changelogItems) && changelogItems.length > 0) {
-            changelogHtml = '<ul style="text-align: left; margin: 0; padding-left: 18px; font-size: 13.5px; line-height: 1.5; color: var(--text-primary); display: flex; flex-direction: column; gap: 8px;">' +
-                changelogItems.map(item => `<li>${item}</li>`).join('') +
-                '</ul>';
+                if (Array.isArray(changelogItems) && changelogItems.length > 0) {
+            const parsedItems = [];
+            changelogItems.forEach(rawItem => {
+                if (typeof rawItem !== 'string') return;
+                let clean = rawItem.replace(/^Versi[oó]n\s+[\d\.]+\s*:\s*/i, '').replace(/^Version\s+[\d\.]+\s*:\s*/i, '');
+                if (/\d+\)\s*/.test(clean)) {
+                    const parts = clean.split(/\s*\d+\)\s*/).map(p => p.trim()).filter(p => p.length > 0);
+                    parsedItems.push(...parts);
+                } else {
+                    parsedItems.push(clean.trim());
+                }
+            });
+
+            const getFeatureIcon = (text) => {
+                const t = text.toLowerCase();
+                if (t.includes('mapa') || t.includes('anatóm') || t.includes('anatomical') || t.includes('fatiga')) {
+                    return { icon: 'ph-person-simple', color: '#ec4899', bg: 'rgba(236, 72, 153, 0.15)' };
+                }
+                if (t.includes('serie') || t.includes('volumen') || t.includes('volume') || t.includes('optima')) {
+                    return { icon: 'ph-chart-bar', color: '#10b981', bg: 'rgba(16, 185, 129, 0.15)' };
+                }
+                if (t.includes('logro') || t.includes('trofeo') || t.includes('achievement') || t.includes('medal')) {
+                    return { icon: 'ph-trophy', color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.15)' };
+                }
+                if (t.includes('historia') || t.includes('story') || t.includes('instagram') || t.includes('tarjeta')) {
+                    return { icon: 'ph-camera', color: '#a855f7', bg: 'rgba(168, 85, 247, 0.15)' };
+                }
+                if (t.includes('teclado') || t.includes('keypad') || t.includes('número') || t.includes('numeric')) {
+                    return { icon: 'ph-keyboard', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.15)' };
+                }
+                if (t.includes('disco') || t.includes('barra') || t.includes('plate') || t.includes('calculadora')) {
+                    return { icon: 'ph-barbell', color: '#f97316', bg: 'rgba(249, 115, 22, 0.15)' };
+                }
+                return { icon: 'ph-sparkle', color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.15)' };
+            };
+
+            changelogHtml = '<div style="display: flex; flex-direction: column; gap: 8px; text-align: left;">' +
+                parsedItems.map(item => {
+                    // Clean emoji if at start
+                    let content = item.replace(/^[\uD800-\uDBFF][\uDC00-\uDFFF]|^[\u2600-\u27BF]|^[\uD83C-\uD83E][\uDD00-\uDFFF]\s*/, '').trim();
+                    const styleMeta = getFeatureIcon(content);
+
+                    content = content.replace(/\*\*([^*]+)\*\*/g, '<strong style="color: var(--text-primary); font-weight: 700;">$1</strong>');
+                    if (!content.includes('<strong>') && content.includes(':')) {
+                        const colonIdx = content.indexOf(':');
+                        const title = content.substring(0, colonIdx).trim();
+                        const rest = content.substring(colonIdx + 1).trim();
+                        content = `<strong style="color: var(--text-primary); font-weight: 700;">${title}:</strong> ${rest}`;
+                    }
+
+                    return `<div style="display: flex; gap: 12px; align-items: center; padding: 10px 14px; background: var(--bg-surface-elevated); border: 1px solid var(--border-color); border-radius: 14px;">
+                        <div style="width: 32px; height: 32px; border-radius: 10px; background: ${styleMeta.bg}; color: ${styleMeta.color}; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
+                            <i class="ph-bold ${styleMeta.icon}"></i>
+                        </div>
+                        <div style="font-size: 13px; line-height: 1.45; color: var(--text-secondary); flex: 1;">${content}</div>
+                    </div>`;
+                }).join('') +
+                '</div>';
         } else {
             const fallbackText = getT('update.defaultChangelog') || 'Mejoras de rendimiento y correcciones de errores.';
             changelogHtml = `<p style="margin:0; text-align:left; font-size: 13.5px; color: var(--text-secondary); font-style: italic;">${fallbackText}</p>`;
@@ -8176,7 +8615,7 @@ window.renderUpdateModalContent = function(data) {
     if (actionContainer) {
         if (isNewer) {
             if (isNative) {
-                actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 10px; padding: 14px; background-color: #10b981; border-color: #10b981; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer;" onclick="openExternalUrl((window.latestUpdateData && window.latestUpdateData.downloadUrl) || 'https://github.com/Streetoh/Gym-tracker/releases/latest')">
+                actionContainer.innerHTML = `<button class="btn-primary full-width" style="margin-bottom: 10px; padding: 14px; background-color: #10b981; border-color: #10b981; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer;" onclick="openExternalUrl((window.latestUpdateData && window.latestUpdateData.downloadUrl) || 'https://github.com/Streetoh/Gym-tracker/releases')">
                         <i class="ph ph-download-simple" style="font-size: 20px;"></i> <span>${getT('update.download') || 'Descargar actualización'}</span>
                     </button>`;
             } else {
@@ -8496,6 +8935,42 @@ window.normalizeMuscleName = function(name) {
     return 'Pecho';
 };
 
+
+function getWorkoutTimestamp(w) {
+    if (!w) return 0;
+    if (w.completedAt && !isNaN(Number(w.completedAt))) return Number(w.completedAt);
+    if (w.dateTimestamp && !isNaN(Number(w.dateTimestamp))) return Number(w.dateTimestamp);
+    if (w.id && !isNaN(Number(w.id)) && Number(w.id) > 1600000000000) return Number(w.id);
+    if (w.date) {
+        if (typeof w.date === 'string' && w.date.includes('/')) {
+            const parts = w.date.split('/');
+            if (parts.length === 3) {
+                const d = parseInt(parts[0], 10);
+                const m = parseInt(parts[1], 10) - 1;
+                const y = parseInt(parts[2], 10);
+                const dt = new Date(y, m, d);
+                if (!isNaN(dt.getTime())) return dt.getTime();
+            }
+        }
+        if (typeof w.date === 'string' && w.date.includes('-')) {
+            const parts = w.date.split('-');
+            if (parts.length === 3) {
+                if (parts[0].length === 4) {
+                    const dt = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                    if (!isNaN(dt.getTime())) return dt.getTime();
+                } else {
+                    const dt = new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
+                    if (!isNaN(dt.getTime())) return dt.getTime();
+                }
+            }
+        }
+        const parsed = new Date(w.date).getTime();
+        if (!isNaN(parsed)) return parsed;
+    }
+    return 0;
+}
+window.getWorkoutTimestamp = getWorkoutTimestamp;
+
 window.refreshMuscleFatigueMap = function() {
     const mount = document.getElementById('anatomy-silhouette-mount');
     if (!mount) return;
@@ -8527,7 +9002,7 @@ window.refreshMuscleFatigueMap = function() {
     const mondayTime = monday.getTime();
 
     completed.forEach(w => {
-        const wTime = w.completedAt || w.dateTimestamp || (w.date ? new Date(w.date).getTime() : 0);
+        const wTime = getWorkoutTimestamp(w);
         if (!w.exercises) return;
 
         w.exercises.forEach(ex => {
@@ -8556,6 +9031,7 @@ window.refreshMuscleFatigueMap = function() {
     };
 
     // Apply colors to all SVG muscle paths
+    if (typeof renderWeeklyMuscleVolume === 'function') renderWeeklyMuscleVolume();
     document.querySelectorAll('.anatomy-svg .muscle-group').forEach(el => {
         const muscle = el.getAttribute('data-muscle');
         const color = getMuscleColor(muscle);
@@ -8637,7 +9113,7 @@ window.renderWeeklyMuscleVolume = function() {
     Object.keys(targets).forEach(m => currentSets[m] = 0);
 
     completed.forEach(w => {
-        const wTime = w.completedAt || w.dateTimestamp || (w.date ? new Date(w.date).getTime() : 0);
+        const wTime = getWorkoutTimestamp(w);
         if (wTime >= mondayTime && w.exercises) {
             w.exercises.forEach(ex => {
                 const m = normalizeMuscleName(ex.group || ex.name);
@@ -8850,16 +9326,29 @@ window.checkAndUnlockAchievements = function(latestSessionData) {
 
 window.showAchievementToast = function(ach) {
     const toast = document.getElementById('achievement-celebration-toast');
-    const nameEl = document.getElementById('toast-achievement-name');
-    const descEl = document.getElementById('toast-achievement-desc');
-    if (!toast || !nameEl || !descEl) return;
+    if (!toast) return;
 
-    nameEl.textContent = ach.title;
-    descEl.textContent = ach.desc;
+    const iconEl = document.getElementById('achievement-toast-icon');
+    const titleEl = document.getElementById('achievement-toast-title');
+    const descEl = document.getElementById('achievement-toast-desc');
 
+    if (iconEl) iconEl.className = 'ph-fill ' + (ach.icon || 'ph-trophy');
+    if (titleEl) titleEl.textContent = typeof getTrAchievementTitle === 'function' ? getTrAchievementTitle(ach.id, ach.title) : ach.title;
+    if (descEl) descEl.textContent = typeof getTrAchievementDesc === 'function' ? getTrAchievementDesc(ach.id, ach.desc) : ach.desc;
+
+    toast.style.visibility = 'visible';
+    toast.style.opacity = '1';
     toast.style.transform = 'translateX(-50%) translateY(0)';
-    setTimeout(() => {
+
+    if (window.achievementToastTimeout) clearTimeout(window.achievementToastTimeout);
+    window.achievementToastTimeout = setTimeout(() => {
+        toast.style.opacity = '0';
         toast.style.transform = 'translateX(-50%) translateY(120px)';
+        setTimeout(() => {
+            if (toast.style.opacity === '0') {
+                toast.style.visibility = 'hidden';
+            }
+        }, 400);
     }, 3800);
 };
 

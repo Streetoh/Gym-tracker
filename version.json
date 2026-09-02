@@ -1,23 +1,45 @@
 {
-  "version": "1.2.0",
-  "versionCode": 120,
-  "downloadUrl": "https://github.com/Streetoh/Gym-tracker/raw/main/Gym%20tracker.apk",
+  "version": "1.2.1",
+  "versionCode": 121,
+  "downloadUrl": "https://github.com/Streetoh/Gym-tracker/releases",
   "githubUrl": "https://github.com/Streetoh/Gym-tracker",
   "changelog": {
     "es": [
-      "Versión 1.2.0: 1) Mapa Anatómico 2D interactivo con heatmap de recuperación muscular. 2) Monitor de series semanales óptimas por músculo. 3) Muro de 26 logros y medallas desbloqueables con alertas en vivo. 4) Tarjeta de resumen estilizada en 9:16 para Historias de Instagram y WhatsApp. 5) Teclado numérico estricto y alineación de entrenamiento."
+      "🛠️ **Edición en Calendario e Historial**: Modifica pesos y repeticiones de sesiones terminadas directamente con sincronización total.",
+      "🏋️ **Pestaña Ejercicios Restaurada**: Cuadrícula completa de grupos, búsqueda instantánea y tarjetas con PRs.",
+      "🔒 **Control de Series en Vivo**: Bloqueo estricto de inputs al finalizar ejercicio con botón para reabrir y modificar.",
+      "💡 **Sugerencias de Repeticiones Limpias**: Visualización en placeholder gris sin autocompletar la casilla.",
+      "📊 **Fatiga y Volumen Corregidos**: Detección precisa de sesiones completadas y actualización simultánea.",
+      "📸 **Comparador de Fotos Optimizado**: Compatibilidad total con fotos de evolución de cualquier fecha."
     ],
     "en": [
-      "Version 1.2.0: 1) Interactive 2D Anatomical Map with muscle recovery heatmap. 2) Optimal weekly working sets tracker per muscle. 3) 26 unlockable achievements & trophies wall with live celebration toasts. 4) Stylized 9:16 story card generator for Instagram and WhatsApp. 5) Strict numeric keypad and alignment fixes."
+      "🛠️ **Calendar & History Editing**: Edit weights and reps of completed workouts with full two-way synchronization.",
+      "🏋️ **Exercises Tab Restored**: Full group grid, instant search, and exercise cards with personal records.",
+      "🔒 **Live Workout Locking**: Prevent accidental changes on finished exercises with a reopen/modify toggle.",
+      "💡 **Clean Rep Suggestions**: Display suggestions in clean grey placeholders without prefilling inputs.",
+      "📊 **Fatigue & Volume Fixed**: Accurate tracking of completed workouts and synchronous refresh.",
+      "📸 **Photo Comparison Fixed**: Seamless comparison of evolution progress photos."
     ],
     "ru": [
-      "Версия 1.2.0: 1) Интерактивная 2D карта мышц с тепловой картой восстановления. 2) Монитор оптимальных подходов в неделю. 3) Стена из 26 достижений и медалей. 4) Карточка 9:16 для историй Instagram и WhatsApp. 5) Строгая числовая клавиатура."
+      "🫀 **2D Карта мышц**: Тепловая карта восстановления и мышечной усталости (вид спереди и сзади).",
+      "📊 **Оптимальные подходы**: Контроль объёма тренировок за неделю по группам мышц.",
+      "🏆 **Стена достижений**: 26 разблокируемых трофеев и медалей.",
+      "📸 **Карточки для историй**: Экспорт итогов тренировки в формате 9:16 для Instagram и WhatsApp.",
+      "⌨️ **Числовая клавиатура**: Быстрый ввод чисел для весов и замеров."
     ],
     "et": [
-      "Versioon 1.2.0: 1) Interaktiivne 2D lihaste kaart taastumise kuumuskaardiga. 2) Nädala optimaalsete seeriate jälgija. 3) 26 avatavat saavutust ja medalit. 4) 9:16 Story kaardi generaator Instagrami ja WhatsAppi jaoks. 5) Numbriklaviatuur."
+      "🫀 **2D Lihaste kaart**: Jälgi taastumist ja väsimust reaalajas (ees ja taga).",
+      "📊 **Nädala optimaalsed seeriad**: Hüpertroofia mahu jälgimine lihasrühmade kaupa.",
+      "🏆 **Saavutuste sein**: 26 avatavat trofeed ja medalit.",
+      "📸 **Story kaardid**: Stiilsed 9:16 kokkuvõtted Instagrami ja WhatsAppi jaoks.",
+      "⌨️ **Numbriklaviatuur**: Mugav numbrite sisestamine kaalu ja mõõtude jaoks."
     ],
     "uk": [
-      "Версія 1.2.0: 1) Інтерактивна 2D карта м'язів з тепловою картою відновлення. 2) Монітор оптимальних підходів на тиждень. 3) Стіна з 26 досягнень та медалей. 4) Картка 9:16 для історій Instagram та WhatsApp. 5) Числова клавіатура."
+      "🫀 **2D Карта м'язів**: Теплова карта відновлення та втоми (вид спереду та ззаду).",
+      "📊 **Оптимальні підходи**: Контроль щотижневого об'єму за групами м'язів.",
+      "🏆 **Стіна досягнень**: 26 трофеїв та медалей з анімаціями.",
+      "📸 **Картка для історій**: Стильні підсумки 9:16 для Instagram та WhatsApp.",
+      "⌨️ **Числова клавіатура**: Зручне введення чисел для ваги та замірів."
     ]
   }
 }

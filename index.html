@@ -173,7 +173,7 @@
 
             <!-- MOBILE DRAWER FOOTER (APP VERSION) -->
             <div class="mobile-drawer-footer" style="padding: 12px 16px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px; align-items: center;">
-                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); window.openUpdateModal();" data-i18n-title="update.viewNews" title="Ver novedades">Gym Tracker v1.2.0</span>
+                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); window.openUpdateModal();" data-i18n-title="update.viewNews" title="Ver novedades">Gym Tracker v1.2.1</span>
                 <button id="btn-manual-check-update" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); checkForUpdates(true);">
                     <i class="ph ph-arrows-clockwise"></i> <span data-i18n="update.checkBtn">Comprobar actualización</span>
                 </button>
@@ -328,7 +328,7 @@
                                 <i class="ph-bold ph-person-simple" style="color: var(--color-accent); font-size: 20px;"></i>
                                 <span data-i18n="anatomy.title">Mapa de Fatiga Muscular</span>
                             </h3>
-                            <button type="button" class="btn-secondary" style="font-size: 11px; padding: 4px 10px; border-radius: 6px;" onclick="refreshMuscleFatigueMap()">
+                            <button type="button" class="btn-secondary" style="font-size: 11px; padding: 4px 10px; border-radius: 6px;" onclick="refreshMuscleFatigueMap(); if(typeof renderWeeklyMuscleVolume==='function') renderWeeklyMuscleVolume();">
                                 <i class="ph ph-arrows-clockwise"></i> <span data-i18n="common.refresh">Actualizar</span>
                             </button>
                         </div>
@@ -1250,7 +1250,7 @@
     </div>
 
     <!-- TOAST CELEBRACIÓN DE LOGRO DESBLOQUEADO -->
-    <div id="achievement-celebration-toast" style="position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(120px); background: linear-gradient(135deg, #1e293b, #0f172a); border: 2px solid #f59e0b; border-radius: 18px; padding: 14px 20px; color: white; display: flex; align-items: center; gap: 14px; box-shadow: 0 10px 35px rgba(245, 158, 11, 0.4); z-index: 999999; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; max-width: 90%; min-width: 290px;">
+    <div id="achievement-celebration-toast" style="position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(120px); opacity: 0; visibility: hidden; pointer-events: none; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease, visibility 0.4s; background: linear-gradient(135deg, #1e293b, #0f172a); border: 2px solid #f59e0b; border-radius: 18px; padding: 14px 20px; color: white; display: flex; align-items: center; gap: 14px; box-shadow: 0 10px 35px rgba(245, 158, 11, 0.4); z-index: 999999; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; max-width: 90%; min-width: 290px;">
         <div style="width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; font-size: 24px; color: #fff; flex-shrink: 0; box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);">
             <i class="ph-bold ph-trophy"></i>
         </div>
