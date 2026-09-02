@@ -5013,45 +5013,68 @@ const extractYouTubeID = (url) => {
 const startWorkout = (session) => {
     if (!session) return;
     activeSession = JSON.parse(JSON.stringify(session)); 
+
+    workoutView.classList.add('active');
+    document.getElementById('workout-title').textContent = session.name || 'Entrenamiento';
+    workoutView.style.setProperty('--color-accent', `var(--color-${session.type || 'hypertrophy'})`); 
     
     // Recover completed data lazily if needed
     if (activeSession.completed) {
-        const dateStr = activeSession.date; 
-        if (dateStr) {
-            const [y, m, d] = dateStr.split('-');
-            const formattedDate = `${d}/${m}/${y}`;
-            const matched = state.completedWorkouts.find(w => w.name === activeSession.name && w.date === formattedDate);
-            if (matched) {
-                activeSession.exercises = JSON.parse(JSON.stringify(matched.exercises));
-            }
-        }
-    }
-    
-    workoutView.classList.add('active');
-    document.getElementById('workout-title').textContent = session.name;
-    workoutView.style.setProperty('--color-accent', `var(--color-${session.type})`);
-    
-    const isActive = !activeSession.completed && state.activeWorkoutState && state.activeWorkoutState.session && state.activeWorkoutState.session.id === session.id;
-    
-    if (activeSession.completed) {
         openExerciseAccordions = [0]; 
         const startBtn = document.getElementById('btn-start-workout');
-        startBtn.style.display = 'none';
+        if (startBtn) startBtn.style.display = 'none';
+        
+        // Hide timer and text "Completado" completely
         const tc = document.getElementById('workout-timer-container');
-        if (tc) tc.style.display = 'flex';
-        else document.getElementById('workout-timer').style.display = 'block';
+        if (tc) tc.style.display = 'none';
+        const wt = document.getElementById('workout-timer');
+        if (wt) wt.style.display = 'none';
         
         const bc = document.getElementById('btn-cancel-workout');
         if (bc) bc.style.display = 'none';
         
-        document.getElementById('workout-timer').textContent = 'Completado';
-        window.isEditingCompletedWorkout = false;
-        const editCompBtn = document.getElementById('btn-edit-completed-workout');
-        if (editCompBtn) editCompBtn.style.display = 'flex';
-        const compBadge = document.getElementById('completed-workout-status-badge');
-        if (compBadge) compBadge.style.display = 'flex';
         document.getElementById('workout-footer').style.display = 'none';
         clearInterval(timerInterval);
+
+        // Show sub-header with [Editar Sesión] and [Sesión Finalizada] badge
+        window.isEditingCompletedWorkout = false;
+        const completedActions = document.getElementById('completed-workout-header-actions');
+        if (completedActions) completedActions.style.display = 'flex';
+        const editCompBtn = document.getElementById('btn-edit-completed-workout');
+        if (editCompBtn) editCompBtn.style.display = 'inline-flex';
+        const compBadge = document.getElementById('completed-workout-status-badge');
+        if (compBadge) compBadge.style.display = 'inline-flex';
+        const editBtnText = document.getElementById('btn-edit-completed-workout-text');
+        if (editBtnText) editBtnText.textContent = 'Editar Sesión';
+
+        // Lazy sync: recover real completed exercises
+        let matched = null;
+        if (activeSession.completedWorkoutId) {
+            matched = (state.completedWorkouts || []).find(w => w.id === activeSession.completedWorkoutId);
+        }
+        if (!matched && activeSession.id) {
+            matched = (state.completedWorkouts || []).find(w => w.sessionId === activeSession.id || w.id === activeSession.id);
+        }
+        if (!matched && activeSession.name) {
+            const dateStr = activeSession.date;
+            let fDate = '';
+            if (dateStr && dateStr.includes('-')) {
+                const [y, m, d] = dateStr.split('-');
+                fDate = `${d}/${m}/${y}`;
+            }
+            matched = (state.completedWorkouts || []).find(w => w.name === activeSession.name && (w.date === fDate || w.date === dateStr));
+        }
+        if (!matched && activeSession.name) {
+            const byName = (state.completedWorkouts || []).filter(w => w.name === activeSession.name);
+            if (byName.length > 0) matched = byName[byName.length - 1];
+        }
+
+        if (matched) {
+            activeSession.completedWorkoutId = matched.id;
+            if (matched.exercises && matched.exercises.length > 0) {
+                activeSession.exercises = JSON.parse(JSON.stringify(matched.exercises));
+            }
+        }
     } else if(isActive && state.activeWorkoutState.startTime) {
         // Resuming
         activeSession = state.activeWorkoutState.session;
@@ -5075,6 +5098,10 @@ const startWorkout = (session) => {
         const compBadge2 = document.getElementById('completed-workout-status-badge');
         if (compBadge2) compBadge2.style.display = 'none';
         
+        const completedActions = document.getElementById('completed-workout-header-actions');
+        if (completedActions) completedActions.style.display = 'none';
+        const wtTimer = document.getElementById('workout-timer');
+        if (wtTimer) wtTimer.style.display = 'block';
         const isAnotherRunning = state.activeWorkoutState && state.activeWorkoutState.startTime;
         const startBtn = document.getElementById('btn-start-workout');
         startBtn.style.display = 'block';
@@ -5610,6 +5637,7 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
         }
         finishExBtn.disabled = !isWorkoutActive;
         if (!isWorkoutActive) finishExBtn.style.opacity = '0.5';
+        if (activeSession.completed) finishExBtn.style.display = 'none';
         finishExBtn.addEventListener('click', () => {
             syncActiveWorkoutInputsFromDOM();
             if (allCompleted) {
@@ -6509,12 +6537,30 @@ const renderGlobalHistory = () => {
                     <h4 style="margin-bottom:4px; font-size:16px;">${w.name || 'Entrenamiento'}</h4>
                     <p style="font-size:12px; color:var(--text-secondary);"><i class="ph ph-calendar"></i> ${w.date || '-'} &bull; <i class="ph ph-clock"></i> ${w.duration || '00:00'} &bull; ${typeName}</p>
                 </div>
+                <button class="btn-icon edit-history-item-btn" style="color:var(--color-accent); margin-right:6px; z-index:10;" title="Editar Entrenamiento"><i class="ph ph-pencil-simple"></i></button>
                 <button class="btn-icon share-history-story-btn" style="color:var(--color-accent); margin-right:6px; z-index:10;" title="Crear Historia"><i class="ph-bold ph-camera"></i></button>
                 <button class="btn-icon delete-history-btn" style="color:var(--color-heavy); margin-right:8px; z-index:10;" title="Eliminar"><i class="ph ph-trash"></i></button>
                 <i class="ph ph-caret-down"></i>
             </div>
             <div class="accordion-body"></div>
         `;
+
+        item.querySelector('.edit-history-item-btn')?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const matchingSession = (state.sessions || []).find(s => s.id === w.sessionId || s.completedWorkoutId === w.id || (s.name === w.name && s.completed));
+            const sessionToOpen = matchingSession ? matchingSession : {
+                id: w.sessionId || ('sess_' + w.id),
+                completedWorkoutId: w.id,
+                completed: true,
+                name: w.name,
+                type: w.type || 'hypertrophy',
+                date: w.date,
+                duration: w.duration,
+                exercises: JSON.parse(JSON.stringify(w.exercises || []))
+            };
+            startWorkout(sessionToOpen);
+            toggleEditCompletedWorkout();
+        });
 
         item.querySelector('.share-history-story-btn')?.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -8441,7 +8487,7 @@ window.generateDashboard = function(mode) {
     }
 };
 
-const CURRENT_APP_VERSION = '1.2.2';
+const CURRENT_APP_VERSION = '1.2.3';
 function compareVersions(v1, v2) {
     const p1 = String(v1).split('.').map(Number);
     const p2 = String(v2).split('.').map(Number);
@@ -9821,13 +9867,20 @@ window.saveEditedCompletedWorkout = function() {
     syncActiveWorkoutInputsFromDOM();
 
     // 1. Update session in state.sessions
-    const sessionInCal = state.sessions.find(s => s.id === activeSession.id);
+    const sessionInCal = (state.sessions || []).find(s => s.id === activeSession.id);
     if (sessionInCal) {
         sessionInCal.exercises = JSON.parse(JSON.stringify(activeSession.exercises || []));
+        if (activeSession.completedWorkoutId) sessionInCal.completedWorkoutId = activeSession.completedWorkoutId;
     }
 
-    // 2. Update record in state.completedWorkouts
-    let compRecord = (state.completedWorkouts || []).find(w => w.sessionId === activeSession.id || w.id === activeSession.id);
+    // 2. Find matching record in state.completedWorkouts using all strategies
+    let compRecord = null;
+    if (activeSession.completedWorkoutId) {
+        compRecord = (state.completedWorkouts || []).find(w => w.id === activeSession.completedWorkoutId);
+    }
+    if (!compRecord && activeSession.id) {
+        compRecord = (state.completedWorkouts || []).find(w => w.sessionId === activeSession.id || w.id === activeSession.id);
+    }
     if (!compRecord && activeSession.name) {
         let fDate = '';
         if (activeSession.date && activeSession.date.includes('-')) {
@@ -9836,12 +9889,35 @@ window.saveEditedCompletedWorkout = function() {
         }
         compRecord = (state.completedWorkouts || []).find(w => w.name === activeSession.name && (w.date === fDate || w.date === activeSession.date));
     }
-
-    if (compRecord) {
-        compRecord.exercises = JSON.parse(JSON.stringify(activeSession.exercises || []));
+    if (!compRecord && activeSession.name) {
+        const byName = (state.completedWorkouts || []).filter(w => w.name === activeSession.name);
+        if (byName.length > 0) compRecord = byName[byName.length - 1];
     }
 
-    // 3. Recalculate PRs and refresh all views
+    // 3. Update existing record or insert if missing
+    if (compRecord) {
+        compRecord.exercises = JSON.parse(JSON.stringify(activeSession.exercises || []));
+        compRecord.sessionId = activeSession.id;
+        activeSession.completedWorkoutId = compRecord.id;
+        if (sessionInCal) sessionInCal.completedWorkoutId = compRecord.id;
+    } else {
+        const newRecord = {
+            id: Date.now().toString(),
+            sessionId: activeSession.id,
+            completedAt: Date.now(),
+            date: formatDate(activeSession.date || new Date()),
+            name: activeSession.name || 'Entrenamiento',
+            type: activeSession.type || 'hypertrophy',
+            duration: activeSession.duration || '45:00',
+            exercises: JSON.parse(JSON.stringify(activeSession.exercises || []))
+        };
+        if (!Array.isArray(state.completedWorkouts)) state.completedWorkouts = [];
+        state.completedWorkouts.push(newRecord);
+        activeSession.completedWorkoutId = newRecord.id;
+        if (sessionInCal) sessionInCal.completedWorkoutId = newRecord.id;
+    }
+
+    // 4. Recalculate PRs and refresh all views
     recalculatePRs();
     saveState();
     renderGlobalHistory();

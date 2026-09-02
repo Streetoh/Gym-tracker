@@ -173,7 +173,7 @@
 
             <!-- MOBILE DRAWER FOOTER (APP VERSION) -->
             <div class="mobile-drawer-footer" style="padding: 12px 16px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px; align-items: center;">
-                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); window.openUpdateModal();" data-i18n-title="update.viewNews" title="Ver novedades">Gym Tracker v1.2.2</span>
+                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); window.openUpdateModal();" data-i18n-title="update.viewNews" title="Ver novedades">Gym Tracker v1.2.3</span>
                 <button id="btn-manual-check-update" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); checkForUpdates(true);">
                     <i class="ph ph-arrows-clockwise"></i> <span data-i18n="update.checkBtn">Comprobar actualización</span>
                 </button>
@@ -513,24 +513,27 @@
 
             <!-- WORKOUT SESSION VIEW (Overlays everything else) -->
             <section id="view-workout" class="view overlay-view">
-                <div class="workout-header">
-                      <button id="close-workout"><i class="ph ph-caret-left"></i></button>
-                      <h2 id="workout-title" data-i18n="workout.title">Entrenamiento</h2>
-                      <button id="btn-start-workout" class="btn-primary" style="padding: 8px 16px; font-size: 14px;" data-i18n="workout.start">Iniciar</button>
-                      
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <button id="btn-edit-completed-workout" class="btn-secondary" style="display: none; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 12px; font-weight: 700; font-size: 13px; cursor: pointer; background: var(--bg-surface-elevated); border: 1px solid var(--color-accent); color: var(--color-accent);" onclick="toggleEditCompletedWorkout()">
-                        <i class="ph ph-pencil-simple"></i> <span id="btn-edit-completed-workout-text">Editar Sesión</span>
-                    </button>
-                    <div id="completed-workout-status-badge" style="display: none; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
-                        <i class="ph-bold ph-check-circle"></i> Sesión Finalizada
+                <div class="workout-header" style="display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding-bottom: 10px;">
+                    <!-- Top Row: Back button, Workout Title, and Start/Timer -->
+                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%;">
+                        <button id="close-workout" class="btn-icon" style="flex-shrink: 0;"><i class="ph ph-caret-left"></i></button>
+                        <h2 id="workout-title" style="flex: 1; margin: 0; font-size: 19px; font-weight: 800; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" data-i18n="workout.title">Entrenamiento</h2>
+                        <button id="btn-start-workout" class="btn-primary" style="padding: 8px 16px; font-size: 14px; flex-shrink: 0;" data-i18n="workout.start">Iniciar</button>
+                        <div id="workout-timer-container" style="display:none; flex-direction:column; align-items:flex-end; flex-shrink: 0;">
+                            <div id="workout-timer" style="font-weight:700; font-size: 16px; color:var(--text-primary); font-variant-numeric: tabular-nums;">00:00:00</div>
+                            <button id="btn-cancel-workout" style="background:none; border:none; color:var(--error-color, #ff4d4f); font-size: 12px; cursor:pointer; padding: 2px 0 0 0;" data-i18n="workout.cancel">Cancelar</button>
+                        </div>
                     </div>
-                </div>
 
-                <div id="workout-timer-container" style="display:none; flex-direction:column; align-items:flex-end;">
-                          <div id="workout-timer" style="font-weight:700; font-size: 16px; color:var(--text-primary); font-variant-numeric: tabular-nums;">00:00:00</div>
-                          <button id="btn-cancel-workout" style="background:none; border:none; color:var(--error-color, #ff4d4f); font-size: 12px; cursor:pointer; padding: 2px 0 0 0;" data-i18n="workout.cancel">Cancelar</button>
-                      </div>
+                    <!-- Sub-header Row for Completed Session (Title is above, this goes right underneath) -->
+                    <div id="completed-workout-header-actions" style="display: none; align-items: center; gap: 10px; width: 100%; margin-top: 2px;">
+                        <button id="btn-edit-completed-workout" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; background: var(--bg-surface-elevated); border: 1.5px solid var(--color-accent); color: var(--color-accent);" onclick="toggleEditCompletedWorkout()">
+                            <i class="ph ph-pencil-simple"></i> <span id="btn-edit-completed-workout-text">Editar Sesión</span>
+                        </button>
+                        <div id="completed-workout-status-badge" style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1.5px solid rgba(16, 185, 129, 0.35);">
+                            <i class="ph-bold ph-check-circle"></i> <span>Sesión Finalizada</span>
+                        </div>
+                    </div>
                 </div>
                 <div id="workout-content" class="workout-content">
                     <!-- Workout sets injected via JS -->

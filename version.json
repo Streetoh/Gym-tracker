@@ -1,6 +1,6 @@
 {
-  "version": "1.2.2",
-  "versionCode": 122,
+  "version": "1.2.3",
+  "versionCode": 123,
   "downloadUrl": "https://github.com/Streetoh/Gym-tracker/releases",
   "githubUrl": "https://github.com/Streetoh/Gym-tracker",
   "changelog": {
@@ -43,7 +43,7 @@
     ]
   },
   "releaseNotes": {
-    "es": "v1.2.2:\\n- Icono de información en entrenamiento activo para ver la técnica y ejecución de cada ejercicio en vivo.\\n- Tarjeta de Historias perfeccionada: auto-ajuste de títulos largos, nombres de ejercicios completos sin puntos suspensivos, conteo real de PRs y corrección del encuadre inferior.\\n- Compartición y descarga nativa de imágenes reales (PNG) en redes sociales (Instagram, WhatsApp, etc.).\\n- Edición in situ de sesiones finalizadas con botón superior y sincronización instantánea con el historial y marcas.",
-    "en": "v1.2.2:\\n- Info icon in active workouts to consult live exercise technique and execution.\\n- Redesigned Story Card: auto-scaling long titles, complete exercise names without ellipses, real PR counts, and no clipping.\\n- Native PNG image sharing to Instagram, WhatsApp and social networks.\\n- In-place completed session editing with top edit button and direct history sync."
+    "es": "v1.2.3:\\n- Rediseño de cabecera en sesiones finalizadas: título arriba, botón de editar sesión y distintivo verde debajo con distribución perfecta (sin texto redundante de Completado).\\n- Sincronización garantizada de pesos y repeticiones editados directamente con el Historial de entrenamientos y PRs (con nuevo botón de edición directa en el Historial).\\n- Botones de Compartir y Descargar de la Tarjeta para Historias perfeccionados con retroalimentación visual inmediata y compartición nativa de archivo PNG en Android.",
+    "en": "v1.2.3:\\n- Redesigned header for completed sessions: clear title on top, edit session button and green badge underneath without redundant 'Completed' text.\\n- Guaranteed sync of edited weights and reps with the History tab and PRs (including direct edit button on history cards).\\n- Story Card download and share buttons perfected with immediate spinner feedback and native PNG file sharing."
   }
 }
