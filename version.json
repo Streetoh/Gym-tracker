@@ -1,6 +1,6 @@
 {
-  "version": "1.2.1",
-  "versionCode": 121,
+  "version": "1.2.2",
+  "versionCode": 122,
   "downloadUrl": "https://github.com/Streetoh/Gym-tracker/releases",
   "githubUrl": "https://github.com/Streetoh/Gym-tracker",
   "changelog": {
@@ -41,5 +41,9 @@
       "📸 **Картка для історій**: Стильні підсумки 9:16 для Instagram та WhatsApp.",
       "⌨️ **Числова клавіатура**: Зручне введення чисел для ваги та замірів."
     ]
+  },
+  "releaseNotes": {
+    "es": "v1.2.2:\\n- Icono de información en entrenamiento activo para ver la técnica y ejecución de cada ejercicio en vivo.\\n- Tarjeta de Historias perfeccionada: auto-ajuste de títulos largos, nombres de ejercicios completos sin puntos suspensivos, conteo real de PRs y corrección del encuadre inferior.\\n- Compartición y descarga nativa de imágenes reales (PNG) en redes sociales (Instagram, WhatsApp, etc.).\\n- Edición in situ de sesiones finalizadas con botón superior y sincronización instantánea con el historial y marcas.",
+    "en": "v1.2.2:\\n- Info icon in active workouts to consult live exercise technique and execution.\\n- Redesigned Story Card: auto-scaling long titles, complete exercise names without ellipses, real PR counts, and no clipping.\\n- Native PNG image sharing to Instagram, WhatsApp and social networks.\\n- In-place completed session editing with top edit button and direct history sync."
   }
 }

@@ -173,7 +173,7 @@
 
             <!-- MOBILE DRAWER FOOTER (APP VERSION) -->
             <div class="mobile-drawer-footer" style="padding: 12px 16px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px; align-items: center;">
-                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); window.openUpdateModal();" data-i18n-title="update.viewNews" title="Ver novedades">Gym Tracker v1.2.1</span>
+                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); window.openUpdateModal();" data-i18n-title="update.viewNews" title="Ver novedades">Gym Tracker v1.2.2</span>
                 <button id="btn-manual-check-update" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); checkForUpdates(true);">
                     <i class="ph ph-arrows-clockwise"></i> <span data-i18n="update.checkBtn">Comprobar actualización</span>
                 </button>
@@ -517,7 +517,17 @@
                       <button id="close-workout"><i class="ph ph-caret-left"></i></button>
                       <h2 id="workout-title" data-i18n="workout.title">Entrenamiento</h2>
                       <button id="btn-start-workout" class="btn-primary" style="padding: 8px 16px; font-size: 14px;" data-i18n="workout.start">Iniciar</button>
-                      <div id="workout-timer-container" style="display:none; flex-direction:column; align-items:flex-end;">
+                      
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <button id="btn-edit-completed-workout" class="btn-secondary" style="display: none; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 12px; font-weight: 700; font-size: 13px; cursor: pointer; background: var(--bg-surface-elevated); border: 1px solid var(--color-accent); color: var(--color-accent);" onclick="toggleEditCompletedWorkout()">
+                        <i class="ph ph-pencil-simple"></i> <span id="btn-edit-completed-workout-text">Editar Sesión</span>
+                    </button>
+                    <div id="completed-workout-status-badge" style="display: none; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 8px; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3);">
+                        <i class="ph-bold ph-check-circle"></i> Sesión Finalizada
+                    </div>
+                </div>
+
+                <div id="workout-timer-container" style="display:none; flex-direction:column; align-items:flex-end;">
                           <div id="workout-timer" style="font-weight:700; font-size: 16px; color:var(--text-primary); font-variant-numeric: tabular-nums;">00:00:00</div>
                           <button id="btn-cancel-workout" style="background:none; border:none; color:var(--error-color, #ff4d4f); font-size: 12px; cursor:pointer; padding: 2px 0 0 0;" data-i18n="workout.cancel">Cancelar</button>
                       </div>
@@ -526,6 +536,11 @@
                     <!-- Workout sets injected via JS -->
                 </div>
                 <div class="workout-footer" style="padding: 24px; display: none;" id="workout-footer">
+                    
+                    <button id="btn-save-completed-workout" class="btn-primary full-width" style="display: none; padding: 14px; font-weight: 800; border-radius: 12px; background: #10b981; border-color: #10b981; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;" onclick="saveEditedCompletedWorkout()">
+                        <i class="ph-bold ph-floppy-disk"></i> <span>Guardar Cambios</span>
+                    </button>
+
                     <button id="finish-workout" class="btn-primary full-width" data-i18n="workout.finish">Finalizar Entrenamiento</button>
                 </div>
             </section>
@@ -1131,6 +1146,9 @@
             </div>
 
             <!-- Action buttons -->
+            <button type="button" class="btn-secondary full-width" style="margin-bottom: 10px; padding: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 12px; font-weight: 700; background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.15)); border: 1px solid rgba(139, 92, 246, 0.35); color: #a855f7;" onclick="openStoryCardModalFromSummary()">
+                <i class="ph-bold ph-camera" style="font-size: 18px;"></i> <span data-i18n="story.createStoryBtn">Compartir Historia (Instagram / WhatsApp)</span>
+            </button>
             <div style="display: flex; gap: 8px;">
                 <button type="button" class="btn-secondary" style="flex: 1; padding: 12px; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="copyWorkoutSummaryText()">
                     <i class="ph ph-copy"></i> <span data-i18n="summary.btnShare">Copiar Resumen</span>
@@ -1228,10 +1246,10 @@
             
             <div class="modal-body" style="display: flex; flex-direction: column; align-items: center; gap: 14px; overflow-y: auto;">
                 <!-- Canvas preview container -->
-                <div style="position: relative; width: 100%; max-width: 320px; border-radius: 18px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.6); border: 1px solid var(--border-color); background: #020617;">
-                    <canvas id="story-canvas" width="1080" height="1920" style="display: none;"></canvas>
-                    <img id="story-preview-img" style="width: 100%; display: block; border-radius: 18px; aspect-ratio: 9/16; object-fit: contain;" alt="Historia de entrenamiento">
-                </div>
+                <div style="position: relative; width: auto; max-width: 290px; max-height: 52vh; aspect-ratio: 9/16; margin: 0 auto; border-radius: 18px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.8); border: 1.5px solid var(--border-color); background: #000000; display: flex; align-items: center; justify-content: center;">
+        <canvas id="story-canvas" width="1080" height="1920" style="display: none;"></canvas>
+        <img id="story-preview-img" style="width: 100%; height: 100%; display: block; border-radius: 16px; object-fit: contain; background: #000000;" alt="Historia de entrenamiento">
+    </div>
 
                 <!-- Story action buttons -->
                 <div style="width: 100%; display: flex; flex-direction: column; gap: 8px;">
@@ -1258,6 +1276,43 @@
             <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #f59e0b;" data-i18n="achievements.toastUnlocked">¡Logro Desbloqueado!</div>
             <div id="toast-achievement-name" style="font-size: 14px; font-weight: 700; color: #fff;">Nombre del logro</div>
             <div id="toast-achievement-desc" style="font-size: 11px; color: #94a3b8;">Descripción del logro</div>
+        </div>
+    </div>
+
+
+    <!-- MODAL TÉCNICA DE EJERCICIO -->
+    <div id="modal-exercise-technique" class="modal">
+        <div class="modal-content" style="max-width: 460px; max-height: 88vh; margin: auto; border-radius: 24px; padding: 20px; display: flex; flex-direction: column;">
+            <div class="modal-header" style="justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <div style="display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0;">
+                    <div style="width: 38px; height: 38px; border-radius: 12px; background: rgba(59, 130, 246, 0.15); display: flex; align-items: center; justify-content: center; color: var(--color-accent); font-size: 22px; flex-shrink: 0;">
+                        <i class="ph-bold ph-info"></i>
+                    </div>
+                    <div style="min-width: 0; flex: 1;">
+                        <h3 id="modal-technique-title" style="font-size: 16px; font-weight: 700; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Técnica del Ejercicio</h3>
+                        <span id="modal-technique-group" class="badge" style="font-size: 11px; padding: 2px 8px; border-radius: 6px; background: var(--bg-surface-elevated); color: var(--text-secondary);">Grupo</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-icon close-modal" onclick="closeModal(document.getElementById('modal-exercise-technique'))"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body" style="overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 14px;">
+                <!-- Media (Video or Image) -->
+                <div id="modal-technique-media" style="width: 100%; border-radius: 14px; overflow: hidden; display: none;"></div>
+                
+                <!-- PRs if any -->
+                <div id="modal-technique-prs" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
+
+                <!-- Description / Technique Box -->
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px;">
+                    <div style="font-size: 12px; font-weight: 700; color: var(--color-accent); text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+                        <i class="ph-bold ph-barbell"></i> <span data-i18n="exercises.technique">Técnica y Ejecución</span>
+                    </div>
+                    <div id="modal-technique-desc" style="font-size: 13.5px; line-height: 1.6; color: var(--text-primary); white-space: pre-line;"></div>
+                </div>
+            </div>
+            <div style="margin-top: 14px;">
+                <button type="button" class="btn-secondary full-width" style="padding: 11px; border-radius: 12px; font-weight: 600;" onclick="closeModal(document.getElementById('modal-exercise-technique'))" data-i18n="common.close">Cerrar</button>
+            </div>
         </div>
     </div>
 

@@ -1549,8 +1549,10 @@ navItems.forEach(item => {
 });
 
 // Modal Logic
-const openModal = (modal) => modal.classList.add('active');
-const closeModal = (modal) => modal.classList.remove('active');
+window.openModal = (modal) => { if (modal) modal.classList.add('active'); };
+window.closeModal = (modal) => { if (modal) modal.classList.remove('active'); };
+const openModal = window.openModal;
+const closeModal = window.closeModal;
 closeBtns.forEach(btn => btn.addEventListener('click', (e) => closeModal(e.target.closest('.modal'))));
 
 // Event Type Selection
@@ -5009,6 +5011,7 @@ const extractYouTubeID = (url) => {
 };
 
 const startWorkout = (session) => {
+    if (!session) return;
     activeSession = JSON.parse(JSON.stringify(session)); 
     
     // Recover completed data lazily if needed
@@ -5042,6 +5045,11 @@ const startWorkout = (session) => {
         if (bc) bc.style.display = 'none';
         
         document.getElementById('workout-timer').textContent = 'Completado';
+        window.isEditingCompletedWorkout = false;
+        const editCompBtn = document.getElementById('btn-edit-completed-workout');
+        if (editCompBtn) editCompBtn.style.display = 'flex';
+        const compBadge = document.getElementById('completed-workout-status-badge');
+        if (compBadge) compBadge.style.display = 'flex';
         document.getElementById('workout-footer').style.display = 'none';
         clearInterval(timerInterval);
     } else if(isActive && state.activeWorkoutState.startTime) {
@@ -5061,6 +5069,11 @@ const startWorkout = (session) => {
     } else {
         // Previewing (Starting fresh or looking)
         openExerciseAccordions = [0]; // Open first exercise by default
+        window.isEditingCompletedWorkout = false;
+        const editCompBtn2 = document.getElementById('btn-edit-completed-workout');
+        if (editCompBtn2) editCompBtn2.style.display = 'none';
+        const compBadge2 = document.getElementById('completed-workout-status-badge');
+        if (compBadge2) compBadge2.style.display = 'none';
         
         const isAnotherRunning = state.activeWorkoutState && state.activeWorkoutState.startTime;
         const startBtn = document.getElementById('btn-start-workout');
@@ -5357,7 +5370,13 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
         header.classList.add('accordion-header');
         if(allCompleted) header.classList.add('completed');
         header.innerHTML = `
-            <h3>${headerTitle} <i class="ph ph-check-circle status-icon"></i></h3>
+            <h3>
+        <button type="button" class="btn-icon info-technique-btn" onclick="event.stopPropagation(); openTechniqueModal('${block.exercises[0].exerciseId}')" title="Ver técnica" style="margin-right: 6px; color: var(--color-accent); font-size: 18px; display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; padding: 2px;">
+            <i class="ph-bold ph-info"></i>
+        </button>
+        <span>${headerTitle}</span>
+        <i class="ph ph-check-circle status-icon"></i>
+    </h3>
             <i class="ph ph-caret-down"></i>
         `;
         
@@ -5440,7 +5459,7 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                 let weightHtml = '';
 
                 const isExCompleted = !!ex.completed;
-                const isFieldEditable = isWorkoutActive && !isExCompleted;
+                const isFieldEditable = (isWorkoutActive && !isExCompleted) || (activeSession.completed && window.isEditingCompletedWorkout);
                 const disabledAttr = !isFieldEditable ? 'disabled' : '';
                 const disabledStyle = !isFieldEditable ? 'opacity: 0.72; cursor: not-allowed;' : '';
                 
@@ -5722,7 +5741,8 @@ document.getElementById('finish-workout').addEventListener('click', () => {
         state.completedWorkouts = [];
     }
 
-    state.completedWorkouts.push({
+    const workoutPrsList = typeof currentWorkoutPRs !== 'undefined' ? Array.from(currentWorkoutPRs.values()) : [];
+    window.lastCompletedWorkoutData = {
         id: Date.now().toString(),
         sessionId: (activeSession && activeSession.id) ? activeSession.id : null,
         completedAt: Date.now(),
@@ -5730,8 +5750,10 @@ document.getElementById('finish-workout').addEventListener('click', () => {
         name: sessionData.name || 'Entrenamiento',
         type: sessionData.type || 'hypertrophy',
         duration: formatTimer(duration > 0 ? duration : 0),
-        exercises: JSON.parse(JSON.stringify(sessionData.exercises || []))
-    });
+        exercises: JSON.parse(JSON.stringify(sessionData.exercises || [])),
+        prs: workoutPrsList
+    };
+    state.completedWorkouts.push(window.lastCompletedWorkoutData);
     
     workoutView.classList.remove('active');
     workoutView.style.removeProperty('--color-accent');
@@ -6502,12 +6524,13 @@ const renderGlobalHistory = () => {
                     totalVol += (parseFloat(s.weight) || 0) * (parseFloat(s.reps) || 0);
                 });
             });
+            const sessionPrs = (w.prs && w.prs.length > 0) ? w.prs : [];
             openStoryCardModal({
                 title: w.name || 'Entrenamiento',
                 volume: totalVol.toLocaleString() + ' kg',
                 duration: w.duration || '45m',
                 date: w.date || new Date().toLocaleDateString(),
-                prs: [],
+                prs: sessionPrs,
                 exercises: w.exercises || []
             });
         });
@@ -8418,7 +8441,7 @@ window.generateDashboard = function(mode) {
     }
 };
 
-const CURRENT_APP_VERSION = '1.2.1';
+const CURRENT_APP_VERSION = '1.2.2';
 function compareVersions(v1, v2) {
     const p1 = String(v1).split('.').map(Number);
     const p2 = String(v2).split('.').map(Number);
@@ -9398,18 +9421,18 @@ window.renderAchievementsView = function() {
 window.activeStoryData = null;
 
 window.openStoryCardModalFromSummary = function() {
-    const summaryTitle = document.getElementById('summary-workout-title')?.textContent || 'Entrenamiento';
-    const volumeVal = document.getElementById('summary-stat-volume')?.textContent || '0 kg';
-    const timeVal = document.getElementById('summary-stat-time')?.textContent || '45m';
-    const prsList = Array.from(document.querySelectorAll('#summary-prs-list > div')).map(d => d.textContent.trim());
+    const lastComp = window.lastCompletedWorkoutData || (state.completedWorkouts && state.completedWorkouts[state.completedWorkouts.length - 1]) || {};
+    const volumeVal = document.getElementById('summary-stat-volume')?.textContent || (lastComp.volume || '0 kg');
+    const timeVal = document.getElementById('summary-stat-time')?.textContent || (lastComp.duration || '45m');
+    const prsList = (lastComp.prs && lastComp.prs.length > 0) ? lastComp.prs : Array.from(document.querySelectorAll('#summary-prs-list > div')).map(d => d.textContent.trim());
 
     const sessionData = {
-        title: summaryTitle.replace('¡', '').replace('!', '').trim(),
+        title: lastComp.name || 'Entrenamiento',
         volume: volumeVal,
         duration: timeVal,
         date: new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }),
         prs: prsList,
-        exercises: (activeSession && activeSession.exercises) ? activeSession.exercises : []
+        exercises: (lastComp.exercises && lastComp.exercises.length > 0) ? lastComp.exercises : []
     };
 
     openStoryCardModal(sessionData);
@@ -9438,21 +9461,21 @@ window.drawStoryCardCanvas = function(data) {
     // 1. Dark Gradient Background
     const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
     bgGrad.addColorStop(0, '#060913');
-    bgGrad.addColorStop(0.3, '#0b1120');
-    bgGrad.addColorStop(0.7, '#020617');
+    bgGrad.addColorStop(0.25, '#0b1120');
+    bgGrad.addColorStop(0.75, '#020617');
     bgGrad.addColorStop(1, '#000000');
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, W, H);
 
     // 2. Ambient Mesh Glow
-    const glow1 = ctx.createRadialGradient(250, 400, 10, 250, 400, 450);
-    glow1.addColorStop(0, 'rgba(139, 92, 246, 0.25)');
+    const glow1 = ctx.createRadialGradient(250, 360, 10, 250, 360, 480);
+    glow1.addColorStop(0, 'rgba(139, 92, 246, 0.28)');
     glow1.addColorStop(1, 'rgba(139, 92, 246, 0)');
     ctx.fillStyle = glow1;
     ctx.fillRect(0, 0, W, H);
 
-    const glow2 = ctx.createRadialGradient(850, 1200, 10, 850, 1200, 500);
-    glow2.addColorStop(0, 'rgba(16, 185, 129, 0.18)');
+    const glow2 = ctx.createRadialGradient(850, 1200, 10, 850, 1200, 520);
+    glow2.addColorStop(0, 'rgba(16, 185, 129, 0.22)');
     glow2.addColorStop(1, 'rgba(16, 185, 129, 0)');
     ctx.fillStyle = glow2;
     ctx.fillRect(0, 0, W, H);
@@ -9476,64 +9499,91 @@ window.drawStoryCardCanvas = function(data) {
     ctx.textAlign = 'center';
     ctx.fillStyle = '#3b82f6';
     ctx.font = '800 36px sans-serif';
-    ctx.fillText('🏋️  GYM TRACKER', W / 2, 140);
+    ctx.fillText('🏋️  GYM TRACKER', W / 2, 130);
 
-    // 4. Workout Title & Date
+    // 4. Workout Title (Auto-scaling & Wrap, never truncated or clipped)
+    const rawTitle = (data.title || 'ENTRENAMIENTO').toUpperCase();
+    let titleFontSize = 62;
+    ctx.font = '900 ' + titleFontSize + 'px sans-serif';
+    const maxTitleW = W - 160;
+
+    // Check if wrapping is needed
+    if (ctx.measureText(rawTitle).width > maxTitleW) {
+        // Try decreasing font down to 42px
+        while (ctx.measureText(rawTitle).width > maxTitleW && titleFontSize > 42) {
+            titleFontSize -= 3;
+            ctx.font = '900 ' + titleFontSize + 'px sans-serif';
+        }
+    }
+
     ctx.fillStyle = '#ffffff';
-    ctx.font = '900 68px sans-serif';
-    const titleText = (data.title || 'ENTRENAMIENTO').toUpperCase();
-    ctx.fillText(titleText, W / 2, 240);
+    // If still wider than maxTitleW, split into 2 lines
+    if (ctx.measureText(rawTitle).width > maxTitleW) {
+        const words = rawTitle.split(' ');
+        let line1 = '';
+        let line2 = '';
+        words.forEach((w, idx) => {
+            if (idx < Math.ceil(words.length / 2)) line1 += (line1 ? ' ' : '') + w;
+            else line2 += (line2 ? ' ' : '') + w;
+        });
+        ctx.fillText(line1, W / 2, 210);
+        ctx.fillText(line2, W / 2, 210 + titleFontSize + 8);
+    } else {
+        ctx.fillText(rawTitle, W / 2, 230);
+    }
 
+    // Date
     ctx.fillStyle = '#94a3b8';
-    ctx.font = '500 34px sans-serif';
-    ctx.fillText(data.date || new Date().toLocaleDateString(), W / 2, 310);
+    ctx.font = '500 32px sans-serif';
+    ctx.fillText(data.date || new Date().toLocaleDateString(), W / 2, 315);
 
     // 5. Stat Cards Grid (4 boxes: Tiempo, Volumen, Series, PRs)
     const cardW = 440;
-    const cardH = 180;
+    const cardH = 170;
     const gapX = 40;
     const startX = 80;
-    const startY = 400;
+    const startY = 390;
 
+    const prsCount = Array.isArray(data.prs) ? data.prs.length : 0;
     const stats = [
         { label: 'DURACIÓN', val: data.duration || '45m', icon: '⏱️', color: '#38bdf8' },
         { label: 'VOLUMEN TOTAL', val: data.volume || '0 kg', icon: '🏋️', color: '#10b981' },
         { label: 'SERIES TOTALES', val: (data.exercises ? data.exercises.reduce((acc, ex) => acc + (ex.sets ? ex.sets.length : 0), 0) : 16) + ' series', icon: '🔢', color: '#a855f7' },
-        { label: 'RÉCORDS (PRs)', val: (data.prs ? data.prs.length : 0) + ' Nuevos', icon: '🏆', color: '#f59e0b' }
+        { label: 'RÉCORDS (PRs)', val: prsCount + (prsCount === 1 ? ' Nuevo' : ' Nuevos'), icon: '🏆', color: '#f59e0b' }
     ];
 
     stats.forEach((st, i) => {
         const row = Math.floor(i / 2);
         const col = i % 2;
         const x = startX + col * (cardW + gapX);
-        const y = startY + row * (cardH + 30);
+        const y = startY + row * (cardH + 24);
 
         // Box background
         ctx.fillStyle = '#1e293b';
-        roundRect(x, y, cardW, cardH, 24);
+        roundRect(x, y, cardW, cardH, 22);
         ctx.fill();
 
         // Border with color tint
         ctx.strokeStyle = st.color;
         ctx.lineWidth = 2.5;
-        roundRect(x, y, cardW, cardH, 24);
+        roundRect(x, y, cardW, cardH, 22);
         ctx.stroke();
 
         // Icon & Label
         ctx.textAlign = 'left';
         ctx.fillStyle = '#94a3b8';
-        ctx.font = '700 24px sans-serif';
-        ctx.fillText(`${st.icon} ${st.label}`, x + 30, y + 55);
+        ctx.font = '700 22px sans-serif';
+        ctx.fillText(st.icon + ' ' + st.label, x + 26, y + 50);
 
         // Value
         ctx.fillStyle = '#ffffff';
-        ctx.font = '900 48px sans-serif';
-        ctx.fillText(st.val, x + 30, y + 130);
+        ctx.font = '900 44px sans-serif';
+        ctx.fillText(st.val, x + 26, y + 124);
     });
 
     // 6. Section: Highlights / Exercises list
-    const boxY = 840;
-    const boxH = 760;
+    const boxY = 800;
+    const boxH = 810;
     ctx.fillStyle = '#0f172a';
     roundRect(80, boxY, 920, boxH, 28);
     ctx.fill();
@@ -9546,62 +9596,83 @@ window.drawStoryCardCanvas = function(data) {
     ctx.textAlign = 'center';
     ctx.fillStyle = '#38bdf8';
     ctx.font = '800 32px sans-serif';
-    ctx.fillText('⚡ RESUMEN DEL ENTRENAMIENTO', W / 2, boxY + 70);
+    ctx.fillText('⚡ RESUMEN DEL ENTRENAMIENTO', W / 2, boxY + 65);
 
-    // List exercises
+    // List exercises (Full names without ellipses, auto-scaling)
     const exs = data.exercises || [];
-    let curY = boxY + 145;
+    let curY = boxY + 115;
     const maxShow = 5;
 
     if (exs.length === 0) {
         ctx.textAlign = 'center';
         ctx.fillStyle = '#64748b';
         ctx.font = '500 34px sans-serif';
-        ctx.fillText('¡Gran esfuerzo completado hoy!', W / 2, boxY + 380);
+        ctx.fillText('¡Gran esfuerzo completado hoy!', W / 2, boxY + 410);
     } else {
-        exs.slice(0, maxShow).forEach((ex, idx) => {
+        exs.slice(0, maxShow).forEach((ex) => {
             const bestSet = (ex.sets || []).reduce((best, s) => {
                 const wt = parseFloat(s.weight) || 0;
                 return wt > (best.wt || 0) ? { wt, reps: s.reps } : best;
             }, { wt: 0, reps: 10 });
 
-            // Exercise row card
+            // Row card background
+            const rowH = 120;
             ctx.fillStyle = '#1e293b';
-            roundRect(110, curY, 860, 100, 16);
+            roundRect(110, curY, 860, rowH, 18);
             ctx.fill();
 
-            // Exercise name
-            ctx.textAlign = 'left';
-            ctx.fillStyle = '#ffffff';
-            ctx.font = '700 32px sans-serif';
-            let exName = ex.name || 'Ejercicio';
-            if (exName.length > 30) exName = exName.substring(0, 28) + '...';
-            ctx.fillText(exName, 140, curY + 62);
-
-            // Best set metrics
+            // Right side: Best set metrics
             ctx.textAlign = 'right';
             ctx.fillStyle = '#10b981';
-            ctx.font = '800 32px sans-serif';
-            const setStr = bestSet.wt > 0 ? `${bestSet.wt} kg × ${bestSet.reps}` : `${ex.sets ? ex.sets.length : 0} series`;
-            ctx.fillText(setStr, 940, curY + 62);
+            ctx.font = '800 30px sans-serif';
+            const setStr = bestSet.wt > 0 ? (bestSet.wt + ' kg × ' + bestSet.reps) : ((ex.sets ? ex.sets.length : 0) + ' series');
+            ctx.fillText(setStr, 940, curY + 68);
 
-            curY += 120;
+            // Left side: Exercise full name (with dynamic wrapping and sizing)
+            ctx.textAlign = 'left';
+            ctx.fillStyle = '#ffffff';
+            const exFullName = ex.name || 'Ejercicio';
+            const maxNameW = 540; // available width before set metric
+            
+            let nameFont = 27;
+            ctx.font = '700 ' + nameFont + 'px sans-serif';
+
+            if (ctx.measureText(exFullName).width <= maxNameW) {
+                ctx.fillText(exFullName, 135, curY + 68);
+            } else {
+                // Auto wrap into 2 lines
+                const words = exFullName.split(' ');
+                let l1 = '';
+                let l2 = '';
+                words.forEach((w) => {
+                    if (ctx.measureText((l1 ? l1 + ' ' : '') + w).width <= maxNameW && !l2) {
+                        l1 += (l1 ? ' ' : '') + w;
+                    } else {
+                        l2 += (l2 ? ' ' : '') + w;
+                    }
+                });
+                ctx.font = '700 23px sans-serif';
+                ctx.fillText(l1, 135, curY + 48);
+                ctx.fillText(l2, 135, curY + 84);
+            }
+
+            curY += 134;
         });
     }
 
-    // 7. Footer Watermark
+    // 7. Footer Watermark (Generously above canvas bottom, no overflow)
     ctx.textAlign = 'center';
     ctx.fillStyle = '#64748b';
-    ctx.font = '600 28px sans-serif';
-    ctx.fillText('🔥 Superando límites cada día • Gym Tracker', W / 2, 1720);
+    ctx.font = '600 26px sans-serif';
+    ctx.fillText('🔥 Superando límites cada día • Gym Tracker', W / 2, 1690);
 
     // Badge at bottom
     ctx.fillStyle = '#1e293b';
-    roundRect(W / 2 - 160, 1780, 320, 60, 30);
+    roundRect(W / 2 - 170, 1740, 340, 56, 28);
     ctx.fill();
     ctx.fillStyle = '#3b82f6';
     ctx.font = '700 22px sans-serif';
-    ctx.fillText('github.com/Streetoh', W / 2, 1818);
+    ctx.fillText('github.com/Streetoh', W / 2, 1776);
 
     // Render preview
     previewImg.src = canvas.toDataURL('image/png');
@@ -9651,3 +9722,149 @@ window.shareStoryCard = async function() {
 
 // Check achievements upon completing workouts
 const origFinishWorkout = window.finishWorkout;
+
+
+window.openTechniqueModal = function(exerciseId) {
+    const dbEx = (state.exercises || []).find(e => e.id === exerciseId);
+    if (!dbEx) return;
+    const modal = document.getElementById('modal-exercise-technique');
+    if (!modal) return;
+
+    const titleEl = document.getElementById('modal-technique-title');
+    const groupEl = document.getElementById('modal-technique-group');
+    if (titleEl) titleEl.textContent = typeof getTrExName === 'function' ? getTrExName(dbEx.name) : dbEx.name;
+    if (groupEl) groupEl.textContent = (translations[state.language]?.groups && translations[state.language].groups[dbEx.group]) ? translations[state.language].groups[dbEx.group] : (dbEx.group || 'Sin Grupo');
+
+    const mediaContainer = document.getElementById('modal-technique-media');
+    if (mediaContainer) {
+        mediaContainer.innerHTML = '';
+        const ytID = typeof extractYouTubeID === 'function' ? extractYouTubeID(dbEx.youtubeLink) : null;
+        if (ytID) {
+            mediaContainer.style.display = 'block';
+            mediaContainer.innerHTML = '<iframe src="https://www.youtube.com/embed/' + ytID + '" allowfullscreen style="width: 100%; aspect-ratio: 16/9; border: none; border-radius: 12px;"></iframe>';
+        } else if (dbEx.imageData) {
+            mediaContainer.style.display = 'block';
+            mediaContainer.innerHTML = '<img src="' + dbEx.imageData + '" onclick="openLightbox(\'' + dbEx.imageData + '\')" style="width: 100%; max-height: 220px; object-fit: contain; border-radius: 12px; background: #000; cursor: pointer;">';
+        } else {
+            mediaContainer.style.display = 'none';
+        }
+    }
+
+    let descText = dbEx.description;
+    if (!descText && typeof defaultExercises !== 'undefined') {
+        const def = defaultExercises.find(e => e.id === dbEx.id || e.name === dbEx.name);
+        if (def && def.description) descText = def.description;
+    }
+    if (!descText) {
+        descText = 'Técnica: Mantén una postura firme, controla la respiración y enfatiza la fase excéntrica (bajada) para maximizar la hipertrofia y seguridad.';
+    }
+    if (typeof getTrExDesc === 'function') {
+        descText = getTrExDesc(dbEx.name, descText);
+    }
+    const descContainer = document.getElementById('modal-technique-desc');
+    if (descContainer) {
+        descContainer.textContent = descText;
+    }
+
+    const prsContainer = document.getElementById('modal-technique-prs');
+    if (prsContainer) {
+        prsContainer.innerHTML = '';
+        const prHeavy = typeof getBestPR === 'function' ? getBestPR(dbEx.id, 'heavy') : null;
+        const prHyp = typeof getBestPR === 'function' ? getBestPR(dbEx.id, 'hypertrophy') : null;
+        if (prHeavy && prHeavy.weight > 0) {
+            prsContainer.innerHTML += '<div style="background: rgba(220, 38, 38, 0.15); border: 1px solid rgba(220, 38, 38, 0.4); border-radius: 8px; padding: 4px 10px; font-size: 11.5px; font-weight: 700; color: #f87171;"><i class="ph-bold ph-trophy"></i> PR Pesado: ' + prHeavy.weight + ' kg × ' + prHeavy.reps + '</div>';
+        }
+        if (prHyp && prHyp.weight > 0) {
+            prsContainer.innerHTML += '<div style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.4); border-radius: 8px; padding: 4px 10px; font-size: 11.5px; font-weight: 700; color: #60a5fa;"><i class="ph-bold ph-trophy"></i> PR Hipertrofia: ' + prHyp.weight + ' kg × ' + prHyp.reps + '</div>';
+        }
+    }
+
+    modal.classList.add('active');
+};
+
+
+
+window.isEditingCompletedWorkout = false;
+
+window.toggleEditCompletedWorkout = function() {
+    window.isEditingCompletedWorkout = !window.isEditingCompletedWorkout;
+    const btn = document.getElementById('btn-edit-completed-workout');
+    const btnText = document.getElementById('btn-edit-completed-workout-text');
+    const footer = document.getElementById('workout-footer');
+    const saveBtn = document.getElementById('btn-save-completed-workout');
+    const finishBtn = document.getElementById('finish-workout');
+
+    if (window.isEditingCompletedWorkout) {
+        if (btnText) btnText.textContent = 'Cancelar Edición';
+        if (btn) {
+            btn.style.borderColor = 'var(--color-heavy)';
+            btn.style.color = 'var(--color-heavy)';
+        }
+        if (footer) footer.style.display = 'block';
+        if (saveBtn) saveBtn.style.display = 'flex';
+        if (finishBtn) finishBtn.style.display = 'none';
+    } else {
+        if (btnText) btnText.textContent = 'Editar Sesión';
+        if (btn) {
+            btn.style.borderColor = 'var(--color-accent)';
+            btn.style.color = 'var(--color-accent)';
+        }
+        if (saveBtn) saveBtn.style.display = 'none';
+        if (footer) footer.style.display = 'none';
+    }
+
+    renderWorkout();
+};
+
+window.saveEditedCompletedWorkout = function() {
+    if (!activeSession) return;
+    syncActiveWorkoutInputsFromDOM();
+
+    // 1. Update session in state.sessions
+    const sessionInCal = state.sessions.find(s => s.id === activeSession.id);
+    if (sessionInCal) {
+        sessionInCal.exercises = JSON.parse(JSON.stringify(activeSession.exercises || []));
+    }
+
+    // 2. Update record in state.completedWorkouts
+    let compRecord = (state.completedWorkouts || []).find(w => w.sessionId === activeSession.id || w.id === activeSession.id);
+    if (!compRecord && activeSession.name) {
+        let fDate = '';
+        if (activeSession.date && activeSession.date.includes('-')) {
+            const [y, m, d] = activeSession.date.split('-');
+            fDate = `${d}/${m}/${y}`;
+        }
+        compRecord = (state.completedWorkouts || []).find(w => w.name === activeSession.name && (w.date === fDate || w.date === activeSession.date));
+    }
+
+    if (compRecord) {
+        compRecord.exercises = JSON.parse(JSON.stringify(activeSession.exercises || []));
+    }
+
+    // 3. Recalculate PRs and refresh all views
+    recalculatePRs();
+    saveState();
+    renderGlobalHistory();
+    renderCalendar();
+    if (typeof refreshMuscleFatigueMap === 'function') refreshMuscleFatigueMap();
+    if (typeof renderWeeklyMuscleVolume === 'function') renderWeeklyMuscleVolume();
+    if (typeof renderAchievementsView === 'function') renderAchievementsView();
+
+    window.isEditingCompletedWorkout = false;
+    const btnText = document.getElementById('btn-edit-completed-workout-text');
+    const btn = document.getElementById('btn-edit-completed-workout');
+    const footer = document.getElementById('workout-footer');
+    const saveBtn = document.getElementById('btn-save-completed-workout');
+    
+    if (btnText) btnText.textContent = 'Editar Sesión';
+    if (btn) {
+        btn.style.borderColor = 'var(--color-accent)';
+        btn.style.color = 'var(--color-accent)';
+    }
+    if (saveBtn) saveBtn.style.display = 'none';
+    if (footer) footer.style.display = 'none';
+
+    renderWorkout();
+    alert('¡Cambios guardados con éxito en el historial y récords!');
+};
+
