@@ -8487,7 +8487,7 @@ window.generateDashboard = function(mode) {
     }
 };
 
-const CURRENT_APP_VERSION = '1.2.3';
+const CURRENT_APP_VERSION = '1.2.4';
 function compareVersions(v1, v2) {
     const p1 = String(v1).split('.').map(Number);
     const p2 = String(v2).split('.').map(Number);
@@ -9724,45 +9724,133 @@ window.drawStoryCardCanvas = function(data) {
     previewImg.src = canvas.toDataURL('image/png');
 };
 
-window.downloadStoryCard = function() {
+window.downloadStoryCard = async function() {
     const canvas = document.getElementById('story-canvas');
     if (!canvas) return;
-    const a = document.createElement('a');
-    a.download = 'gym-tracker-historia.png';
-    a.href = canvas.toDataURL('image/png');
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => a.remove(), 200);
+
+    const dlBtn = document.querySelector('#modal-story-card button[onclick="downloadStoryCard()"]');
+    const origHtml = dlBtn ? dlBtn.innerHTML : '';
+    if (dlBtn) dlBtn.innerHTML = '<i class="ph-bold ph-spinner ph-spin"></i> Guardando...';
+
+    try {
+        const dataUrl = canvas.toDataURL('image/png');
+        const base64Data = dataUrl.replace(/^data:image\/png;base64,/, '');
+        const fileName = 'gym_tracker_historia_' + Date.now() + '.png';
+
+        // 1. Android Capacitor Native (Write file and trigger Save / Share intent)
+        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Filesystem) {
+            const { Filesystem } = window.Capacitor.Plugins;
+            let fileUri = null;
+            try {
+                const writeResult = await Filesystem.writeFile({
+                    path: fileName,
+                    data: base64Data,
+                    directory: 'CACHE'
+                });
+                fileUri = writeResult.uri;
+            } catch (writeErr) {
+                console.warn('Filesystem CACHE write error:', writeErr);
+            }
+
+            if (fileUri && window.Capacitor.Plugins.Share) {
+                await window.Capacitor.Plugins.Share.share({
+                    title: 'Guardar Imagen',
+                    dialogTitle: 'Guardar Imagen en Dispositivo / Galería',
+                    files: [fileUri]
+                });
+            } else {
+                alert('¡Imagen guardada en tu dispositivo!');
+            }
+            return;
+        }
+
+        // 2. Web Browser Fallback (Blob + virtual link)
+        if (canvas.toBlob) {
+            canvas.toBlob((blob) => {
+                if (!blob) return;
+                const blobUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.download = fileName;
+                a.href = blobUrl;
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    a.remove();
+                    URL.revokeObjectURL(blobUrl);
+                }, 400);
+            }, 'image/png');
+        } else {
+            const a = document.createElement('a');
+            a.download = fileName;
+            a.href = dataUrl;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => a.remove(), 400);
+        }
+    } catch(e) {
+        console.error('Error in downloadStoryCard:', e);
+        alert('Error al descargar imagen: ' + (e.message || e));
+    } finally {
+        if (dlBtn) dlBtn.innerHTML = origHtml;
+    }
 };
 
 window.shareStoryCard = async function() {
     const canvas = document.getElementById('story-canvas');
     if (!canvas) return;
 
-    try {
-        canvas.toBlob(async (blob) => {
-            if (!blob) return downloadStoryCard();
-            const file = new File([blob], 'gym-tracker-historia.png', { type: 'image/png' });
+    const shareBtn = document.querySelector('#modal-story-card button[onclick="shareStoryCard()"]');
+    const origHtml = shareBtn ? shareBtn.innerHTML : '';
+    if (shareBtn) shareBtn.innerHTML = '<i class="ph-bold ph-spinner ph-spin"></i> Compartiendo...';
 
-            if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                await navigator.share({
-                    title: 'Mi Entrenamiento en Gym Tracker',
-                    text: '¡Entrenamiento completado en Gym Tracker! 🔥',
-                    files: [file]
+    try {
+        const dataUrl = canvas.toDataURL('image/png');
+        const base64Data = dataUrl.replace(/^data:image\/png;base64,/, '');
+        const fileName = 'gym_tracker_historia_' + Date.now() + '.png';
+
+        // 1. Android Capacitor Native Sharing (Passes REAL PNG FILE to Instagram, WhatsApp, etc. WITHOUT PLAIN TEXT!)
+        if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Filesystem && window.Capacitor.Plugins.Share) {
+            try {
+                const { Filesystem, Share } = window.Capacitor.Plugins;
+                const writeResult = await Filesystem.writeFile({
+                    path: fileName,
+                    data: base64Data,
+                    directory: 'CACHE'
                 });
-            } else if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Share) {
-                // Capacitor native share
-                await window.Capacitor.Plugins.Share.share({
-                    title: 'Gym Tracker Historia',
-                    text: '¡Entrenamiento superado con Gym Tracker! 💪',
-                    dialogTitle: 'Compartir Historia'
+
+                await Share.share({
+                    title: 'Mi Historia de Entrenamiento',
+                    dialogTitle: 'Compartir Imagen de Historia',
+                    files: [writeResult.uri]
                 });
-            } else {
-                downloadStoryCard();
+                return;
+            } catch (capErr) {
+                console.warn('Capacitor native share error, trying Web Share fallback:', capErr);
             }
-        }, 'image/png');
-    } catch(e) {
-        downloadStoryCard();
+        }
+
+        // 2. Web Share API with File object
+        if (canvas.toBlob && navigator.canShare) {
+            const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+            if (blob) {
+                const file = new File([blob], fileName, { type: 'image/png' });
+                if (navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        title: 'Gym Tracker Historia',
+                        files: [file]
+                    });
+                    return;
+                }
+            }
+        }
+
+        // 3. Fallback: Download
+        await downloadStoryCard();
+    } catch(err) {
+        console.error('Error in shareStoryCard:', err);
+        await downloadStoryCard();
+    } finally {
+        if (shareBtn) shareBtn.innerHTML = origHtml;
     }
 };
 
