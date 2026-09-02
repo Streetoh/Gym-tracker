@@ -10,12 +10,12 @@
         window.openExternalUrl = function(url) {
             if (!url) return;
             try {
-                if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Browser) {
-                    window.Capacitor.Plugins.Browser.open({ url: url });
+                if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.SaveAs && typeof window.Capacitor.Plugins.SaveAs.openDefaultBrowser === 'function') {
+                    window.Capacitor.Plugins.SaveAs.openDefaultBrowser({ url: url });
                     return;
                 }
             } catch (e) {
-                console.warn("Capacitor Browser plugin error:", e);
+                console.warn("SaveAs.openDefaultBrowser error:", e);
             }
             try {
                 var opened = window.open(url, '_system');
@@ -151,6 +151,10 @@
                     <i class="ph ph-clock-counter-clockwise"></i>
                     <span data-i18n="nav.history">Historial</span>
                 </button>
+                                <button class="nav-item" data-target="view-activity">
+                    <i class="ph-bold ph-sneaker-move"></i>
+                    <span data-i18n="nav.activity">Actividad</span>
+                </button>
                 <button class="nav-item" data-target="view-progression">
                     <i class="ph ph-trend-up"></i>
                     <span data-i18n="nav.progression">Progresión</span>
@@ -173,9 +177,20 @@
 
             <!-- MOBILE DRAWER FOOTER (APP VERSION) -->
             <div class="mobile-drawer-footer" style="padding: 12px 16px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px; align-items: center;">
-                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); window.openUpdateModal();" data-i18n-title="update.viewNews" title="Ver novedades">Gym Tracker v1.2.5</span>
+                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); window.openUpdateModal();" data-i18n-title="update.viewNews" title="Ver novedades">Gym Tracker v1.2.6</span>
                 <button id="btn-manual-check-update" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); checkForUpdates(true);">
                     <i class="ph ph-arrows-clockwise"></i> <span data-i18n="update.checkBtn">Comprobar actualización</span>
+                </button>
+                                                <button id="btn-coach-portal" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); openExternalUrl('coach.html');">
+                    <i class="ph-bold ph-chalkboard-teacher" style="font-size: 15px; color: #3b82f6;"></i> <span data-i18n="coach.menuTitle">Portal Entrenador (Web)</span>
+                </button>
+                <button id="btn-watch-companion" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); openWatchCompanionModal();">
+                    <i class="ph-bold ph-watch" style="font-size: 15px; color: #8b5cf6;"></i> <span data-i18n="watch.menuTitle">Reloj Smartwatch</span>
+                    <span id="watch-status-dot" style="width: 7px; height: 7px; border-radius: 50%; background: #10b981; display: inline-block; margin-left: 2px;"></span>
+                </button>
+                <button id="btn-joint-issues" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); openJointIssuesModal();">
+                    <i class="ph-bold ph-first-aid" style="font-size: 15px; color: #f59e0b;"></i> <span data-i18n="joints.menuTitle">Molestias Articulares</span>
+                    <span id="joint-issues-count-badge" style="display: none; background: #f59e0b; color: #000; font-size: 10px; font-weight: 800; border-radius: 10px; padding: 1px 6px; margin-left: 4px;"></span>
                 </button>
                 <button id="btn-github-repo" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); openExternalUrl('https://github.com/Streetoh/Gym-tracker');">
                     <i class="ph-bold ph-github-logo" style="font-size: 15px;"></i> <span data-i18n="common.githubRepo">Repositorio GitHub</span>
@@ -556,7 +571,7 @@
                 <i class="ph ph-sparkle" style="font-size: 56px; color: var(--color-accent); margin-bottom: 16px;"></i>
                 <h2 style="margin-bottom: 12px; font-weight: 700;" data-i18n="nav.ai">Asistente IA</h2>
                 <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 14px; line-height: 1.5;">
-                    Para usar el asistente inteligente, introduce tu Clave API gratuita de Gemini obtenida en <a href="#" onclick="window.open('https://aistudio.google.com/app/apikey', '_blank'); return false;" style="color: var(--color-accent); font-weight: 600;">Google AI Studio</a>.
+                    Para usar el asistente inteligente, introduce tu Clave API gratuita de Gemini obtenida en <a href="#" onclick="openExternalUrl('https://aistudio.google.com/app/apikey'); return false;" style="color: var(--color-accent); font-weight: 600;">Google AI Studio</a>.
                 </p>
                 <input type="password" id="ai-api-key-input" class="form-input" placeholder="Pega tu API Key de Google aquí..." autocomplete="off" style="margin-bottom: 16px; width: 100%; text-align: center;">
                 <button class="btn-primary full-width" onclick="saveAiKey()">Guardar y Empezar</button>
@@ -582,7 +597,44 @@
                 </div>
             </div>
         </div>
-    </main>
+    
+            <!-- VISTA ACTIVIDAD & SAMSUNG HEALTH -->
+            <section id="view-activity" class="view">
+                <div class="view-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <div>
+                        <h2 style="font-size: 20px; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 8px;">
+                            <i class="ph-bold ph-sneaker-move" style="color: #10b981;"></i>
+                            <span data-i18n="activity.title">Actividad Diaria</span>
+                        </h2>
+                        <div id="activity-sync-status-text" style="font-size: 11.5px; color: var(--text-secondary); margin-top: 2px;">
+                            Samsung Health • Sincronizado
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <button type="button" class="btn-icon" onclick="openActivitySettingsModal()" title="Ajustes de Actividad" style="width: 36px; height: 36px; border-radius: 10px; background: var(--bg-surface-elevated); color: var(--text-primary); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <i class="ph-bold ph-gear"></i>
+                        </button>
+                        <button type="button" id="btn-sync-activity" class="btn-primary" onclick="syncActivityData(true)" style="padding: 7px 12px; font-size: 12px; border-radius: 10px; background: #10b981; border-color: #10b981; color: white; display: flex; align-items: center; gap: 6px; font-weight: 700; cursor: pointer;">
+                            <i class="ph-bold ph-arrows-clockwise" id="icon-sync-activity"></i>
+                            <span data-i18n="activity.syncBtn">Sincronizar</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Date Selector -->
+                <div class="card" style="padding: 8px 14px; margin-bottom: 16px; border-radius: 14px; display: flex; justify-content: space-between; align-items: center; background: var(--bg-surface); border: 1px solid var(--border-color);">
+                    <button type="button" class="btn-icon" onclick="changeActivityDay(-1)" style="font-size: 18px; color: var(--text-secondary); cursor: pointer;"><i class="ph ph-caret-left"></i></button>
+                    <div id="activity-current-date-label" style="font-weight: 700; font-size: 14px; color: var(--text-primary); text-transform: capitalize;">Hoy</div>
+                    <button type="button" class="btn-icon" id="btn-activity-next-day" onclick="changeActivityDay(1)" style="font-size: 18px; color: var(--text-secondary); cursor: pointer;"><i class="ph ph-caret-right"></i></button>
+                </div>
+
+                <!-- Cards Container -->
+                <div id="activity-cards-container" style="display: flex; flex-direction: column; gap: 14px;">
+                    <!-- Rendered dynamically by renderActivityView() -->
+                </div>
+            </section>
+
+        </main>
     </div>
 
     <!-- MODALS -->
@@ -1315,6 +1367,211 @@
             </div>
             <div style="margin-top: 14px;">
                 <button type="button" class="btn-secondary full-width" style="padding: 11px; border-radius: 12px; font-weight: 600;" onclick="closeModal(document.getElementById('modal-exercise-technique'))" data-i18n="common.close">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL GESTOR DE MOLESTIAS Y ARTICULACIONES -->
+    <div id="modal-joint-issues" class="modal">
+        <div class="modal-content" style="max-width: 480px; max-height: 90vh; margin: auto; border-radius: 24px; padding: 20px; display: flex; flex-direction: column;">
+            <div class="modal-header" style="justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 38px; height: 38px; border-radius: 12px; background: rgba(245, 158, 11, 0.15); display: flex; align-items: center; justify-content: center; color: #f59e0b; font-size: 22px;">
+                        <i class="ph-bold ph-first-aid"></i>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 16.5px; font-weight: 700; margin: 0;" data-i18n="joints.title">Molestias Articulares</h3>
+                        <div style="font-size: 11px; color: var(--text-secondary);" data-i18n="joints.subtitle">Prevención y variantes seguras</div>
+                    </div>
+                </div>
+                <button type="button" class="btn-icon close-modal" onclick="closeModal(document.getElementById('modal-joint-issues'))"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body" style="overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 12px;" id="joint-issues-list">
+                <!-- Rendered dynamically by renderJointIssues() -->
+            </div>
+            <div style="margin-top: 14px; display: flex; gap: 8px;">
+                <button type="button" class="btn-primary full-width" style="padding: 12px; border-radius: 12px; font-weight: 700; background-color: #f59e0b; border-color: #f59e0b; color: #000;" onclick="saveAndCloseJointIssuesModal()" data-i18n="common.save">Guardar Ajustes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL ALERTA DE ESTRÉS ARTICULAR EN EJERCICIO -->
+    <div id="modal-joint-stress-alert" class="modal">
+        <div class="modal-content" style="max-width: 480px; max-height: 90vh; margin: auto; border-radius: 24px; padding: 20px; display: flex; flex-direction: column;">
+            <div class="modal-header" style="justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 38px; height: 38px; border-radius: 12px; background: rgba(245, 158, 11, 0.2); display: flex; align-items: center; justify-content: center; color: #f59e0b; font-size: 22px;">
+                        <i class="ph-bold ph-warning"></i>
+                    </div>
+                    <div>
+                        <h3 id="joint-stress-modal-title" style="font-size: 16px; font-weight: 700; margin: 0;">Aviso de Sobrecarga Articular</h3>
+                        <div id="joint-stress-modal-exname" style="font-size: 11.5px; color: var(--text-secondary);">Ejercicio</div>
+                    </div>
+                </div>
+                <button type="button" class="btn-icon close-modal" onclick="closeModal(document.getElementById('modal-joint-stress-alert'))"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body" style="overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 14px;">
+                <div id="joint-stress-modal-explanation" style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 14px; padding: 12px 14px; font-size: 12.5px; line-height: 1.5; color: var(--text-primary);">
+                </div>
+                
+                <div style="font-size: 12px; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
+                    <i class="ph-bold ph-shield-check"></i> <span data-i18n="joints.safeAlternatives">Variantes Seguras Recomendadas</span>
+                </div>
+                <div id="joint-stress-modal-alternatives" style="display: flex; flex-direction: column; gap: 8px;">
+                    <!-- Filled dynamically with 1-tap substitute buttons -->
+                </div>
+            </div>
+            <div style="margin-top: 14px; display: flex; gap: 8px;">
+                <button type="button" class="btn-secondary full-width" style="padding: 11px; border-radius: 12px; font-weight: 600;" onclick="closeModal(document.getElementById('modal-joint-stress-alert'))" data-i18n="joints.continueAnyway">Continuar con este ejercicio</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL AJUSTES DE ACTIVIDAD Y VINCULACIÓN -->
+    <div id="modal-activity-settings" class="modal">
+        <div class="modal-content" style="max-width: 460px; max-height: 90vh; margin: auto; border-radius: 24px; padding: 20px; display: flex; flex-direction: column;">
+            <div class="modal-header" style="justify-content: space-between; align-items: center; margin-bottom: 14px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 38px; height: 38px; border-radius: 12px; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 22px;">
+                        <i class="ph-bold ph-gear"></i>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 16.5px; font-weight: 700; margin: 0;" data-i18n="activity.settingsTitle">Ajustes de Actividad</h3>
+                        <div style="font-size: 11px; color: var(--text-secondary);" data-i18n="activity.settingsSubtitle">Meta de pasos y Samsung Health</div>
+                    </div>
+                </div>
+                <button type="button" class="btn-icon close-modal" onclick="closeModal(document.getElementById('modal-activity-settings'))"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body" style="overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 16px;">
+                <!-- Step Goal -->
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px;">
+                    <label style="font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; display: block; margin-bottom: 8px;">Meta diaria de pasos</label>
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px;">
+                        <button type="button" class="btn-secondary goal-pill" onclick="setQuickStepGoal(6000)" style="padding: 5px 10px; font-size: 12px; border-radius: 8px; cursor: pointer;">6.000</button>
+                        <button type="button" class="btn-secondary goal-pill" onclick="setQuickStepGoal(8000)" style="padding: 5px 10px; font-size: 12px; border-radius: 8px; cursor: pointer;">8.000</button>
+                        <button type="button" class="btn-secondary goal-pill" onclick="setQuickStepGoal(10000)" style="padding: 5px 10px; font-size: 12px; border-radius: 8px; cursor: pointer;">10.000</button>
+                        <button type="button" class="btn-secondary goal-pill" onclick="setQuickStepGoal(12000)" style="padding: 5px 10px; font-size: 12px; border-radius: 8px; cursor: pointer;">12.000</button>
+                    </div>
+                    <input type="number" id="input-step-goal" class="form-input" style="width: 100%; text-align: center; font-size: 16px; font-weight: 700;" placeholder="10000">
+                </div>
+
+                <!-- Connection to Samsung Health / Health Connect -->
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <i class="ph-bold ph-heartbeat" style="font-size: 20px; color: #10b981;"></i>
+                        <div style="font-weight: 700; font-size: 13.5px;">Vincular Samsung Health</div>
+                    </div>
+                    <div style="font-size: 12px; line-height: 1.5; color: var(--text-secondary);">
+                        Samsung Health sincroniza tus pasos, calorías, actividades y sueño con <strong>Health Connect (Conexión de Salud)</strong>. Pulsa para configurar los permisos en tu dispositivo:
+                    </div>
+                    <button type="button" class="btn-secondary full-width" onclick="openNativeHealthSettings()" style="padding: 10px; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; font-weight: 600; font-size: 12.5px; cursor: pointer;">
+                        <i class="ph-bold ph-sliders"></i> Abrir Conexión de Salud
+                    </button>
+                </div>
+            </div>
+            <div style="margin-top: 14px;">
+                <button type="button" class="btn-primary full-width" style="padding: 12px; border-radius: 12px; font-weight: 700; background: #10b981; border-color: #10b981; cursor: pointer;" onclick="saveActivitySettings()">Guardar Ajustes</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL SMARTWATCH COMPANION (GALAXY WATCH / WEAR OS) -->
+    <div id="modal-watch-companion" class="modal">
+        <div class="modal-content" style="max-width: 460px; max-height: 90vh; margin: auto; border-radius: 24px; padding: 20px; display: flex; flex-direction: column;">
+            <div class="modal-header" style="justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 38px; height: 38px; border-radius: 12px; background: rgba(139, 92, 246, 0.18); display: flex; align-items: center; justify-content: center; color: #8b5cf6; font-size: 22px;">
+                        <i class="ph-bold ph-watch"></i>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 16.5px; font-weight: 700; margin: 0;" data-i18n="watch.title">Smartwatch Companion</h3>
+                        <div style="font-size: 11px; color: var(--text-secondary);" data-i18n="watch.subtitle">Samsung Galaxy Watch & Wear OS</div>
+                    </div>
+                </div>
+                <button type="button" class="btn-icon close-modal" onclick="closeModal(document.getElementById('modal-watch-companion'))"><i class="ph ph-x"></i></button>
+            </div>
+
+            <div class="modal-body" style="overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 14px;">
+                <!-- Connection Status Card -->
+                <div style="padding: 14px; border-radius: 16px; background: var(--bg-surface); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 20px;">
+                            <i class="ph-bold ph-bluetooth"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 700; font-size: 13.5px;" id="watch-device-name">Samsung Galaxy Watch</div>
+                            <div style="font-size: 11px; color: #10b981; font-weight: 600; display: flex; align-items: center; gap: 4px;">
+                                <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981;"></span> Sincronizado por Bluetooth
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: right; font-size: 11px; color: var(--text-secondary);">
+                        <i class="ph-bold ph-battery-high" style="color: #10b981; font-size: 14px;"></i> 84%
+                    </div>
+                </div>
+
+                <!-- Interactive Watch Circular Simulator -->
+                <div style="display: flex; flex-direction: column; align-items: center; padding: 12px; background: var(--bg-surface); border-radius: 18px; border: 1px solid var(--border-color);">
+                    <div style="font-size: 11.5px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.5px;">
+                        Vista previa en pantalla del reloj
+                    </div>
+                    
+                    <!-- Circular Watch Frame -->
+                    <div style="width: 190px; height: 190px; border-radius: 50%; background: #000; border: 6px solid #27272a; box-shadow: 0 8px 24px rgba(0,0,0,0.6), inset 0 0 10px rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 16px; text-align: center; position: relative; overflow: hidden;">
+                        <div style="font-size: 10px; color: #8b5cf6; font-weight: 700; text-transform: uppercase; margin-bottom: 2px;">Serie 2 de 4</div>
+                        <div style="font-size: 13px; font-weight: 800; color: #fff; line-height: 1.2; max-width: 140px; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">Press de banca</div>
+                        <div style="font-size: 14px; font-weight: 900; color: #10b981; margin: 4px 0 6px 0;">80 kg × 8 reps</div>
+                        
+                        <button type="button" onclick="testWatchVibration()" style="background: #10b981; color: #000; font-size: 10px; font-weight: 800; border: none; border-radius: 14px; padding: 5px 12px; cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 8px rgba(16,185,129,0.3);">
+                            <i class="ph-bold ph-check"></i> COMPLETAR
+                        </button>
+
+                        <div style="display: flex; align-items: center; gap: 4px; font-size: 9.5px; color: #ef4444; font-weight: 700; margin-top: 6px;">
+                            <i class="ph-fill ph-heart"></i> <span>124 BPM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Toggles -->
+                <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 700; font-size: 13px;">Vibrar al terminar descanso</div>
+                            <div style="font-size: 11px; color: var(--text-secondary);">Doble pulso háptico en la muñeca</div>
+                        </div>
+                        <label class="switch" style="position: relative; display: inline-block; width: 44px; height: 24px;">
+                            <input type="checkbox" checked id="watch-vibrate-toggle" style="opacity: 0; width: 0; height: 0;">
+                            <span class="slider round" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #8b5cf6; transition: .3s; border-radius: 24px;">
+                                <span style="position: absolute; content: ''; height: 18px; width: 18px; left: 23px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%;"></span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div style="font-weight: 700; font-size: 13px;">Frecuencia Cardíaca (BPM)</div>
+                            <div style="font-size: 11px; color: var(--text-secondary);">Lectura del sensor óptico del reloj</div>
+                        </div>
+                        <label class="switch" style="position: relative; display: inline-block; width: 44px; height: 24px;">
+                            <input type="checkbox" checked id="watch-bpm-toggle" style="opacity: 0; width: 0; height: 0;">
+                            <span class="slider round" style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #8b5cf6; transition: .3s; border-radius: 24px;">
+                                <span style="position: absolute; content: ''; height: 18px; width: 18px; left: 23px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%;"></span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Test vibration button -->
+                <button type="button" class="btn-secondary full-width" onclick="testWatchVibration()" style="padding: 11px; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; cursor: pointer;">
+                    <i class="ph-bold ph-vibrate" style="color: #8b5cf6; font-size: 16px;"></i> Probar vibración háptica en reloj
+                </button>
+            </div>
+
+            <div style="margin-top: 14px;">
+                <button type="button" class="btn-primary full-width" style="padding: 12px; border-radius: 12px; font-weight: 700; background: #8b5cf6; border-color: #8b5cf6;" onclick="closeModal(document.getElementById('modal-watch-companion'))" data-i18n="common.close">Guardar y Cerrar</button>
             </div>
         </div>
     </div>

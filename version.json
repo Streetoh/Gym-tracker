@@ -1,24 +1,34 @@
 {
-  "version": "1.2.5",
-  "versionCode": 125,
+  "version": "1.2.6",
+  "versionCode": 126,
   "downloadUrl": "https://github.com/Streetoh/Gym-tracker/releases",
   "githubUrl": "https://github.com/Streetoh/Gym-tracker",
   "changelog": {
     "es": [
-      "📸 **Tarjeta para Historias (PNG Nativo)**: Compartición directa del archivo de imagen a Instagram Stories, WhatsApp y Telegram (sin texto plano).",
-      "💾 **Descarga Directa en Dispositivo**: Botón de guardar imagen en el dispositivo/galería completamente funcional en Android.",
-      "✏️ **Edición de Sesiones Finalizadas**: Rediseño limpio de la cabecera (título arriba, botón de editar y distintivo verde debajo sin textos redundantes).",
-      "🔄 **Sincronización Total con el Historial**: Actualización en tiempo real de pesos y repeticiones en el registro de entrenamientos y marcas personales (PRs).",
-      "ℹ️ **Técnica y Vídeos en Vivo**: Acceso directo a la guía de técnica y ejecución de cada ejercicio durante el entrenamiento.",
-      "⚡ **Corrección en Sesiones Planeadas**: Solucionado el error al abrir entrenamientos pendientes desde el calendario."
+      "🏆 **36 Logros y Medallas Desbloqueables**: 10 nuevos hitos míticos implementados (Club 100 kg Banca, Respeto al Leg Day, 250t, 500t, 1 Millón de kg, Sesión Gladiador 20t, Maestro de la Biomecánica, El Escultor, Vientre de Acero, Embajador del Esfuerzo).",
+      "🌐 **Apertura en Navegador por Defecto**: Todos los enlaces externos y descargas ahora se abren en el navegador predeterminado del teléfono (Samsung Internet, Brave, Firefox, etc.) mediante intent nativo de Android en lugar de forzar Chrome.",
+      "🩺 **Gestor de Molestias y Articulaciones Sensibles**: Registra molestias en hombros, codos, rodillas, lumbares, muñecas o caderas y recibe avisos inteligentes preventivos durante el entreno ('⚠️ Cuidado: Hombro') con sugerencias de variantes seguras sustituibles en 1 toque.",
+      "👻 **Modo Fantasma en Vivo (Ghost Workout)**: Durante tu entrenamiento en vivo, cada serie muestra de forma tenue tu marca anterior ('Última vez: X kg × Y reps') para saber exactamente qué tienes que batir, con autorrellenado automático en 1 toque al tocar la marca.",
+      "🏃 **Nueva Pestaña de Actividad & Samsung Health**: Consulta en tiempo real tus pasos diarios con anillo de meta circular, distancia en km, calorías de actividad, sesiones de ejercicio y horas de sueño sincronizadas con Samsung Health y Conexión de Salud (Health Connect).",
+      "⌚ **Companion para Smartwatch (Wear OS / Galaxy Watch)**: Control del entrenamiento en muñeca en Samsung Galaxy Watch con vibración háptica de doble pulso al finalizar descansos, pulsómetro en tiempo real y simulador circular AMOLED.",
+      "💻 **Portal Web / Dashboard de Escritorio para Entrenador**: Plataforma web de escritorio ('coach.html') para diseñar mesociclos, gestionar múltiples atletas/alumnos, revisar adherencia, gráficos de volumen por grupo muscular y exportar rutinas en 1 clic.",
+      "📸 **Tarjeta para Historias (PNG Nativo)**: Compartición directa del archivo de imagen a Instagram Stories, WhatsApp y Telegram.",
+      "💾 **Descarga Directa en Dispositivo**: Guardado directo de la imagen de tarjeta de entreno en la galería/almacenamiento.",
+      "✏️ **Edición de Sesiones Finalizadas**: Rediseño limpio de cabecera con botón de editar y distintivo verde sin textos redundantes.",
+      "🔄 **Sincronización Total con el Historial**: Actualización en tiempo real de pesos y repeticiones editadas en el historial y marcas personales (PRs)."
     ],
     "en": [
-      "📸 **Story Cards (Native PNG)**: Share real image files directly to Instagram Stories, WhatsApp, and Telegram without plain text.",
-      "💾 **Direct Device Download**: Working save image to device/gallery button on Android.",
-      "✏️ **Completed Session Editing**: Clean header layout (title on top, edit button & green badge underneath without redundant text).",
-      "🔄 **Full History Sync**: Real-time update of edited weights and reps in the History tab and personal records (PRs).",
-      "ℹ️ **Live Technique Guide**: Quick access to exercise execution guides and videos during active workouts.",
-      "⚡ **Planned Workouts Fix**: Fixed opening scheduled sessions from the calendar."
+      "🏆 **36 Unlockable Achievements & Trophies**: 10 new iconic milestones implemented (Bench Club 100 kg, Leg Day Respect, 250t, 500t, 1M kg, Gladiator Session 20t, Technique Master, The Sculptor, Steel Waist, Story Ambassador).",
+      "🌐 **Default Browser Support**: External links and downloads now open in your phone's selected default browser (Samsung Internet, Brave, Firefox, etc.) via native Android intent instead of forcing Chrome.",
+      "🩺 **Joint Discomfort & Injury Manager**: Log active discomfort in shoulders, elbows, knees, lower back, wrists, or hips and receive live preventive alerts ('⚠️ Careful: Shoulder') with 1-tap safe exercise replacements.",
+      "👻 **Live Ghost Workout Mode**: Every set displays your previous performance ('Last time: X kg × Y reps') so you know what to beat, with 1-tap autofill by tapping the ghost tag.",
+      "🏃 **New Activity Tab & Samsung Health Integration**: Real-time daily steps ring with custom goal, distance in km, active calories, workout sessions, and sleep hours synced with Samsung Health via Health Connect.",
+      "⌚ **Smartwatch Companion (Wear OS / Galaxy Watch)**: Wrist workout control for Samsung Galaxy Watch with dual-pulse haptic vibrations on rest timer end, real-time heart rate, and circular AMOLED watch simulator.",
+      "💻 **Coach Desktop Web Portal & Dashboard**: Dedicated desktop web platform ('coach.html') to design mesocycles, manage multiple athletes, inspect adherence, muscle volume charts, and 1-click routine export.",
+      "📸 **Story Cards (Native PNG)**: Share real image files directly to Instagram Stories, WhatsApp, and Telegram.",
+      "💾 **Direct Device Download**: Working save image to device/gallery button.",
+      "✏️ **Completed Session Editing**: Clean header layout without redundant text.",
+      "🔄 **Full History Sync**: Real-time update of edited weights and reps in the History tab and PRs."
     ],
     "ru": [
       "🫀 **2D Карта мышц**: Тепловая карта восстановления и мышечной усталости (вид спереди и сзади).",
@@ -43,7 +53,7 @@
     ]
   },
   "releaseNotes": {
-    "es": "v1.2.5:\\n- Solución definitiva para la Tarjeta de Historias: Compartición nativa de imagen real (PNG) en Android sin enviar texto.\\n- Botón Descargar Imagen en Android para guardar en galería.\\n- Corrección al abrir sesiones planeadas desde el calendario (ReferenceError eliminado).\\n- Sincronización completa con el historial y cabecera limpia en sesiones terminadas.",
-    "en": "v1.2.5:\\n- Definitive fix for Story Cards: Native PNG image sharing in Android without plain text.\\n- Download Image button to save to gallery on Android.\\n- Fixed opening planned sessions from calendar.\\n- Full history synchronization and clean completed session header."
+    "es": "v1.2.6:\\n- 36 Logros y medallas desbloqueables.\\n- Apertura en navegador predeterminado del sistema.\\n- Gestor de molestias articulares con variantes seguras en 1 toque.\\n- Modo fantasma en vivo con autorrellenado.\\n- Pestaña de Actividad y sincronización con Samsung Health.\\n- Smartwatch Companion (Wear OS / Galaxy Watch).\\n- Portal Web de Escritorio para Entrenador (coach.html).\\n- Tarjetas para historias con compartición y descarga nativa.\\n- Edición y sincronización con el historial.",
+    "en": "v1.2.6:\\n- 36 Unlockable achievements.\\n- Default system browser support.\\n- Joint Discomfort Manager with 1-tap safe variants.\\n- Live Ghost Workout with 1-tap autofill.\\n- Activity Tab with Samsung Health sync.\\n- Smartwatch Companion (Wear OS / Galaxy Watch).\\n- Coach Desktop Web Portal (coach.html).\\n- Story cards native sharing & direct download.\\n- Completed session editing & history sync."
   }
 }
