@@ -6,6 +6,7 @@
   "githubUrl": "https://github.com/Streetoh/Gym-tracker",
   "changelog": {
     "es": [
+      "🎯 **Filtros de Logros Optimizados**: Eliminada la pestaña genérica 'Todos'; ahora se muestran únicamente las pestañas **Desbloqueados** (seleccionada por defecto) y **Pendientes**.",
       "🔄 **Botón de Restablecimiento de Logros**: Nueva opción para reiniciar todo el progreso de logros desde cero si se desea empezar de nuevo, protegido de forma segura con 3 ventanas de confirmación consecutivas.",
       "🏆 **Marcado de Récords (PR) en Historial**: En el desglose de sesión del historial, el distintivo PR se muestra exclusivamente en la primera serie donde se batió la marca, evitando repeticiones innecesarias en series idénticas posteriores.",
       "📖 **Tutorial Interactivo Completo**: Pestaña 'En curso' actualizada con explicación detallada y captura de alta resolución de la calculadora de porcentajes para Dropset (%). Títulos y descripciones de ejercicios limpios y claros.",
@@ -14,6 +15,7 @@
       "⚡ **Máxima Fluidez y Estabilidad**: Dimensiones fijas uniformes en ventanas modales y eliminación de botones redundantes."
     ],
     "en": [
+      "🎯 **Streamlined Achievement Filters**: Removed the redundant 'All' filter tab; now exclusively displaying **Unlocked** (active by default) and **Locked** tabs.",
       "🔄 **Reset Achievements Button**: New feature to reset all achievement progress from scratch, protected by 3 sequential confirmation dialogs to prevent accidental resets.",
       "🏆 **History PR Set Highlighting**: In workout history logs, the PR badge is now cleanly marked only on the first set that broke the personal record.",
       "📖 **Complete Interactive Guide**: Live workout tab updated with dropset percentage calculator (%) walkthrough and high-res screenshot. Clean exercise descriptions.",
@@ -22,6 +24,7 @@
       "⚡ **Fluidity & Modal Stability**: Consistent fixed window sizes across modal transitions."
     ],
     "ru": [
+      "🎯 **Оптимизированные фильтры достижений**: Удалена вкладка «Все», отображаются только «Разблокированные» (по умолчанию) и «В ожидании».",
       "🔄 **Кнопка сброса достижений**: Возможность начать получение достижений с нуля, защищенная 3 окнами подтверждения.",
       "🏆 **Отметка рекордов (PR) в истории**: Знак рекорда отмечается только на первом подходе, побившем рекорд.",
       "📖 **Интерактивное руководство**: Добавлен раздел калькулятора дропсетов (%) в активной тренировке.",
@@ -29,6 +32,7 @@
       "🏋️ **Олимпийский гриф 20 кг**: Стандартный вес грифа 20 кг."
     ],
     "et": [
+      "🎯 **Optimeeritud saavutuste filtrid**: Eemaldatud üldine 'Kõik' filter; kuvatakse ainult vahekaardid 'Avatud' (vaikimisi valitud) ja 'Ootel'.",
       "🔄 **Saavutuste lähtestamise nupp**: Võimalus alustada saavutuste kogumist nullist, kaitstud 3 järjestikuse kinnitusaknaga.",
       "🏆 **Rekordite (PR) märkimine ajaloos**: Rekordimärk kuvatakse ainult esimesel seerial, mis rekordi ületas.",
       "📖 **Interaktiivne juhend**: Lisatud dropset kalkulaatori (%) juhend ja selgitused.",
@@ -36,6 +40,7 @@
       "🏋️ **Olümpiakang 20 kg**: Kangi baaskaal 20 kg automaatse ketaste arvutusega."
     ],
     "uk": [
+      "🎯 **Оптимізовані фільтри досягнень**: Вилучено вкладку «Всі», відображаються лише «Відкриті» (за замовчуванням) та «В очікуванні».",
       "🔄 **Кнопка скидання досягнень**: Можливість почати відкриття досягнень спочатку, захищена 3 послідовними вікнами підтвердження.",
       "🏆 **Відмітка рекордів (PR) в історії**: Знак рекорду відображається тільки на першому підході, що побив рекорд.",
       "📖 **Інтерактивний посібник**: Додано розділ калькулятора дропсетів (%) у тренуванні.",

@@ -11314,10 +11314,10 @@ window.showAchievementToast = function(ach) {
 };
 
 
-window.achCurrentFilter = window.achCurrentFilter || 'all';
+window.achCurrentFilter = 'unlocked';
 
 window.setAchievementsFilter = function(filter) {
-    window.achCurrentFilter = filter;
+    window.achCurrentFilter = filter === 'locked' ? 'locked' : 'unlocked';
     renderAchievementsView();
 };
 
@@ -11337,21 +11337,22 @@ window.renderAchievementsView = function() {
 
     const lang = (window.state && window.state.language) || localStorage.getItem('gym_language') || 'es';
 
-    const tAll = (typeof getT === 'function' ? getT('common.all') : null) || (lang === 'en' ? 'All' : (lang === 'ru' ? 'Все' : (lang === 'et' ? 'Kõik' : (lang === 'uk' ? 'Всі' : 'Todos'))));
     const tUnlocked = lang === 'en' ? 'Unlocked' : (lang === 'ru' ? 'Открытые' : (lang === 'et' ? 'Avatud' : (lang === 'uk' ? 'Відкриті' : 'Desbloqueados')));
     const tLocked = lang === 'en' ? 'Locked' : (lang === 'ru' ? 'В ожидании' : (lang === 'et' ? 'Ootel' : (lang === 'uk' ? 'В очікуванні' : 'Pendientes')));
     const tUnlockedOn = lang === 'en' ? 'Unlocked on' : (lang === 'ru' ? 'Разблокировано' : (lang === 'et' ? 'Avatud' : (lang === 'uk' ? 'Розблоковано' : 'Desbloqueado el')));
-    const tEmpty = lang === 'en' ? 'No achievements in this category.' : (lang === 'ru' ? 'В этой категории пока нет достижений.' : (lang === 'et' ? 'Selles kategoorias pole saavutusi.' : (lang === 'uk' ? 'У цій категорії поки немає досягнень.' : 'No hay logros en esta categoría.')));
 
     if (countEl) countEl.textContent = `${unlockedCount} / ${totalCount} ${tUnlocked} (${pct}%)`;
     if (barEl) barEl.style.width = pct + '%';
 
+    if (!window.achCurrentFilter || (window.achCurrentFilter !== 'locked' && window.achCurrentFilter !== 'unlocked')) {
+        window.achCurrentFilter = 'unlocked';
+    }
+    const curF = window.achCurrentFilter;
+
     if (filterBar) {
-        const curF = window.achCurrentFilter || 'all';
         filterBar.innerHTML = `
-            <button type="button" class="btn-secondary" onclick="setAchievementsFilter('all')" style="padding: 6px 14px; font-size: 12px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: all 0.2s; ${curF === 'all' ? 'background: var(--color-accent); color: white; border-color: var(--color-accent);' : 'background: var(--bg-surface-elevated); color: var(--text-secondary);'}">${tAll} (${totalCount})</button>
-            <button type="button" class="btn-secondary" onclick="setAchievementsFilter('unlocked')" style="padding: 6px 14px; font-size: 12px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: all 0.2s; ${curF === 'unlocked' ? 'background: #f59e0b; color: white; border-color: #f59e0b;' : 'background: var(--bg-surface-elevated); color: var(--text-secondary);'}">🏆 ${tUnlocked} (${unlockedCount})</button>
-            <button type="button" class="btn-secondary" onclick="setAchievementsFilter('locked')" style="padding: 6px 14px; font-size: 12px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: all 0.2s; ${curF === 'locked' ? 'background: var(--color-heavy); color: white; border-color: var(--color-heavy);' : 'background: var(--bg-surface-elevated); color: var(--text-secondary);'}">🔒 ${tLocked} (${lockedCount})</button>
+            <button type="button" class="btn-secondary" onclick="setAchievementsFilter('unlocked')" style="padding: 7px 16px; font-size: 12px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: all 0.2s; ${curF === 'unlocked' ? 'background: #f59e0b; color: white; border-color: #f59e0b;' : 'background: var(--bg-surface-elevated); color: var(--text-secondary);'}">🏆 ${tUnlocked} (${unlockedCount})</button>
+            <button type="button" class="btn-secondary" onclick="setAchievementsFilter('locked')" style="padding: 7px 16px; font-size: 12px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: all 0.2s; ${curF === 'locked' ? 'background: var(--color-heavy); color: white; border-color: var(--color-heavy);' : 'background: var(--bg-surface-elevated); color: var(--text-secondary);'}">🔒 ${tLocked} (${lockedCount})</button>
         `;
     }
 
@@ -11368,16 +11369,29 @@ window.renderAchievementsView = function() {
         return 0;
     });
 
-    const curF = window.achCurrentFilter || 'all';
     const filteredList = sortedList.filter(ach => {
         const isUnlocked = !!data.unlocked[ach.id];
-        if (curF === 'unlocked') return isUnlocked;
         if (curF === 'locked') return !isUnlocked;
-        return true;
+        return isUnlocked;
     });
 
     if (filteredList.length === 0) {
-        mount.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 32px 16px; color: var(--text-secondary); font-size: 13px;">${tEmpty}</div>`;
+        const tEmptyUnlocked = {
+            es: 'Aún no has desbloqueado ningún logro. ¡Completa entrenamientos para ganar medallas!',
+            en: 'No achievements unlocked yet. Complete workouts to earn badges!',
+            ru: 'Пока нет разблокированных достижений. Тренируйтесь, чтобы получить медали!',
+            et: 'Ühtegi saavutust pole veel avatud. Treeni medalite teenimiseks!',
+            uk: 'Поки немає відкритих досягнень. Тренуйтесь, щоб отримати медалі!'
+        };
+        const tEmptyLocked = {
+            es: '¡Enhorabuena! Has desbloqueado todos los logros.',
+            en: 'Congratulations! You have unlocked all achievements.',
+            ru: 'Поздравляем! Вы открыли все достижения.',
+            et: 'Palju õnne! Oled avanud kõik saavutused.',
+            uk: 'Вітаємо! Ви відкрили всі досягнення.'
+        };
+        const emptyMsg = curF === 'locked' ? (tEmptyLocked[lang] || tEmptyLocked['es']) : (tEmptyUnlocked[lang] || tEmptyUnlocked['es']);
+        mount.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 36px 16px; color: var(--text-secondary); font-size: 13.5px; line-height: 1.5;">${emptyMsg}</div>`;
         return;
     }
 
