@@ -6355,23 +6355,6 @@ window.checkSetPR = function(exerciseId, weight, reps, setRowEl, setIndex) {
         isPR = false;
     }
 
-    // Check if an earlier set in this same workout session already matched or beat this PR
-    let beatenByEarlierSet = false;
-    currentWorkoutPRs.forEach((val, k) => {
-        if (k.startsWith(exerciseId + '_')) {
-            const earlierIdx = parseInt(k.split('_')[1]);
-            if (earlierIdx < setIndex) {
-                if (val.weight >= wVal && val.reps >= rVal) {
-                    beatenByEarlierSet = true;
-                }
-            }
-        }
-    });
-
-    if (beatenByEarlierSet) {
-        isPR = false;
-    }
-
     if (isPR) {
         currentWorkoutPRs.set(prKey, {
             exerciseId,
