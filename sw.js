@@ -1,10 +1,11 @@
-const CACHE_NAME = 'gym-tracker-v1788270000000';
+const CACHE_NAME = 'gym-tracker-v1.2.7';
 const urlsToCache = [
   './',
   './index.html',
   './styles.css',
   './app.js',
   './default_db.js',
+  './tutorial-preview.html',
   'https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css',
   'https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css'
 ];

@@ -1,59 +1,50 @@
 {
-  "version": "1.2.6",
-  "versionCode": 126,
+  "version": "1.2.8",
+  "versionCode": 128,
+  "releaseDate": "04/09/2026",
   "downloadUrl": "https://github.com/Streetoh/Gym-tracker/releases",
   "githubUrl": "https://github.com/Streetoh/Gym-tracker",
   "changelog": {
     "es": [
-      "🏆 **36 Logros y Medallas Desbloqueables**: 10 nuevos hitos míticos implementados (Club 100 kg Banca, Respeto al Leg Day, 250t, 500t, 1 Millón de kg, Sesión Gladiador 20t, Maestro de la Biomecánica, El Escultor, Vientre de Acero, Embajador del Esfuerzo).",
-      "🌐 **Apertura en Navegador por Defecto**: Todos los enlaces externos y descargas ahora se abren en el navegador predeterminado del teléfono (Samsung Internet, Brave, Firefox, etc.) mediante intent nativo de Android en lugar de forzar Chrome.",
-      "🩺 **Gestor de Molestias y Articulaciones Sensibles**: Registra molestias en hombros, codos, rodillas, lumbares, muñecas o caderas y recibe avisos inteligentes preventivos durante el entreno ('⚠️ Cuidado: Hombro') con sugerencias de variantes seguras sustituibles en 1 toque.",
-      "👻 **Modo Fantasma en Vivo (Ghost Workout)**: Durante tu entrenamiento en vivo, cada serie muestra de forma tenue tu marca anterior ('Última vez: X kg × Y reps') para saber exactamente qué tienes que batir, con autorrellenado automático en 1 toque al tocar la marca.",
-      "🏃 **Nueva Pestaña de Actividad & Samsung Health**: Consulta en tiempo real tus pasos diarios con anillo de meta circular, distancia en km, calorías de actividad, sesiones de ejercicio y horas de sueño sincronizadas con Samsung Health y Conexión de Salud (Health Connect).",
-      "⌚ **Companion para Smartwatch (Wear OS / Galaxy Watch)**: Control del entrenamiento en muñeca en Samsung Galaxy Watch con vibración háptica de doble pulso al finalizar descansos, pulsómetro en tiempo real y simulador circular AMOLED.",
-      "💻 **Portal Web / Dashboard de Escritorio para Entrenador**: Plataforma web de escritorio ('coach.html') para diseñar mesociclos, gestionar múltiples atletas/alumnos, revisar adherencia, gráficos de volumen por grupo muscular y exportar rutinas en 1 clic.",
-      "📸 **Tarjeta para Historias (PNG Nativo)**: Compartición directa del archivo de imagen a Instagram Stories, WhatsApp y Telegram.",
-      "💾 **Descarga Directa en Dispositivo**: Guardado directo de la imagen de tarjeta de entreno en la galería/almacenamiento.",
-      "✏️ **Edición de Sesiones Finalizadas**: Rediseño limpio de cabecera con botón de editar y distintivo verde sin textos redundantes.",
-      "🔄 **Sincronización Total con el Historial**: Actualización en tiempo real de pesos y repeticiones editadas en el historial y marcas personales (PRs)."
+      "🔄 **Botón de Restablecimiento de Logros**: Nueva opción para reiniciar todo el progreso de logros desde cero si se desea empezar de nuevo, protegido de forma segura con 3 ventanas de confirmación consecutivas.",
+      "🏆 **Marcado de Récords (PR) en Historial**: En el desglose de sesión del historial, el distintivo PR se muestra exclusivamente en la primera serie donde se batió la marca, evitando repeticiones innecesarias en series idénticas posteriores.",
+      "📖 **Tutorial Interactivo Completo**: Pestaña 'En curso' actualizada con explicación detallada y captura de alta resolución de la calculadora de porcentajes para Dropset (%). Títulos y descripciones de ejercicios limpios y claros.",
+      "🎯 **Estandarización y Títulos de Logros**: Formato de nombres normalizado sin mayúsculas excesivas en los 50 logros. Ajuste exacto en 'El despertar de Carlo' (sesión de al menos 30 min un domingo a las 03:00 AM) y 'Día de pierna saltado'.",
+      "🏋️ **Calculadora de Discos Olímpica (20 kg)**: Barra olímpica estándar fijada en 20 kg con desglose gráfico de discos por cada lado.",
+      "⚡ **Máxima Fluidez y Estabilidad**: Dimensiones fijas uniformes en ventanas modales y eliminación de botones redundantes."
     ],
     "en": [
-      "🏆 **36 Unlockable Achievements & Trophies**: 10 new iconic milestones implemented (Bench Club 100 kg, Leg Day Respect, 250t, 500t, 1M kg, Gladiator Session 20t, Technique Master, The Sculptor, Steel Waist, Story Ambassador).",
-      "🌐 **Default Browser Support**: External links and downloads now open in your phone's selected default browser (Samsung Internet, Brave, Firefox, etc.) via native Android intent instead of forcing Chrome.",
-      "🩺 **Joint Discomfort & Injury Manager**: Log active discomfort in shoulders, elbows, knees, lower back, wrists, or hips and receive live preventive alerts ('⚠️ Careful: Shoulder') with 1-tap safe exercise replacements.",
-      "👻 **Live Ghost Workout Mode**: Every set displays your previous performance ('Last time: X kg × Y reps') so you know what to beat, with 1-tap autofill by tapping the ghost tag.",
-      "🏃 **New Activity Tab & Samsung Health Integration**: Real-time daily steps ring with custom goal, distance in km, active calories, workout sessions, and sleep hours synced with Samsung Health via Health Connect.",
-      "⌚ **Smartwatch Companion (Wear OS / Galaxy Watch)**: Wrist workout control for Samsung Galaxy Watch with dual-pulse haptic vibrations on rest timer end, real-time heart rate, and circular AMOLED watch simulator.",
-      "💻 **Coach Desktop Web Portal & Dashboard**: Dedicated desktop web platform ('coach.html') to design mesocycles, manage multiple athletes, inspect adherence, muscle volume charts, and 1-click routine export.",
-      "📸 **Story Cards (Native PNG)**: Share real image files directly to Instagram Stories, WhatsApp, and Telegram.",
-      "💾 **Direct Device Download**: Working save image to device/gallery button.",
-      "✏️ **Completed Session Editing**: Clean header layout without redundant text.",
-      "🔄 **Full History Sync**: Real-time update of edited weights and reps in the History tab and PRs."
+      "🔄 **Reset Achievements Button**: New feature to reset all achievement progress from scratch, protected by 3 sequential confirmation dialogs to prevent accidental resets.",
+      "🏆 **History PR Set Highlighting**: In workout history logs, the PR badge is now cleanly marked only on the first set that broke the personal record.",
+      "📖 **Complete Interactive Guide**: Live workout tab updated with dropset percentage calculator (%) walkthrough and high-res screenshot. Clean exercise descriptions.",
+      "🎯 **Achievements Standardization**: Normalized sentence-case titles across all 50 achievements, updated triggers for 'Carlo's awakening' (Sunday 03:00 AM, 30+ min) and 'Skipped leg day'.",
+      "🏋️ **Olympic Plate Calculator (20 kg)**: Default Olympic bar set to 20 kg with automatic plate breakdown per side.",
+      "⚡ **Fluidity & Modal Stability**: Consistent fixed window sizes across modal transitions."
     ],
     "ru": [
-      "🫀 **2D Карта мышц**: Тепловая карта восстановления и мышечной усталости (вид спереди и сзади).",
-      "📊 **Оптимальные подходы**: Контроль объёма тренировок за неделю по группам мышц.",
-      "🏆 **Стена достижений**: 26 разблокируемых трофеев и медалей.",
-      "📸 **Карточки для историй**: Экспорт итогов тренировки в формате 9:16 для Instagram и WhatsApp.",
-      "⌨️ **Числовая клавиатура**: Быстрый ввод чисел для весов и замеров."
+      "🔄 **Кнопка сброса достижений**: Возможность начать получение достижений с нуля, защищенная 3 окнами подтверждения.",
+      "🏆 **Отметка рекордов (PR) в истории**: Знак рекорда отмечается только на первом подходе, побившем рекорд.",
+      "📖 **Интерактивное руководство**: Добавлен раздел калькулятора дропсетов (%) в активной тренировке.",
+      "🎯 **50 Достижений**: Нормализация названий, обновленные условия для особых достижений.",
+      "🏋️ **Олимпийский гриф 20 кг**: Стандартный вес грифа 20 кг."
     ],
     "et": [
-      "🫀 **2D Lihaste kaart**: Jälgi taastumist ja väsimust reaalajas (ees ja taga).",
-      "📊 **Nädala optimaalsed seeriad**: Hüpertroofia mahu jälgimine lihasrühmade kaupa.",
-      "🏆 **Saavutuste sein**: 26 avatavat trofeed ja medalit.",
-      "📸 **Story kaardid**: Stiilsed 9:16 kokkuvõtted Instagrami ja WhatsAppi jaoks.",
-      "⌨️ **Numbriklaviatuur**: Mugav numbrite sisestamine kaalu ja mõõtude jaoks."
+      "🔄 **Saavutuste lähtestamise nupp**: Võimalus alustada saavutuste kogumist nullist, kaitstud 3 järjestikuse kinnitusaknaga.",
+      "🏆 **Rekordite (PR) märkimine ajaloos**: Rekordimärk kuvatakse ainult esimesel seerial, mis rekordi ületas.",
+      "📖 **Interaktiivne juhend**: Lisatud dropset kalkulaatori (%) juhend ja selgitused.",
+      "🎯 **50 Saavutust**: Standardiseeritud pealkirjad ja uuendatud reeglid.",
+      "🏋️ **Olümpiakang 20 kg**: Kangi baaskaal 20 kg automaatse ketaste arvutusega."
     ],
     "uk": [
-      "🫀 **2D Карта м'язів**: Теплова карта відновлення та втоми (вид спереду та ззаду).",
-      "📊 **Оптимальні підходи**: Контроль щотижневого об'єму за групами м'язів.",
-      "🏆 **Стіна досягнень**: 26 трофеїв та медалей з анімаціями.",
-      "📸 **Картка для історій**: Стильні підсумки 9:16 для Instagram та WhatsApp.",
-      "⌨️ **Числова клавіатура**: Зручне введення чисел для ваги та замірів."
+      "🔄 **Кнопка скидання досягнень**: Можливість почати відкриття досягнень спочатку, захищена 3 послідовними вікнами підтвердження.",
+      "🏆 **Відмітка рекордів (PR) в історії**: Знак рекорду відображається тільки на першому підході, що побив рекорд.",
+      "📖 **Інтерактивний посібник**: Додано розділ калькулятора дропсетів (%) у тренуванні.",
+      "🎯 **50 Досягнень**: Нормалізовані назви та оновлені умови досягнень.",
+      "🏋️ **Олімпійський гриф 20 кг**: Базова вага грифа 20 кг."
     ]
   },
   "releaseNotes": {
-    "es": "v1.2.6:\\n- 36 Logros y medallas desbloqueables.\\n- Apertura en navegador predeterminado del sistema.\\n- Gestor de molestias articulares con variantes seguras en 1 toque.\\n- Modo fantasma en vivo con autorrellenado.\\n- Pestaña de Actividad y sincronización con Samsung Health.\\n- Smartwatch Companion (Wear OS / Galaxy Watch).\\n- Portal Web de Escritorio para Entrenador (coach.html).\\n- Tarjetas para historias con compartición y descarga nativa.\\n- Edición y sincronización con el historial.",
-    "en": "v1.2.6:\\n- 36 Unlockable achievements.\\n- Default system browser support.\\n- Joint Discomfort Manager with 1-tap safe variants.\\n- Live Ghost Workout with 1-tap autofill.\\n- Activity Tab with Samsung Health sync.\\n- Smartwatch Companion (Wear OS / Galaxy Watch).\\n- Coach Desktop Web Portal (coach.html).\\n- Story cards native sharing & direct download.\\n- Completed session editing & history sync."
+    "es": "v1.2.8:\\n- Botón de restablecimiento de logros protegido con 3 ventanas de confirmación.\\n- Marcado exclusivo de PR en la primera serie que superó la marca en el historial.\\n- Guía interactiva actualizada con calculadora de dropset (%).\\n- Nombres de logros normalizados y triggers ajustados.\\n- Rendimiento y fluidez optimizados.",
+    "en": "v1.2.8:\\n- Reset achievements button with 3-step confirmation.\\n- Single set PR badge in history logs.\\n- Interactive tutorial updated with % dropset calculator.\\n- Normalized achievement titles and refined triggers.\\n- Enhanced stability and performance."
   }
 }

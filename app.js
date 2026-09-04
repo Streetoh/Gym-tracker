@@ -1,4 +1,3 @@
-
 window.openExternalUrl = function(url) {
     if (!url) return;
     try {
@@ -1535,12 +1534,12 @@ navItems.forEach(item => {
             headerTitle.textContent = getT('header.evolution') || getT('nav.evolution') || 'Evolución';
             if (typeof renderEvolutionHistory === 'function') renderEvolutionHistory();
             if (typeof renderEvolutionView === 'function') renderEvolutionView();
-        } else if (target === 'view-progression') {
-            headerTitle.textContent = getT('header.progression') || getT('nav.progression') || 'Progresión';
-            if (typeof renderProgressionView === 'function') renderProgressionView();
         } else if (target === 'view-activity') {
             headerTitle.textContent = getT('header.activity') || getT('nav.activity') || 'Actividad';
             if (typeof renderActivityView === 'function') renderActivityView();
+        } else if (target === 'view-progression') {
+            headerTitle.textContent = getT('header.progression') || getT('nav.progression') || 'Progresión';
+            if (typeof renderProgressionView === 'function') renderProgressionView();
         } else if (target === 'view-exercises') {
             headerTitle.textContent = getT('header.exercises') || getT('nav.exercises') || 'Ejercicios';
             if (typeof renderExercises === 'function') renderExercises();
@@ -1763,6 +1762,10 @@ const translations = {
           "title": "Muro de Logros y Trofeos",
           "globalProgress": "{count} / {total} Desbloqueados ({pct}%)",
           "toastUnlocked": "¡Logro Desbloqueado!",
+            "resetBtn": "Restablecer logros",
+            "resetHint": "Protegido con 3 ventanas de confirmación para evitar borrados accidentales.",
+            "resetBtn": "Restablecer logros",
+            "resetHint": "Protegido con 3 ventanas de confirmación para evitar borrados accidentales.",
           "unlockedOn": "Desbloqueado el",
           "locked": "Bloqueado"
 },
@@ -1839,7 +1842,8 @@ const translations = {
             "workout": "En curso",
             "progression": "Progresión",
             "evolution": "Evolución",
-            "export": "Exp / Imp"
+            "export": "Exp / Imp",
+            "tutorial": "Guía y Tutorial"
         },
         "header": {
             "ai": "Asistente IA",
@@ -2115,7 +2119,7 @@ const translations = {
             "weightTooLow": "El peso debe ser mayor al de la barra ({bar}kg)",
             "btnApply": "Aplicar a la serie",
             "close": "Cerrar",
-            "barOlympic": "25 kg (Olímpica)",
+            "barOlympic": "20 kg (Olímpica)",
             "barMultipower": "15 kg (Multipower)",
             "barEZ": "10 kg (EZ)"
         },
@@ -2177,6 +2181,10 @@ const translations = {
           "title": "Achievements & Trophies Wall",
           "globalProgress": "{count} / {total} Unlocked ({pct}%)",
           "toastUnlocked": "Achievement Unlocked!",
+            "resetBtn": "Reset achievements",
+            "resetHint": "Protected by 3 confirmation dialogs to prevent accidental resets.",
+            "resetBtn": "Reset achievements",
+            "resetHint": "Protected by 3 confirmation dialogs to prevent accidental resets.",
           "unlockedOn": "Unlocked on",
           "locked": "Locked"
 },
@@ -2253,7 +2261,8 @@ const translations = {
             "workout": "Workout",
             "progression": "Progression",
             "evolution": "Evolution",
-            "export": "Exp / Imp"
+            "export": "Exp / Imp",
+            "tutorial": "Guía y Tutorial"
         },
         "header": {
             "ai": "AI Assistant",
@@ -2517,7 +2526,7 @@ const translations = {
             "weightTooLow": "Weight must be greater than bar ({bar}kg)",
             "btnApply": "Apply to set",
             "close": "Close",
-            "barOlympic": "25 kg (Olympic)",
+            "barOlympic": "20 kg (Olympic)",
             "barMultipower": "15 kg (Multipower)",
             "barEZ": "10 kg (EZ)"
         },
@@ -2579,6 +2588,10 @@ const translations = {
           "title": "Стена достижений и трофеев",
           "globalProgress": "{count} / {total} Разблокировано ({pct}%)",
           "toastUnlocked": "Достижение разблокировано!",
+            "resetBtn": "Сбросить достижения",
+            "resetHint": "Защищено 3 окнами подтверждения для предотвращения случайного сброса.",
+            "resetBtn": "Сбросить достижения",
+            "resetHint": "Защищено 3 окнами подтверждения для предотвращения случайного сброса.",
           "unlockedOn": "Получено",
           "locked": "Заблокировано"
 },
@@ -2911,7 +2924,7 @@ const translations = {
             "weightTooLow": "Вес должен быть больше грифа ({bar}кг)",
             "btnApply": "Применить к подходу",
             "close": "Закрыть",
-            "barOlympic": "25 кг (Олимпийский)",
+            "barOlympic": "20 кг (Олимпийский)",
             "barMultipower": "15 кг (Мультипауэр)",
             "barEZ": "10 кг (EZ)"
         },
@@ -2973,6 +2986,10 @@ const translations = {
           "title": "Saavutuste sein",
           "globalProgress": "{count} / {total} Avatud ({pct}%)",
           "toastUnlocked": "Saavutus avatud!",
+            "resetBtn": "Lähtesta saavutused",
+            "resetHint": "Kaitstud 3 kinnitusaknaga juhusliku lähtestamise vältimiseks.",
+            "resetBtn": "Lähtesta saavutused",
+            "resetHint": "Kaitstud 3 kinnitusaknaga juhusliku lähtestamise vältimiseks.",
           "unlockedOn": "Avatud",
           "locked": "Lukus"
 },
@@ -3304,7 +3321,7 @@ const translations = {
             "weightTooLow": "Kaal peab olema suurem kui kangi kaal ({bar}kg)",
             "btnApply": "Rakenda seeriale",
             "close": "Sulge",
-            "barOlympic": "25 kg (Olümpia)",
+            "barOlympic": "20 kg (Olümpia)",
             "barMultipower": "15 kg (Multipower)",
             "barEZ": "10 kg (EZ)"
         },
@@ -3366,6 +3383,10 @@ const translations = {
           "title": "Стіна досягнень та трофеїв",
           "globalProgress": "{count} / {total} Розблоковано ({pct}%)",
           "toastUnlocked": "Досягнення розблоковано!",
+            "resetBtn": "Скинути досягнення",
+            "resetHint": "Захищено 3 вікнами підтвердження для запобігання випадкового скидання.",
+            "resetBtn": "Скинути досягнення",
+            "resetHint": "Захищено 3 вікнами підтвердження для запобігання випадкового скидання.",
           "unlockedOn": "Отримано",
           "locked": "Заблоковано"
 },
@@ -3698,7 +3719,7 @@ const translations = {
             "weightTooLow": "Вага має бути більшою за вагу грифа ({bar}кг)",
             "btnApply": "Застосувати до підходу",
             "close": "Закрити",
-            "barOlympic": "25 кг (Олімпійський)",
+            "barOlympic": "20 кг (Олімпійський)",
             "barMultipower": "15 кг (Мультипауер)",
             "barEZ": "10 кг (EZ)"
         },
@@ -5085,6 +5106,9 @@ const startWorkout = (session) => {
             if (matched.exercises && matched.exercises.length > 0) {
                 activeSession.exercises = JSON.parse(JSON.stringify(matched.exercises));
             }
+            if (matched.prs && matched.prs.length > 0) {
+                activeSession.prs = JSON.parse(JSON.stringify(matched.prs));
+            }
         }
     } else if(isActive && state.activeWorkoutState.startTime) {
         // Resuming
@@ -5312,9 +5336,10 @@ function getLastWeightSuggestion(exerciseId, sessionType, setType, setIndex) {
 }
 
 const renderWorkout = () => {
-
     try {
+    if (!activeSession) return;
     const content = document.getElementById('workout-content');
+    if (!content) return;
     content.innerHTML = '';
     
     // Block description banner at top of session
@@ -5329,13 +5354,13 @@ function isMultipowerExercise(ex) {
 
 let activePlateCalcTargetInput = null;
 let activePlateCalcSetObj = null;
-let currentPlateCalcBar = 25;
+let currentPlateCalcBar = 20;
 
 window.calculateBarbellPlates = calculateBarbellPlates;
 function calculateBarbellPlates(targetWeight, barWeight) {
     const platesAvailable = [25, 20, 15, 10, 5, 2.5, 1.25];
     const target = parseFloat(targetWeight) || 0;
-    const bar = parseFloat(barWeight) || 25;
+    const bar = parseFloat(barWeight) || 20;
 
     if (target < bar) {
         return {
@@ -5383,7 +5408,7 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
     } else if (exObj && /ez|curl.*barra/i.test(exObj.name)) {
         currentPlateCalcBar = 10;
     } else {
-        currentPlateCalcBar = 25;
+        currentPlateCalcBar = 20;
     }
 
     setPlateCalcBar(currentPlateCalcBar);
@@ -5469,6 +5494,16 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
             headerTitle = `(${groupName}) ${getTrExName(block.name)}`;
         }
         
+        const completedPrs = (activeSession && activeSession.prs) ? activeSession.prs : [];
+        const livePrsList = typeof currentWorkoutPRs !== 'undefined' ? Array.from(currentWorkoutPRs.values()) : [];
+        const blockHasPR = block.exercises.some(bEx => {
+            const exId = bEx.exerciseId;
+            const exNm = (bEx.name || '').toLowerCase();
+            return completedPrs.some(p => p.exerciseId === exId || (p.exerciseName && p.exerciseName.toLowerCase() === exNm)) ||
+                   livePrsList.some(p => p.exerciseId === exId || (p.exerciseName && p.exerciseName.toLowerCase() === exNm));
+        });
+        const prTrophyHeaderHtml = blockHasPR ? `<span class="badge-pr-trophy" title="¡Récord Personal superado en este ejercicio!" style="margin-left: 8px; color: #f59e0b; display: inline-flex; align-items: center; font-size: 16px; vertical-align: middle;"><i class="ph-fill ph-trophy"></i></span>` : '';
+
         // Header (Accordion)
         const header = document.createElement('div');
         header.classList.add('accordion-header');
@@ -5478,7 +5513,7 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
         <button type="button" class="btn-icon info-technique-btn" onclick="event.stopPropagation(); openTechniqueModal('${block.exercises[0].exerciseId}')" title="Ver técnica" style="margin-right: 6px; color: var(--color-accent); font-size: 18px; display: inline-flex; align-items: center; justify-content: center; vertical-align: middle; padding: 2px;">
             <i class="ph-bold ph-info"></i>
         </button>
-        <span>${headerTitle}</span>
+        <span>${headerTitle}</span>${prTrophyHeaderHtml}
         ${(() => {
             const firstEx = block.exercises[0];
             const match = getExerciseJointStress(firstEx.name, firstEx.group);
@@ -5607,8 +5642,19 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                     weightHtml = `<div style="display:flex; align-items:center; gap:4px;"><input type="number" step="any" inputmode="numeric" pattern="[0-9]*" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 50px; height: 32px; text-align: center; font-size: 13px; ${disabledStyle}" ${disabledAttr}>${plateBtn}</div>`;
                 }
 
+                const isSetPR = (set.isPR) || completedPrs.some(p => {
+                    const matchEx = p.exerciseId === ex.exerciseId || (p.exerciseName && p.exerciseName.toLowerCase() === (ex.name || '').toLowerCase());
+                    if (!matchEx) return false;
+                    const pWeight = parseFloat(p.weight) || 0;
+                    const sWeight = parseFloat(set.weight) || 0;
+                    const pReps = parseFloat(p.reps) || 0;
+                    const sReps = parseFloat(set.reps) || 0;
+                    return pWeight === sWeight && (pReps === 0 || sReps === 0 || pReps === sReps);
+                });
+                const prBadgeHtml = isSetPR ? `<span class="pr-badge" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 6px; padding: 1px 5px; font-size: 10px; font-weight: 800; margin-left: 4px; display: inline-flex; align-items: center; gap: 2px;" title="Récord Personal superado en esta serie"><i class="ph-bold ph-trophy"></i> PR</span>` : '';
+
                 setRow.innerHTML = `
-                    <div class="set-number" style="margin-top: 8px;">${setIndex + 1}</div>
+                    <div class="set-number" style="margin-top: 8px;">${setIndex + 1}${prBadgeHtml}</div>
                     <div style="display:flex; flex-direction:column; justify-content: flex-start; flex: 1; min-width: 0;">
                         <select class="set-type-select" disabled style="opacity: 0.95; cursor: not-allowed; pointer-events: none; width: 100%;">
                             <option value="Calentamiento" ${set.type==='Calentamiento'?'selected':''}>${getSetTypeT('Calentamiento')}</option>
@@ -5807,6 +5853,29 @@ document.getElementById('btn-delete-recurring').addEventListener('click', () => 
         const dayOfWeek = deletedDate.getDay();
         const baseName = (sessionToDelete.name || '').replace(/\s*\((?:Semana|Week|\d+)[^\)]*\)/i, '').trim().toLowerCase();
         
+        
+        const isRealLegSession = (sess) => {
+            if (!sess) return false;
+            const name = (sess.name || '').toLowerCase();
+            if (sess.type === 'goal' || name.includes('objetivo') || name.includes('pasos')) return false;
+            if (/\b(pierna|piernas|patas|cuadriceps|cuádriceps|femoral|femorales|isquios|isquiosurales|gemelo|gemelos|gluteo|glúteo|gluteos|glúteos|leg|legs|squat|squats)\b/i.test(name)) {
+                return true;
+            }
+            const allEx = (state && state.exercises) ? state.exercises : [];
+            return (sess.exercises || []).some(e => {
+                const fullEx = allEx.find(db => db.id === (e.exerciseId || e.id)) || e;
+                const exName = (fullEx.name || e.name || '').toLowerCase();
+                const exGroup = (fullEx.group || e.group || '').toLowerCase();
+                if (/\b(pierna|piernas|cuádriceps|cuadriceps|isquiosurales|glúteo|gluteo|gemelos)\b/i.test(exGroup)) return true;
+                return /\b(sentadilla|prensa|zancada|zancadas|squat|lunge|lunges|leg press|extensión de pierna|curl femoral|peso muerto rumano|gemelos)\b/i.test(exName);
+            });
+        };
+
+        if (isRealLegSession(sessionToDelete)) {
+            localStorage.setItem('gym_unlocked_skipped_leg_day', 'true');
+            if (typeof unlockAchievement === 'function') unlockAchievement('skipped_leg_day');
+        }
+
         state.sessions = state.sessions.filter(s => {
             const sDate = parseDateStr(s.date);
             if (sDate < deletedDate) return true; // Mantener sesiones pasadas
@@ -5864,7 +5933,16 @@ document.getElementById('finish-workout').addEventListener('click', () => {
         state.completedWorkouts = [];
     }
 
-    const workoutPrsList = typeof currentWorkoutPRs !== 'undefined' ? Array.from(currentWorkoutPRs.values()) : [];
+    // Deduplicate PRs so each exercise only appears ONCE (the best set)
+    const rawPrs = typeof currentWorkoutPRs !== 'undefined' ? Array.from(currentWorkoutPRs.values()) : [];
+    const uniquePrMap = new Map();
+    rawPrs.forEach(pr => {
+        const existing = uniquePrMap.get(pr.exerciseId);
+        if (!existing || (pr.weight > existing.weight) || (pr.weight === existing.weight && pr.reps > existing.reps)) {
+            uniquePrMap.set(pr.exerciseId, pr);
+        }
+    });
+    const workoutPrsList = Array.from(uniquePrMap.values());
     window.lastCompletedWorkoutData = {
         id: Date.now().toString(),
         sessionId: (activeSession && activeSession.id) ? activeSession.id : null,
@@ -5924,13 +6002,13 @@ function isMultipowerExercise(ex) {
 
 let activePlateCalcTargetInput = null;
 let activePlateCalcSetObj = null;
-let currentPlateCalcBar = 25;
+let currentPlateCalcBar = 20;
 
 window.calculateBarbellPlates = calculateBarbellPlates;
 function calculateBarbellPlates(targetWeight, barWeight) {
     const platesAvailable = [25, 20, 15, 10, 5, 2.5, 1.25];
     const target = parseFloat(targetWeight) || 0;
-    const bar = parseFloat(barWeight) || 25;
+    const bar = parseFloat(barWeight) || 20;
 
     if (target < bar) {
         return {
@@ -5978,7 +6056,7 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
     } else if (exObj && /ez|curl.*barra/i.test(exObj.name)) {
         currentPlateCalcBar = 10;
     } else {
-        currentPlateCalcBar = 25;
+        currentPlateCalcBar = 20;
     }
 
     setPlateCalcBar(currentPlateCalcBar);
@@ -6260,6 +6338,40 @@ window.checkSetPR = function(exerciseId, weight, reps, setRowEl, setIndex) {
         }
     }
 
+    // Check if an earlier set in this same workout session already matched or beat this PR
+    let beatenByEarlierSet = false;
+    currentWorkoutPRs.forEach((val, k) => {
+        if (k.startsWith(exerciseId + '_')) {
+            const earlierIdx = parseInt(k.split('_')[1]);
+            if (earlierIdx < setIndex) {
+                if (val.weight >= wVal && val.reps >= rVal) {
+                    beatenByEarlierSet = true;
+                }
+            }
+        }
+    });
+
+    if (beatenByEarlierSet) {
+        isPR = false;
+    }
+
+    // Check if an earlier set in this same workout session already matched or beat this PR
+    let beatenByEarlierSet = false;
+    currentWorkoutPRs.forEach((val, k) => {
+        if (k.startsWith(exerciseId + '_')) {
+            const earlierIdx = parseInt(k.split('_')[1]);
+            if (earlierIdx < setIndex) {
+                if (val.weight >= wVal && val.reps >= rVal) {
+                    beatenByEarlierSet = true;
+                }
+            }
+        }
+    });
+
+    if (beatenByEarlierSet) {
+        isPR = false;
+    }
+
     if (isPR) {
         currentWorkoutPRs.set(prKey, {
             exerciseId,
@@ -6280,7 +6392,27 @@ window.checkSetPR = function(exerciseId, weight, reps, setRowEl, setIndex) {
                 badge.title = prLabel;
                 setNumberEl.appendChild(badge);
             }
+
+            // Also show trophy icon in exercise accordion header
+            const accordionItem = setRowEl.closest('.accordion-item');
+            if (accordionItem) {
+                const headerTitle = accordionItem.querySelector('.accordion-header h3 span') || accordionItem.querySelector('.accordion-header span');
+                if (headerTitle && !accordionItem.querySelector('.live-pr-trophy')) {
+                    const trophy = document.createElement('span');
+                    trophy.className = 'live-pr-trophy';
+                    trophy.style.cssText = 'color: #f59e0b; margin-left: 6px; font-size: 16px; display: inline-flex; align-items: center;';
+                    trophy.title = '¡Récord Personal superado en esta sesión!';
+                    trophy.innerHTML = '<i class="ph-fill ph-trophy"></i>';
+                    headerTitle.parentElement.insertBefore(trophy, headerTitle.nextSibling);
+                }
+            }
         }
+
+        // Trigger PR achievement immediately
+        try {
+            if (typeof unlockAchievement === 'function') unlockAchievement('first_pr');
+            localStorage.setItem('gym_unlocked_first_pr', 'true');
+        } catch(e) {}
     } else {
         currentWorkoutPRs.delete(prKey);
     }
@@ -6339,7 +6471,17 @@ window.showWorkoutSummaryModal = function(workoutData) {
     if (volEl) volEl.textContent = `${Math.round(totalVolume).toLocaleString()} kg`;
     if (setsEl) setsEl.textContent = completedSetsCount;
 
-    const prsArray = Array.from(currentWorkoutPRs.values());
+    // Deduplicate PRs so each exercise only appears ONCE
+    const rawPrs = (workoutData && Array.isArray(workoutData.prs)) ? workoutData.prs : Array.from(currentWorkoutPRs.values());
+    const uniquePrMap = new Map();
+    rawPrs.forEach(pr => {
+        const id = pr.exerciseId || pr.name || pr.exerciseName;
+        const existing = uniquePrMap.get(id);
+        if (!existing || (pr.weight > existing.weight) || (pr.weight === existing.weight && pr.reps > existing.reps)) {
+            uniquePrMap.set(id, pr);
+        }
+    });
+    const prsArray = Array.from(uniquePrMap.values());
     if (prsCountEl) prsCountEl.textContent = prsArray.length;
 
     // Render PRs
@@ -6696,8 +6838,12 @@ const renderGlobalHistory = () => {
                 if (s && s.weight && Number(s.weight) > maxW) maxW = Number(s.weight); 
             });
             
+            const wPrs = Array.isArray(w.prs) ? w.prs : [];
+            const exPr = wPrs.find(p => (ex.exerciseId && p.exerciseId === ex.exerciseId) || (p.exerciseName && p.exerciseName.toLowerCase() === (ex.name || '').toLowerCase()));
+            const exPrTrophy = exPr ? `<span class="pr-badge" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 6px; padding: 1px 6px; font-size: 11px; font-weight: 800; margin-left: 6px; display: inline-flex; align-items: center; gap: 3px;" title="¡Récord Personal superado!"><i class="ph-fill ph-trophy"></i> PR</span>` : '';
+
             body.innerHTML += `<div class="history-set" style="margin-top:8px;">
-                <strong style="color:var(--text-primary);">${getTrExName(ex.name)}</strong> 
+                <strong style="color:var(--text-primary);">${getTrExName(ex.name)}${exPrTrophy}</strong> 
                 <span style="color:var(--color-accent); font-weight:600;">Max: ${maxW}kg</span>
             </div>`;
             
@@ -6708,10 +6854,15 @@ const renderGlobalHistory = () => {
                 </div>`;
             }
             
+            let prMarkedForEx = false;
             sets.forEach((s, idx) => {
                 if (!s) return;
+                const isSetPR = !prMarkedForEx && exPr && parseFloat(s.weight) === parseFloat(exPr.weight) && (!exPr.reps || parseFloat(s.reps) === parseFloat(exPr.reps));
+                if (isSetPR) prMarkedForEx = true;
+                if (isSetPR) prMarkedForEx = true;
+                const setPrBadge = isSetPR ? `<span style="color:#f59e0b; font-weight:800; margin-left:4px;"><i class="ph-fill ph-trophy"></i> PR</span>` : '';
                 body.innerHTML += `<div style="font-size:11px; display:flex; justify-content:space-between; color:var(--text-secondary); padding: 2px 0;">
-                    <span>${getT('workout.series') || 'Serie'} ${idx+1} (${getSetTypeT(s.type)})</span> <span>${s.reps || '-'} x ${s.weight || 0}kg</span>
+                    <span>${getT('workout.series') || 'Serie'} ${idx+1} (${getSetTypeT(s.type)})${setPrBadge}</span> <span>${s.reps || '-'} x ${s.weight || 0}kg</span>
                 </div>`;
             });
         });
@@ -8324,6 +8475,12 @@ document.getElementById('btn-export-calendar').addEventListener('click', async (
         };
         const jsonStr = JSON.stringify(data);
         const filename = 'gymtracker_planned_' + new Date().toISOString().split('T')[0] + '.json';
+
+        localStorage.setItem('gym_has_exported_json', 'true');
+        localStorage.setItem('gym_last_export_json_raw', jsonStr.trim());
+        localStorage.setItem('gym_last_export_date_str', new Date().toISOString().split('T')[0]);
+        if (typeof unlockAchievement === 'function') unlockAchievement('data_analyst');
+
         
         if (window.Capacitor && window.Capacitor.Plugins.SaveAs && window.Capacitor.Plugins.Filesystem) {
             try {
@@ -8369,6 +8526,18 @@ document.getElementById('file-import-calendar').addEventListener('change', (e) =
     const reader = new FileReader();
     reader.onload = (ev) => {
         try {
+            
+            // Check Nudo de Automatización (Exportar e importar el mismo día sin modificar nada)
+            const todayStr = new Date().toISOString().split('T')[0];
+            const lastExpDate = localStorage.getItem('gym_last_export_date_str');
+            const lastExpRaw = localStorage.getItem('gym_last_export_json_raw');
+            const importedRaw = String(ev.target.result).trim();
+
+            if (lastExpDate === todayStr && lastExpRaw && lastExpRaw === importedRaw) {
+                localStorage.setItem('gym_unlocked_automation_loop', 'true');
+                if (typeof unlockAchievement === 'function') unlockAchievement('automation_loop');
+            }
+
             const data = JSON.parse(ev.target.result);
             if (data.gym_exercises) localStorage.setItem('gym_exercises', data.gym_exercises);
             if (data.gym_groups) localStorage.setItem('gym_groups', data.gym_groups);
@@ -8409,6 +8578,12 @@ document.getElementById('btn-backup-export')?.addEventListener('click', async ()
         };
         const jsonStr = JSON.stringify(data);
         const filename = 'gymtracker_backup_' + new Date().toISOString().split('T')[0] + '.json';
+
+        localStorage.setItem('gym_has_exported_json', 'true');
+        localStorage.setItem('gym_last_export_json_raw', jsonStr.trim());
+        localStorage.setItem('gym_last_export_date_str', new Date().toISOString().split('T')[0]);
+        if (typeof unlockAchievement === 'function') unlockAchievement('data_analyst');
+
         
         if (window.Capacitor && window.Capacitor.Plugins.SaveAs && window.Capacitor.Plugins.Filesystem) {
             try {
@@ -8582,7 +8757,7 @@ window.generateDashboard = function(mode) {
     }
 };
 
-const CURRENT_APP_VERSION = '1.2.6';
+const CURRENT_APP_VERSION = '1.2.8';
 function compareVersions(v1, v2) {
     const p1 = String(v1).split('.').map(Number);
     const p2 = String(v2).split('.').map(Number);
@@ -8598,26 +8773,22 @@ window.latestUpdateData = null;
 
 const DEFAULT_APP_CHANGELOG = {
     es: [
+        "🏃 **Pestaña de Actividad & Samsung Health**: Integración con el sensor de podómetro del dispositivo y enlace directo con Samsung Health a través de Conexión de Salud (Health Connect), mostrando pasos diarios, distancia real en km, calorías y sesiones de entrenamiento.",
         "🏆 **36 Logros y Medallas Desbloqueables**: 10 nuevos hitos míticos implementados (Club 100 kg Banca, Respeto al Leg Day, 250t, 500t, 1 Millón de kg, Sesión Gladiador 20t, Maestro de la Biomecánica, El Escultor, Vientre de Acero, Embajador del Esfuerzo).",
         "🌐 **Apertura en Navegador por Defecto**: Todos los enlaces externos y descargas ahora se abren en el navegador predeterminado del teléfono (Samsung Internet, Brave, Firefox, etc.) mediante intent nativo de Android en lugar de forzar Chrome.",
         "🩺 **Gestor de Molestias y Articulaciones Sensibles**: Registra molestias en hombros, codos, rodillas, lumbares, muñecas o caderas y recibe avisos inteligentes preventivos durante el entreno ('⚠️ Cuidado: Hombro') con sugerencias de variantes seguras sustituibles en 1 toque.",
         "👻 **Modo Fantasma en Vivo (Ghost Workout)**: Durante tu entrenamiento en vivo, cada serie muestra de forma tenue tu marca anterior ('Última vez: X kg × Y reps') para saber exactamente qué tienes que batir, con autorrellenado automático en 1 toque al tocar la marca.",
-        "🏃 **Nueva Pestaña de Actividad & Samsung Health**: Consulta en tiempo real tus pasos diarios con anillo de meta circular, distancia en km, calorías de actividad, sesiones de ejercicio y horas de sueño sincronizadas con Samsung Health y Conexión de Salud (Health Connect).",
-        "⌚ **Companion para Smartwatch (Wear OS / Galaxy Watch)**: Control del entrenamiento en muñeca en Samsung Galaxy Watch con vibración háptica de doble pulso al finalizar descansos, pulsómetro en tiempo real y simulador circular AMOLED.",
-        "💻 **Portal Web / Dashboard de Escritorio para Entrenador**: Plataforma web de escritorio ('coach.html') para diseñar mesociclos, gestionar múltiples atletas/alumnos, revisar adherencia, gráficos de volumen por grupo muscular y exportar rutinas en 1 clic.",
         "📸 **Tarjeta para Historias (PNG Nativo)**: Compartición directa del archivo de imagen a Instagram Stories, WhatsApp y Telegram.",
         "💾 **Descarga Directa en Dispositivo**: Guardado directo de la imagen de tarjeta de entreno en la galería/almacenamiento.",
         "✏️ **Edición de Sesiones Finalizadas**: Rediseño limpio de cabecera con botón de editar y distintivo verde sin textos redundantes.",
         "🔄 **Sincronización Total con el Historial**: Actualización en tiempo real de pesos y repeticiones editadas en el historial y marcas personales (PRs)."
 ],
     en: [
+        "🏃 **Activity Tab & Samsung Health Integration**: Native pedometer hardware sensor integration and direct Samsung Health linking via Health Connect, displaying daily steps, real distance in km, calories, and training sessions.",
         "🏆 **36 Unlockable Achievements & Trophies**: 10 new iconic milestones implemented (Bench Club 100 kg, Leg Day Respect, 250t, 500t, 1M kg, Gladiator Session 20t, Technique Master, The Sculptor, Steel Waist, Story Ambassador).",
         "🌐 **Default Browser Support**: External links and downloads now open in your phone's selected default browser (Samsung Internet, Brave, Firefox, etc.) via native Android intent instead of forcing Chrome.",
         "🩺 **Joint Discomfort & Injury Manager**: Log active discomfort in shoulders, elbows, knees, lower back, wrists, or hips and receive live preventive alerts ('⚠️ Careful: Shoulder') with 1-tap safe exercise replacements.",
         "👻 **Live Ghost Workout Mode**: Every set displays your previous performance ('Last time: X kg × Y reps') so you know what to beat, with 1-tap autofill by tapping the ghost tag.",
-        "🏃 **New Activity Tab & Samsung Health Integration**: Real-time daily steps ring with custom goal, distance in km, active calories, workout sessions, and sleep hours synced with Samsung Health via Health Connect.",
-        "⌚ **Smartwatch Companion (Wear OS / Galaxy Watch)**: Wrist workout control for Samsung Galaxy Watch with dual-pulse haptic vibrations on rest timer end, real-time heart rate, and circular AMOLED watch simulator.",
-        "💻 **Coach Desktop Web Portal & Dashboard**: Dedicated desktop web platform ('coach.html') to design mesocycles, manage multiple athletes, inspect adherence, muscle volume charts, and 1-click routine export.",
         "📸 **Story Cards (Native PNG)**: Share real image files directly to Instagram Stories, WhatsApp, and Telegram.",
         "💾 **Direct Device Download**: Working save image to device/gallery button.",
         "✏️ **Completed Session Editing**: Clean header layout without redundant text.",
@@ -8978,6 +9149,16 @@ function initApp() {
         }
     }
     
+    
+    // Check first run welcome tutorial
+    if (!localStorage.getItem('gym_tutorial_seen')) {
+        setTimeout(() => {
+            if (typeof openWelcomeTutorialModal === 'function') {
+                openWelcomeTutorialModal();
+            }
+        }, 1200);
+    }
+
     const calNav = document.querySelector('.nav-item[data-target="view-calendar"]');
     if (calNav) {
         calNav.click();
@@ -9319,51 +9500,1224 @@ window.renderWeeklyMuscleVolume = function() {
 };
 
 // =========================================================================
-// 4. ACHIEVEMENTS SYSTEM (26 LOGROS & MEDALLAS)
+// 4. ACHIEVEMENTS SYSTEM (50 LOGROS & MEDALLAS MULTI-IDIOMA CON PROGRESO)
 // =========================================================================
+
 const ACHIEVEMENTS_CATALOG = [
-    { id: 'first_workout', title: 'Primer Paso', desc: 'Completa tu primer entrenamiento en la app.', icon: 'ph-sneaker', tier: 'bronze', category: 'streak' },
-    { id: 'strength_60', title: 'Club 60 kg', desc: 'Levanta 60 kg o más en cualquier ejercicio.', icon: 'ph-barbell', tier: 'bronze', category: 'strength' },
-    { id: 'strength_80', title: 'Club 80 kg', desc: 'Levanta 80 kg o más en cualquier ejercicio.', icon: 'ph-barbell', tier: 'silver', category: 'strength' },
-    { id: 'strength_100', title: 'Club 100 kg', desc: '¡Tres dígitos! Levanta 100 kg o más en un ejercicio.', icon: 'ph-trophy', tier: 'gold', category: 'strength' },
-    { id: 'bench_100', title: 'Club de la Banca (100 kg)', desc: '¡El rito de paso sagrado! Levanta 100 kg o más en Press de Banca.', icon: 'ph-barbell', tier: 'gold', category: 'strength' },
-    { id: 'strength_120', title: 'Club 120 kg', desc: 'Fuerza pesada: levanta 120 kg o más.', icon: 'ph-crown', tier: 'diamond', category: 'strength' },
-    { id: 'strength_140', title: 'Club 140 kg+', desc: 'Fuerza de élite: supera los 140 kg en un levantamiento.', icon: 'ph-fire', tier: 'master', category: 'strength' },
-    
-    { id: 'streak_3_week', title: 'Semana de Fuego', desc: 'Completa al menos 3 entrenamientos en la misma semana.', icon: 'ph-flame', tier: 'bronze', category: 'streak' },
-    { id: 'perfect_week', title: 'Semana Perfecta', desc: 'Completa 4 o más entrenamientos en una semana.', icon: 'ph-lightning', tier: 'silver', category: 'streak' },
-    { id: 'leg_day_respect', title: 'Respeto al Leg Day', desc: 'Completa al menos 4 entrenamientos de Pierna en el mismo mes.', icon: 'ph-shield-check', tier: 'silver', category: 'streak' },
-    { id: 'workouts_5', title: 'Iniciación Constante', desc: 'Completa 5 entrenamientos registrados en tu historial.', icon: 'ph-medal', tier: 'bronze', category: 'streak' },
-    { id: 'workouts_15', title: 'Hábito Forjado', desc: 'Completa 15 entrenamientos totales.', icon: 'ph-medal', tier: 'silver', category: 'streak' },
-    { id: 'workouts_30', title: 'Guerrero del Hierro', desc: 'Completa 30 entrenamientos en tu trayectoria.', icon: 'ph-medal', tier: 'gold', category: 'streak' },
-    { id: 'workouts_50', title: 'Medio Centenar', desc: 'Alcanza 50 entrenamientos completados.', icon: 'ph-crown', tier: 'diamond', category: 'streak' },
-    { id: 'workouts_100', title: 'Centurión Legendario', desc: '¡100 entrenamientos! Hito reservado a los más disciplinados.', icon: 'ph-trophy', tier: 'master', category: 'streak' },
-
-    { id: 'volume_5k', title: 'Camión Ligero', desc: 'Mueve más de 5.000 kg de volumen total en una sola sesión.', icon: 'ph-truck', tier: 'bronze', category: 'volume' },
-    { id: 'volume_10k', title: 'Grúa Pesada', desc: 'Mueve más de 10.000 kg de volumen total en una sesión.', icon: 'ph-gauge', tier: 'silver', category: 'volume' },
-    { id: 'volume_15k', title: 'Titán del Acero', desc: 'Mueve más de 15.000 kg de volumen en una sesión épica.', icon: 'ph-rocket', tier: 'gold', category: 'volume' },
-    { id: 'volume_20k_session', title: 'Sesión Gladiador', desc: 'Mueve más de 20.000 kg de volumen total en una sola sesión.', icon: 'ph-sword', tier: 'gold', category: 'volume' },
-    { id: 'volume_total_100k', title: 'Rompedor de Cargas', desc: 'Acumula más de 100.000 kg de volumen total histórico.', icon: 'ph-mountains', tier: 'diamond', category: 'volume' },
-    { id: 'volume_250k', title: 'El Peso de un Tren', desc: 'Acumula más de 250.000 kg de volumen total levantado.', icon: 'ph-train', tier: 'gold', category: 'volume' },
-    { id: 'volume_500k', title: 'El Boeing 747', desc: 'Medio millón de kilos: acumula más de 500.000 kg de volumen histórico.', icon: 'ph-airplane-tilt', tier: 'diamond', category: 'volume' },
-    { id: 'volume_1m', title: 'Millonario del Acero', desc: '¡1.000.000 kg! Hito legendario reservado a auténticos titanes.', icon: 'ph-crown', tier: 'master', category: 'volume' },
-    
-    { id: 'to_failure', title: 'Hasta el Límite', desc: 'Registra tu primera serie llevada "Al fallo".', icon: 'ph-skull', tier: 'bronze', category: 'effort' },
-    { id: 'dropset_done', title: 'Maestro del Dropset', desc: 'Completa una serie Dropset utilizando la calculadora %.', icon: 'ph-percent', tier: 'bronze', category: 'effort' },
-    { id: 'first_pr', title: 'Rompe-Límites', desc: 'Consigue tu primer Récord Personal (PR) histórico.', icon: 'ph-trend-up', tier: 'silver', category: 'pr' },
-    { id: 'pr_triple', title: 'Lluvia de Récords', desc: 'Supera 3 o más récords personales en un solo entrenamiento.', icon: 'ph-sparkle', tier: 'gold', category: 'pr' },
-
-    { id: 'early_bird', title: 'Madrugador', desc: 'Completa un entrenamiento antes de las 9:00 AM.', icon: 'ph-sun-horizon', tier: 'bronze', category: 'lifestyle' },
-    { id: 'night_owl', title: 'Guerrero Nocturno', desc: 'Completa un entrenamiento después de las 20:30 PM.', icon: 'ph-moon-stars', tier: 'bronze', category: 'lifestyle' },
-    { id: 'iron_hour', title: 'Sesión de Hierro', desc: 'Completa un entrenamiento con más de 60 minutos de duración.', icon: 'ph-timer', tier: 'silver', category: 'lifestyle' },
-    { id: 'first_evolution', title: 'Seguimiento Riguroso', desc: 'Guarda tu primer registro de peso o medidas corporales.', icon: 'ph-scales', tier: 'bronze', category: 'lifestyle' },
-    { id: 'photo_sculptor', title: 'El Escultor', desc: 'Registra fotos de evolución corporal y compáralas en el visor antes/después.', icon: 'ph-camera', tier: 'silver', category: 'lifestyle' },
-    { id: 'steel_waist', title: 'Vientre de Acero', desc: 'Registra una reducción de 2 cm o más en tu medida de cintura.', icon: 'ph-arrows-in-line-horizontal', tier: 'gold', category: 'lifestyle' },
-    { id: 'technique_master', title: 'Maestro de la Biomecánica', desc: 'Consulta la técnica y ejecución de al menos 10 ejercicios diferentes.', icon: 'ph-book-open-text', tier: 'silver', category: 'lifestyle' },
-    { id: 'story_ambassador', title: 'Embajador del Esfuerzo', desc: 'Genera y comparte una Tarjeta de Historias para mostrar tu entrenamiento.', icon: 'ph-share-network', tier: 'bronze', category: 'lifestyle' },
-    { id: 'full_body_week', title: 'Atleta Completo', desc: 'Entrena pecho, espalda, hombros y piernas en la misma semana.', icon: 'ph-person-simple-run', tier: 'gold', category: 'lifestyle' }
+    { id: 'first_workout', title: "Primer paso", desc: "Completa tu primer entrenamiento en la app.", icon: 'ph-sneaker', tier: 'bronze', category: 'streak' },
+    { id: 'strength_60', title: "Club 60 kg", desc: "Levanta 60 kg o más en cualquier ejercicio.", icon: 'ph-barbell', tier: 'bronze', category: 'strength' },
+    { id: 'strength_80', title: "Club 80 kg", desc: "Levanta 80 kg o más en cualquier ejercicio.", icon: 'ph-barbell', tier: 'silver', category: 'strength' },
+    { id: 'strength_100', title: "Club 100 kg", desc: "¡Tres dígitos! Levanta 100 kg o más en un ejercicio.", icon: 'ph-trophy', tier: 'gold', category: 'strength' },
+    { id: 'bench_100', title: "Club de la banca (100 kg)", desc: "¡El rito sagrado! Levanta 100 kg o más en press de banca.", icon: 'ph-barbell', tier: 'gold', category: 'strength' },
+    { id: 'strength_120', title: "Club 120 kg", desc: "Fuerza pesada: levanta 120 kg o más.", icon: 'ph-crown', tier: 'diamond', category: 'strength' },
+    { id: 'strength_140', title: "Club 140 kg+", desc: "Fuerza de élite: supera los 140 kg en un levantamiento.", icon: 'ph-fire', tier: 'master', category: 'strength' },
+    { id: 'streak_3_week', title: "Semana de fuego", desc: "Completa al menos 3 entrenamientos en la misma semana.", icon: 'ph-flame', tier: 'bronze', category: 'streak' },
+    { id: 'perfect_week', title: "Semana perfecta", desc: "Completa 4 o más entrenamientos en una semana.", icon: 'ph-lightning', tier: 'silver', category: 'streak' },
+    { id: 'leg_day_respect', title: "Respeto al leg day", desc: "Completa al menos 4 entrenamientos de pierna en el mismo mes.", icon: 'ph-shield-check', tier: 'silver', category: 'streak' },
+    { id: 'workouts_5', title: "Iniciación constante", desc: "Completa 5 entrenamientos registrados en tu historial.", icon: 'ph-medal', tier: 'bronze', category: 'streak' },
+    { id: 'workouts_15', title: "Hábito forjado", desc: "Completa 15 entrenamientos totales.", icon: 'ph-medal', tier: 'silver', category: 'streak' },
+    { id: 'workouts_30', title: "Guerrero del hierro", desc: "Completa 30 entrenamientos en tu trayectoria.", icon: 'ph-medal', tier: 'gold', category: 'streak' },
+    { id: 'workouts_50', title: "Medio centenar", desc: "Alcanza 50 entrenamientos completados.", icon: 'ph-crown', tier: 'diamond', category: 'streak' },
+    { id: 'workouts_100', title: "Centurión legendario", desc: "¡100 entrenamientos! Hito reservado a los más disciplinados.", icon: 'ph-trophy', tier: 'master', category: 'streak' },
+    { id: 'volume_5k', title: "Camión ligero", desc: "Mueve más de 5.000 kg de volumen total en una sola sesión.", icon: 'ph-truck', tier: 'bronze', category: 'volume' },
+    { id: 'volume_10k', title: "Grúa pesada", desc: "Mueve más de 10.000 kg de volumen total en una sesión.", icon: 'ph-gauge', tier: 'silver', category: 'volume' },
+    { id: 'volume_15k', title: "Titán del acero", desc: "Mueve más de 15.000 kg de volumen en una sesión épica.", icon: 'ph-rocket', tier: 'gold', category: 'volume' },
+    { id: 'volume_20k_session', title: "Sesión gladiador", desc: "Mueve más de 20.000 kg de volumen total en una sola sesión.", icon: 'ph-sword', tier: 'gold', category: 'volume' },
+    { id: 'volume_total_100k', title: "Rompedor de cargas", desc: "Acumula más de 100.000 kg de volumen total histórico.", icon: 'ph-mountains', tier: 'diamond', category: 'volume' },
+    { id: 'volume_250k', title: "El peso de un tren", desc: "Acumula más de 250.000 kg de volumen total levantado.", icon: 'ph-train', tier: 'gold', category: 'volume' },
+    { id: 'volume_500k', title: "El Boeing 747", desc: "Medio millón de kilos: acumula más de 500.000 kg de volumen histórico.", icon: 'ph-airplane-tilt', tier: 'diamond', category: 'volume' },
+    { id: 'volume_1m', title: "Millonario del acero", desc: "¡1.000.000 kg! Hito legendario reservado a auténticos titanes.", icon: 'ph-crown', tier: 'master', category: 'volume' },
+    { id: 'to_failure', title: "Hasta el límite", desc: "Registra tu primera serie llevada \"Al fallo\".", icon: 'ph-skull', tier: 'bronze', category: 'effort' },
+    { id: 'dropset_done', title: "Maestro del dropset", desc: "Completa una serie dropset utilizando la calculadora %.", icon: 'ph-percent', tier: 'bronze', category: 'effort' },
+    { id: 'first_pr', title: "Rompe-límites", desc: "Consigue tu primer récord personal (PR) histórico.", icon: 'ph-trend-up', tier: 'silver', category: 'pr' },
+    { id: 'pr_triple', title: "Lluvia de récords", desc: "Supera 3 o más récords personales en un solo entrenamiento.", icon: 'ph-sparkle', tier: 'gold', category: 'pr' },
+    { id: 'early_bird', title: "Madrugador", desc: "Completa un entrenamiento antes de las 9:00 AM.", icon: 'ph-sun-horizon', tier: 'bronze', category: 'lifestyle' },
+    { id: 'night_owl', title: "Guerrero nocturno", desc: "Completa un entrenamiento después de las 20:30 PM.", icon: 'ph-moon-stars', tier: 'bronze', category: 'lifestyle' },
+    { id: 'iron_hour', title: "Sesión de hierro", desc: "Completa un entrenamiento con más de 60 minutos de duración.", icon: 'ph-timer', tier: 'silver', category: 'lifestyle' },
+    { id: 'first_evolution', title: "Seguimiento riguroso", desc: "Guarda tu primer registro de peso o medidas corporales.", icon: 'ph-scales', tier: 'bronze', category: 'lifestyle' },
+    { id: 'photo_sculptor', title: "El escultor", desc: "Registra fotos de evolución corporal y compáralas en el visor antes/después.", icon: 'ph-camera', tier: 'silver', category: 'lifestyle' },
+    { id: 'steel_waist', title: "Vientre de acero", desc: "Registra una reducción de 2 cm o más en tu medida de cintura.", icon: 'ph-arrows-in-line-horizontal', tier: 'gold', category: 'lifestyle' },
+    { id: 'technique_master', title: "Maestro de la biomecánica", desc: "Consulta la técnica y ejecución de al menos 10 ejercicios diferentes.", icon: 'ph-book-open-text', tier: 'silver', category: 'lifestyle' },
+    { id: 'story_ambassador', title: "Embajador del esfuerzo", desc: "Genera y comparte una tarjeta de historias para mostrar tu entrenamiento.", icon: 'ph-share-network', tier: 'bronze', category: 'lifestyle' },
+    { id: 'full_body_week', title: "Atleta completo", desc: "Entrena pecho, espalda, hombros y piernas en la misma semana.", icon: 'ph-person-simple-run', tier: 'gold', category: 'lifestyle' },
+    { id: 'data_analyst', title: "Analista de datos", desc: "Exportar el historial de entrenamientos a JSON por primera vez para alimentar el dashboard.", icon: 'ph-chart-pie-slice', tier: 'bronze', category: 'special' },
+    { id: 'the_architect', title: "El arquitecto", desc: "Crear y guardar una rutina compleja de varios meses utilizando los grupos de ejercicios colapsables.", icon: 'ph-tree-structure', tier: 'gold', category: 'special' },
+    { id: 'controlled_chaos', title: "Caos controlado", desc: "Utilizar la función de reordenar ejercicios en medio de una sesión activa para adaptarte a un gimnasio lleno.", icon: 'ph-shuffle', tier: 'bronze', category: 'effort' },
+    { id: 'server_overload', title: "Sobrecarga del servidor", desc: "Superar las 1.000 series totales registradas en la base de datos de la app.", icon: 'ph-hard-drives', tier: 'diamond', category: 'volume' },
+    { id: 'iron_discipline', title: "Disciplina de hierro", desc: "Entrenar en tu cumpleaños o en un día festivo nacional de tu país.", icon: 'ph-calendar-check', tier: 'gold', category: 'streak' },
+    { id: 'grindelwald_legs', title: "Piernas de Grindelwald", desc: "Acumular 50.000 kg de volumen en sentadillas, prensa y zancadas como para escalar una montaña.", icon: 'ph-mountains', tier: 'master', category: 'volume' },
+    { id: 'skipped_leg_day', title: "Día de pierna saltado", desc: "Salta tu primer entrenamiento de pierna.", icon: 'ph-prohibit', tier: 'bronze', category: 'special' },
+    { id: 'paladin_aura', title: "Aura del paladín", desc: "Completar 20 sesiones enfocadas en el core y músculos estabilizadores.", icon: 'ph-shield-plus', tier: 'gold', category: 'strength' },
+    { id: 'cleave_strike', title: "Golpe de rajar (Cleave)", desc: "Batir récords personales en 3 ejercicios compuestos diferentes en una sola sesión.", icon: 'ph-sword', tier: 'diamond', category: 'pr' },
+    { id: 'total_sync_365', title: "Sincronización total", desc: "Tener registros en la base de datos JSON que abarquen los 365 días del año.", icon: 'ph-globe', tier: 'master', category: 'streak' },
+    { id: 'gemini_oracle', title: "Oráculo de Gemini", desc: "Utilizar la integración de IA por primera vez para analizar tu rendimiento o generar una rutina.", icon: 'ph-sparkle', tier: 'bronze', category: 'special' },
+    { id: 'assembler_optimizer', title: "Optimizador de ensamblador", desc: "Terminar una rutina en un 15% menos de tiempo manteniendo el mismo volumen.", icon: 'ph-timer', tier: 'gold', category: 'effort' },
+    { id: 'carlos_awakening', title: "El despertar de Carlo", desc: "Registra un entrenamiento de al menos media hora un domingo a las 03:00 AM. \"Dónde demonios estoy?\"", icon: 'ph-mask-happy', tier: 'gold', category: 'pr' },
+    { id: 'automation_loop', title: "Nudo de automatización", desc: "Exportar la base de datos JSON e importarla de nuevo el mismo día sin haber modificado nada.", icon: 'ph-arrows-counter-clockwise', tier: 'silver', category: 'special' }
 ];
 window.ACHIEVEMENTS_CATALOG = ACHIEVEMENTS_CATALOG;
+
+const ACHIEVEMENT_TRANSLATIONS = {
+  "first_workout": {
+    "es": {
+      "title": "Primer paso",
+      "desc": "Completa tu primer entrenamiento en la app."
+    },
+    "en": {
+      "title": "First step",
+      "desc": "Complete your first workout in the app."
+    },
+    "ru": {
+      "title": "Первый шаг",
+      "desc": "Завершите свою первую тренировку в приложении."
+    },
+    "et": {
+      "title": "Esimene samm",
+      "desc": "Lõpeta oma esimene treening rakenduses."
+    },
+    "uk": {
+      "title": "Перший крок",
+      "desc": "Завершіть своє перше тренування у додатку."
+    }
+  },
+  "strength_60": {
+    "es": {
+      "title": "Club 60 kg",
+      "desc": "Levanta 60 kg o más en cualquier ejercicio."
+    },
+    "en": {
+      "title": "60 kg club",
+      "desc": "Lift 60 kg or more in any exercise."
+    },
+    "ru": {
+      "title": "Клуб 60 кг",
+      "desc": "Поднимите 60 кг или более в любом упражнении."
+    },
+    "et": {
+      "title": "60 kg klubi",
+      "desc": "Tõsta 60 kg või rohkem mis tahes harjutuses."
+    },
+    "uk": {
+      "title": "Клуб 60 кг",
+      "desc": "Підніміть 60 кг або більше у будь-якій вправі."
+    }
+  },
+  "strength_80": {
+    "es": {
+      "title": "Club 80 kg",
+      "desc": "Levanta 80 kg o más en cualquier ejercicio."
+    },
+    "en": {
+      "title": "80 kg club",
+      "desc": "Lift 80 kg or more in any exercise."
+    },
+    "ru": {
+      "title": "Клуб 80 кг",
+      "desc": "Поднимите 80 кг или более в любом упражнении."
+    },
+    "et": {
+      "title": "80 kg klubi",
+      "desc": "Tõsta 80 kg või rohkem mis tahes harjutuses."
+    },
+    "uk": {
+      "title": "Клуб 80 кг",
+      "desc": "Підніміть 80 кг або більше у будь-якій вправі."
+    }
+  },
+  "strength_100": {
+    "es": {
+      "title": "Club 100 kg",
+      "desc": "¡Tres dígitos! Levanta 100 kg o más en un ejercicio."
+    },
+    "en": {
+      "title": "100 kg club",
+      "desc": "Triple digits! Lift 100 kg or more in an exercise."
+    },
+    "ru": {
+      "title": "Клуб 100 кг",
+      "desc": "Трехзначный вес! Поднимите 100 кг или более."
+    },
+    "et": {
+      "title": "100 kg klubi",
+      "desc": "Kolmekohaline number! Tõsta 100 kg või rohkem."
+    },
+    "uk": {
+      "title": "Клуб 100 кг",
+      "desc": "Тризначна вага! Підніміть 100 кг або більше."
+    }
+  },
+  "bench_100": {
+    "es": {
+      "title": "Club de la banca (100 kg)",
+      "desc": "¡El rito sagrado! Levanta 100 kg o más en press de banca."
+    },
+    "en": {
+      "title": "Bench club (100 kg)",
+      "desc": "The sacred rite! Lift 100 kg or more in bench press."
+    },
+    "ru": {
+      "title": "Клуб жима (100 кг)",
+      "desc": "Священный рубеж! Выжмите 100 кг или более в жиме лежа."
+    },
+    "et": {
+      "title": "Surumise klubi (100 kg)",
+      "desc": "Püha verstapost! Suru lamades 100 kg või rohkem."
+    },
+    "uk": {
+      "title": "Клуб жиму (100 кг)",
+      "desc": "Священний рубіж! Витисніть 100 кг або більше у жимі лежачи."
+    }
+  },
+  "strength_120": {
+    "es": {
+      "title": "Club 120 kg",
+      "desc": "Fuerza pesada: levanta 120 kg o más."
+    },
+    "en": {
+      "title": "120 kg club",
+      "desc": "Heavy duty: lift 120 kg or more."
+    },
+    "ru": {
+      "title": "Клуб 120 кг",
+      "desc": "Тяжелый вес: поднимите 120 кг или более."
+    },
+    "et": {
+      "title": "120 kg klubi",
+      "desc": "Raskekaal: tõsta 120 kg või rohkem."
+    },
+    "uk": {
+      "title": "Клуб 120 кг",
+      "desc": "Важка вага: підніміть 120 кг або більше."
+    }
+  },
+  "strength_140": {
+    "es": {
+      "title": "Club 140 kg+",
+      "desc": "Fuerza de élite: supera los 140 kg en un levantamiento."
+    },
+    "en": {
+      "title": "140 kg+ club",
+      "desc": "Elite strength: surpass 140 kg in a lift."
+    },
+    "ru": {
+      "title": "Клуб 140+ кг",
+      "desc": "Элитная сила: преодолейте 140 кг в подъеме."
+    },
+    "et": {
+      "title": "140 kg+ klubi",
+      "desc": "Eliitjõud: ületa 140 kg mis tahes tõstes."
+    },
+    "uk": {
+      "title": "Клуб 140+ кг",
+      "desc": "Елітна сила: подолайте 140 кг у підйомі."
+    }
+  },
+  "streak_3_week": {
+    "es": {
+      "title": "Semana de fuego",
+      "desc": "Completa al menos 3 entrenamientos en la misma semana."
+    },
+    "en": {
+      "title": "Fire week",
+      "desc": "Complete at least 3 workouts in the same week."
+    },
+    "ru": {
+      "title": "Огненная неделя",
+      "desc": "Выполните не менее 3 тренировок за одну неделю."
+    },
+    "et": {
+      "title": "Tulenädal",
+      "desc": "Lõpeta vähemalt 3 treeningut samal nädalal."
+    },
+    "uk": {
+      "title": "Вогняний тиждень",
+      "desc": "Виконайте щонайменше 3 тренування за один тиждень."
+    }
+  },
+  "perfect_week": {
+    "es": {
+      "title": "Semana perfecta",
+      "desc": "Completa 4 o más entrenamientos en una semana."
+    },
+    "en": {
+      "title": "Perfect week",
+      "desc": "Complete 4 or more workouts in a single week."
+    },
+    "ru": {
+      "title": "Идеальная неделя",
+      "desc": "Выполните 4 или более тренировок за неделю."
+    },
+    "et": {
+      "title": "Täiuslik nädal",
+      "desc": "Lõpeta 4 või enam treeningut ühe nädala jooksul."
+    },
+    "uk": {
+      "title": "Ідеальний тиждень",
+      "desc": "Виконайте 4 або більше тренувань за тиждень."
+    }
+  },
+  "leg_day_respect": {
+    "es": {
+      "title": "Respeto al leg day",
+      "desc": "Completa al menos 4 entrenamientos de pierna en el mismo mes."
+    },
+    "en": {
+      "title": "Respect the leg day",
+      "desc": "Complete at least 4 leg workouts in the same month."
+    },
+    "ru": {
+      "title": "Уважение к дню ног",
+      "desc": "Выполните не менее 4 тренировок ног за один месяц."
+    },
+    "et": {
+      "title": "Jalapäeva austus",
+      "desc": "Tee samal kuul vähemalt 4 jalatreeningut."
+    },
+    "uk": {
+      "title": "Повага до дня ніг",
+      "desc": "Виконайте щонайменше 4 тренування ніг за один місяць."
+    }
+  },
+  "workouts_5": {
+    "es": {
+      "title": "Iniciación constante",
+      "desc": "Completa 5 entrenamientos registrados en tu historial."
+    },
+    "en": {
+      "title": "Consistent start",
+      "desc": "Complete 5 workouts logged in your history."
+    },
+    "ru": {
+      "title": "Уверенное начало",
+      "desc": "Завершите 5 тренировок в истории."
+    },
+    "et": {
+      "title": "Järjekindel algus",
+      "desc": "Lõpeta 5 treeningut oma ajaloos."
+    },
+    "uk": {
+      "title": "Впевнений початок",
+      "desc": "Завершіть 5 тренувань в історії."
+    }
+  },
+  "workouts_15": {
+    "es": {
+      "title": "Hábito forjado",
+      "desc": "Completa 15 entrenamientos totales."
+    },
+    "en": {
+      "title": "Habit forged",
+      "desc": "Complete 15 total workouts."
+    },
+    "ru": {
+      "title": "Привычка создана",
+      "desc": "Завершите 15 тренировок всего."
+    },
+    "et": {
+      "title": "Harjumus loodud",
+      "desc": "Lõpeta kokku 15 treeningut."
+    },
+    "uk": {
+      "title": "Звичка сформована",
+      "desc": "Завершіть 15 тренувань загалом."
+    }
+  },
+  "workouts_30": {
+    "es": {
+      "title": "Guerrero del hierro",
+      "desc": "Completa 30 entrenamientos en tu trayectoria."
+    },
+    "en": {
+      "title": "Iron warrior",
+      "desc": "Complete 30 workouts in your journey."
+    },
+    "ru": {
+      "title": "Железный воин",
+      "desc": "Завершите 30 тренировок на своем пути."
+    },
+    "et": {
+      "title": "Rauasõdalane",
+      "desc": "Lõpeta oma teekonnal 30 treeningut."
+    },
+    "uk": {
+      "title": "Залізний воїн",
+      "desc": "Завершіть 30 тренувань на своєму шляху."
+    }
+  },
+  "workouts_50": {
+    "es": {
+      "title": "Medio centenar",
+      "desc": "Alcanza 50 entrenamientos completados."
+    },
+    "en": {
+      "title": "Half a hundred",
+      "desc": "Reach 50 completed workouts."
+    },
+    "ru": {
+      "title": "Полсотни",
+      "desc": "Достигните 50 завершенных тренировок."
+    },
+    "et": {
+      "title": "Poolsada",
+      "desc": "Jõua 50 lõpetatud treeninguni."
+    },
+    "uk": {
+      "title": "Півсотні",
+      "desc": "Досягніть 50 завершених тренувань."
+    }
+  },
+  "workouts_100": {
+    "es": {
+      "title": "Centurión legendario",
+      "desc": "¡100 entrenamientos! Hito reservado a los más disciplinados."
+    },
+    "en": {
+      "title": "Legendary centurion",
+      "desc": "100 workouts! Milestone reserved for the disciplined."
+    },
+    "ru": {
+      "title": "Легендарный центурион",
+      "desc": "100 тренировок! Рубеж самых дисциплинированных."
+    },
+    "et": {
+      "title": "Legendaarne tsenturioon",
+      "desc": "100 treeningut! Tõelise distsipliini verstapost."
+    },
+    "uk": {
+      "title": "Легендарний центуріон",
+      "desc": "100 тренувань! Рубіж найбільш дисциплінованих."
+    }
+  },
+  "volume_5k": {
+    "es": {
+      "title": "Camión ligero",
+      "desc": "Mueve más de 5.000 kg de volumen total en una sola sesión."
+    },
+    "en": {
+      "title": "Light truck",
+      "desc": "Move over 5,000 kg of total volume in a single session."
+    },
+    "ru": {
+      "title": "Легкий грузовик",
+      "desc": "Поднимите более 5 000 кг общего объема за тренировку."
+    },
+    "et": {
+      "title": "Kerge veok",
+      "desc": "Tõsta ühel treeningul üle 5 000 kg kogumahtu."
+    },
+    "uk": {
+      "title": "Легка вантажівка",
+      "desc": "Підніміть понад 5 000 кг загального обсягу за одне тренування."
+    }
+  },
+  "volume_10k": {
+    "es": {
+      "title": "Grúa pesada",
+      "desc": "Mueve más de 10.000 kg de volumen total en una sesión."
+    },
+    "en": {
+      "title": "Heavy crane",
+      "desc": "Move over 10,000 kg of total volume in a session."
+    },
+    "ru": {
+      "title": "Тяжелый кран",
+      "desc": "Поднимите более 10 000 кг объема за тренировку."
+    },
+    "et": {
+      "title": "Raske kraana",
+      "desc": "Tõsta ühel treeningul üle 10 000 kg mahtu."
+    },
+    "uk": {
+      "title": "Важкий кран",
+      "desc": "Підніміть понад 10 000 кг обсягу за одне тренування."
+    }
+  },
+  "volume_15k": {
+    "es": {
+      "title": "Titán del acero",
+      "desc": "Mueve más de 15.000 kg de volumen en una sesión épica."
+    },
+    "en": {
+      "title": "Steel titan",
+      "desc": "Move over 15,000 kg of volume in an epic session."
+    },
+    "ru": {
+      "title": "Стальной титан",
+      "desc": "Поднимите более 15 000 кг объема в эпической сессии."
+    },
+    "et": {
+      "title": "Terastitaan",
+      "desc": "Tõsta eepilisel treeningul üle 15 000 kg mahtu."
+    },
+    "uk": {
+      "title": "Сталевий титан",
+      "desc": "Підніміть понад 15 000 кг обсягу в епічній сесії."
+    }
+  },
+  "volume_20k_session": {
+    "es": {
+      "title": "Sesión gladiador",
+      "desc": "Mueve más de 20.000 kg de volumen total en una sola sesión."
+    },
+    "en": {
+      "title": "Gladiator session",
+      "desc": "Move over 20,000 kg of total volume in a single session."
+    },
+    "ru": {
+      "title": "Сессия гладиатора",
+      "desc": "Преодолейте 20 000 кг объема за одну тренировку."
+    },
+    "et": {
+      "title": "Gladiaatori treening",
+      "desc": "Tõsta ühel treeningul üle 20 000 kg kogumahtu."
+    },
+    "uk": {
+      "title": "Сесія гладіатора",
+      "desc": "Подолайте 20 000 кг обсягу за одне тренування."
+    }
+  },
+  "volume_total_100k": {
+    "es": {
+      "title": "Rompedor de cargas",
+      "desc": "Acumula más de 100.000 kg de volumen total histórico."
+    },
+    "en": {
+      "title": "Load breaker",
+      "desc": "Accumulate over 100,000 kg of total career volume."
+    },
+    "ru": {
+      "title": "Сокрушитель тяжестей",
+      "desc": "Накопите более 100 000 кг суммарного объема."
+    },
+    "et": {
+      "title": "Raskuste murdja",
+      "desc": "Kogu kokku üle 100 000 kg kogumahtu."
+    },
+    "uk": {
+      "title": "Нищівник навантажень",
+      "desc": "Накопичіть понад 100 000 кг сумарного обсягу."
+    }
+  },
+  "volume_250k": {
+    "es": {
+      "title": "El peso de un tren",
+      "desc": "Acumula más de 250.000 kg de volumen total levantado."
+    },
+    "en": {
+      "title": "Weight of a train",
+      "desc": "Accumulate over 250,000 kg of total lifted volume."
+    },
+    "ru": {
+      "title": "Вес поезда",
+      "desc": "Накопите более 250 000 кг общего поднятого веса."
+    },
+    "et": {
+      "title": "Rongi raskus",
+      "desc": "Kogu kokku üle 250 000 kg tõstetud mahtu."
+    },
+    "uk": {
+      "title": "Вага поїзда",
+      "desc": "Накопичіть понад 250 000 кг загальної піднятої ваги."
+    }
+  },
+  "volume_500k": {
+    "es": {
+      "title": "El Boeing 747",
+      "desc": "Medio millón de kilos: acumula más de 500.000 kg de volumen histórico."
+    },
+    "en": {
+      "title": "The Boeing 747",
+      "desc": "Half a million kilos: accumulate over 500,000 kg lifetime volume."
+    },
+    "ru": {
+      "title": "Боинг 747",
+      "desc": "Полмиллиона килограммов: преодолейте рубеж в 500 000 кг."
+    },
+    "et": {
+      "title": "Boeing 747",
+      "desc": "Pool miljonit kilo: kogu üle 500 000 kg kogumahtu."
+    },
+    "uk": {
+      "title": "Боїнг 747",
+      "desc": "Півмільйона кілограмів: подолайте рубіж у 500 000 кг."
+    }
+  },
+  "volume_1m": {
+    "es": {
+      "title": "Millonario del acero",
+      "desc": "¡1.000.000 kg! Hito legendario reservado a auténticos titanes."
+    },
+    "en": {
+      "title": "Steel millionaire",
+      "desc": "1,000,000 kg! Legendary milestone for true titans."
+    },
+    "ru": {
+      "title": "Стальной миллионер",
+      "desc": "1 000 000 кг! Легендарный рубеж для истинных титанов."
+    },
+    "et": {
+      "title": "Terase miljonär",
+      "desc": "1 000 000 kg! Legendaarne saavutus tõelistele titaanidele."
+    },
+    "uk": {
+      "title": "Сталевий мільйонер",
+      "desc": "1 000 000 кг! Легендарний рубіж для справжніх титанів."
+    }
+  },
+  "to_failure": {
+    "es": {
+      "title": "Hasta el límite",
+      "desc": "Registra tu primera serie llevada \"Al fallo\"."
+    },
+    "en": {
+      "title": "To the limit",
+      "desc": "Log your first set taken \"To failure\"."
+    },
+    "ru": {
+      "title": "До предела",
+      "desc": "Запишите свой первый подход \"До отказа\"."
+    },
+    "et": {
+      "title": "Viimse piirini",
+      "desc": "Märgi oma esimene seeria \"Suutlikkuseni\"."
+    },
+    "uk": {
+      "title": "До межі",
+      "desc": "Запишіть свій перший підхід \"До відмови\"."
+    }
+  },
+  "dropset_done": {
+    "es": {
+      "title": "Maestro del dropset",
+      "desc": "Completa una serie dropset utilizando la calculadora %."
+    },
+    "en": {
+      "title": "Dropset master",
+      "desc": "Complete a dropset using the % calculator."
+    },
+    "ru": {
+      "title": "Мастер дропсетов",
+      "desc": "Завершите дропсет с помощью калькулятора %."
+    },
+    "et": {
+      "title": "Dropseti meister",
+      "desc": "Tee dropset kasutades % kalkulaatorit."
+    },
+    "uk": {
+      "title": "Майстер дропсетів",
+      "desc": "Виконайте дропсет за допомогою калькулятора %."
+    }
+  },
+  "first_pr": {
+    "es": {
+      "title": "Rompe-límites",
+      "desc": "Consigue tu primer récord personal (PR) histórico."
+    },
+    "en": {
+      "title": "Limit breaker",
+      "desc": "Achieve your first personal record (PR)."
+    },
+    "ru": {
+      "title": "Преодоление предела",
+      "desc": "Установите свой первый персональный рекорд (PR)."
+    },
+    "et": {
+      "title": "Piiride ületaja",
+      "desc": "Saavuta oma esimene isiklik rekord (PR)."
+    },
+    "uk": {
+      "title": "Подолання меж",
+      "desc": "Встановіть свій перший особистий рекорд (PR)."
+    }
+  },
+  "pr_triple": {
+    "es": {
+      "title": "Lluvia de récords",
+      "desc": "Supera 3 o más récords personales en un solo entrenamiento."
+    },
+    "en": {
+      "title": "Record shower",
+      "desc": "Break 3 or more personal records in a single workout."
+    },
+    "ru": {
+      "title": "Ливень рекордов",
+      "desc": "Побейте 3 или более рекордов за одну тренировку."
+    },
+    "et": {
+      "title": "Rekordite sadu",
+      "desc": "Ületa ühel treeningul 3 või enam isiklikku rekordit."
+    },
+    "uk": {
+      "title": "Злива рекордів",
+      "desc": "Побийте 3 або більше рекордів за одне тренування."
+    }
+  },
+  "early_bird": {
+    "es": {
+      "title": "Madrugador",
+      "desc": "Completa un entrenamiento antes de las 9:00 AM."
+    },
+    "en": {
+      "title": "Early bird",
+      "desc": "Complete a workout before 9:00 AM."
+    },
+    "ru": {
+      "title": "Ранняя пташка",
+      "desc": "Завершите тренировку до 9:00 утра."
+    },
+    "et": {
+      "title": "Varajane ärkaja",
+      "desc": "Lõpeta treening enne kella 9:00 hommikul."
+    },
+    "uk": {
+      "title": "Рання пташка",
+      "desc": "Завершіть тренування до 9:00 ранку."
+    }
+  },
+  "night_owl": {
+    "es": {
+      "title": "Guerrero nocturno",
+      "desc": "Completa un entrenamiento después de las 20:30 PM."
+    },
+    "en": {
+      "title": "Night warrior",
+      "desc": "Complete a workout after 8:30 PM."
+    },
+    "ru": {
+      "title": "Ночной воин",
+      "desc": "Завершите тренировку после 20:30 вечера."
+    },
+    "et": {
+      "title": "Öine sõdalane",
+      "desc": "Lõpeta treening pärast kella 20:30 õhtul."
+    },
+    "uk": {
+      "title": "Нічний воїн",
+      "desc": "Завершіть тренування після 20:30 вечора."
+    }
+  },
+  "iron_hour": {
+    "es": {
+      "title": "Sesión de hierro",
+      "desc": "Completa un entrenamiento con más de 60 minutos de duración."
+    },
+    "en": {
+      "title": "Iron session",
+      "desc": "Complete a workout lasting over 60 minutes."
+    },
+    "ru": {
+      "title": "Железная сессия",
+      "desc": "Завершите тренировку продолжительностью более 60 минут."
+    },
+    "et": {
+      "title": "Rauasessioon",
+      "desc": "Lõpeta treening, mille kestus on üle 60 minuti."
+    },
+    "uk": {
+      "title": "Залізна сесія",
+      "desc": "Завершіть тренування тривалістю понад 60 хвилин."
+    }
+  },
+  "first_evolution": {
+    "es": {
+      "title": "Seguimiento riguroso",
+      "desc": "Guarda tu primer registro de peso o medidas corporales."
+    },
+    "en": {
+      "title": "Rigorous tracking",
+      "desc": "Save your first body weight or measurement entry."
+    },
+    "ru": {
+      "title": "Строгий контроль",
+      "desc": "Сохраните первую запись веса или замеров тела."
+    },
+    "et": {
+      "title": "Range jälgimine",
+      "desc": "Salvesta oma esimene kehakaalu või mõõtude kanne."
+    },
+    "uk": {
+      "title": "Суворий контроль",
+      "desc": "Збережіть перший запис ваги або вимірів тіла."
+    }
+  },
+  "photo_sculptor": {
+    "es": {
+      "title": "El escultor",
+      "desc": "Registra fotos de evolución corporal y compáralas en el visor antes/después."
+    },
+    "en": {
+      "title": "The sculptor",
+      "desc": "Log progress photos and compare them in the before/after viewer."
+    },
+    "ru": {
+      "title": "Скульптор",
+      "desc": "Сделайте фото прогресса и сравните их до/после."
+    },
+    "et": {
+      "title": "Skulptor",
+      "desc": "Lisa arengufotod ja võrdle neid enne/pärast vaates."
+    },
+    "uk": {
+      "title": "Скульптор",
+      "desc": "Зробіть фото прогресу та порівняйте їх до/після."
+    }
+  },
+  "steel_waist": {
+    "es": {
+      "title": "Vientre de acero",
+      "desc": "Registra una reducción de 2 cm o más en tu medida de cintura."
+    },
+    "en": {
+      "title": "Steel waist",
+      "desc": "Log a reduction of 2 cm or more in your waist measurement."
+    },
+    "ru": {
+      "title": "Стальная талия",
+      "desc": "Зафиксируйте уменьшение талии на 2 см или более."
+    },
+    "et": {
+      "title": "Terastalje",
+      "desc": "Märgi vööümbermõõdu vähenemine 2 cm või rohkem."
+    },
+    "uk": {
+      "title": "Сталева талія",
+      "desc": "Зафіксуйте зменшення талії на 2 см або більше."
+    }
+  },
+  "technique_master": {
+    "es": {
+      "title": "Maestro de la biomecánica",
+      "desc": "Consulta la técnica y ejecución de al menos 10 ejercicios diferentes."
+    },
+    "en": {
+      "title": "Biomechanics master",
+      "desc": "View technique and form guide for at least 10 different exercises."
+    },
+    "ru": {
+      "title": "Мастер биомеханики",
+      "desc": "Изучите технику выполнения не менее 10 различных упражнений."
+    },
+    "et": {
+      "title": "Biomehaanika meister",
+      "desc": "Vaata tehnika juhiseid vähemalt 10 erineva harjutuse kohta."
+    },
+    "uk": {
+      "title": "Майстер біомеханіки",
+      "desc": "Вивчіть техніку виконання щонайменше 10 різних вправ."
+    }
+  },
+  "story_ambassador": {
+    "es": {
+      "title": "Embajador del esfuerzo",
+      "desc": "Genera y comparte una tarjeta de historias para mostrar tu entrenamiento."
+    },
+    "en": {
+      "title": "Effort ambassador",
+      "desc": "Generate and share a story card to showcase your workout."
+    },
+    "ru": {
+      "title": "Амбассадор усилий",
+      "desc": "Создайте карточку для историй и поделитесь тренировкой."
+    },
+    "et": {
+      "title": "Pingutuse saadik",
+      "desc": "Loo ja jaga loo kaarti oma treeningu näitamiseks."
+    },
+    "uk": {
+      "title": "Амбасадор зусиль",
+      "desc": "Створіть картку для історій та поділіться тренуванням."
+    }
+  },
+  "full_body_week": {
+    "es": {
+      "title": "Atleta completo",
+      "desc": "Entrena pecho, espalda, hombros y piernas en la misma semana."
+    },
+    "en": {
+      "title": "Complete athlete",
+      "desc": "Train chest, back, shoulders, and legs in the same week."
+    },
+    "ru": {
+      "title": "Универсальный атлет",
+      "desc": "Потренируйте грудь, спину, плечи и ноги за одну неделю."
+    },
+    "et": {
+      "title": "Täielik sportlane",
+      "desc": "Treeni rinda, selga, õlgu ja jalgu samal nädalal."
+    },
+    "uk": {
+      "title": "Універсальний атлет",
+      "desc": "Потренуйте груди, спину, плечі та ноги за один тиждень."
+    }
+  },
+  "data_analyst": {
+    "es": {
+      "title": "Analista de datos",
+      "desc": "Exportar el historial de entrenamientos a JSON por primera vez para alimentar el dashboard."
+    },
+    "en": {
+      "title": "Data analyst",
+      "desc": "Export workout history to JSON for the first time."
+    },
+    "ru": {
+      "title": "Аналитик данных",
+      "desc": "Экспортируйте историю тренировок в JSON впервые."
+    },
+    "et": {
+      "title": "Andmeanalüütik",
+      "desc": "Ekspordi treeningute ajalugu esmakordselt JSON-faili."
+    },
+    "uk": {
+      "title": "Аналітик даних",
+      "desc": "Експортуйте історію тренувань у JSON вперше."
+    }
+  },
+  "the_architect": {
+    "es": {
+      "title": "El arquitecto",
+      "desc": "Crear y guardar una rutina compleja de varios meses utilizando los grupos de ejercicios colapsables."
+    },
+    "en": {
+      "title": "The architect",
+      "desc": "Create and save a complex multi-month routine with collapsible groups."
+    },
+    "ru": {
+      "title": "Архитектор",
+      "desc": "Создайте и сохраните многомесячную программу тренировок."
+    },
+    "et": {
+      "title": "Arhitekt",
+      "desc": "Loo ja salvesta mitmekuine kompleksne treeningkava."
+    },
+    "uk": {
+      "title": "Архітектор",
+      "desc": "Створіть та збережіть багатомісячну програму тренувань."
+    }
+  },
+  "controlled_chaos": {
+    "es": {
+      "title": "Caos controlado",
+      "desc": "Utilizar la función de reordenar ejercicios en medio de una sesión activa para adaptarte a un gimnasio lleno."
+    },
+    "en": {
+      "title": "Controlled chaos",
+      "desc": "Reorder exercises during a live workout to adapt to a busy gym."
+    },
+    "ru": {
+      "title": "Управляемый хаос",
+      "desc": "Измените порядок упражнений во время тренировки в переполненном зале."
+    },
+    "et": {
+      "title": "Kontrollitud kaos",
+      "desc": "Muuda harjutuste järjekorda aktiivse treeningu ajal."
+    },
+    "uk": {
+      "title": "Керований хаос",
+      "desc": "Змініть порядок вправ під час тренування у заповненому залі."
+    }
+  },
+  "server_overload": {
+    "es": {
+      "title": "Sobrecarga del servidor",
+      "desc": "Superar las 1.000 series totales registradas en la base de datos de la app."
+    },
+    "en": {
+      "title": "Server overload",
+      "desc": "Surpass 1,000 total sets recorded in the app database."
+    },
+    "ru": {
+      "title": "Перегрузка сервера",
+      "desc": "Преодолейте 1 000 записанных подходов в базе данных."
+    },
+    "et": {
+      "title": "Serveri ülekoormus",
+      "desc": "Ületa 1 000 salvestatud seeriat rakenduse andmebaasis."
+    },
+    "uk": {
+      "title": "Перевантаження сервера",
+      "desc": "Подолайте 1 000 записаних підходів у базі даних."
+    }
+  },
+  "iron_discipline": {
+    "es": {
+      "title": "Disciplina de hierro",
+      "desc": "Entrenar en tu cumpleaños o en un día festivo nacional de tu país."
+    },
+    "en": {
+      "title": "Iron discipline",
+      "desc": "Train on your birthday or on a national public holiday in your country."
+    },
+    "ru": {
+      "title": "Железная дисциплина",
+      "desc": "Потренируйтесь в свой день рождения или в национальный праздник."
+    },
+    "et": {
+      "title": "Raudne distsipliin",
+      "desc": "Tee trenni oma sünnipäeval või riigipühal."
+    },
+    "uk": {
+      "title": "Залізна дисципліна",
+      "desc": "Потренуйтеся у свій день народження або в національне свято."
+    }
+  },
+  "grindelwald_legs": {
+    "es": {
+      "title": "Piernas de Grindelwald",
+      "desc": "Acumular 50.000 kg de volumen en sentadillas, prensa y zancadas como para escalar una montaña."
+    },
+    "en": {
+      "title": "Grindelwald legs",
+      "desc": "Accumulate 50,000 kg volume in squats, leg press, and lunges."
+    },
+    "ru": {
+      "title": "Ноги Грин-де-Вальда",
+      "desc": "Накопите 50 000 кг объема в приседаниях, жиме ногами и выпадах."
+    },
+    "et": {
+      "title": "Grindelwaldi jalad",
+      "desc": "Kogu 50 000 kg mahtu kükkides, jalapressil ja väljaastetes."
+    },
+    "uk": {
+      "title": "Ноги Грін-де-Вальда",
+      "desc": "Накопичіть 50 000 кг обсягу в присіданнях, жимі ногами та випадах."
+    }
+  },
+  "skipped_leg_day": {
+    "es": {
+      "title": "Día de pierna saltado",
+      "desc": "Salta tu primer entrenamiento de pierna."
+    },
+    "en": {
+      "title": "Skipped leg day",
+      "desc": "Skip your first leg workout."
+    },
+    "ru": {
+      "title": "Пропущенный день ног",
+      "desc": "Пропустите свою первую тренировку ног."
+    },
+    "et": {
+      "title": "Vahele jäänud jalapäev",
+      "desc": "Jäta oma esimene jalapäev vahele."
+    },
+    "uk": {
+      "title": "Пропущений день ніг",
+      "desc": "Пропустіть своє перше тренування ніг."
+    }
+  },
+  "paladin_aura": {
+    "es": {
+      "title": "Aura del paladín",
+      "desc": "Completar 20 sesiones enfocadas en el core y músculos estabilizadores."
+    },
+    "en": {
+      "title": "Paladin's aura",
+      "desc": "Complete 20 sessions focused on core and stabilizer muscles."
+    },
+    "ru": {
+      "title": "Аура паладина",
+      "desc": "Завершите 20 тренировок мышц кора и стабилизаторов."
+    },
+    "et": {
+      "title": "Paladini aura",
+      "desc": "Tee 20 treeningut kerelihastele ja stabilisaatoritele."
+    },
+    "uk": {
+      "title": "Аура паладина",
+      "desc": "Завершіть 20 тренувань м'язів кору та стабілізаторів."
+    }
+  },
+  "cleave_strike": {
+    "es": {
+      "title": "Golpe de rajar (Cleave)",
+      "desc": "Batir récords personales en 3 ejercicios compuestos diferentes en una sola sesión."
+    },
+    "en": {
+      "title": "Cleave strike",
+      "desc": "Break PRs in 3 different compound exercises in a single workout."
+    },
+    "ru": {
+      "title": "Рассекающий удар",
+      "desc": "Установите рекорды в 3 базовых упражнениях за одну сессию."
+    },
+    "et": {
+      "title": "Hoolöök",
+      "desc": "Loo uued rekordid 3 baasharjutuses ühe treeningu jooksul."
+    },
+    "uk": {
+      "title": "Розсікаючий удар",
+      "desc": "Встановіть рекорди у 3 базових вправах за одну сесію."
+    }
+  },
+  "total_sync_365": {
+    "es": {
+      "title": "Sincronización total",
+      "desc": "Tener registros en la base de datos JSON que abarquen los 365 días del año."
+    },
+    "en": {
+      "title": "Total sync",
+      "desc": "Have records spanning all 365 days of the year."
+    },
+    "ru": {
+      "title": "Полная синхронизация",
+      "desc": "Имейте записи за все 365 дней года."
+    },
+    "et": {
+      "title": "Täielik sünkroonimine",
+      "desc": "Omage kandeid aasta kõigi 365 päeva kohta."
+    },
+    "uk": {
+      "title": "Повна синхронізація",
+      "desc": "Майте записи за всі 365 днів року."
+    }
+  },
+  "gemini_oracle": {
+    "es": {
+      "title": "Oráculo de Gemini",
+      "desc": "Utilizar la integración de IA por primera vez para analizar tu rendimiento o generar una rutina."
+    },
+    "en": {
+      "title": "Gemini oracle",
+      "desc": "Use the AI assistant for the first time to analyze performance or create a routine."
+    },
+    "ru": {
+      "title": "Оракул Gemini",
+      "desc": "Используйте ИИ впервые для анализа тренировок или составления программы."
+    },
+    "et": {
+      "title": "Gemini oraakel",
+      "desc": "Kasuta tehisintellekti esmakordselt soorituse analüüsimiseks või kava loomiseks."
+    },
+    "uk": {
+      "title": "Оракул Gemini",
+      "desc": "Скористайтеся ШІ вперше для аналізу тренувань або створення програми."
+    }
+  },
+  "assembler_optimizer": {
+    "es": {
+      "title": "Optimizador de ensamblador",
+      "desc": "Terminar una rutina en un 15% menos de tiempo manteniendo el mismo volumen."
+    },
+    "en": {
+      "title": "Assembly optimizer",
+      "desc": "Finish a full workout in 15% less time while maintaining volume."
+    },
+    "ru": {
+      "title": "Оптимизатор ассемблера",
+      "desc": "Завершите тренировку на 15% быстрее при том же объеме."
+    },
+    "et": {
+      "title": "Assembleri optimeerija",
+      "desc": "Lõpeta treening 15% kiiremini, säilitades sama treeningmahu."
+    },
+    "uk": {
+      "title": "Оптимізатор асемблера",
+      "desc": "Завершіть тренування на 15% швидше, зберігши той самий обсяг."
+    }
+  },
+  "carlos_awakening": {
+    "es": {
+      "title": "El despertar de Carlo",
+      "desc": "Registra un entrenamiento de al menos media hora un domingo a las 03:00 AM. \"Dónde demonios estoy?\""
+    },
+    "en": {
+      "title": "Carlo's awakening",
+      "desc": "Log a workout of at least 30 minutes on a Sunday at 03:00 AM. \"Where the hell am I?\""
+    },
+    "ru": {
+      "title": "Пробуждение Карло",
+      "desc": "Запишите тренировку длительностью не менее 30 минут в воскресенье в 03:00 ночи. \"Где я, черт возьми?\""
+    },
+    "et": {
+      "title": "Carlo ärkamine",
+      "desc": "Salvesta vähemalt 30-minutiline treening pühapäeval kell 03:00 öösel. \"Kus kurat ma olen?\""
+    },
+    "uk": {
+      "title": "Пробудження Карло",
+      "desc": "Запишіть тренування тривалістю не менше 30 хвилин у неділю о 03:00 ночі. \"Де я, в біса?\""
+    }
+  },
+  "automation_loop": {
+    "es": {
+      "title": "Nudo de automatización",
+      "desc": "Exportar la base de datos JSON e importarla de nuevo el mismo día sin haber modificado nada."
+    },
+    "en": {
+      "title": "Automation loop",
+      "desc": "Export your workout database and import it back the same day without changes."
+    },
+    "ru": {
+      "title": "Петля автоматизации",
+      "desc": "Экспортируйте базу JSON и импортируйте её обратно в тот же день."
+    },
+    "et": {
+      "title": "Automatiseerimise silmus",
+      "desc": "Ekspordi JSON andmebaas ja impordi see samal päeval muutmata kujul tagasi."
+    },
+    "uk": {
+      "title": "Петля автоматизації",
+      "desc": "Експортуйте базу JSON та імпортуйте її назад у той самий день."
+    }
+  }
+};
+window.ACHIEVEMENT_TRANSLATIONS = ACHIEVEMENT_TRANSLATIONS;
+
+
+window.getTrAchievementTitle = function(id, defaultTitle) {
+    const lang = (window.state && window.state.language) || localStorage.getItem('gym_language') || 'es';
+    if (ACHIEVEMENT_TRANSLATIONS[id] && ACHIEVEMENT_TRANSLATIONS[id][lang] && ACHIEVEMENT_TRANSLATIONS[id][lang].title) {
+        return ACHIEVEMENT_TRANSLATIONS[id][lang].title;
+    }
+    return defaultTitle || (ACHIEVEMENT_TRANSLATIONS[id] && ACHIEVEMENT_TRANSLATIONS[id]['es'] ? ACHIEVEMENT_TRANSLATIONS[id]['es'].title : id);
+};
+
+window.getTrAchievementDesc = function(id, defaultDesc) {
+    const lang = (window.state && window.state.language) || localStorage.getItem('gym_language') || 'es';
+    if (ACHIEVEMENT_TRANSLATIONS[id] && ACHIEVEMENT_TRANSLATIONS[id][lang] && ACHIEVEMENT_TRANSLATIONS[id][lang].desc) {
+        return ACHIEVEMENT_TRANSLATIONS[id][lang].desc;
+    }
+    return defaultDesc || (ACHIEVEMENT_TRANSLATIONS[id] && ACHIEVEMENT_TRANSLATIONS[id]['es'] ? ACHIEVEMENT_TRANSLATIONS[id]['es'].desc : '');
+};
+
+window.detectUserCountry = function() {
+    try {
+        const tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || '').toLowerCase();
+        if (tz.includes('madrid') || tz.includes('canary')) return 'ES';
+        if (tz.includes('mexico')) return 'MX';
+        if (tz.includes('buenos_aires') || tz.includes('argentina')) return 'AR';
+        if (tz.includes('bogota') || tz.includes('colombia')) return 'CO';
+        if (tz.includes('santiago') || tz.includes('chile')) return 'CL';
+        if (tz.includes('tallinn') || tz.includes('estonia')) return 'EE';
+        if (tz.includes('kyiv') || tz.includes('kiev') || tz.includes('ukraine')) return 'UA';
+        if (tz.includes('moscow') || tz.includes('russia')) return 'RU';
+        if (tz.includes('london')) return 'GB';
+        if (tz.includes('new_york') || tz.includes('chicago') || tz.includes('los_angeles') || tz.includes('denver')) return 'US';
+        
+        const navLang = (navigator.language || navigator.userLanguage || '').toUpperCase();
+        if (navLang.includes('-')) {
+            const country = navLang.split('-')[1];
+            if (country && country.length === 2) return country;
+        }
+    } catch(e) {}
+    return 'ES';
+};
+
+window.getCountryHolidays = function(countryCode) {
+    const c = (countryCode || 'ES').toUpperCase();
+    const map = {
+        'ES': ['01-01', '01-06', '05-01', '08-15', '10-12', '11-01', '12-06', '12-08', '12-25', '03-29', '04-18'],
+        'MX': ['01-01', '02-05', '03-21', '05-01', '09-16', '11-20', '12-25'],
+        'AR': ['01-01', '03-24', '04-02', '05-01', '05-25', '06-20', '07-09', '12-08', '12-25'],
+        'CO': ['01-01', '05-01', '07-20', '08-07', '12-08', '12-25'],
+        'CL': ['01-01', '05-01', '05-21', '07-16', '09-18', '09-19', '10-31', '11-01', '12-08', '12-25'],
+        'EE': ['01-01', '02-24', '05-01', '06-23', '06-24', '08-20', '12-24', '12-25', '12-26'],
+        'UA': ['01-01', '01-07', '03-08', '05-01', '05-09', '06-28', '08-24', '10-14', '12-25'],
+        'RU': ['01-01', '01-02', '01-03', '01-07', '02-23', '03-08', '05-01', '05-09', '06-12', '11-04'],
+        'US': ['01-01', '07-04', '11-11', '12-25'],
+        'GB': ['01-01', '12-25', '12-26']
+    };
+    return map[c] || map['ES'];
+};
+
 
 window.loadAchievements = function() {
     try {
@@ -9380,154 +10734,564 @@ window.saveAchievements = function(data) {
     } catch(e) {}
 };
 
-window.checkAndUnlockAchievements = function(latestSessionData) {
-    const data = loadAchievements();
-    const completed = state.completedWorkouts || [];
-    const newlyUnlocked = [];
+window.unlockAchievement = function(id) {
+    if (!window.ACHIEVEMENTS_CATALOG) return false;
+    const data = typeof loadAchievements === 'function' ? loadAchievements() : { unlocked: {} };
+    if (!data.unlocked) data.unlocked = {};
+    
+    if (!data.unlocked[id]) {
+        data.unlocked[id] = { unlockedAt: Date.now() };
+        if (typeof saveAchievements === 'function') saveAchievements(data);
+        const ach = ACHIEVEMENTS_CATALOG.find(a => a.id === id);
+        if (ach && typeof showAchievementToast === 'function') {
+            showAchievementToast(ach);
+        }
+        if (document.getElementById('view-achievements')?.classList.contains('active')) {
+            if (typeof renderAchievementsView === 'function') renderAchievementsView();
+        }
+        return true;
+    }
+    return false;
+};
 
+
+window.getAchievementProgress = function(achId, state, data) {
+    const resetTs = parseInt(localStorage.getItem('gym_achievements_reset_timestamp') || '0', 10);
+    const completed = (Array.isArray(state?.completedWorkouts) ? state.completedWorkouts : [])
+        .filter(w => {
+            const wTime = w.completedAt || (w.date ? new Date(w.date).getTime() : 0);
+            return wTime >= resetTs;
+        });
+    const isUnlocked = !!(data?.unlocked && data.unlocked[achId]);
+
+    // 1. Single session max volume
+    if (['volume_5k', 'volume_10k', 'volume_15k', 'volume_20k_session'].includes(achId)) {
+        const targets = { 'volume_5k': 5000, 'volume_10k': 10000, 'volume_15k': 15000, 'volume_20k_session': 20000 };
+        const target = targets[achId];
+        let maxSessionVol = 0;
+        completed.forEach(w => {
+            let v = 0;
+            (w.exercises || []).forEach(ex => {
+                (ex.sets || []).forEach(s => {
+                    v += (parseFloat(s.weight) || 0) * (parseFloat(s.reps) || 0);
+                });
+            });
+            if (v > maxSessionVol) maxSessionVol = v;
+        });
+        const current = Math.round(maxSessionVol);
+        const pct = Math.min(100, Math.round((current / target) * 100));
+        return {
+            current,
+            target,
+            pct: isUnlocked ? 100 : pct,
+            formatted: `${current.toLocaleString()} / ${target.toLocaleString()} kg`,
+            label: 'Máx. sesión'
+        };
+    }
+
+    // 2. Cumulative volume
+    if (['volume_total_100k', 'volume_250k', 'volume_500k', 'volume_1m'].includes(achId)) {
+        const targets = { 'volume_total_100k': 100000, 'volume_250k': 250000, 'volume_500k': 500000, 'volume_1m': 1000000 };
+        const target = targets[achId];
+        let totalVol = 0;
+        completed.forEach(w => {
+            (w.exercises || []).forEach(ex => {
+                (ex.sets || []).forEach(s => {
+                    totalVol += (parseFloat(s.weight) || 0) * (parseFloat(s.reps) || 0);
+                });
+            });
+        });
+        const current = Math.round(totalVol);
+        const pct = Math.min(100, Math.round((current / target) * 100));
+        return {
+            current,
+            target,
+            pct: isUnlocked ? 100 : pct,
+            formatted: `${current.toLocaleString()} / ${target.toLocaleString()} kg`,
+            label: 'Volumen total'
+        };
+    }
+
+    // 3. Grindelwald legs
+    if (achId === 'grindelwald_legs') {
+        const target = 50000;
+        let legVol = 0;
+        completed.forEach(w => {
+            (w.exercises || []).forEach(ex => {
+                const n = (ex.name || '').toLowerCase();
+                if (n.includes('sentadilla') || n.includes('squat') || n.includes('prensa') || n.includes('press de pierna') || n.includes('zancada') || n.includes('lunge') || n.includes('búlgara') || n.includes('hack')) {
+                    (ex.sets || []).forEach(s => {
+                        legVol += (parseFloat(s.weight) || 0) * (parseFloat(s.reps) || 0);
+                    });
+                }
+            });
+        });
+        const current = Math.round(legVol);
+        const pct = Math.min(100, Math.round((current / target) * 100));
+        return {
+            current,
+            target,
+            pct: isUnlocked ? 100 : pct,
+            formatted: `${current.toLocaleString()} / 50.000 kg`,
+            label: 'Volumen de pierna'
+        };
+    }
+
+    // 4. Strength clubs (max weight in any exercise)
+    if (['strength_60', 'strength_80', 'strength_100', 'strength_120', 'strength_140'].includes(achId)) {
+        const targets = { 'strength_60': 60, 'strength_80': 80, 'strength_100': 100, 'strength_120': 120, 'strength_140': 140 };
+        const target = targets[achId];
+        let maxWeight = 0;
+        completed.forEach(w => {
+            (w.exercises || []).forEach(ex => {
+                (ex.sets || []).forEach(s => {
+                    const wt = parseFloat(s.weight) || 0;
+                    if (wt > maxWeight) maxWeight = wt;
+                });
+            });
+        });
+        const current = maxWeight;
+        const pct = Math.min(100, Math.round((current / target) * 100));
+        return {
+            current,
+            target,
+            pct: isUnlocked ? 100 : pct,
+            formatted: `${current} / ${target} kg`,
+            label: 'Máx. levantado'
+        };
+    }
+
+    // 5. Bench press 100kg
+    if (achId === 'bench_100') {
+        const target = 100;
+        let maxBench = 0;
+        completed.forEach(w => {
+            (w.exercises || []).forEach(ex => {
+                const n = (ex.name || '').toLowerCase();
+                if (n.includes('press de banca') || n.includes('press plano con barra') || n.includes('bench press')) {
+                    (ex.sets || []).forEach(s => {
+                        const wt = parseFloat(s.weight) || 0;
+                        if (wt > maxBench) maxBench = wt;
+                    });
+                }
+            });
+        });
+        const current = maxBench;
+        const pct = Math.min(100, Math.round((current / target) * 100));
+        return {
+            current,
+            target,
+            pct: isUnlocked ? 100 : pct,
+            formatted: `${current} / 100 kg`,
+            label: 'Press banca máx.'
+        };
+    }
+
+    // 6. Workout count milestones
+    if (['first_workout', 'workouts_5', 'workouts_15', 'workouts_30', 'workouts_50', 'workouts_100'].includes(achId)) {
+        const targets = { 'first_workout': 1, 'workouts_5': 5, 'workouts_15': 15, 'workouts_30': 30, 'workouts_50': 50, 'workouts_100': 100 };
+        const target = targets[achId];
+        const current = completed.length;
+        const pct = Math.min(100, Math.round((current / target) * 100));
+        return {
+            current,
+            target,
+            pct: isUnlocked ? 100 : pct,
+            formatted: `${current} / ${target}`,
+            label: 'Sesiones'
+        };
+    }
+
+    // 7. Technique master (10 different exercises)
+    if (achId === 'technique_master') {
+        const target = 10;
+        let viewed = 0;
+        try {
+            const raw = localStorage.getItem('gym_viewed_techniques');
+            if (raw) viewed = JSON.parse(raw).length;
+        } catch(e) {}
+        const current = viewed;
+        const pct = Math.min(100, Math.round((current / target) * 100));
+        return {
+            current,
+            target,
+            pct: isUnlocked ? 100 : pct,
+            formatted: `${current} / 10`,
+            label: 'Ejercicios vistos'
+        };
+    }
+
+    // 8. Server overload (1,000 total sets)
+    if (achId === 'server_overload') {
+        const target = 1000;
+        let totalSets = 0;
+        completed.forEach(w => {
+            (w.exercises || []).forEach(ex => {
+                totalSets += (ex.sets || []).length;
+            });
+        });
+        const current = totalSets;
+        const pct = Math.min(100, Math.round((current / target) * 100));
+        return {
+            current,
+            target,
+            pct: isUnlocked ? 100 : pct,
+            formatted: `${current.toLocaleString()} / 1.000`,
+            label: 'Series registradas'
+        };
+    }
+
+    // 9. Paladin aura (20 core sessions)
+    if (achId === 'paladin_aura') {
+        const target = 20;
+        let coreCount = 0;
+        completed.forEach(w => {
+            const hasCore = (w.exercises || []).some(ex => {
+                const n = (ex.name || '').toLowerCase();
+                return n.includes('abdominal') || n.includes('core') || n.includes('plancha') || n.includes('crunch') || n.includes('lumbar') || n.includes('rueda abdominal') || n.includes('elevaciones de piernas');
+            });
+            if (hasCore) coreCount++;
+        });
+        const current = coreCount;
+        const pct = Math.min(100, Math.round((current / target) * 100));
+        return {
+            current,
+            target,
+            pct: isUnlocked ? 100 : pct,
+            formatted: `${current} / 20`,
+            label: 'Sesiones de core'
+        };
+    }
+
+    // 10. Total sync 365
+    if (achId === 'total_sync_365') {
+        const target = 365;
+        const daysSet = new Set();
+        completed.forEach(w => {
+            const d = w.date || (w.completedAt ? new Date(w.completedAt).toISOString().split('T')[0] : '');
+            if (d && d.length >= 10) daysSet.add(d.substring(5, 10)); // MM-DD
+        });
+        const current = daysSet.size;
+        const pct = Math.min(100, Math.round((current / target) * 100));
+        return {
+            current,
+            target,
+            pct: isUnlocked ? 100 : pct,
+            formatted: `${current} / 365 días`,
+            label: 'Días del año'
+        };
+    }
+
+    return null;
+};
+
+
+window.checkAndUnlockAchievements = function() {
+    const data = loadAchievements();
+    if (!data.unlocked) data.unlocked = {};
+
+    const newlyUnlocked = [];
     const unlock = (id) => {
         if (!data.unlocked[id]) {
             data.unlocked[id] = { unlockedAt: Date.now() };
             const ach = ACHIEVEMENTS_CATALOG.find(a => a.id === id);
             if (ach) newlyUnlocked.push(ach);
+            return true;
         }
+        return false;
     };
 
-    // 1. Total workouts
-    const totalCount = completed.length;
-    if (totalCount >= 1) unlock('first_workout');
-    if (totalCount >= 5) unlock('workouts_5');
-    if (totalCount >= 15) unlock('workouts_15');
-    if (totalCount >= 30) unlock('workouts_30');
-    if (totalCount >= 50) unlock('workouts_50');
-    if (totalCount >= 100) unlock('workouts_100');
+    const resetTs = parseInt(localStorage.getItem('gym_achievements_reset_timestamp') || '0', 10);
+    const completed = (Array.isArray(state.completedWorkouts) ? state.completedWorkouts : [])
+        .filter(w => {
+            const wTime = w.completedAt || (w.date ? new Date(w.date).getTime() : 0);
+            return wTime >= resetTs;
+        });
+    const totalWorkouts = completed.length;
 
-    // 2. Weights, Volumes, Bench 100kg & Leg Days
-    let maxWeight = 0;
-    let totalVolumeHist = 0;
-    let hasFailure = false;
-    let hasDropset = false;
-    let hasBench100 = false;
-    const legWorkoutsByMonth = {};
+    // 1. Workouts count milestones
+    if (totalWorkouts >= 1) unlock('first_workout');
+    if (totalWorkouts >= 5) unlock('workouts_5');
+    if (totalWorkouts >= 15) unlock('workouts_15');
+    if (totalWorkouts >= 30) unlock('workouts_30');
+    if (totalWorkouts >= 50) unlock('workouts_50');
+    if (totalWorkouts >= 100) unlock('workouts_100');
+
+    // 2. Strength milestones
+    let maxLifted = 0;
+    let maxBench = 0;
+    let hadFailure = false;
+    let hadDropset = false;
+    let had3PRsInSession = false;
 
     completed.forEach(w => {
-        let sessionVol = 0;
-        let isLegSession = false;
+        let sessionPRCount = (w.prs && Array.isArray(w.prs)) ? w.prs.length : 0;
+        if (sessionPRCount >= 3) had3PRsInSession = true;
 
         (w.exercises || []).forEach(ex => {
-            const exNameLower = (ex.name || '').toLowerCase();
-            const exGroupLower = (ex.group || '').toLowerCase();
-
-            if (exGroupLower.includes('pierna') || exGroupLower.includes('cuádricep') || exGroupLower.includes('isquio') || exGroupLower.includes('glúteo') ||
-                exNameLower.includes('sentadilla') || exNameLower.includes('squat') || exNameLower.includes('prensa') || exNameLower.includes('peso muerto') || exNameLower.includes('zancada')) {
-                isLegSession = true;
-            }
-
-            const isBenchEx = exNameLower.includes('banca') || exNameLower.includes('bench') || exNameLower.includes('press plano');
+            const exName = (ex.name || '').toLowerCase();
+            const isBench = exName.includes('press de banca') || exName.includes('press plano con barra') || exName.includes('bench press');
 
             (ex.sets || []).forEach(s => {
                 const wt = parseFloat(s.weight) || 0;
-                const reps = parseFloat(s.reps) || 0;
-                if (wt > maxWeight) maxWeight = wt;
-                if (isBenchEx && wt >= 100) hasBench100 = true;
-                sessionVol += (wt * reps);
-
-                if (s.type === 'Al fallo') hasFailure = true;
-                if (s.weightDrop || s.repsDrop) hasDropset = true;
+                if (wt > maxLifted) maxLifted = wt;
+                if (isBench && wt > maxBench) maxBench = wt;
+                if (s.type === 'Al fallo' || s.type === 'Dropset fallo') hadFailure = true;
+                if (s.type === 'Dropset' || s.type === 'Dropset fallo' || s.weightDrop) hadDropset = true;
             });
         });
+    });
 
-        totalVolumeHist += sessionVol;
-        if (sessionVol >= 5000) unlock('volume_5k');
-        if (sessionVol >= 10000) unlock('volume_10k');
-        if (sessionVol >= 15000) unlock('volume_15k');
-        if (sessionVol >= 20000) unlock('volume_20k_session');
+    if (maxLifted >= 60) unlock('strength_60');
+    if (maxLifted >= 80) unlock('strength_80');
+    if (maxLifted >= 100) unlock('strength_100');
+    if (maxLifted >= 120) unlock('strength_120');
+    if (maxLifted >= 140) unlock('strength_140');
+    if (maxBench >= 100) unlock('bench_100');
 
-        // Leg day respect (4 leg workouts in a month)
-        if (isLegSession) {
-            const dateRef = w.completedAt ? new Date(w.completedAt) : (w.date ? new Date() : null);
-            if (dateRef) {
-                const monthKey = `${dateRef.getFullYear()}-${dateRef.getMonth()}`;
-                legWorkoutsByMonth[monthKey] = (legWorkoutsByMonth[monthKey] || 0) + 1;
-                if (legWorkoutsByMonth[monthKey] >= 4) unlock('leg_day_respect');
+    // 3. Effort & PRs
+    if (hadFailure) unlock('to_failure');
+    if (hadDropset) unlock('dropset_done');
+    if (had3PRsInSession) unlock('pr_triple');
+    if (localStorage.getItem('gym_unlocked_first_pr') === 'true' || completed.some(w => w.prs && w.prs.length > 0)) {
+        unlock('first_pr');
+    }
+
+    // 4. Volume milestones
+    let totalHistoricalVolume = 0;
+    let maxSessionVolume = 0;
+
+    completed.forEach(w => {
+        let sessionVol = 0;
+        (w.exercises || []).forEach(ex => {
+            (ex.sets || []).forEach(s => {
+                const wt = parseFloat(s.weight) || 0;
+                const r = parseFloat(s.reps) || 0;
+                sessionVol += (wt * r);
+            });
+        });
+        totalHistoricalVolume += sessionVol;
+        if (sessionVol > maxSessionVolume) maxSessionVolume = sessionVol;
+    });
+
+    if (maxSessionVolume >= 5000) unlock('volume_5k');
+    if (maxSessionVolume >= 10000) unlock('volume_10k');
+    if (maxSessionVolume >= 15000) unlock('volume_15k');
+    if (maxSessionVolume >= 20000) unlock('volume_20k_session');
+
+    if (totalHistoricalVolume >= 100000) unlock('volume_total_100k');
+    if (totalHistoricalVolume >= 250000) unlock('volume_250k');
+    if (totalHistoricalVolume >= 500000) unlock('volume_500k');
+    if (totalHistoricalVolume >= 1000000) unlock('volume_1m');
+
+    // 5. Streaks & Frequency
+    const workoutsByWeek = {};
+    completed.forEach(w => {
+        const d = w.completedAt ? new Date(w.completedAt) : (w.date ? new Date(w.date) : null);
+        if (d && !isNaN(d.getTime())) {
+            const y = d.getFullYear();
+            const oneJan = new Date(y, 0, 1);
+            const numberOfDays = Math.floor((d - oneJan) / (24 * 60 * 60 * 1000));
+            const week = Math.ceil((d.getDay() + 1 + numberOfDays) / 7);
+            const key = `${y}_W${week}`;
+            workoutsByWeek[key] = (workoutsByWeek[key] || 0) + 1;
+        }
+    });
+
+    let maxInWeek = 0;
+    Object.values(workoutsByWeek).forEach(cnt => {
+        if (cnt > maxInWeek) maxInWeek = cnt;
+    });
+
+    if (maxInWeek >= 3) unlock('streak_3_week');
+    if (maxInWeek >= 4) unlock('perfect_week');
+
+    // Leg day respect (at least 4 leg workouts in same month)
+    const legsByMonth = {};
+    completed.forEach(w => {
+        const d = w.completedAt ? new Date(w.completedAt) : (w.date ? new Date(w.date) : null);
+        if (d && !isNaN(d.getTime())) {
+            const mKey = `${d.getFullYear()}_M${d.getMonth() + 1}`;
+            const hasLegs = (w.exercises || []).some(ex => {
+                const n = (ex.name || '').toLowerCase();
+                return n.includes('pierna') || n.includes('sentadilla') || n.includes('prensa') || n.includes('cuádriceps') || n.includes('isquio') || n.includes('gemelo') || n.includes('femoral') || n.includes('búlgara') || n.includes('zancada') || n.includes('hack') || n.includes('peso muerto');
+            });
+            if (hasLegs) {
+                legsByMonth[mKey] = (legsByMonth[mKey] || 0) + 1;
             }
         }
+    });
 
-        // Session time & hours
-        if (w.startTime && w.completedAt) {
-            const durMin = (w.completedAt - w.startTime) / 60000;
-            if (durMin >= 60) unlock('iron_hour');
+    if (Object.values(legsByMonth).some(cnt => cnt >= 4)) {
+        unlock('leg_day_respect');
+    }
 
-            const dateObj = new Date(w.completedAt);
-            const hour = dateObj.getHours();
-            if (hour < 9) unlock('early_bird');
-            if (hour >= 20 && dateObj.getMinutes() >= 30) unlock('night_owl');
+    // 6. Lifestyle & Timing
+    completed.forEach(w => {
+        const d = w.completedAt ? new Date(w.completedAt) : (w.date ? new Date(w.date) : null);
+        if (d && !isNaN(d.getTime())) {
+            const h = d.getHours();
+            const m = d.getMinutes();
+            if (h < 9) unlock('early_bird');
+            if (h > 20 || (h === 20 && m >= 30)) unlock('night_owl');
+        }
+
+        const dur = (w.duration || '').toLowerCase();
+        let min = 0;
+        if (dur.includes(':')) {
+            const p = dur.split(':').map(Number);
+            if (p.length === 2) min = p[0] + (p[1] / 60);
+            if (p.length === 3) min = (p[0] * 60) + p[1] + (p[2] / 60);
+        } else if (dur.includes('h') || dur.includes('m')) {
+            const hMatch = dur.match(/(\d+)\s*h/);
+            const mMatch = dur.match(/(\d+)\s*m/);
+            if (hMatch) min += parseInt(hMatch[1]) * 60;
+            if (mMatch) min += parseInt(mMatch[1]);
+        }
+        if (min >= 60) unlock('iron_hour');
+    });
+
+    // 7. Evolution & Measurements
+    try {
+        const evoRaw = localStorage.getItem('gym_evolution_data');
+        if (evoRaw) {
+            const evo = JSON.parse(evoRaw);
+            if (Array.isArray(evo) && evo.length > 0) {
+                unlock('first_evolution');
+                const hasPhotos = evo.some(e => e.photos && e.photos.length > 0);
+                if (hasPhotos) unlock('photo_sculptor');
+
+                const waistEntries = evo.filter(e => e.waist && Number(e.waist) > 0).sort((a,b) => new Date(a.date) - new Date(b.date));
+                if (waistEntries.length >= 2) {
+                    const diff = Number(waistEntries[0].waist) - Number(waistEntries[waistEntries.length - 1].waist);
+                    if (diff >= 2) unlock('steel_waist');
+                }
+            }
+        }
+    } catch(e) {}
+
+    // Technique Master
+    try {
+        const viewed = JSON.parse(localStorage.getItem('gym_viewed_techniques') || '[]');
+        if (viewed.length >= 10) unlock('technique_master');
+    } catch(e) {}
+
+    // 8. Server Overload (1,000 sets)
+    let totalAllCompletedSets = 0;
+    completed.forEach(w => {
+        (w.exercises || []).forEach(ex => {
+            totalAllCompletedSets += (ex.sets || []).length;
+        });
+    });
+    if (totalAllCompletedSets >= 1000) unlock('server_overload');
+
+    // 9. Disciplina de Hierro (Entrenar en cumpleaños o festivo nacional del país del usuario)
+    const userCountry = detectUserCountry();
+    const countryHolidays = getCountryHolidays(userCountry);
+    const userBirth = state.profile?.birthDate || localStorage.getItem('gym_user_birthdate') || '';
+    let birthMonthDay = '';
+    if (userBirth && userBirth.includes('-')) {
+        const parts = userBirth.split('-');
+        if (parts.length === 3) birthMonthDay = parts[1] + '-' + parts[2];
+    }
+    completed.forEach(w => {
+        const dObj = w.completedAt ? new Date(w.completedAt) : (w.date ? new Date(w.date) : null);
+        if (dObj && !isNaN(dObj.getTime())) {
+            const m = String(dObj.getMonth() + 1).padStart(2, '0');
+            const d = String(dObj.getDate()).padStart(2, '0');
+            const key = m + '-' + d;
+            if (countryHolidays.includes(key) || (birthMonthDay && key === birthMonthDay)) {
+                unlock('iron_discipline');
+            }
         }
     });
 
-    if (maxWeight >= 60) unlock('strength_60');
-    if (maxWeight >= 80) unlock('strength_80');
-    if (maxWeight >= 100) unlock('strength_100');
-    if (hasBench100) unlock('bench_100');
-    if (maxWeight >= 120) unlock('strength_120');
-    if (maxWeight >= 140) unlock('strength_140');
-
-    if (totalVolumeHist >= 100000) unlock('volume_total_100k');
-    if (totalVolumeHist >= 250000) unlock('volume_250k');
-    if (totalVolumeHist >= 500000) unlock('volume_500k');
-    if (totalVolumeHist >= 1000000) unlock('volume_1m');
-
-    if (hasFailure) unlock('to_failure');
-    if (hasDropset) unlock('dropset_done');
-
-    // 3. PR checks
-    const prRecords = JSON.parse(localStorage.getItem('gym_personal_records') || '{}');
-    if (Object.keys(prRecords).length > 0) unlock('first_pr');
-
-    if (latestSessionData && latestSessionData.newPRs && latestSessionData.newPRs.length >= 3) {
-        unlock('pr_triple');
-    }
-
-    // 4. Weekly workouts count
-    const now = new Date();
-    const day = now.getDay();
-    const diff = now.getDate() - day + (day === 0 ? -6 : 1);
-    const mondayTime = new Date(now.setDate(diff)).setHours(0,0,0,0);
-    const thisWeekWorkouts = completed.filter(w => (w.completedAt || 0) >= mondayTime);
-    if (thisWeekWorkouts.length >= 3) unlock('streak_3_week');
-    if (thisWeekWorkouts.length >= 4) unlock('perfect_week');
-
-    // 5. Full body in a week check
-    const trainedMusclesThisWeek = new Set();
-    thisWeekWorkouts.forEach(w => {
-        (w.exercises || []).forEach(ex => trainedMusclesThisWeek.add(normalizeMuscleName(ex.group || ex.name)));
+    // 10. Piernas de Grindelwald (50.000 kg acumulados en pierna)
+    let grindelwaldLegVol = 0;
+    completed.forEach(w => {
+        (w.exercises || []).forEach(ex => {
+            const n = (ex.name || '').toLowerCase();
+            if (n.includes('sentadilla') || n.includes('squat') || n.includes('prensa') || n.includes('press de pierna') || n.includes('zancada') || n.includes('lunge') || n.includes('búlgara') || n.includes('hack')) {
+                (ex.sets || []).forEach(s => {
+                    const wt = parseFloat(s.weight) || 0;
+                    const r = parseFloat(s.reps) || 0;
+                    grindelwaldLegVol += (wt * r);
+                });
+            }
+        });
     });
-    if (trainedMusclesThisWeek.has('Pecho') && trainedMusclesThisWeek.has('Espalda') && trainedMusclesThisWeek.has('Hombros') && trainedMusclesThisWeek.has('Cuádriceps')) {
-        unlock('full_body_week');
-    }
+    if (grindelwaldLegVol >= 50000) unlock('grindelwald_legs');
 
-    // 6. Evolution records & Steel Waist check
-    const evol = state.evolution || [];
-    if (evol.length > 0) unlock('first_evolution');
-    const photosCount = evol.filter(e => e.photo || e.imageData || e.photoPath).length;
-    if (photosCount >= 2) unlock('photo_sculptor');
+    // 11. Aura del Paladín (20 sesiones de core)
+    let paladinCoreCount = 0;
+    completed.forEach(w => {
+        const hasCore = (w.exercises || []).some(ex => {
+            const n = (ex.name || '').toLowerCase();
+            return n.includes('abdominal') || n.includes('core') || n.includes('plancha') || n.includes('crunch') || n.includes('lumbar') || n.includes('rueda abdominal') || n.includes('elevaciones de piernas');
+        });
+        if (hasCore) paladinCoreCount++;
+    });
+    if (paladinCoreCount >= 20) unlock('paladin_aura');
 
-    const waistEntries = evol.filter(e => parseFloat(e.waist) > 0);
-    if (waistEntries.length >= 2) {
-        const initialWaist = parseFloat(waistEntries[0].waist);
-        const minWaist = Math.min(...waistEntries.map(e => parseFloat(e.waist)));
-        if ((initialWaist - minWaist) >= 2) unlock('steel_waist');
-    }
+    // 12. Golpe de Rajar (Cleave) (3 PRs en ejercicios compuestos en una sola sesión)
+    completed.forEach(w => {
+        if (w.prs && Array.isArray(w.prs) && w.prs.length >= 3) {
+            let compoundPrCount = 0;
+            w.prs.forEach(pr => {
+                const n = (pr.exerciseName || '').toLowerCase();
+                if (n.includes('banca') || n.includes('press') || n.includes('sentadilla') || n.includes('squat') || n.includes('peso muerto') || n.includes('deadlift') || n.includes('dominada') || n.includes('remo') || n.includes('fondos')) {
+                    compoundPrCount++;
+                }
+            });
+            if (compoundPrCount >= 3) unlock('cleave_strike');
+        }
+    });
 
-    // 7. Technique master check
-    try {
-        const viewedTech = JSON.parse(localStorage.getItem('gym_technique_viewed') || '[]');
-        if (viewedTech.length >= 10) unlock('technique_master');
-    } catch(e) {}
+    // 13. Sincronización Total (365 días del año)
+    const allDaysOfYears = new Set();
+    completed.forEach(w => {
+        const d = w.date || (w.completedAt ? new Date(w.completedAt).toISOString().split('T')[0] : '');
+        if (d && d.length >= 10) allDaysOfYears.add(d.substring(5, 10));
+    });
+    if (allDaysOfYears.size >= 365) unlock('total_sync_365');
+
+    // 14. El despertar de Carlo: Registra un entrenamiento de al menos media hora un domingo a las 03:00 AM.
+    completed.forEach(w => {
+        const dObj = w.completedAt ? new Date(w.completedAt) : (w.date ? new Date(w.date) : null);
+        if (dObj && !isNaN(dObj.getTime())) {
+            const isSunday = dObj.getDay() === 0;
+            const is3AM = dObj.getHours() === 3;
+            
+            // Calculate minutes
+            const dur = (w.duration || '').toLowerCase();
+            let min = 0;
+            if (dur.includes(':')) {
+                const p = dur.split(':').map(Number);
+                if (p.length === 2) min = p[0] + (p[1] / 60);
+                if (p.length === 3) min = (p[0] * 60) + p[1] + (p[2] / 60);
+            } else if (dur.includes('h') || dur.includes('m')) {
+                const hMatch = dur.match(/(\d+)\s*h/);
+                const mMatch = dur.match(/(\d+)\s*m/);
+                if (hMatch) min += parseInt(hMatch[1]) * 60;
+                if (mMatch) min += parseInt(mMatch[1]);
+            }
+            if (isSunday && is3AM && min >= 30) {
+                unlock('carlos_awakening');
+            }
+        }
+    });
+
+    // 15. Flag-based achievements
+    if (localStorage.getItem('gym_unlocked_data_analyst') === 'true') unlock('data_analyst');
+    if (localStorage.getItem('gym_unlocked_the_architect') === 'true') unlock('the_architect');
+    if (localStorage.getItem('gym_unlocked_controlled_chaos') === 'true') unlock('controlled_chaos');
+    if (localStorage.getItem('gym_unlocked_skipped_leg_day') === 'true') unlock('skipped_leg_day');
+    if (localStorage.getItem('gym_unlocked_gemini_oracle') === 'true') unlock('gemini_oracle');
+    if (localStorage.getItem('gym_unlocked_story_ambassador') === 'true') unlock('story_ambassador');
+    if (localStorage.getItem('gym_unlocked_automation_loop') === 'true') unlock('automation_loop');
 
     saveAchievements(data);
 
-    // Trigger toast celebration for newly unlocked
     if (newlyUnlocked.length > 0) {
         newlyUnlocked.forEach((ach, index) => {
             setTimeout(() => showAchievementToast(ach), index * 4200);
@@ -9537,13 +11301,14 @@ window.checkAndUnlockAchievements = function(latestSessionData) {
     return newlyUnlocked;
 };
 
+
 window.showAchievementToast = function(ach) {
     const toast = document.getElementById('achievement-celebration-toast');
     if (!toast) return;
 
-    const iconEl = document.getElementById('achievement-toast-icon');
-    const titleEl = document.getElementById('achievement-toast-title');
-    const descEl = document.getElementById('achievement-toast-desc');
+    const iconEl = document.getElementById('toast-achievement-icon') || document.getElementById('achievement-toast-icon') || toast.querySelector('i');
+    const titleEl = document.getElementById('toast-achievement-name') || document.getElementById('achievement-toast-title');
+    const descEl = document.getElementById('toast-achievement-desc') || document.getElementById('achievement-toast-desc');
 
     if (iconEl) iconEl.className = 'ph-fill ' + (ach.icon || 'ph-trophy');
     if (titleEl) titleEl.textContent = typeof getTrAchievementTitle === 'function' ? getTrAchievementTitle(ach.id, ach.title) : ach.title;
@@ -9565,8 +11330,17 @@ window.showAchievementToast = function(ach) {
     }, 3800);
 };
 
+
+window.achCurrentFilter = window.achCurrentFilter || 'all';
+
+window.setAchievementsFilter = function(filter) {
+    window.achCurrentFilter = filter;
+    renderAchievementsView();
+};
+
 window.renderAchievementsView = function() {
     const mount = document.getElementById('achievements-grid-mount');
+    const filterBar = document.getElementById('achievements-filter-bar');
     const countEl = document.getElementById('achievements-global-count');
     const barEl = document.getElementById('achievements-global-bar');
     if (!mount) return;
@@ -9575,35 +11349,218 @@ window.renderAchievementsView = function() {
     const data = loadAchievements();
     const unlockedCount = Object.keys(data.unlocked).length;
     const totalCount = ACHIEVEMENTS_CATALOG.length;
+    const lockedCount = totalCount - unlockedCount;
     const pct = Math.round((unlockedCount / totalCount) * 100);
 
-    if (countEl) countEl.textContent = `${unlockedCount} / ${totalCount} Desbloqueados (${pct}%)`;
+    const lang = (window.state && window.state.language) || localStorage.getItem('gym_language') || 'es';
+
+    const tAll = (typeof getT === 'function' ? getT('common.all') : null) || (lang === 'en' ? 'All' : (lang === 'ru' ? 'Все' : (lang === 'et' ? 'Kõik' : (lang === 'uk' ? 'Всі' : 'Todos'))));
+    const tUnlocked = lang === 'en' ? 'Unlocked' : (lang === 'ru' ? 'Открытые' : (lang === 'et' ? 'Avatud' : (lang === 'uk' ? 'Відкриті' : 'Desbloqueados')));
+    const tLocked = lang === 'en' ? 'Locked' : (lang === 'ru' ? 'В ожидании' : (lang === 'et' ? 'Ootel' : (lang === 'uk' ? 'В очікуванні' : 'Pendientes')));
+    const tUnlockedOn = lang === 'en' ? 'Unlocked on' : (lang === 'ru' ? 'Разблокировано' : (lang === 'et' ? 'Avatud' : (lang === 'uk' ? 'Розблоковано' : 'Desbloqueado el')));
+    const tEmpty = lang === 'en' ? 'No achievements in this category.' : (lang === 'ru' ? 'В этой категории пока нет достижений.' : (lang === 'et' ? 'Selles kategoorias pole saavutusi.' : (lang === 'uk' ? 'У цій категорії поки немає досягнень.' : 'No hay logros en esta categoría.')));
+
+    if (countEl) countEl.textContent = `${unlockedCount} / ${totalCount} ${tUnlocked} (${pct}%)`;
     if (barEl) barEl.style.width = pct + '%';
 
+    if (filterBar) {
+        const curF = window.achCurrentFilter || 'all';
+        filterBar.innerHTML = `
+            <button type="button" class="btn-secondary" onclick="setAchievementsFilter('all')" style="padding: 6px 14px; font-size: 12px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: all 0.2s; ${curF === 'all' ? 'background: var(--color-accent); color: white; border-color: var(--color-accent);' : 'background: var(--bg-surface-elevated); color: var(--text-secondary);'}">${tAll} (${totalCount})</button>
+            <button type="button" class="btn-secondary" onclick="setAchievementsFilter('unlocked')" style="padding: 6px 14px; font-size: 12px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: all 0.2s; ${curF === 'unlocked' ? 'background: #f59e0b; color: white; border-color: #f59e0b;' : 'background: var(--bg-surface-elevated); color: var(--text-secondary);'}">🏆 ${tUnlocked} (${unlockedCount})</button>
+            <button type="button" class="btn-secondary" onclick="setAchievementsFilter('locked')" style="padding: 6px 14px; font-size: 12px; border-radius: 20px; font-weight: 700; cursor: pointer; transition: all 0.2s; ${curF === 'locked' ? 'background: var(--color-heavy); color: white; border-color: var(--color-heavy);' : 'background: var(--bg-surface-elevated); color: var(--text-secondary);'}">🔒 ${tLocked} (${lockedCount})</button>
+        `;
+    }
+
+    const sortedList = [...ACHIEVEMENTS_CATALOG].sort((a, b) => {
+        const aUnlocked = !!data.unlocked[a.id];
+        const bUnlocked = !!data.unlocked[b.id];
+        if (aUnlocked && !bUnlocked) return -1;
+        if (!aUnlocked && bUnlocked) return 1;
+        if (aUnlocked && bUnlocked) {
+            const timeA = data.unlocked[a.id].unlockedAt || 0;
+            const timeB = data.unlocked[b.id].unlockedAt || 0;
+            return timeB - timeA;
+        }
+        return 0;
+    });
+
+    const curF = window.achCurrentFilter || 'all';
+    const filteredList = sortedList.filter(ach => {
+        const isUnlocked = !!data.unlocked[ach.id];
+        if (curF === 'unlocked') return isUnlocked;
+        if (curF === 'locked') return !isUnlocked;
+        return true;
+    });
+
+    if (filteredList.length === 0) {
+        mount.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 32px 16px; color: var(--text-secondary); font-size: 13px;">${tEmpty}</div>`;
+        return;
+    }
+
     let html = '';
-    ACHIEVEMENTS_CATALOG.forEach(ach => {
+    filteredList.forEach(ach => {
         const isUnlocked = !!data.unlocked[ach.id];
         const dateStr = isUnlocked ? new Date(data.unlocked[ach.id].unlockedAt).toLocaleDateString() : '';
+        const title = getTrAchievementTitle(ach.id, ach.title);
+        const desc = getTrAchievementDesc(ach.id, ach.desc);
+        const prog = getAchievementProgress(ach.id, state, data);
+
+        let progressHtml = '';
+        if (prog) {
+            const progressColor = isUnlocked ? 'linear-gradient(90deg, #10b981, #059669)' : 'linear-gradient(90deg, #3b82f6, #6366f1)';
+            const numColor = isUnlocked ? '#10b981' : 'var(--color-accent)';
+            progressHtml = `
+                <div style="margin-top: 8px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 5px 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 10px; margin-bottom: 3px;">
+                        <span style="color: var(--text-muted); font-weight: 600;">${prog.label || 'Progreso'}</span>
+                        <strong style="color: ${numColor}; font-weight: 700;">${prog.formatted}</strong>
+                    </div>
+                    <div style="width: 100%; height: 5px; background: rgba(255, 255, 255, 0.08); border-radius: 999px; overflow: hidden;">
+                        <div style="width: ${prog.pct}%; height: 100%; background: ${progressColor}; border-radius: 999px; transition: width 0.3s ease;"></div>
+                    </div>
+                </div>
+            `;
+        }
 
         html += `
-            <div class="achievement-card ${isUnlocked ? 'unlocked' : 'locked'}">
-                <div class="achievement-icon-wrapper">
-                    <i class="ph-bold ${ach.icon}"></i>
-                </div>
-                <div style="flex: 1; min-width: 0;">
-                    <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px;">
-                        <span style="font-weight: 700; font-size: 13px; color: var(--text-primary); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${ach.title}</span>
-                        ${isUnlocked ? '<span style="color: #f59e0b; font-size: 12px;"><i class="ph-bold ph-check-circle"></i></span>' : '<span style="color: var(--text-muted); font-size: 11px;"><i class="ph ph-lock"></i></span>'}
+            <div class="achievement-card ${isUnlocked ? 'unlocked' : 'locked'}" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div style="display: flex; gap: 12px; align-items: flex-start;">
+                    <div class="achievement-icon-wrapper" style="flex-shrink: 0;">
+                        <i class="ph-bold ${ach.icon}"></i>
                     </div>
-                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px; line-height: 1.3;">${ach.desc}</div>
-                    ${isUnlocked ? `<div style="font-size: 10px; color: #f59e0b; margin-top: 4px; font-weight: 600;">Desbloqueado el ${dateStr}</div>` : ''}
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px;">
+                            <span style="font-weight: 700; font-size: 13px; color: var(--text-primary); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${title}</span>
+                            ${isUnlocked ? '<span style="color: #f59e0b; font-size: 12px; flex-shrink: 0;"><i class="ph-bold ph-check-circle"></i></span>' : '<span style="color: var(--text-muted); font-size: 11px; flex-shrink: 0;"><i class="ph ph-lock"></i></span>'}
+                        </div>
+                        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px; line-height: 1.35;">${desc}</div>
+                    </div>
                 </div>
+                ${progressHtml}
+                ${isUnlocked ? `<div style="font-size: 10px; color: #f59e0b; margin-top: 6px; font-weight: 600;">${tUnlockedOn} ${dateStr}</div>` : ''}
             </div>
         `;
     });
 
     mount.innerHTML = html;
+
+    let resetContainer = document.getElementById('achievements-reset-container');
+    if (!resetContainer && mount.parentNode) {
+        resetContainer = document.createElement('div');
+        resetContainer.id = 'achievements-reset-container';
+        resetContainer.style.cssText = 'margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border-color); text-align: center;';
+        resetContainer.innerHTML = `
+            <button type="button" id="btn-reset-achievements" onclick="confirmResetAchievements()" style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); color: #ef4444; padding: 10px 18px; border-radius: 12px; font-size: 12.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;">
+                <i class="ph-bold ph-arrow-counter-clockwise"></i>
+                <span id="btn-reset-achievements-text" data-i18n="achievements.resetBtn">Restablecer logros</span>
+            </button>
+            <p id="reset-achievements-hint" style="font-size: 11px; color: var(--text-muted); margin-top: 6px; margin-bottom: 0;">Protegido con 3 ventanas de confirmación para evitar borrados accidentales.</p>
+        `;
+        mount.parentNode.appendChild(resetContainer);
+    }
+
+    const resetBtnText = document.getElementById('btn-reset-achievements-text');
+    const resetHintText = document.getElementById('reset-achievements-hint');
+    if (resetBtnText) {
+        const btnMap = {
+            es: 'Restablecer logros',
+            en: 'Reset achievements',
+            ru: 'Сбросить достижения',
+            et: 'Lähtesta saavutused',
+            uk: 'Скинути досягнення'
+        };
+        resetBtnText.textContent = btnMap[lang] || btnMap['es'];
+    }
+    if (resetHintText) {
+        const hintMap = {
+            es: 'Protegido con 3 ventanas de confirmación para evitar borrados accidentales.',
+            en: 'Protected by 3 confirmation dialogs to prevent accidental resets.',
+            ru: 'Защищено 3 окнами подтверждения для предотвращения случайного сброса.',
+            et: 'Kaitstud 3 kinnitusaknaga juhusliku lähtestamise vältimiseks.',
+            uk: 'Захищено 3 вікнами підтвердження для запобігання випадкового скидання.'
+        };
+        resetHintText.textContent = hintMap[lang] || hintMap['es'];
+    }
 };
+
+
+window.confirmResetAchievements = function() {
+    const lang = (window.state && window.state.language) || localStorage.getItem('gym_language') || 'es';
+
+    const msgs = {
+        es: [
+            "¿Estás seguro de que deseas restablecer todos tus logros?\n\nEsta acción eliminará todas las medallas y trofeos que has desbloqueado.",
+            "¡ATENCIÓN! (Confirmación 2 de 3)\n\n¿Realmente quieres reiniciar todo tu progreso de logros? Tendrás que volver a completar cada desafío desde cero para desbloquearlos de nuevo.",
+            "⚠️ ÚLTIMA ADVERTENCIA (Confirmación 3 de 3)\n\n¿Confirmas el borrado DEFINITIVO de tus logros?\nEsta acción es completamente irreversible."
+        ],
+        en: [
+            "Are you sure you want to reset all your achievements?\n\nThis action will remove all badges and trophies earned so far.",
+            "ATTENTION! (Confirmation 2 of 3)\n\nDo you really want to reset all achievement progress? You will have to complete each challenge from scratch to unlock them again.",
+            "⚠️ FINAL WARNING (Confirmation 3 of 3)\n\nDo you confirm the PERMANENT deletion of your achievements?\nThis action cannot be undone."
+        ],
+        ru: [
+            "Вы уверены, что хотите сбросить все свои достижения?\n\nЭто действие удалит все полученные медали и трофеи.",
+            "ВНИМАНИЕ! (Подтверждение 2 из 3)\n\nВы действительно хотите сбросить весь прогресс достижений? Вам придется выполнять задания заново.",
+            "⚠️ ПОСЛЕДНЕЕ ПРЕДУПРЕЖДЕНИЕ (Подтверждение 3 из 3)\n\nПодтверждаете ОКОНЧАТЕЛЬНЫЙ сброс достижений?\nЭто действие необратимо."
+        ],
+        et: [
+            "Kas olete kindel, et soovite kõik saavutused lähtestada?\n\nSee toiming eemaldab kõik seni teenitud medalid ja karikad.",
+            "TÄHELEPANU! (Kinnitus 2 / 3)\n\nKas soovite tõesti kogu saavutuste edenemise nullida? Peate kõike uuesti alustama.",
+            "⚠️ VIIMANE HOIATUS (Kinnitus 3 / 3)\n\nKas kinnitate saavutuste LÕPLIKKU kustutamist?\nSeda toimingut ei saa tagasi võtta."
+        ],
+        uk: [
+            "Ви впевнені, що хочете скинути всі свої досягнення?\n\nЦя дія видалить усі отримані медалі та трофеї.",
+            "УВАГА! (Підтвердження 2 з 3)\n\nВи дійсно бажаєте скинути весь прогрес досягнень? Вам доведеться виконувати завдання заново.",
+            "⚠️ ОСТАННЄ ПОПЕРЕДЖЕННЯ (Підтвердження 3 з 3)\n\nПідтверджуєте ОСТАТОЧНЕ видалення досягнень?\nЦя дія незворотна."
+        ]
+    };
+
+    const currentMsgs = msgs[lang] || msgs['es'];
+
+    // Ventana 1 de confirmación
+    if (!confirm(currentMsgs[0])) return;
+
+    // Ventana 2 de confirmación
+    if (!confirm(currentMsgs[1])) return;
+
+    // Ventana 3 de confirmación
+    if (!confirm(currentMsgs[2])) return;
+
+    // Ejecutar el restablecimiento completo
+    resetAllAchievements();
+};
+
+window.resetAllAchievements = function() {
+    localStorage.setItem('gym_achievements_reset_timestamp', Date.now().toString());
+    localStorage.setItem('gym_achievements', JSON.stringify({ unlocked: {} }));
+    localStorage.removeItem('gym_unlocked_first_pr');
+    localStorage.removeItem('gym_unlocked_carlos_awakening');
+    localStorage.removeItem('gym_unlocked_data_analyst');
+    localStorage.removeItem('gym_unlocked_the_architect');
+    localStorage.removeItem('gym_unlocked_controlled_chaos');
+    localStorage.removeItem('gym_unlocked_skipped_leg_day');
+    localStorage.removeItem('gym_unlocked_gemini_oracle');
+    localStorage.removeItem('gym_unlocked_story_ambassador');
+    localStorage.removeItem('gym_unlocked_automation_loop');
+    localStorage.removeItem('gym_viewed_techniques');
+
+    if (typeof renderAchievementsView === 'function') {
+        renderAchievementsView();
+    }
+
+    const lang = (window.state && window.state.language) || localStorage.getItem('gym_language') || 'es';
+    const successMsg = {
+        es: "¡Logros restablecidos con éxito! Puedes comenzar a desbloquearlos de nuevo.",
+        en: "Achievements successfully reset! You can start unlocking them from scratch.",
+        ru: "Достижения успешно сброшены! Вы можете разблокировать их заново.",
+        et: "Saavutused on edukalt lähtestatud! Võid alustada nende avamist uuesti.",
+        uk: "Досягнення успішно скинуто! Ви можете розблокувати їх заново."
+    };
+    alert(successMsg[lang] || successMsg['es']);
+};
+
+
 
 // =========================================================================
 // 5. STORY CARD GENERATOR (1080x1920 CANVAS FOR INSTAGRAM & WHATSAPP)
@@ -10419,7 +12376,12 @@ window.saveAndCloseJointIssuesModal = function() {
     updateJointIssuesBadge();
     const modal = document.getElementById('modal-joint-issues');
     if (modal) modal.classList.remove('active');
-    if (typeof renderWorkout === 'function') renderWorkout();
+    if (activeSession && typeof renderWorkout === 'function') {
+        renderWorkout();
+    }
+    if (typeof showToast === 'function') {
+        showToast('Molestias articulares guardadas');
+    }
 };
 
 window.openJointStressModal = function(exerciseId, exerciseName) {
@@ -10518,270 +12480,328 @@ window.replaceWithSafeAlternative = function(newExId, oldExId) {
 
 
 // =========================================================================
-// MÓDULO PESTAÑA ACTIVIDAD Y SAMSUNG HEALTH
+// REAL ACTIVITY & SAMSUNG HEALTH INTEGRATION
 // =========================================================================
-window.selectedActivityDate = new Date().toISOString().split('T')[0];
+let activityDateOffset = 0; // 0 = today, -1 = yesterday, etc.
+let cachedDailySteps = 0;
+let hasSensorHardware = true;
+let hasSensorPermission = true;
 
-window.initActivityData = function() {
-    state.activityData = state.activityData || {
-        dailyStepGoal: 10000,
-        lastSync: null,
-        days: {}
-    };
-
-    const todayStr = new Date().toISOString().split('T')[0];
-    if (!state.activityData.days[todayStr]) {
-        // Initial sample or synced state for today
-        state.activityData.days[todayStr] = {
-            steps: 8450,
-            distanceKm: 6.12,
-            calories: 540,
-            activeMinutes: 52,
-            activities: [
-                { id: 'act_1', title: 'Caminata rápida al aire libre', type: 'walking', durationMin: 32, calories: 165, time: '08:20' },
-                { id: 'act_2', title: 'Entrenamiento de fuerza Gym Tracker', type: 'strength', durationMin: 45, calories: 280, time: '18:15' }
-            ],
-            sleep: {
-                durationHours: 7,
-                durationMinutes: 42,
-                bedtime: '23:30',
-                wakeTime: '07:12',
-                quality: 'Óptimo'
-            }
-        };
-    }
-};
 
 window.renderActivityView = function() {
-    initActivityData();
     const container = document.getElementById('activity-cards-container');
     if (!container) return;
 
-    const dateLabel = document.getElementById('activity-current-date-label');
-    const todayStr = new Date().toISOString().split('T')[0];
-    const isToday = (selectedActivityDate === todayStr);
-
-    if (dateLabel) {
-        if (isToday) {
-            const d = new Date();
-            const dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-            const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-            dateLabel.textContent = `Hoy, ${d.getDate()} ${monthNames[d.getMonth()]}`;
-        } else {
-            const parts = selectedActivityDate.split('-');
-            dateLabel.textContent = `${parts[2]}/${parts[1]}/${parts[0]}`;
-        }
+    // Daily step goal
+    const goal = (state.activityGoal && state.activityGoal > 0) ? state.activityGoal : 10000;
+    
+    // Calculate date label
+    const targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + activityDateOffset);
+    const dateStr = targetDate.toISOString().split('T')[0];
+    
+    const dateLabelEl = document.getElementById('activity-current-date-label');
+    if (dateLabelEl) {
+        if (activityDateOffset === 0) dateLabelEl.textContent = 'Hoy, ' + targetDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+        else if (activityDateOffset === -1) dateLabelEl.textContent = 'Ayer, ' + targetDate.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+        else dateLabelEl.textContent = targetDate.toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short' });
     }
 
     const nextBtn = document.getElementById('btn-activity-next-day');
-    if (nextBtn) {
-        nextBtn.style.opacity = isToday ? '0.3' : '1';
-        nextBtn.style.pointerEvents = isToday ? 'none' : 'auto';
-    }
+    if (nextBtn) nextBtn.disabled = (activityDateOffset >= 0);
 
-    const dayData = (state.activityData && state.activityData.days && state.activityData.days[selectedActivityDate]) || {
-        steps: 0,
-        distanceKm: 0,
-        calories: 0,
-        activeMinutes: 0,
-        activities: [],
-        sleep: null
-    };
+    // Get real step count from state or cachedDailySteps
+    if (!state.activityStepsByDate) state.activityStepsByDate = {};
+    const steps = (activityDateOffset === 0) ? (state.activityStepsByDate[dateStr] || cachedDailySteps || 0) : (state.activityStepsByDate[dateStr] || 0);
+    const distanceKm = (steps * 0.00075).toFixed(2);
+    const stepKcal = Math.round(steps * 0.04);
+    
+    // Progress calculation
+    const progressPercent = Math.min(100, Math.round((steps / goal) * 100));
+    const circumference = 2 * Math.PI * 52; // r = 52
+    const dashoffset = circumference - (circumference * progressPercent / 100);
 
-    const goal = (state.activityData && state.activityData.dailyStepGoal) || 10000;
-    const stepPercent = Math.min(100, Math.round((dayData.steps / goal) * 100));
-
-    // SVG Circular Progress
-    const radius = 68;
-    const circ = 2 * Math.PI * radius;
-    const strokeDash = circ - (stepPercent / 100) * circ;
-
-    let activitiesHtml = '';
-    if (dayData.activities && dayData.activities.length > 0) {
-        activitiesHtml = dayData.activities.map(act => {
-            const icon = act.type === 'walking' ? 'ph-person-simple-walk' : (act.type === 'running' ? 'ph-person-simple-run' : (act.type === 'cycling' ? 'ph-bicycle' : 'ph-barbell'));
-            return `
-                <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: var(--bg-surface-elevated); border-radius: 12px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <div style="width: 36px; height: 36px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 18px;">
-                            <i class="ph-bold ${icon}"></i>
-                        </div>
-                        <div>
-                            <div style="font-weight: 700; font-size: 13px; color: var(--text-primary);">${act.title}</div>
-                            <div style="font-size: 11px; color: var(--text-secondary);">${act.time || ''} • ${act.durationMin} min</div>
-                        </div>
+    
+    // Synced Sleep Card (from Health Connect)
+    if (!state.activitySleepByDate) state.activitySleepByDate = {};
+    const sleepData = state.activitySleepByDate[dateStr];
+    let sleepCardHtml = '';
+    if (sleepData) {
+        sleepCardHtml = `
+            <div class="card" style="padding: 16px; background: var(--bg-surface); border-radius: 18px; border: 1px solid var(--border-color);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <div style="font-size: 13.5px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                        <i class="ph-bold ph-moon" style="color: #8b5cf6;"></i> Sueño y Descanso
                     </div>
-                    <div style="text-align: right;">
-                        <div style="font-weight: 800; font-size: 13px; color: #f59e0b;">${act.calories} kcal</div>
-                        <div style="font-size: 10.5px; color: var(--text-secondary);">Samsung Health</div>
-                    </div>
+                    <span style="font-size: 11px; color: #8b5cf6; font-weight: 700; background: rgba(139,92,246,0.12); padding: 3px 8px; border-radius: 6px;">Samsung Health</span>
                 </div>
-            `;
-        }).join('');
-    } else {
-        activitiesHtml = `<div class="empty-state" style="padding: 16px; font-size: 12px; color: var(--text-secondary); text-align: center;">No hay actividades registradas en esta fecha.</div>`;
-    }
-
-    let sleepHtml = '';
-    if (dayData.sleep) {
-        const s = dayData.sleep;
-        const totalMin = (s.durationHours * 60) + s.durationMinutes;
-        const qualityColor = totalMin >= 450 ? '#10b981' : (totalMin >= 360 ? '#f59e0b' : '#ef4444');
-        const recoveryText = totalMin >= 450 ? 'Recuperación óptima para entrenar hoy' : (totalMin >= 360 ? 'Recuperación moderada' : 'Descanso bajo (prioriza recuperación)');
-
-        sleepHtml = `
-            <div class="card" style="padding: 16px; border-radius: 18px; background: var(--bg-surface); border: 1px solid var(--border-color);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <div style="width: 32px; height: 32px; border-radius: 10px; background: rgba(139, 92, 246, 0.15); display: flex; align-items: center; justify-content: center; color: #8b5cf6; font-size: 18px;">
-                            <i class="ph-bold ph-moon"></i>
-                        </div>
-                        <span style="font-weight: 700; font-size: 14px;">Sueño y Recuperación</span>
-                    </div>
-                    <span style="font-size: 11px; padding: 3px 8px; border-radius: 8px; background: ${qualityColor}22; color: ${qualityColor}; font-weight: 700;">${s.quality || 'Registrado'}</span>
-                </div>
-
-                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: baseline;">
                     <div>
-                        <div style="font-size: 26px; font-weight: 900; color: var(--text-primary);">${s.durationHours}h ${s.durationMinutes}m</div>
-                        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">Horas dormidas</div>
+                        <div style="font-size: 24px; font-weight: 900; color: var(--text-primary);">${sleepData.hours}h ${sleepData.minutes}m</div>
+                        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">Tiempo total dormido</div>
                     </div>
                     <div style="text-align: right;">
-                        <div style="font-size: 13px; font-weight: 700; color: var(--text-primary);">${s.bedtime || '--:--'} → ${s.wakeTime || '--:--'}</div>
-                        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">Horario de descanso</div>
+                        <div style="font-size: 13px; font-weight: 700;">${sleepData.bedtime} → ${sleepData.wakeTime}</div>
+                        <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">Horario de sueño</div>
                     </div>
-                </div>
-
-                <div style="padding: 8px 12px; border-radius: 10px; background: var(--bg-surface-elevated); font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 6px;">
-                    <i class="ph-bold ph-sparkle" style="color: ${qualityColor};"></i>
-                    <span>${recoveryText}</span>
                 </div>
             </div>
         `;
     }
 
-    container.innerHTML = `
-        <!-- Card Pasos y Progreso Circular -->
-        <div class="card" style="padding: 20px; border-radius: 20px; background: var(--bg-surface); border: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; text-align: center;">
-            <div style="position: relative; width: 170px; height: 170px; margin-bottom: 12px;">
-                <svg width="170" height="170" viewBox="0 0 170 170" style="transform: rotate(-90deg);">
-                    <circle cx="85" cy="85" r="${radius}" fill="transparent" stroke="rgba(255,255,255,0.06)" stroke-width="12" />
-                    <circle cx="85" cy="85" r="${radius}" fill="transparent" stroke="#10b981" stroke-width="12" stroke-dasharray="${circ}" stroke-dashoffset="${strokeDash}" stroke-linecap="round" style="transition: stroke-dashoffset 0.6s ease;" />
-                </svg>
-                <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                    <i class="ph-bold ph-sneaker-move" style="font-size: 22px; color: #10b981; margin-bottom: 2px;"></i>
-                    <div style="font-size: 26px; font-weight: 900; line-height: 1; color: var(--text-primary);">${dayData.steps.toLocaleString()}</div>
-                    <div style="font-size: 11.5px; color: var(--text-secondary); margin-top: 4px;">de ${goal.toLocaleString()}</div>
+    // Synced Exercises Card (from Health Connect)
+    if (!state.activityExercisesByDate) state.activityExercisesByDate = {};
+    const externalExercises = state.activityExercisesByDate[dateStr] || [];
+    let externalExHtml = '';
+    if (externalExercises.length > 0) {
+        externalExHtml = `
+            <div class="card" style="padding: 16px; background: var(--bg-surface); border-radius: 18px; border: 1px solid var(--border-color);">
+                <div style="font-size: 13.5px; font-weight: 800; display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                    <i class="ph-bold ph-person-simple-walk" style="color: #10b981;"></i> Actividades Samsung Health
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    ${externalExercises.map(ex => `
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: var(--bg-surface-elevated); border-radius: 10px;">
+                            <div style="font-weight: 700; font-size: 13px;">${escapeHtml(ex.title)}</div>
+                            <div style="font-size: 11.5px; color: #10b981; font-weight: 700;">${ex.durationMin} min</div>
+                        </div>
+                    `).join('')}
                 </div>
             </div>
+        `;
+    }
 
-            <div style="width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 6px;">
-                <div style="padding: 10px; border-radius: 12px; background: var(--bg-surface-elevated);">
-                    <div style="font-size: 11px; color: var(--text-secondary);">Distancia</div>
-                    <div style="font-size: 15px; font-weight: 800; color: var(--text-primary); margin-top: 2px;">${dayData.distanceKm.toFixed(2)} km</div>
-                </div>
-                <div style="padding: 10px; border-radius: 12px; background: var(--bg-surface-elevated);">
-                    <div style="font-size: 11px; color: var(--text-secondary);">Calorías en Pasos</div>
-                    <div style="font-size: 15px; font-weight: 800; color: #f59e0b; margin-top: 2px;">${Math.round(dayData.steps * 0.04)} kcal</div>
-                </div>
-            </div>
-        </div>
+    // Real workouts from Gym Tracker for this date
+    const todayWorkouts = (state.workouts || []).filter(w => {
+        if (!w.date) return false;
+        return w.date.startsWith(dateStr);
+    });
 
-        <!-- Card Calorías Activas y Tiempo en Movimiento -->
-        <div class="card" style="padding: 16px; border-radius: 18px; background: var(--bg-surface); border: 1px solid var(--border-color);">
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-                <div style="width: 32px; height: 32px; border-radius: 10px; background: rgba(245, 158, 11, 0.15); display: flex; align-items: center; justify-content: center; color: #f59e0b; font-size: 18px;">
-                    <i class="ph-bold ph-flame"></i>
-                </div>
-                <span style="font-weight: 700; font-size: 14px;">Gasto y Tiempo Activo</span>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                <div style="padding: 12px; border-radius: 14px; background: var(--bg-surface-elevated);">
-                    <div style="font-size: 11px; color: var(--text-secondary);">Calorías Activas</div>
-                    <div style="font-size: 22px; font-weight: 900; color: #f59e0b; margin-top: 2px;">${dayData.calories} <span style="font-size: 13px; font-weight: 600;">kcal</span></div>
-                </div>
-                <div style="padding: 12px; border-radius: 14px; background: var(--bg-surface-elevated);">
-                    <div style="font-size: 11px; color: var(--text-secondary);">Tiempo Activo</div>
-                    <div style="font-size: 22px; font-weight: 900; color: #10b981; margin-top: 2px;">${dayData.activeMinutes} <span style="font-size: 13px; font-weight: 600;">min</span></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Card Actividades Registradas -->
-        <div class="card" style="padding: 16px; border-radius: 18px; background: var(--bg-surface); border: 1px solid var(--border-color);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div style="width: 32px; height: 32px; border-radius: 10px; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 18px;">
-                        <i class="ph-bold ph-barbell"></i>
+    let workoutsListHtml = '';
+    if (todayWorkouts.length > 0) {
+        workoutsListHtml = todayWorkouts.map(w => {
+            const setsCount = (w.exercises || []).reduce((acc, ex) => acc + (ex.sets || []).length, 0);
+            return `
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: var(--bg-surface-elevated); border-radius: 12px; margin-bottom: 8px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #10b981;">
+                            <i class="ph-bold ph-barbell"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 700; font-size: 13px;">${escapeHtml(w.name || 'Entrenamiento Gym Tracker')}</div>
+                            <div style="font-size: 11px; color: var(--text-secondary);">${setsCount} series completadas</div>
+                        </div>
                     </div>
-                    <span style="font-weight: 700; font-size: 14px;">Actividades y Entrenos</span>
+                    <span style="font-size: 11px; font-weight: 700; color: #10b981; background: rgba(16,185,129,0.12); padding: 3px 8px; border-radius: 6px;">Completado</span>
                 </div>
-                <span style="font-size: 11px; color: var(--text-secondary);">Samsung Health</span>
+            `;
+        }).join('');
+    } else {
+        workoutsListHtml = `
+            <div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 12px 0;">
+                No hay entrenamientos de Gym Tracker registrados en este día.
             </div>
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                ${activitiesHtml}
+        `;
+    }
+
+    // Hardware / permission banner
+    let permissionBannerHtml = '';
+    if (!hasSensorPermission) {
+        permissionBannerHtml = `
+            <div style="padding: 12px 14px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #f59e0b; font-weight: 600;">
+                    <i class="ph-bold ph-warning" style="font-size: 18px;"></i> Permiso de actividad física pendiente
+                </div>
+                <button type="button" class="btn-primary" onclick="requestNativeSensorPermission()" style="padding: 6px 12px; font-size: 11.5px; font-weight: 700; background: #f59e0b; border: none; border-radius: 8px; color: #000; cursor: pointer;">
+                    Permitir
+                </button>
+            </div>
+        `;
+    }
+
+    container.innerHTML = `
+        ${permissionBannerHtml}
+
+        <!-- MAIN STEP RING CARD -->
+        <div class="card" style="padding: 22px 16px; display: flex; flex-direction: column; align-items: center; background: var(--bg-surface); border-radius: 20px; border: 1px solid var(--border-color);">
+            <div style="position: relative; width: 140px; height: 140px; display: flex; align-items: center; justify-content: center;">
+                <svg width="140" height="140" style="transform: rotate(-90deg);">
+                    <circle cx="70" cy="70" r="52" stroke="rgba(255,255,255,0.07)" stroke-width="12" fill="none"/>
+                    <circle cx="70" cy="70" r="52" stroke="#10b981" stroke-width="12" stroke-linecap="round" fill="none"
+                        stroke-dasharray="${circumference}" stroke-dashoffset="${dashoffset}" style="transition: stroke-dashoffset 0.6s ease;"/>
+                </svg>
+                <div style="position: absolute; text-align: center; display: flex; flex-direction: column; align-items: center;">
+                    <i class="ph-bold ph-sneaker-move" style="font-size: 20px; color: #10b981; margin-bottom: 2px;"></i>
+                    <span style="font-size: 22px; font-weight: 900; line-height: 1;">${steps.toLocaleString('es-ES')}</span>
+                    <span style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">de ${goal.toLocaleString('es-ES')}</span>
+                </div>
+            </div>
+
+            <!-- Distance and Calories Row -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; margin-top: 20px;">
+                <div style="padding: 12px; background: var(--bg-surface-elevated); border-radius: 14px; text-align: center;">
+                    <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600;">Distancia</div>
+                    <div style="font-size: 16px; font-weight: 800; margin-top: 2px;">${distanceKm} km</div>
+                </div>
+                <div style="padding: 12px; background: var(--bg-surface-elevated); border-radius: 14px; text-align: center;">
+                    <div style="font-size: 11px; color: var(--text-secondary); text-transform: uppercase; font-weight: 600;">Calorías en Pasos</div>
+                    <div style="font-size: 16px; font-weight: 800; color: #f59e0b; margin-top: 2px;">${stepKcal} kcal</div>
+                </div>
+            </div>
+
+            <!-- Fast Action: Adjust / Sync Steps Button -->
+            <button type="button" class="btn-secondary" onclick="openActivitySettingsModal()" style="margin-top: 14px; width: 100%; padding: 10px 14px; border-radius: 12px; font-weight: 700; font-size: 12.5px; display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--bg-surface-elevated); border: 1px solid var(--border-color); color: var(--text-primary); cursor: pointer;">
+                <i class="ph-bold ph-pencil-simple" style="color: #10b981; font-size: 16px;"></i> Ajustar / Sincronizar Pasos de Hoy
+            </button>
+        </div>
+
+        <!-- SAMSUNG HEALTH LINKING CARD -->
+        <div class="card" style="padding: 16px; background: var(--bg-surface); border-radius: 18px; border: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <div style="font-size: 13.5px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                    <i class="ph-bold ph-heartbeat" style="color: #10b981;"></i> Conexión con Samsung Health
+                </div>
+                <span style="font-size: 11px; color: #10b981; font-weight: 600;">Health Connect</span>
+            </div>
+            <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;">
+                Samsung Health comparte datos mediante <strong>Conexión de Salud (Health Connect)</strong>. Abre Samsung Health para verificar que está activa la sincronización:
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <button type="button" class="btn-primary" onclick="openNativeHealthConnect()" style="padding: 9px 12px; font-size: 12px; font-weight: 700; background: #10b981; border: none; border-radius: 10px; color: white; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;">
+                    <i class="ph-bold ph-sliders"></i> Abrir Conexión
+                </button>
+                <button type="button" class="btn-secondary" onclick="openNativeSamsungHealth()" style="padding: 9px 12px; font-size: 12px; font-weight: 600; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;">
+                    <i class="ph-bold ph-arrow-square-out"></i> Samsung Health
+                </button>
             </div>
         </div>
 
-        <!-- Card Sueño -->
-        ${sleepHtml}
+        ${sleepCardHtml}
+        ${externalExHtml}
+        <!-- REAL GYM TRACKER WORKOUTS CARD -->
+        <div class="card" style="padding: 16px; background: var(--bg-surface); border-radius: 18px; border: 1px solid var(--border-color);">
+            <div style="font-size: 13.5px; font-weight: 800; display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                <i class="ph-bold ph-barbell" style="color: #3b82f6;"></i> Sesiones de Entrenamiento del Día
+            </div>
+            ${workoutsListHtml}
+        </div>
     `;
 };
 
-window.changeActivityDay = function(offset) {
-    const cur = new Date(selectedActivityDate + 'T00:00:00');
-    cur.setDate(cur.getDate() + offset);
-    const today = new Date();
-    today.setHours(0,0,0,0);
-    if (cur > today) return; // Cannot go into future
 
-    selectedActivityDate = cur.toISOString().split('T')[0];
-    renderActivityView();
+
+window.syncActivityData = function() {
+    const spinIcon = document.getElementById('icon-sync-spin');
+    if (spinIcon) spinIcon.classList.add('ph-spin');
+
+    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.HealthSync) {
+        // Call Kotlin Health Connect sync method
+        window.Capacitor.Plugins.HealthSync.syncSamsungHealthData({ daysOffset: activityDateOffset }).then(res => {
+            if (spinIcon) spinIcon.classList.remove('ph-spin');
+            console.log('Health Connect sync result:', res);
+            
+            if (res && res.success) {
+                const targetDate = new Date();
+                targetDate.setDate(targetDate.getDate() + activityDateOffset);
+                const dateStr = targetDate.toISOString().split('T')[0];
+
+                if (!state.activityStepsByDate) state.activityStepsByDate = {};
+                state.activityStepsByDate[dateStr] = res.steps || 0;
+                cachedDailySteps = res.steps || 0;
+
+                // Cache sleep data
+                if (!state.activitySleepByDate) state.activitySleepByDate = {};
+                if (res.hasSleep) {
+                    state.activitySleepByDate[dateStr] = {
+                        hours: res.sleepHours || 0,
+                        minutes: res.sleepMinutes || 0,
+                        bedtime: res.sleepBedtime || '--:--',
+                        wakeTime: res.sleepWakeTime || '--:--',
+                        title: res.sleepTitle || 'Sueño registrado'
+                    };
+                }
+
+                // Cache exercises
+                if (!state.activityExercisesByDate) state.activityExercisesByDate = {};
+                if (res.exercises && res.exercises.length > 0) {
+                    state.activityExercisesByDate[dateStr] = res.exercises;
+                }
+
+                if (typeof saveState === 'function') saveState();
+                renderActivityView();
+
+                if (typeof showToast === 'function') {
+                    showToast('Samsung Health sincronizado: ' + (res.steps || 0).toLocaleString('es-ES') + ' pasos');
+                }
+            } else {
+                // If permission needed or failed, open permission flow or show message
+                if (res && res.error && res.error.includes('Permission')) {
+                    if (window.Capacitor.Plugins.HealthSync.requestHealthPermissions) {
+                        window.Capacitor.Plugins.HealthSync.requestHealthPermissions();
+                    }
+                } else {
+                    renderActivityView();
+                    if (typeof showToast === 'function') {
+                        showToast(res?.error || 'No se recibieron datos de Health Connect');
+                    }
+                }
+            }
+        }).catch(err => {
+            if (spinIcon) spinIcon.classList.remove('ph-spin');
+            console.warn('Error syncing with Health Connect:', err);
+            renderActivityView();
+            if (typeof showToast === 'function') {
+                showToast('Abre Conexión de Salud para conceder permisos a Gym Tracker');
+            }
+        });
+    } else {
+        setTimeout(() => {
+            if (spinIcon) spinIcon.classList.remove('ph-spin');
+            renderActivityView();
+        }, 300);
+    }
 };
 
-window.syncActivityData = function(manual = false) {
-    const icon = document.getElementById('icon-sync-activity');
-    if (icon) icon.classList.add('ph-spin');
-
-    const statusText = document.getElementById('activity-sync-status-text');
-    if (statusText) statusText.textContent = 'Sincronizando con Samsung Health...';
-
-    // Call native plugin if available
+window.requestNativeSensorPermission = function() {
     if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.HealthSync) {
-        window.Capacitor.Plugins.HealthSync.isAvailable().then(res => {
-            console.log("HealthSync availability:", res);
-        }).catch(err => console.warn(err));
+        window.Capacitor.Plugins.HealthSync.requestHealthPermissions().catch(e => {
+            window.Capacitor.Plugins.HealthSync.openHealthConnectSettings().catch(err => console.warn(err));
+        });
     }
+};
 
-    setTimeout(() => {
-        initActivityData();
-        const todayStr = new Date().toISOString().split('T')[0];
-        if (state.activityData.days[todayStr]) {
-            // Add subtle fresh increment to simulate real live sync
-            state.activityData.days[todayStr].steps += Math.floor(Math.random() * 80) + 20;
-            state.activityData.days[todayStr].distanceKm = parseFloat((state.activityData.days[todayStr].steps * 0.00075).toFixed(2));
-            state.activityData.days[todayStr].calories = Math.round(state.activityData.days[todayStr].steps * 0.042) + 220;
-        }
-        state.activityData.lastSync = new Date().toISOString();
 
-        if (typeof saveState === 'function') saveState();
-        renderActivityView();
+// =========================================================================
+// ACTIVITY VIEW CONTROLLER & HELPERS
+// =========================================================================
 
-        if (icon) icon.classList.remove('ph-spin');
-        if (statusText) statusText.textContent = 'Samsung Health • Sincronizado hace un momento';
-
-        if (manual && typeof showToast === 'function') {
-            showToast('Datos de Samsung Health actualizados correctamente');
-        }
-    }, 800);
+window.changeActivityDay = function(delta) {
+    activityDateOffset += delta;
+    if (activityDateOffset > 0) activityDateOffset = 0;
+    renderActivityView();
+    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.HealthSync) {
+        syncActivityData();
+    }
 };
 
 window.openActivitySettingsModal = function() {
-    initActivityData();
-    const input = document.getElementById('input-step-goal');
-    if (input) input.value = state.activityData.dailyStepGoal || 10000;
     const modal = document.getElementById('modal-activity-settings');
-    if (modal) modal.classList.add('active');
+    const inputGoal = document.getElementById('input-step-goal');
+    const inputSteps = document.getElementById('input-manual-steps');
+    
+    const targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + activityDateOffset);
+    const dateStr = targetDate.toISOString().split('T')[0];
+
+    if (!state.activityStepsByDate) state.activityStepsByDate = {};
+    const curSteps = state.activityStepsByDate[dateStr] || cachedDailySteps || 0;
+
+    if (inputGoal) inputGoal.value = (state.activityGoal && state.activityGoal > 0) ? state.activityGoal : 10000;
+    if (inputSteps) inputSteps.value = curSteps > 0 ? curSteps : '';
+
+    if (modal) {
+        modal.classList.add('active');
+    }
 };
 
 window.setQuickStepGoal = function(goal) {
@@ -10789,61 +12809,156 @@ window.setQuickStepGoal = function(goal) {
     if (input) input.value = goal;
 };
 
+window.addStepsToManualInput = function(delta) {
+    const input = document.getElementById('input-manual-steps');
+    const current = parseInt(input ? input.value : 0, 10) || 0;
+    if (input) input.value = current + delta;
+};
+
+window.setManualStepsQuick = function(val) {
+    const input = document.getElementById('input-manual-steps');
+    if (input) input.value = val;
+};
+
+window.applyManualSteps = function() {
+    const input = document.getElementById('input-manual-steps');
+    const val = parseInt(input ? input.value : 0, 10);
+    if (!isNaN(val) && val >= 0) {
+        cachedDailySteps = val;
+        const targetDate = new Date();
+        targetDate.setDate(targetDate.getDate() + activityDateOffset);
+        const dateStr = targetDate.toISOString().split('T')[0];
+
+        if (!state.activityStepsByDate) state.activityStepsByDate = {};
+        state.activityStepsByDate[dateStr] = val;
+        if (typeof saveState === 'function') saveState();
+
+        const modal = document.getElementById('modal-activity-settings');
+        if (modal) modal.classList.remove('active');
+
+        renderActivityView();
+        if (typeof showToast === 'function') {
+            showToast('Pasos actualizados: ' + val.toLocaleString('es-ES'));
+        }
+    }
+};
+
 window.saveActivitySettings = function() {
     const input = document.getElementById('input-step-goal');
-    const val = parseInt(input ? input.value : 10000, 10);
+    const val = parseInt(input?.value, 10);
     if (!isNaN(val) && val > 0) {
-        state.activityData.dailyStepGoal = val;
+        state.activityGoal = val;
+        if (typeof saveState === 'function') saveState();
     }
-    if (typeof saveState === 'function') saveState();
-    renderActivityView();
     const modal = document.getElementById('modal-activity-settings');
     if (modal) modal.classList.remove('active');
-    if (typeof showToast === 'function') showToast('Meta de pasos guardada');
+    renderActivityView();
+    if (typeof showToast === 'function') {
+        showToast('Meta de pasos guardada: ' + (state.activityGoal || 10000).toLocaleString('es-ES'));
+    }
 };
 
-window.openNativeHealthSettings = function() {
+window.openNativeHealthConnect = function() {
     if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.HealthSync) {
-        window.Capacitor.Plugins.HealthSync.openHealthSettings().catch(e => {
-            alert('Abre Samsung Health en tu dispositivo y ve a Ajustes > Conexión de Salud para conceder permisos.');
+        window.Capacitor.Plugins.HealthSync.requestHealthPermissions().catch(() => {
+            window.Capacitor.Plugins.HealthSync.openHealthConnectSettings().catch(e => console.warn(e));
         });
     } else {
-        alert('Para sincronizar con tu reloj Galaxy Watch o teléfono Samsung:\n1. Abre Samsung Health.\n2. Ve a Ajustes > Conexión de Salud (Health Connect).\n3. Concede los permisos de pasos, actividad y sueño a Gym Tracker.');
+        alert('En tu teléfono Samsung, abre Samsung Health y ve a Ajustes > Conexión de Salud para autorizar a Gym Tracker.');
+    }
+};
+
+window.openNativeSamsungHealth = function() {
+    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.HealthSync) {
+        window.Capacitor.Plugins.HealthSync.openSamsungHealthApp().catch(e => console.warn(e));
+    } else {
+        alert('Abre la app Samsung Health en tu dispositivo.');
     }
 };
 
 
-// =========================================================================
-// SMARTWATCH COMPANION (GALAXY WATCH / WEAR OS)
-// =========================================================================
-window.openWatchCompanionModal = function() {
-    const modal = document.getElementById('modal-watch-companion');
-    if (modal) modal.classList.add('active');
+window.moveWorkoutExercise = function(idx, direction) {
+    if (!window.activeSession || !window.activeSession.exercises) return;
+    const targetIdx = idx + direction;
+    if (targetIdx < 0 || targetIdx >= window.activeSession.exercises.length) return;
 
-    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.WearSync) {
-        window.Capacitor.Plugins.WearSync.checkConnection().then(res => {
-            const nameEl = document.getElementById('watch-device-name');
-            if (nameEl && res && res.deviceName) {
-                nameEl.textContent = res.deviceName;
-            }
-        }).catch(e => console.warn(e));
-    }
-};
+    try {
+        if (typeof syncActiveWorkoutInputsFromDOM === 'function') syncActiveWorkoutInputsFromDOM();
+    } catch(e) {}
 
-window.testWatchVibration = function() {
-    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.WearSync) {
-        window.Capacitor.Plugins.WearSync.triggerWatchVibration().catch(e => console.warn(e));
+    const temp = window.activeSession.exercises[idx];
+    window.activeSession.exercises[idx] = window.activeSession.exercises[targetIdx];
+    window.activeSession.exercises[targetIdx] = temp;
+
+    // UNLOCK CAOS CONTROLADO (Reordenar ejercicios en sesión activa)
+    localStorage.setItem('gym_unlocked_controlled_chaos', 'true');
+    if (typeof unlockAchievement === 'function') {
+        unlockAchievement('controlled_chaos');
     }
-    if (navigator.vibrate) {
-        navigator.vibrate([200, 150, 300]);
-    }
+
+    try {
+        if (typeof autoSaveWorkout === 'function') autoSaveWorkout();
+        if (typeof renderWorkout === 'function') renderWorkout();
+    } catch(e) {}
+    
     if (typeof showToast === 'function') {
-        showToast('Pulso háptico enviado al reloj');
+        showToast('Orden del ejercicio actualizado');
     }
 };
 
-window.sendWorkoutUpdateToWatch = function(data) {
-    if (window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.WearSync) {
-        window.Capacitor.Plugins.WearSync.sendWorkoutUpdate(data || {}).catch(e => console.warn(e));
+
+window.trackPRChangeForCarlo = function(exId, newWeight) {
+    try {
+        const wt = parseFloat(newWeight) || 0;
+        if (wt <= 0) return;
+        const todayStr = new Date().toISOString().split('T')[0];
+        const key = 'gym_carlo_pr_history_' + todayStr;
+        const raw = localStorage.getItem(key);
+        const data = raw ? JSON.parse(raw) : {};
+
+        if (!data[exId]) data[exId] = [];
+        // If there was an earlier edit today and the new weight is higher:
+        if (data[exId].length > 0) {
+            const lastWt = data[exId][data[exId].length - 1];
+            if (wt > lastWt) {
+                localStorage.setItem('gym_unlocked_carlos_awakening', 'true');
+                if (typeof unlockAchievement === 'function') unlockAchievement('carlos_awakening');
+            }
+        }
+        data[exId].push(wt);
+        localStorage.setItem(key, JSON.stringify(data));
+    } catch(e) {}
+};
+
+
+// =========================================================================
+// WELCOME TUTORIAL & GUIDE INTEGRATION
+// =========================================================================
+window.openWelcomeTutorialModal = function() {
+    let m = document.getElementById('modal-welcome-tutorial');
+    if (!m) {
+        m = document.createElement('div');
+        m.id = 'modal-welcome-tutorial';
+        m.className = 'modal';
+        m.style.cssText = 'display: none; position: fixed; inset: 0; z-index: 999999; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(5px); padding: 12px;';
+        m.innerHTML = `
+            <div class="modal-backdrop" style="position: absolute; inset: 0;" onclick="closeWelcomeTutorialModal()"></div>
+            <iframe id="iframe-welcome-tutorial" src="tutorial-preview.html" style="width: 100%; max-width: 680px; height: min(92vh, 760px); border: none; border-radius: 24px; position: relative; z-index: 1000000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); background: #0f172a;"></iframe>
+        `;
+        document.body.appendChild(m);
+    }
+    m.style.display = 'flex';
+    m.classList.add('active');
+    const iframe = document.getElementById('iframe-welcome-tutorial');
+    if (iframe && (!iframe.src || iframe.src === 'about:blank')) {
+        iframe.src = 'tutorial-preview.html';
+    }
+};
+
+window.closeWelcomeTutorialModal = function() {
+    const m = document.getElementById('modal-welcome-tutorial');
+    if (m) {
+        m.style.display = 'none';
+        m.classList.remove('active');
     }
 };
