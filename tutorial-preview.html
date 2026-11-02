@@ -80,17 +80,24 @@
         </div>
         <div class="min-w-0">
           <div class="flex items-center gap-2">
-            <h2 class="font-black text-base sm:text-lg text-white tracking-tight">Guía de Gym Tracker</h2>
-            <span class="step-badge bg-brand-500/20 text-brand-400 border border-brand-500/30">TUTORIAL</span>
+            <h2 class="font-black text-base sm:text-lg text-white tracking-tight" id="tut-title">Guía de Gym Tracker</h2>
+            <span class="step-badge bg-brand-500/20 text-brand-400 border border-brand-500/30" id="tut-badge">TUTORIAL</span>
           </div>
-          <p class="text-xs text-slate-400 leading-normal">
-            Aprende a dominar todas las funciones de tu cuaderno digital
-          </p>
+          <p class="text-xs text-slate-400 leading-normal" id="tut-subtitle">Aprende a dominar todas las funciones de tu cuaderno digital</p>
         </div>
       </div>
-      <button onclick="dismissModal()" class="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition shrink-0 ml-2" title="Cerrar">
-        <i class="ph-bold ph-x text-lg"></i>
-      </button>
+      <div class="flex items-center gap-2 shrink-0">
+        <select id="tut-lang-select" onchange="changeTutLanguage(this.value)" class="bg-slate-800 text-slate-200 text-xs font-bold py-1.5 px-2.5 rounded-xl border border-slate-700 outline-none cursor-pointer hover:border-brand-500 transition">
+          <option value="en">🇬🇧 English</option>
+          <option value="es">🇪🇸 Español</option>
+          <option value="ru">🇷🇺 Русский</option>
+          <option value="et">🇪🇪 Eesti</option>
+          <option value="uk">🇺🇦 Українська</option>
+        </select>
+        <button onclick="dismissModal()" class="p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition shrink-0 ml-1" title="Cerrar">
+          <i class="ph-bold ph-x text-lg"></i>
+        </button>
+      </div>
     </div>
 
     <!-- 2. HORIZONTAL TAB SELECTOR WITH SMOOTH ARROW BUTTONS -->
@@ -101,40 +108,40 @@
 
       <div id="tabs-scroll-container" class="flex gap-1.5 overflow-x-auto py-2 px-1 custom-scroll scroll-smooth flex-1" style="scrollbar-width: none;">
         <button onclick="switchTab('intro')" id="tab-intro" class="tab-btn px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-brand-500 text-slate-950 shadow-md shadow-brand-500/20">
-          <i class="ph-bold ph-sparkle"></i> ¿Para qué sirve?
+          <i class="ph-bold ph-sparkle"></i> <span id="tut-tab-intro">¿Para qué sirve?</span>
         </button>
         <button onclick="switchTab('calendar')" id="tab-calendar" class="tab-btn px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
-          <i class="ph-bold ph-calendar"></i> Calendario
+          <i class="ph-bold ph-calendar"></i> <span id="tut-tab-calendar">Calendario</span>
         </button>
         <button onclick="switchTab('workout')" id="tab-workout" class="tab-btn px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
-          <i class="ph-bold ph-play-circle"></i> En curso
+          <i class="ph-bold ph-play-circle"></i> <span id="tut-tab-workout">En curso</span>
         </button>
         <button onclick="switchTab('exercises')" id="tab-exercises" class="tab-btn px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
-          <i class="ph-bold ph-barbell"></i> Ejercicios
+          <i class="ph-bold ph-barbell"></i> <span id="tut-tab-exercises">Ejercicios</span>
         </button>
         <button onclick="switchTab('history')" id="tab-history" class="tab-btn px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
-          <i class="ph-bold ph-clock-counter-clockwise"></i> Historial
+          <i class="ph-bold ph-clock-counter-clockwise"></i> <span id="tut-tab-history">Historial</span>
         </button>
         <button onclick="switchTab('progression')" id="tab-progression" class="tab-btn px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
-          <i class="ph-bold ph-trend-up"></i> Progresión
+          <i class="ph-bold ph-trend-up"></i> <span id="tut-tab-progression">Progresión</span>
         </button>
         <button onclick="switchTab('evolution')" id="tab-evolution" class="tab-btn px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
-          <i class="ph-bold ph-user"></i> Evolución
+          <i class="ph-bold ph-user"></i> <span id="tut-tab-evolution">Evolución</span>
         </button>
         <button onclick="switchTab('export')" id="tab-export" class="tab-btn px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
-          <i class="ph-bold ph-export"></i> Exp / Imp
+          <i class="ph-bold ph-export"></i> <span id="tut-tab-export">Exp / Imp</span>
         </button>
         <button onclick="switchTab('ai')" id="tab-ai" class="tab-btn px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
-          <i class="ph-bold ph-sparkle text-purple-400"></i> Asistente IA
+          <i class="ph-bold ph-sparkle text-purple-400"></i> <span id="tut-tab-ai">Asistente IA</span>
         </button>
         <button onclick="switchTab('joints')" id="tab-joints" class="tab-btn px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
-          <i class="ph-bold ph-first-aid text-amber-400"></i> Molestias
+          <i class="ph-bold ph-first-aid text-amber-400"></i> <span id="tut-tab-joints">Molestias</span>
         </button>
         <button onclick="switchTab('updates')" id="tab-updates" class="tab-btn px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
-          <i class="ph-bold ph-arrows-clockwise text-blue-400"></i> Actualización
+          <i class="ph-bold ph-arrows-clockwise text-blue-400"></i> <span id="tut-tab-updates">Actualización</span>
         </button>
         <button onclick="switchTab('dashboard')" id="tab-dashboard" class="tab-btn px-3 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5 bg-slate-800 text-slate-300 hover:bg-slate-700">
-          <i class="ph-bold ph-chart-bar text-purple-400"></i> Dashboard Analítico
+          <i class="ph-bold ph-chart-bar text-purple-400"></i> <span id="tut-tab-dashboard">Dashboard</span>
         </button>
       </div>
 
@@ -716,18 +723,18 @@
     <div class="px-4 sm:px-6 py-4 bg-slate-900/90 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
       <label class="flex items-center gap-2.5 cursor-pointer text-xs text-slate-300 select-none">
         <input type="checkbox" id="chk-never-show" class="w-4 h-4 rounded bg-slate-800 border-slate-700 text-brand-500 focus:ring-0 focus:ring-offset-0 transition cursor-pointer">
-        <span>No volver a mostrar al iniciar la app</span>
+        <span><span id="tut-lbl-never-show">No volver a mostrar al iniciar</span> la app</span>
       </label>
 
       <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
         <button id="btn-prev" onclick="prevTab()" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 transition hidden">
-          <i class="ph-bold ph-arrow-left mr-1"></i> Anterior
+          <i class="ph-bold ph-arrow-left mr-1"></i> <span id="tut-btn-prev">Anterior</span>
         </button>
         <button id="btn-next" onclick="nextTab()" class="px-4 py-2.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 transition">
-          Siguiente <i class="ph-bold ph-arrow-right ml-1"></i>
+          <span id="tut-btn-next">Siguiente</span> <i class="ph-bold ph-arrow-right ml-1"></i>
         </button>
         <button onclick="dismissModal()" class="px-5 py-2.5 rounded-xl text-xs font-bold bg-brand-500 hover:bg-brand-400 text-slate-950 transition flex items-center gap-1.5 shadow-lg shadow-brand-500/20">
-          <i class="ph-bold ph-check-circle text-base"></i> ¡Entendido!
+          <i class="ph-bold ph-check-circle text-base"></i> <span id="tut-btn-done">¡Entendido!</span>
         </button>
       </div>
     </div>
@@ -811,8 +818,162 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const initialLang = urlParams.get('lang') || localStorage.getItem('gym_language') || 'en';
+      changeTutLanguage(initialLang);
       switchTab('intro');
     });
+    const tutTranslations = {
+      es: {
+        title: "Guía de Gym Tracker",
+        subtitle: "Aprende a dominar todas las funciones de tu cuaderno digital",
+        badge: "TUTORIAL",
+        tabIntro: "¿Para qué sirve?",
+        tabCalendar: "Calendario",
+        tabWorkout: "En curso",
+        tabExercises: "Ejercicios",
+        tabHistory: "Historial",
+        tabProgression: "Progresión",
+        tabEvolution: "Evolución",
+        tabExport: "Exp / Imp",
+        tabAi: "Asistente IA",
+        tabJoints: "Molestias",
+        tabUpdates: "Actualización",
+        tabDashboard: "Dashboard",
+        btnPrev: "Anterior",
+        btnNext: "Siguiente",
+        btnDone: "¡Entendido!",
+        lblNeverShow: "No volver a mostrar al iniciar"
+      },
+      en: {
+        title: "Gym Tracker Guide",
+        subtitle: "Master all the features of your digital training notebook",
+        badge: "TUTORIAL",
+        tabIntro: "What is it for?",
+        tabCalendar: "Calendar",
+        tabWorkout: "Workout",
+        tabExercises: "Exercises",
+        tabHistory: "History",
+        tabProgression: "Progression",
+        tabEvolution: "Evolution",
+        tabExport: "Exp / Imp",
+        tabAi: "AI Assistant",
+        tabJoints: "Joints",
+        tabUpdates: "Updates",
+        tabDashboard: "Dashboard",
+        btnPrev: "Previous",
+        btnNext: "Next",
+        btnDone: "Got it!",
+        lblNeverShow: "Don't show again on startup"
+      },
+      ru: {
+        title: "Руководство Gym Tracker",
+        subtitle: "Узнайте обо всех функциях вашего цифрового блокнота",
+        badge: "ТУТОРИАЛ",
+        tabIntro: "Для чего это?",
+        tabCalendar: "Календарь",
+        tabWorkout: "Тренировка",
+        tabExercises: "Упражнения",
+        tabHistory: "История",
+        tabProgression: "Прогресс",
+        tabEvolution: "Эволюция",
+        tabExport: "Эксп / Имп",
+        tabAi: "ИИ Помощник",
+        tabJoints: "Суставы",
+        tabUpdates: "Обновления",
+        tabDashboard: "Панель",
+        btnPrev: "Назад",
+        btnNext: "Далее",
+        btnDone: "Понятно!",
+        lblNeverShow: "Не показывать при запуске"
+      },
+      et: {
+        title: "Gym Tracker Juhend",
+        subtitle: "Õpi kasutama kõiki digitaalse treeningpäeviku funktsioone",
+        badge: "ÕPETUS",
+        tabIntro: "Milleks see on?",
+        tabCalendar: "Kalender",
+        tabWorkout: "Treening",
+        tabExercises: "Harjutused",
+        tabHistory: "Ajalugu",
+        tabProgression: "Progressioon",
+        tabEvolution: "Areng",
+        tabExport: "Eksp / Imp",
+        tabAi: "Tehisintellekt",
+        tabJoints: "Liigesed",
+        tabUpdates: "Uuendused",
+        tabDashboard: "Töölaud",
+        btnPrev: "Eelmine",
+        btnNext: "Järgmine",
+        btnDone: "Sain aru!",
+        lblNeverShow: "Ära näita käivitamisel uuesti"
+      },
+      uk: {
+        title: "Посібник Gym Tracker",
+        subtitle: "Дізнайтеся про всі можливості вашого цифрового блокнота",
+        badge: "ТУТОРІАЛ",
+        tabIntro: "Для чого це?",
+        tabCalendar: "Календар",
+        tabWorkout: "Тренування",
+        tabExercises: "Вправи",
+        tabHistory: "Історія",
+        tabProgression: "Прогрес",
+        tabEvolution: "Еволюція",
+        tabExport: "Експ / Імп",
+        tabAi: "ШІ Помічник",
+        tabJoints: "Суглоби",
+        tabUpdates: "Оновлення",
+        tabDashboard: "Панель",
+        btnPrev: "Назад",
+        btnNext: "Далі",
+        btnDone: "Зрозуміло!",
+        lblNeverShow: "Більше не показувати при запуску"
+      }
+    };
+
+    function applyTutorialTranslations(lang) {
+      const t = tutTranslations[lang] || tutTranslations['en'];
+      const setTxt = (id, val) => {
+        const el = document.getElementById(id);
+        if (el && val) el.textContent = val;
+      };
+      setTxt('tut-title', t.title);
+      setTxt('tut-subtitle', t.subtitle);
+      setTxt('tut-badge', t.badge);
+      setTxt('tut-tab-intro', t.tabIntro);
+      setTxt('tut-tab-calendar', t.tabCalendar);
+      setTxt('tut-tab-workout', t.tabWorkout);
+      setTxt('tut-tab-exercises', t.tabExercises);
+      setTxt('tut-tab-history', t.tabHistory);
+      setTxt('tut-tab-progression', t.tabProgression);
+      setTxt('tut-tab-evolution', t.tabEvolution);
+      setTxt('tut-tab-export', t.tabExport);
+      setTxt('tut-tab-ai', t.tabAi);
+      setTxt('tut-tab-joints', t.tabJoints);
+      setTxt('tut-tab-updates', t.tabUpdates);
+      setTxt('tut-tab-dashboard', t.tabDashboard);
+      setTxt('tut-btn-prev', t.btnPrev);
+      setTxt('tut-btn-next', t.btnNext);
+      setTxt('tut-btn-done', t.btnDone);
+      setTxt('tut-lbl-never-show', t.lblNeverShow);
+      
+      const sel = document.getElementById('tut-lang-select');
+      if (sel) sel.value = lang;
+      document.documentElement.lang = lang;
+    }
+
+    function changeTutLanguage(lang) {
+      if (!lang || !tutTranslations[lang]) return;
+      localStorage.setItem('gym_language', lang);
+      localStorage.setItem('gym_language_chosen', 'true');
+      applyTutorialTranslations(lang);
+      try {
+        if (window.parent && window.parent.setAppLanguageFromTutorial) {
+          window.parent.setAppLanguageFromTutorial(lang);
+        }
+      } catch(e) {}
+    }
+
   </script>
 </body>
 </html>

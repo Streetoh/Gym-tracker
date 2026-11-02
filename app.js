@@ -1190,7 +1190,7 @@ function getTrExName(originalName) {
 }
 
 let state = {
-    language: localStorage.getItem('gym_language') || 'es',
+    language: localStorage.getItem('gym_language') || 'en',
     exercises: (savedExercises && savedExercises.length > 0) ? savedExercises : (typeof defaultExercises !== 'undefined' ? defaultExercises : []),
     sessions: JSON.parse(localStorage.getItem('gym_sessions')) || [],
     predefinedSessions: JSON.parse(localStorage.getItem('gym_routines')) || [],
@@ -3772,6 +3772,42 @@ const translations = {
     }
 };
 
+
+const GLOBAL_EXTRA_TRANSLATIONS = {'es': {'nav': {'tutorial': 'Guía y Tutorial'}, 'joints': {'menuTitle': 'Molestias Articulares', 'title': 'Molestias Articulares y Lesiones', 'subtitle': 'Registra articulaciones sensibles para avisarte durante tus entrenamientos'}, 'common': {'githubRepo': 'Repositorio GitHub'}, 'recovery': {'title': 'Recuperación Muscular', 'allReady': 'Todo Listo', 'recovering': 'recuperando', 'fatiguedSingle': 'fatigado', 'fatiguedPlural': 'fatigados', 'viewMap': 'Ver mapa', 'hideMap': 'Ocultar mapa', 'statusReady': 'Listo', 'rested': 'Descansado', 'hoursAgo': 'hace {h}h', 'moreThan7Days': 'Más de 7 días (totalmente recuperado)', 'hoursAgoFull': 'Hace {h} horas', 'lastWorkout': 'Último entreno', 'statusLabel': 'Estado'}, 'fatigue': {'frontView': 'Vista Frontal', 'backView': 'Vista Dorsal', 'tapHint': 'Toca cualquier músculo para ver su detalle de descanso.'}, 'modals_predefined': {'newTitle': 'Nueva Sesión Predefinida', 'editTitle': 'Editar Sesión Predefinida', 'namePlaceholder': 'Ej. Día 1: Empuje (Pecho, Hombro, Tríceps)', 'searchPlaceholder': '🔍 Buscar ejercicio o grupo muscular...', 'selectedSingular': 'seleccionado', 'selectedPlural': 'seleccionados', 'selectedShort': '{count} selec.', 'phaseDesc': 'Cada pestaña (<strong>Hipertrofia</strong>, <strong>Pesado</strong> y <strong>Alta Int.</strong>) guarda sus propias series y repeticiones por separado. Cambia de pestaña para ajustar cada fase a tu gusto:', 'editingPhasePrefix': 'Editando series y repeticiones independientes para:', 'emptyEditorHint': 'Abre un grupo muscular arriba y pulsa sobre las tarjetas de los ejercicios para añadirlos a la sesión.', 'emptyListTitle': 'No tienes sesiones predefinidas guardadas', 'emptyListDesc': 'Pulsa en "Crear Nueva Sesión Predefinida" para empezar.', 'seriesCount': '{count} series'}, 'update': {'currentTitle': 'Novedades de la versión', 'upToDateDesc': 'Tu aplicación está actualizada a la última versión.', 'understood': 'Entendido', 'versionLabel': 'Versión'}}, 'en': {'nav': {'tutorial': 'Guide & Tutorial'}, 'joints': {'menuTitle': 'Joint Discomfort', 'title': 'Joint Discomfort & Injuries', 'subtitle': 'Log tender joints to receive alerts during your workouts'}, 'common': {'githubRepo': 'GitHub Repository'}, 'recovery': {'title': 'Muscle Recovery', 'allReady': 'All Ready', 'recovering': 'recovering', 'fatiguedSingle': 'fatigued', 'fatiguedPlural': 'fatigued', 'viewMap': 'View map', 'hideMap': 'Hide map', 'statusReady': 'Ready', 'rested': 'Rested', 'hoursAgo': '{h}h ago', 'moreThan7Days': 'Over 7 days (fully recovered)', 'hoursAgoFull': '{h} hours ago', 'lastWorkout': 'Last workout', 'statusLabel': 'Status'}, 'fatigue': {'frontView': 'Front View', 'backView': 'Back View', 'tapHint': 'Tap any muscle to view its recovery status.'}, 'modals_predefined': {'newTitle': 'New Predefined Session', 'editTitle': 'Edit Predefined Session', 'namePlaceholder': 'E.g. Day 1: Push (Chest, Shoulders, Triceps)', 'searchPlaceholder': '🔍 Search exercise or muscle group...', 'selectedSingular': 'selected', 'selectedPlural': 'selected', 'selectedShort': '{count} sel.', 'phaseDesc': 'Each tab (<strong>Hypertrophy</strong>, <strong>Heavy</strong>, and <strong>High Int.</strong>) saves its own independent sets & reps. Switch tabs to adjust each phase to your preference:', 'editingPhasePrefix': 'Editing independent sets and reps for:', 'emptyEditorHint': 'Open a muscle group above and tap exercise cards to add them to the session.', 'emptyListTitle': 'You have no saved predefined sessions', 'emptyListDesc': "Tap 'Create New Predefined Session' to get started.", 'seriesCount': '{count} sets'}, 'update': {'currentTitle': 'Version Highlights', 'upToDateDesc': 'Your app is up to date with the latest version.', 'understood': 'Got it', 'versionLabel': 'Version'}}, 'ru': {'nav': {'tutorial': 'Руководство и туториал'}, 'joints': {'menuTitle': 'Дискомфорт в суставах', 'title': 'Дискомфорт в суставах и травмы', 'subtitle': 'Отмечайте чувствительные суставы для предупреждений во время тренировок'}, 'common': {'githubRepo': 'Репозиторий GitHub'}, 'recovery': {'title': 'Восстановление мышц', 'allReady': 'Всё готово', 'recovering': 'восстанавливается', 'fatiguedSingle': 'утомлена', 'fatiguedPlural': 'утомлены', 'viewMap': 'Показать карту', 'hideMap': 'Скрыть карту', 'statusReady': 'Готов', 'rested': 'Отдохнул', 'hoursAgo': '{h}ч назад', 'moreThan7Days': 'Более 7 дней (полностью восстановлен)', 'hoursAgoFull': '{h} часов назад', 'lastWorkout': 'Последняя тренировка', 'statusLabel': 'Статус'}, 'fatigue': {'frontView': 'Вид спереди', 'backView': 'Вид сзади', 'tapHint': 'Нажмите на мышцу для деталей восстановления.'}, 'modals_predefined': {'newTitle': 'Новый шаблон тренировки', 'editTitle': 'Редактировать шаблон', 'namePlaceholder': 'Напр. День 1: Жим (Грудь, Плечи, Трицепс)', 'searchPlaceholder': '🔍 Поиск упражнения или группы мышц...', 'selectedSingular': 'выбрано', 'selectedPlural': 'выбрано', 'selectedShort': '{count} выбр.', 'phaseDesc': 'Каждая вкладка (<strong>Гипертрофия</strong>, <strong>Тяжелый</strong> и <strong>Выс. инт.</strong>) сохраняет свои подходы и повторения. Переключайте вкладки для настройки:', 'editingPhasePrefix': 'Настройка подходов и повторений для:', 'emptyEditorHint': 'Откройте группу мышц выше и нажмите на карточки упражнений, чтобы добавить их.', 'emptyListTitle': 'Нет сохраненных шаблонов', 'emptyListDesc': "Нажмите 'Создать новый шаблон', чтобы начать.", 'seriesCount': '{count} подходов'}, 'update': {'currentTitle': 'Что нового в этой версии', 'upToDateDesc': 'Ваше приложение обновлено до последней версии.', 'understood': 'Понятно', 'versionLabel': 'Версия'}}, 'et': {'nav': {'tutorial': 'Juhend ja tutvustus'}, 'joints': {'menuTitle': 'Liigesevalu ja ebamugavus', 'title': 'Liigeseprobleemid ja vigastused', 'subtitle': 'Märgi tundlikud liigesed treeningute ajal hoiatuste saamiseks'}, 'common': {'githubRepo': 'GitHubi repositoorium'}, 'recovery': {'title': 'Lihaste taastumine', 'allReady': 'Kõik valmis', 'recovering': 'taastumas', 'fatiguedSingle': 'väsinud', 'fatiguedPlural': 'väsinud', 'viewMap': 'Vaata kaarti', 'hideMap': 'Peida kaart', 'statusReady': 'Valmis', 'rested': 'Puhanud', 'hoursAgo': '{h}t tagasi', 'moreThan7Days': 'Üle 7 päeva (täielikult taastunud)', 'hoursAgoFull': '{h} tundi tagasi', 'lastWorkout': 'Viimane treening', 'statusLabel': 'Olek'}, 'fatigue': {'frontView': 'Eestvaade', 'backView': 'Seljavaade', 'tapHint': 'Puuduta lihast taastumise üksikasjade nägemiseks.'}, 'modals_predefined': {'newTitle': 'Uus treeningumall', 'editTitle': 'Muuda treeningumalli', 'namePlaceholder': 'Nt 1. Päev: Surumine (Rind, Õlg, Triitseps)', 'searchPlaceholder': '🔍 Otsi harjutust või lihasgruppi...', 'selectedSingular': 'valitud', 'selectedPlural': 'valitud', 'selectedShort': '{count} val.', 'phaseDesc': 'Iga vahekaart (<strong>Hüpertroofia</strong>, <strong>Raske</strong> ja <strong>Kõrge int.</strong>) salvestab oma seeriad ja kordused. Vaheta vahekaarte faaside muutmiseks:', 'editingPhasePrefix': 'Seeriate ja korduste muutmine faasile:', 'emptyEditorHint': 'Ava ülalpool lihasgrupp ja puuduta harjutuste kaarte nende lisamiseks.', 'emptyListTitle': 'Salvestatud treeningumalle pole', 'emptyListDesc': "Alustamiseks vajuta 'Loo uus mall'.", 'seriesCount': '{count} seeriat'}, 'update': {'currentTitle': 'Selle versiooni uuendused', 'upToDateDesc': 'Teie rakendus on uuendatud viimasele versioonile.', 'understood': 'Sain aru', 'versionLabel': 'Versioon'}}, 'uk': {'nav': {'tutorial': 'Посібник і туторіал'}, 'joints': {'menuTitle': 'Дискомфорт у суглобах', 'title': 'Дискомфорт у суглобах та травми', 'subtitle': 'Фіксуйте чутливі суглоби для сповіщень під час тренувань'}, 'common': {'githubRepo': 'Репозиторій GitHub'}, 'recovery': {'title': "Відновлення м'язів", 'allReady': 'Все готово', 'recovering': 'відновлюється', 'fatiguedSingle': 'втомлена', 'fatiguedPlural': 'втомлені', 'viewMap': 'Показати карту', 'hideMap': 'Сховати карту', 'statusReady': 'Готовий', 'rested': 'Відпочив', 'hoursAgo': '{h}год тому', 'moreThan7Days': 'Більше 7 днів (повністю відновлений)', 'hoursAgoFull': '{h} годин тому', 'lastWorkout': 'Останнє тренування', 'statusLabel': 'Статус'}, 'fatigue': {'frontView': 'Вид спереду', 'backView': 'Вид ззаду', 'tapHint': "Натисніть на м'яз для деталей відновлення."}, 'modals_predefined': {'newTitle': 'Новий шаблон тренування', 'editTitle': 'Редагувати шаблон', 'namePlaceholder': 'Напр. День 1: Жим (Груди, Плечі, Трицепс)', 'searchPlaceholder': "🔍 Пошук вправи або групи м'язів...", 'selectedSingular': 'обрано', 'selectedPlural': 'обрано', 'selectedShort': '{count} обр.', 'phaseDesc': 'Кожна вкладка (<strong>Гіпертрофія</strong>, <strong>Важкий</strong> та <strong>Вис. інт.</strong>) зберігає окремі підходи та повторення. Перемикайте вкладки для налаштування:', 'editingPhasePrefix': 'Налаштування підходів та повторень для:', 'emptyEditorHint': "Відкрийте групу м'язів вище та натисніть на картки вправ, щоб додати їх.", 'emptyListTitle': 'Немає збережених шаблонів', 'emptyListDesc': "Натисніть 'Створити новий шаблон', щоб розпочати.", 'seriesCount': '{count} підходів'}, 'update': {'currentTitle': 'Що нового в цій версії', 'upToDateDesc': 'Ваш додаток оновлено до останньої версії.', 'understood': 'Зрозуміло', 'versionLabel': 'Версія'}}};
+(function mergeExtraTranslations() {
+    if (typeof translations === 'undefined') return;
+    Object.keys(GLOBAL_EXTRA_TRANSLATIONS).forEach(lang => {
+        if (!translations[lang]) translations[lang] = {};
+        const ext = GLOBAL_EXTRA_TRANSLATIONS[lang];
+        if (ext.nav) Object.assign(translations[lang].nav, ext.nav);
+        if (ext.joints) {
+            translations[lang].joints = translations[lang].joints || {};
+            Object.assign(translations[lang].joints, ext.joints);
+        }
+        if (ext.common) {
+            translations[lang].common = translations[lang].common || {};
+            Object.assign(translations[lang].common, ext.common);
+        }
+        if (ext.recovery) {
+            translations[lang].recovery = translations[lang].recovery || {};
+            Object.assign(translations[lang].recovery, ext.recovery);
+        }
+        if (ext.fatigue) {
+            translations[lang].fatigue = translations[lang].fatigue || {};
+            Object.assign(translations[lang].fatigue, ext.fatigue);
+        }
+        if (ext.modals_predefined) {
+            translations[lang].modals = translations[lang].modals || {};
+            translations[lang].modals.predefined = translations[lang].modals.predefined || {};
+            Object.assign(translations[lang].modals.predefined, ext.modals_predefined);
+        }
+        if (ext.update) {
+            translations[lang].update = translations[lang].update || {};
+            Object.assign(translations[lang].update, ext.update);
+        }
+    });
+})();
+
 const getSetTypeT = (str) => {
     const map = {
         'Calentamiento': 'warmup', 'Aproximación': 'approach', 'Efectiva': 'effective',
@@ -3780,6 +3816,28 @@ const getSetTypeT = (str) => {
     if (map[str]) return getT('setTypes.' + map[str]);
     return str;
 };
+
+window.getTranslatedGroupName = function(gName) {
+    if (!gName) return 'Sin Grupo';
+    const clean = gName.trim().toLowerCase();
+    let gKey = clean;
+    if (clean === 'abdominales y core' || clean === 'core' || clean === 'abs') gKey = 'core';
+    else if (clean === 'tríceps' || clean === 'triceps') gKey = 'triceps';
+    else if (clean === 'bíceps' || clean === 'biceps') gKey = 'biceps';
+    else if (clean === 'hombros' || clean === 'hombro' || clean === 'delts') gKey = 'hombro';
+    else if (clean === 'cuádriceps' || clean === 'gemelos' || clean === 'piernas') gKey = 'piernas';
+    
+    const trG = typeof getT === 'function' ? getT('groups.' + gKey) : gName;
+    return (trG && trG !== 'groups.' + gKey) ? trG : gName;
+};
+function getTranslatedGroupName(gName) { return window.getTranslatedGroupName(gName); }
+
+window.getTranslatedTypeLabel = function(type) {
+    if (type === 'heavy') return (typeof getT === 'function' && getT('types.heavy') && getT('types.heavy') !== 'types.heavy') ? getT('types.heavy') : 'Pesado';
+    if (type === 'intensity') return (typeof getT === 'function' && getT('types.intensity') && getT('types.intensity') !== 'types.intensity') ? getT('types.intensity') : 'Alta Intensidad';
+    return (typeof getT === 'function' && getT('types.hypertrophy') && getT('types.hypertrophy') !== 'types.hypertrophy') ? getT('types.hypertrophy') : 'Hipertrofia';
+};
+function getTranslatedTypeLabel(type) { return window.getTranslatedTypeLabel(type); }
 
 const getT = (path) => {
     const keys = path.split('.');
@@ -3840,6 +3898,14 @@ const updateLanguageUI = () => {
         // Re-render update modal if active or if latest data exists
         if (typeof window.renderUpdateModalContent === 'function' && (window.latestUpdateData || document.getElementById('modal-update')?.classList.contains('active'))) {
             window.renderUpdateModalContent(window.latestUpdateData);
+        }
+        if (typeof updateCalendarRecoveryWidget === 'function') updateCalendarRecoveryWidget();
+        if (typeof window.renderPredefinedSessionsList === 'function' && document.getElementById('predefined-list-view')?.style.display !== 'none') {
+            window.renderPredefinedSessionsList();
+        }
+        if (typeof window.renderPredefinedMuscleAccordion === 'function' && document.getElementById('predefined-editor-view')?.style.display !== 'none') {
+            window.renderPredefinedMuscleAccordion();
+            if (typeof window.renderPredefinedEditorItems === 'function') window.renderPredefinedEditorItems();
         }
 
         // Force header update
@@ -7070,6 +7136,9 @@ document.querySelectorAll('.lang-select-btn').forEach(btn => {
         if (typeof renderExportList !== 'undefined') renderExportList();
         if (typeof window.renderFullChatHistory === 'function') window.renderFullChatHistory();
         if (typeof updateAiButtonsVisibility === 'function') updateAiButtonsVisibility();
+        if (typeof window.renderPredefinedSessionsList === 'function') window.renderPredefinedSessionsList();
+        if (typeof window.renderPredefinedMuscleAccordion === 'function') window.renderPredefinedMuscleAccordion();
+        if (typeof updateCalendarRecoveryWidget === 'function') updateCalendarRecoveryWidget();
     });
 });
 
@@ -9275,13 +9344,24 @@ function initApp() {
     }
     
     
-    // Check first run welcome tutorial
-    if (!localStorage.getItem('gym_tutorial_seen')) {
-        setTimeout(() => {
-            if (typeof openWelcomeTutorialModal === 'function') {
-                openWelcomeTutorialModal();
-            }
-        }, 1200);
+    // First run language check
+    const hasChosenLang = localStorage.getItem('gym_language_chosen');
+    const savedLang = localStorage.getItem('gym_language');
+    if (!hasChosenLang && !savedLang) {
+        // First run! Show language picker modal in English by default
+        const modalFirstLang = document.getElementById('modal-first-run-language');
+        if (modalFirstLang) {
+            modalFirstLang.style.display = 'flex';
+            modalFirstLang.classList.add('active');
+        }
+    } else {
+        if (!localStorage.getItem('gym_tutorial_seen')) {
+            setTimeout(() => {
+                if (typeof openWelcomeTutorialModal === 'function') {
+                    openWelcomeTutorialModal();
+                }
+            }, 1200);
+        }
     }
 
     const calNav = document.querySelector('.nav-item[data-target="view-calendar"]');
@@ -9519,7 +9599,14 @@ window.getMuscleRecoveryStatus = function() {
 window.updateCalendarRecoveryWidget = function() {
     const badge = document.getElementById('calendar-recovery-summary-badge');
     const chipsContainer = document.getElementById('calendar-recovery-chips');
+    const toggleText = document.getElementById('calendar-recovery-toggle-text');
+    const mount = document.getElementById('calendar-recovery-mount');
     if (!badge && !chipsContainer) return;
+
+    if (toggleText && mount) {
+        const isHidden = mount.style.display === 'none' || !mount.style.display;
+        toggleText.textContent = isHidden ? (getT('recovery.viewMap') || 'Ver mapa') : (getT('recovery.hideMap') || 'Ocultar mapa');
+    }
 
     const recovery = window.getMuscleRecoveryStatus();
     const primaryMuscles = ['Pecho', 'Espalda', 'Piernas', 'Hombros', 'Bíceps', 'Tríceps'];
@@ -9537,29 +9624,42 @@ window.updateCalendarRecoveryWidget = function() {
             badge.style.background = 'rgba(239, 68, 68, 0.15)';
             badge.style.borderColor = 'rgba(239, 68, 68, 0.35)';
             badge.style.color = '#ef4444';
-            badge.textContent = `🔴 ${fatiguedCount} fatigado${fatiguedCount > 1 ? 's' : ''}`;
+            const fWord = fatiguedCount > 1 ? (getT('recovery.fatiguedPlural') || 'fatigados') : (getT('recovery.fatiguedSingle') || 'fatigado');
+            badge.textContent = `🔴 ${fatiguedCount} ${fWord}`;
         } else if (recoveringCount > 0) {
             badge.style.background = 'rgba(245, 158, 11, 0.15)';
             badge.style.borderColor = 'rgba(245, 158, 11, 0.35)';
             badge.style.color = '#f59e0b';
-            badge.textContent = `🟡 ${recoveringCount} recuperando`;
+            badge.textContent = `🟡 ${recoveringCount} ${getT('recovery.recovering') || 'recuperando'}`;
         } else {
             badge.style.background = 'rgba(16, 185, 129, 0.15)';
             badge.style.borderColor = 'rgba(16, 185, 129, 0.35)';
             badge.style.color = '#10b981';
-            badge.textContent = '🟢 Todo Listo';
+            badge.textContent = `🟢 ${getT('recovery.allReady') || 'Todo Listo'}`;
         }
     }
 
     if (chipsContainer) {
         chipsContainer.innerHTML = primaryMuscles.map(m => {
-            const info = recovery[m] || { status: 'ready', color: '#10b981', label: 'Listo', hoursAgo: Infinity };
-            let subtext = info.label;
+            const info = recovery[m] || { status: 'ready', color: '#10b981', label: getT('recovery.statusReady') || 'Listo', hoursAgo: Infinity };
+            let subtext = getT('recovery.statusReady') || 'Listo';
             if (info.status === 'fatigued' && info.hoursAgo < 24) subtext = `${info.hoursAgo}h`;
             else if (info.status === 'recovering') subtext = `${info.hoursAgo}h`;
-            return `<div class="recovery-chip" title="${m}: ${info.label} (${info.hoursAgo === Infinity ? 'Descansado' : 'hace ' + info.hoursAgo + 'h'})"><span class="recovery-chip-dot" style="background:${info.color};"></span><span>${m}</span><span style="opacity:0.75; font-size:10px;">${subtext}</span></div>`;
+            else if (info.status === 'ready') subtext = getT('recovery.statusReady') || 'Listo';
+            
+            const trGroup = getTranslatedGroupName(m);
+            const titleStatus = info.hoursAgo === Infinity ? (getT('recovery.rested') || 'Descansado') : ((getT('recovery.hoursAgo') || 'hace {h}h').replace('{h}', info.hoursAgo));
+            return `<div class="recovery-chip" title="${trGroup}: ${info.label} (${titleStatus})"><span class="recovery-chip-dot" style="background:${info.color};"></span><span>${trGroup}</span><span style="opacity:0.75; font-size:10px;">${subtext}</span></div>`;
         }).join('');
     }
+};
+
+window.getAnatomySvgMarkup = function() {
+    const front = getT('fatigue.frontView') || 'Vista Frontal';
+    const back = getT('fatigue.backView') || 'Vista Dorsal';
+    return (typeof ANATOMY_SVG_MARKUP !== 'undefined' ? ANATOMY_SVG_MARKUP : '')
+        .replace(/<div style="font-size: 12px; font-weight: 700; color: var\(--text-secondary\); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Vista Frontal<\/div>/, `<div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;">${front}</div>`)
+        .replace(/<div style="font-size: 12px; font-weight: 700; color: var\(--text-secondary\); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Vista Dorsal<\/div>/, `<div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;">${back}</div>`);
 };
 
 window.toggleCalendarRecoveryHeatmap = function() {
@@ -9572,18 +9672,18 @@ window.toggleCalendarRecoveryHeatmap = function() {
     if (isHidden) {
         mount.style.display = 'block';
         if (icon) icon.className = 'ph-bold ph-caret-up';
-        if (toggleText) toggleText.textContent = 'Ocultar mapa';
+        if (toggleText) toggleText.textContent = getT('recovery.hideMap') || 'Ocultar mapa';
         
         const silMount = document.getElementById('calendar-anatomy-silhouette-mount');
-        if (silMount && (!silMount.innerHTML || silMount.innerHTML.trim() === '')) {
-            silMount.innerHTML = (typeof ANATOMY_SVG_MARKUP !== 'undefined') ? ANATOMY_SVG_MARKUP : '';
+        if (silMount) {
+            silMount.innerHTML = window.getAnatomySvgMarkup();
         }
         
         if (silMount) {
             const recovery = window.getMuscleRecoveryStatus();
             silMount.querySelectorAll('.anatomy-svg .muscle-group').forEach(el => {
                 const muscle = el.getAttribute('data-muscle');
-                const info = recovery[muscle] || { color: '#10b981', label: 'Listo' };
+                const info = recovery[muscle] || { color: '#10b981', label: getT('recovery.statusReady') || 'Listo' };
                 el.setAttribute('fill', info.color);
 
                 el.onclick = () => {
@@ -9591,9 +9691,10 @@ window.toggleCalendarRecoveryHeatmap = function() {
                     el.classList.add('active');
                     const detailEl = document.getElementById('calendar-anatomy-selected-muscle-detail');
                     if (detailEl) {
-                        const mInfo = recovery[muscle] || { status: 'ready', color: '#10b981', label: 'Listo', hoursAgo: Infinity };
-                        const agoText = mInfo.hoursAgo === Infinity ? 'Más de 7 días (totalmente recuperado)' : `Hace ${mInfo.hoursAgo} horas`;
-                        detailEl.innerHTML = `<span style="font-weight:700; color:${mInfo.color};">${muscle}:</span> Estado <strong>${mInfo.label}</strong>. Último entreno: ${agoText}.`;
+                        const mInfo = recovery[muscle] || { status: 'ready', color: '#10b981', label: getT('recovery.statusReady') || 'Listo', hoursAgo: Infinity };
+                        const agoText = mInfo.hoursAgo === Infinity ? (getT('recovery.moreThan7Days') || 'Más de 7 días (totalmente recuperado)') : ((getT('recovery.hoursAgoFull') || 'Hace {h} horas').replace('{h}', mInfo.hoursAgo));
+                        const trMuscle = getTranslatedGroupName(muscle);
+                        detailEl.innerHTML = `<span style="font-weight:700; color:${mInfo.color};">${trMuscle}:</span> ${getT('recovery.statusLabel') || 'Estado'} <strong>${mInfo.label}</strong>. ${getT('recovery.lastWorkout') || 'Último entreno'}: ${agoText}.`;
                     }
                 };
             });
@@ -9601,7 +9702,7 @@ window.toggleCalendarRecoveryHeatmap = function() {
     } else {
         mount.style.display = 'none';
         if (icon) icon.className = 'ph-bold ph-caret-down';
-        if (toggleText) toggleText.textContent = 'Ver mapa';
+        if (toggleText) toggleText.textContent = getT('recovery.viewMap') || 'Ver mapa';
     }
 };
 
@@ -13247,7 +13348,49 @@ window.trackPRChangeForCarlo = function(exId, newWeight) {
 // =========================================================================
 // WELCOME TUTORIAL & GUIDE INTEGRATION
 // =========================================================================
+window.setAppLanguageFromTutorial = function(lang) {
+    if (!lang || !translations[lang]) return;
+    state.language = lang;
+    localStorage.setItem('gym_language', lang);
+    localStorage.setItem('gym_language_chosen', 'true');
+    updateLanguageUI();
+    if (typeof renderCalendar === 'function') renderCalendar();
+    if (typeof renderExercises === 'function') renderExercises();
+    if (typeof renderGlobalHistory === 'function') renderGlobalHistory();
+    if (typeof renderPredefinedSessionsList === 'function') renderPredefinedSessionsList();
+    if (typeof renderPredefinedMuscleAccordion === 'function') renderPredefinedMuscleAccordion();
+    if (typeof updateCalendarRecoveryWidget === 'function') updateCalendarRecoveryWidget();
+};
+
+window.chooseFirstRunLanguage = function(lang) {
+    state.language = lang;
+    localStorage.setItem('gym_language', lang);
+    localStorage.setItem('gym_language_chosen', 'true');
+    const m = document.getElementById('modal-first-run-language');
+    if (m) {
+        m.style.display = 'none';
+        m.classList.remove('active');
+    }
+    updateLanguageUI();
+    if (typeof renderCalendar === 'function') renderCalendar();
+    if (typeof renderExercises === 'function') renderExercises();
+    if (typeof renderGlobalHistory === 'function') renderGlobalHistory();
+    if (typeof renderPredefinedSessionsList === 'function') renderPredefinedSessionsList();
+    if (typeof renderPredefinedMuscleAccordion === 'function') renderPredefinedMuscleAccordion();
+    if (typeof updateCalendarRecoveryWidget === 'function') updateCalendarRecoveryWidget();
+
+    // Now open welcome tutorial in chosen language if not seen
+    if (!localStorage.getItem('gym_tutorial_seen')) {
+        setTimeout(() => {
+            if (typeof openWelcomeTutorialModal === 'function') {
+                openWelcomeTutorialModal();
+            }
+        }, 300);
+    }
+};
+
 window.openWelcomeTutorialModal = function() {
+    const curLang = state.language || localStorage.getItem('gym_language') || 'en';
     let m = document.getElementById('modal-welcome-tutorial');
     if (!m) {
         m = document.createElement('div');
@@ -13256,15 +13399,15 @@ window.openWelcomeTutorialModal = function() {
         m.style.cssText = 'display: none; position: fixed; inset: 0; z-index: 999999; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(5px); padding: 12px;';
         m.innerHTML = `
             <div class="modal-backdrop" style="position: absolute; inset: 0;" onclick="closeWelcomeTutorialModal()"></div>
-            <iframe id="iframe-welcome-tutorial" src="tutorial-preview.html" style="width: 100%; max-width: 680px; height: min(92vh, 760px); border: none; border-radius: 24px; position: relative; z-index: 1000000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); background: #0f172a;"></iframe>
+            <iframe id="iframe-welcome-tutorial" src="tutorial-preview.html?lang=${curLang}" style="width: 100%; max-width: 680px; height: min(92vh, 760px); border: none; border-radius: 24px; position: relative; z-index: 1000000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); background: #0f172a;"></iframe>
         `;
         document.body.appendChild(m);
     }
     m.style.display = 'flex';
     m.classList.add('active');
     const iframe = document.getElementById('iframe-welcome-tutorial');
-    if (iframe && (!iframe.src || iframe.src === 'about:blank')) {
-        iframe.src = 'tutorial-preview.html';
+    if (iframe) {
+        iframe.src = `tutorial-preview.html?lang=${curLang}`;
     }
 };
 
@@ -13411,7 +13554,7 @@ window.closeWelcomeTutorialModal = function() {
             translations[lang].common = translations[lang].common || {};
             translations[lang].common.back = t.back;
             translations[lang].modals = translations[lang].modals || {};
-            translations[lang].modals.predefined = {
+            translations[lang].modals.predefined = Object.assign(translations[lang].modals.predefined || {}, {
                 title: t.preTitle,
                 desc: t.preDesc,
                 createNew: t.preCreateNew,
@@ -13419,8 +13562,8 @@ window.closeWelcomeTutorialModal = function() {
                 selectByMuscle: t.preSelectByMuscle,
                 configureSets: t.preConfigureSets,
                 saveBtn: t.preSaveBtn
-            };
-            translations[lang].modals.mesocycle = {
+            });
+            translations[lang].modals.mesocycle = Object.assign(translations[lang].modals.mesocycle || {}, {
                 title: t.mesoTitle,
                 shortTitle: t.mesoShortTitle,
                 desc: t.mesoDesc,
@@ -13433,7 +13576,7 @@ window.closeWelcomeTutorialModal = function() {
                 thursday: t.thursday,
                 friday: t.friday,
                 scheduleBtn: t.mesoScheduleBtn
-            };
+            });
         });
         if (typeof updateLanguageUI === 'function') {
             try { updateLanguageUI(); } catch (e) {}
@@ -13655,8 +13798,8 @@ window.closeWelcomeTutorialModal = function() {
         if (templates.length === 0) {
             container.innerHTML = `<div class="empty-state" style="padding: 24px; text-align: center; color: var(--text-secondary); background: var(--bg-surface); border-radius: 14px; border: 1px dashed var(--border-color);">
                 <i class="ph-bold ph-bookmarks" style="font-size: 32px; opacity: 0.5; margin-bottom: 8px;"></i>
-                <div style="font-weight: 700; font-size: 14px;">No tienes sesiones predefinidas guardadas</div>
-                <div style="font-size: 12px; margin-top: 4px;">Pulsa en "Crear Nueva Sesión Predefinida" para empezar.</div>
+                <div style="font-weight: 700; font-size: 14px;">${getT('modals.predefined.emptyListTitle') || 'No tienes sesiones predefinidas guardadas'}</div>
+                <div style="font-size: 12px; margin-top: 4px;">${getT('modals.predefined.emptyListDesc') || 'Pulsa en "Crear Nueva Sesión Predefinida" para empezar.'}</div>
             </div>`;
             return;
         }
@@ -13706,9 +13849,9 @@ window.closeWelcomeTutorialModal = function() {
                                         <span style="font-size: 10.5px; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 1px 6px; border-radius: 4px;">${dbEx.group || 'Sin Grupo'}</span>
                                     </div>
                                     <div style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 10.5px; margin-top: 4px;">
-                                        <span style="color: var(--color-hypertrophy);">🔵 <strong>Hipertrofia:</strong> ${hypInfo}</span>
-                                        <span style="color: var(--color-heavy);">🔴 <strong>Pesado:</strong> ${heaInfo}</span>
-                                        <span style="color: var(--color-intensity);">🟢 <strong>Alta Int:</strong> ${intInfo}</span>
+                                        <span style="color: var(--color-hypertrophy);">🔵 <strong>${getT('types.hypertrophy') || 'Hipertrofia'}:</strong> ${hypInfo}</span>
+                                        <span style="color: var(--color-heavy);">🔴 <strong>${getT('types.heavy') || 'Pesado'}:</strong> ${heaInfo}</span>
+                                        <span style="color: var(--color-intensity);">🟢 <strong>${getT('types.intensity') || 'Alta Int'}:</strong> ${intInfo}</span>
                                     </div>
                                 </div>
                             </div>
@@ -13739,7 +13882,7 @@ window.closeWelcomeTutorialModal = function() {
                                     <span style="font-size: 11px; font-weight: 800; background: rgba(255,255,255,0.08); color: var(--text-secondary); padding: 1px 5px; border-radius: 4px;">#${itemCounter++}</span>
                                     <span style="font-size: 13px; font-weight: 700; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${trName}</span>
                                 </div>
-                                <div style="font-size: 11px; color: var(--text-secondary);">${setsCount} series</div>
+                                <div style="font-size: 11px; color: var(--text-secondary);">${(getT('modals.predefined.seriesCount') || '{count} series').replace('{count}', setsCount)}</div>
                             </div>
                         </div>
                     `;
@@ -13905,7 +14048,7 @@ window.closeWelcomeTutorialModal = function() {
         if (editId) {
             const existing = (state.predefinedSessions || []).find(t => String(t.id) === String(editId));
             if (existing) {
-                if (headingEl) headingEl.textContent = 'Editar Sesión Predefinida';
+                if (headingEl) headingEl.textContent = getT('modals.predefined.editTitle') || 'Editar Sesión Predefinida';
                 if (idInput) idInput.value = existing.id;
                 if (nameInput) nameInput.value = existing.name || '';
                 predefinedEditorType = existing.type || 'hypertrophy';
@@ -13931,7 +14074,7 @@ window.closeWelcomeTutorialModal = function() {
                 }
             }
         } else {
-            if (headingEl) headingEl.textContent = 'Nueva Sesión Predefinida';
+            if (headingEl) headingEl.textContent = getT('modals.predefined.newTitle') || 'Nueva Sesión Predefinida';
             if (idInput) idInput.value = '';
             if (nameInput) nameInput.value = '';
             predefinedEditorType = 'hypertrophy';
@@ -13986,21 +14129,22 @@ window.closeWelcomeTutorialModal = function() {
 
         const banner = document.getElementById('predefined-active-phase-banner');
         if (banner) {
+            const prefix = getT('modals.predefined.editingPhasePrefix') || 'Editando series y repeticiones independientes para:';
             if (predefinedEditorType === 'heavy') {
                 banner.style.background = 'rgba(220, 38, 38, 0.12)';
                 banner.style.color = 'var(--color-heavy)';
                 banner.style.borderColor = 'rgba(220, 38, 38, 0.35)';
-                banner.innerHTML = '🔴 Editando series y repeticiones independientes para: <strong>Pesado</strong>';
+                banner.innerHTML = `🔴 ${prefix} <strong>${getT('types.heavy') || 'Pesado'}</strong>`;
             } else if (predefinedEditorType === 'intensity') {
                 banner.style.background = 'rgba(16, 185, 129, 0.12)';
                 banner.style.color = 'var(--color-intensity)';
                 banner.style.borderColor = 'rgba(16, 185, 129, 0.35)';
-                banner.innerHTML = '🟢 Editando series y repeticiones independientes para: <strong>Alta Intensidad</strong>';
+                banner.innerHTML = `🟢 ${prefix} <strong>${getT('types.intensity') || 'Alta Intensidad'}</strong>`;
             } else {
                 banner.style.background = 'rgba(37, 99, 235, 0.12)';
                 banner.style.color = 'var(--color-hypertrophy)';
                 banner.style.borderColor = 'rgba(37, 99, 235, 0.35)';
-                banner.innerHTML = '🔵 Editando series y repeticiones independientes para: <strong>Hipertrofia</strong>';
+                banner.innerHTML = `🔵 ${prefix} <strong>${getT('types.hypertrophy') || 'Hipertrofia'}</strong>`;
             }
         }
 
@@ -14060,7 +14204,8 @@ window.closeWelcomeTutorialModal = function() {
         const searchVal = (document.getElementById('predefined-exercise-search')?.value || '').trim().toLowerCase();
         const selectedIds = getSelectedExerciseIdsInPredefined();
         if (badgeEl) {
-            badgeEl.textContent = `${selectedIds.length} seleccionado${selectedIds.length === 1 ? '' : 's'}`;
+            const sWord = selectedIds.length === 1 ? (getT('modals.predefined.selectedSingular') || 'seleccionado') : (getT('modals.predefined.selectedPlural') || 'seleccionados');
+            badgeEl.textContent = `${selectedIds.length} ${sWord}`;
         }
 
         container.innerHTML = '';
@@ -14093,7 +14238,7 @@ window.closeWelcomeTutorialModal = function() {
                     <span style="font-size: 18px;">${typeof getGroupEmoji === 'function' ? getGroupEmoji(gName) : '💪'}</span>
                     <span>${getTranslatedGroupName(gName)}</span>
                     ${selectedInGroup > 0
-                        ? `<span style="background: var(--color-accent); color: #fff; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 999px;">${selectedInGroup} selec.</span>`
+                        ? `<span style="background: var(--color-accent); color: #fff; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 999px;">${(getT('modals.predefined.selectedShort') || '{count} selec.').replace('{count}', selectedInGroup)}</span>`
                         : `<span style="color: var(--text-secondary); font-size: 12px; font-weight: 500;">(${exList.length})</span>`}
                 </div>
                 <i class="ph-bold ph-caret-${isOpen ? 'up' : 'down'}" style="font-size: 15px; color: var(--text-secondary);"></i>
@@ -14167,7 +14312,7 @@ window.closeWelcomeTutorialModal = function() {
         ul.innerHTML = '';
 
         if (predefinedEditorItems.length === 0) {
-            ul.innerHTML = '<li style="padding: 20px; text-align: center; color: var(--text-secondary); font-size: 13px; border: 1px dashed var(--border-color); border-radius: 12px;">Abre un grupo muscular arriba y pulsa sobre las tarjetas de los ejercicios para añadirlos a la sesión.</li>';
+            ul.innerHTML = `<li style="padding: 20px; text-align: center; color: var(--text-secondary); font-size: 13px; border: 1px dashed var(--border-color); border-radius: 12px;">${getT('modals.predefined.emptyEditorHint') || 'Abre un grupo muscular arriba y pulsa sobre las tarjetas de los ejercicios para añadirlos a la sesión.'}</li>`;
             return;
         }
 
