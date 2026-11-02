@@ -19,7 +19,7 @@
 1. [🌟 Filosofía y Características Principales](#-filosofía-y-características-principales)
 2. [🧭 Desglose Completo de Menús y Funciones](#-desglose-completo-de-menús-y-funciones)
    - [📅 1. Menú Calendario & Recuperación](#-1-menú-calendario--recuperación)
-   - [🗂️ 2. Creador de Sesiones & Mesociclos](#-2-creador-de-sesiones--mesociclos)
+   - [🗂️ 2. Creador de Sesiones & Mesociclos](#️-2-creador-de-sesiones--mesociclos)
    - [⏱️ 3. Menú En Curso (Entrenamiento Activo)](#️-3-menú-en-curso-entrenamiento-activo)
    - [🏋️ 4. Menú Ejercicios (Biblioteca de Movimientos)](#️-4-menú-ejercicios-biblioteca-de-movimientos)
    - [🕒 5. Menú Historial Global](#-5-menú-historial-global)
@@ -27,11 +27,11 @@
    - [💾 7. Menú Exportar / Importar](#-7-menú-exportar--importar)
    - [🤖 8. Asistente IA (Carlo)](#-8-asistente-ia-carlo)
 3. [📚 Tutoriales Paso a Paso](#-tutoriales-paso-a-paso)
-   - [Tutorial 1: Cómo programar un mesociclo de 12 semanas](#tutorial-1-cómo-programar-un-mesociclo-de-12-semanas)
-   - [Tutorial 2: Cómo entrenar en vivo aplicando Sobrecarga Progresiva, Notas y RIR](#tutorial-2-cómo-entrenar-en-vivo-aplicando-sobrecarga-progresiva-notas-y-rir)
-   - [Tutorial 3: Cómo gestionar la recuperación muscular y evitar el sobreentrenamiento](#tutorial-3-cómo-gestionar-la-recuperación-muscular-y-evitar-el-sobreentrenamiento)
-   - [Tutorial 4: Cómo registrar medidas corporales y comparar fotos de evolución](#tutorial-4-cómo-registrar-medidas-corporales-y-comparar-fotos-de-evolución)
-   - [Tutorial 5: Cómo hacer copias de seguridad e importar desde Excel](#tutorial-5-cómo-hacer-copias-de-seguridad-e-importar-desde-excel)
+   - [Programar un Mesociclo de 12 Semanas](#programar-un-mesociclo-de-12-semanas)
+   - [Entrenar en Vivo con Sobrecarga Progresiva, Notas y RIR](#entrenar-en-vivo-con-sobrecarga-progresiva-notas-y-rir)
+   - [Gestionar la Recuperación Muscular y Prevenir Sobreentrenamiento](#gestionar-la-recuperación-muscular-y-prevenir-sobreentrenamiento)
+   - [Registrar Medidas Antropométricas y Comparar Fotos de Evolución](#registrar-medidas-antropométricas-y-comparar-fotos-de-evolución)
+   - [Crear Copias de Seguridad (JSON) e Importar Rutinas desde Excel](#crear-copias-de-seguridad-json-e-importar-rutinas-desde-excel)
 4. [🛠️ Herramientas Auxiliares Integradas](#️-herramientas-auxiliares-integradas)
 5. [📥 Instalación y Actualización](#-instalación-y-actualización)
 
@@ -103,7 +103,7 @@ El centro de control de tu rutina semanal. Permite ver de un vistazo qué sesion
 
 ### 🗂️ 2. Creador de Sesiones & Mesociclos
 
-Ubicado en la barra de navegación con el icono `ph-squares-four`. Es la herramienta integral para diseñar rutinas y programar temporadas completas de entrenamiento.
+Ubicado en la barra de navegación inferior pulsando el icono <img src="img/icons/nav_sessions.png" width="22" height="22" valign="middle" alt="Sesiones" /> **Sesiones**. Es la herramienta integral para diseñar rutinas y programar temporadas completas de entrenamiento.
 
 #### Pestaña 1: Sesiones Predefinidas
 - **Selector Visual de Ejercicios por Grupo Muscular**:
@@ -174,10 +174,10 @@ La pantalla donde pasas el tiempo mientras entrenas en el gimnasio, optimizada p
   - En la cabecera de cada ejercicio dispones de un campo de nota persistente (ej: *asiento 4, polea altura 6, agarre neutro*).
   - Esta nota se guarda de por vida con el ejercicio y reaparece automáticamente en futuros entrenamientos.
 - **Herramientas de Apoyo en la Serie**:
-  - **Calculadora de Discos Olímpica (`ph-barbell`)**: En ejercicios con barra olímpica (20 kg), pulsa el icono de barra para ver qué discos exactos (25, 20, 15, 10, 5, 2.5, 1.25 kg) colocar en cada lado.
-  - **Calculadora de Dropset (`%`)**: Calcula automáticamente bajadas del 15%, 20% o 25% con respecto al peso principal.
+  - **Calculadora de Discos Olímpica** <img src="img/icons/btn_plate_calc.png" width="20" height="20" valign="middle" alt="Calculadora de Discos" />: En ejercicios con barra olímpica (20 kg), pulsa este icono para ver qué discos exactos (25, 20, 15, 10, 5, 2.5, 1.25 kg) colocar en cada lado de la barra.
+  - **Calculadora de Dropset** <img src="img/icons/btn_dropset.png" width="20" height="20" valign="middle" alt="Dropset" />: Calcula automáticamente descensos del 15%, 20% o 25% con respecto al peso principal.
   - **Sustituir Ejercicio**: Si una máquina está ocupada, pulsa *Sustituir* para cambiarlo al vuelo por una variante equivalente del mismo grupo muscular.
-  - **Avisos de Molestias Articulares**: Si tienes activada una molestia (ej: hombro o lumbar), el ejercicio mostrará una alerta preventiva con variantes seguras.
+  - **Avisos de Molestias Articulares**: Si tienes activada una molestia (ej: hombro o lumbar), el ejercicio mostrará una alerta preventiva con variantes biomecánicamente seguras.
 
 <div align="center">
   <img src="img/screenshots/06_plate_calc_modal.png" alt="Calculadora de Discos Olímpica Interactiva" width="360" />
@@ -192,7 +192,7 @@ Base de datos completa de ejercicios categorizados con soporte multimedia y par�
 - **Búsqueda Instantánea**: Encuentra cualquier movimiento por nombre, sinónimo o grupo muscular.
 - **Visualizador en Lightbox**: Toca la imagen de cualquier ejercicio para verla en pantalla completa con técnica correcta.
 - **Importación desde Excel**:
-  - Botón verde `ph-file-xls` para importar planes completos desde archivos de hoja de cálculo (`.xlsx` o `.xls`).
+  - Pulsa el botón verde <img src="img/icons/btn_import_excel.png" width="22" height="22" valign="middle" alt="Importar Excel" /> para importar planes completos desde hojas de cálculo (`.xlsx` o `.xls`).
   - La app interpreta automáticamente nombres, grupos musculares, series, descansos y notas.
 - **Gestor de Grupos Musculares**:
   - Crea grupos musculares personalizados o reorganiza los existentes.
@@ -287,9 +287,9 @@ Asistente técnico especializado en entrenamiento de fuerza y sobrecarga progres
 
 ## 📚 Tutoriales Paso a Paso
 
-### Tutorial 1: Cómo programar un mesociclo de 12 semanas
+### Programar un Mesociclo de 12 Semanas
 
-1. Dirígete a la pestaña **Sesiones** (`ph-squares-four`).
+1. Dirígete a la pestaña <img src="img/icons/nav_sessions.png" width="20" height="20" valign="middle" alt="Sesiones" /> **Sesiones**.
 2. En la sub-pestaña **Sesiones Predefinidas**, pulsa en *Crear Nueva Sesión Predefinida*.
 3. Selecciona los ejercicios que compondrán tu rutina pulsando sobre sus tarjetas visuales ilustradas.
 4. Ajusta para cada ejercicio sus series y repeticiones objetivo para cada una de las 3 fases: Hipertrofia (ej: 3×10), Pesados (ej: 4×5) y Alta Intensidad (ej: 3×8 + dropset). Guarda la sesión (ej: "Torso A").
@@ -301,7 +301,7 @@ Asistente técnico especializado en entrenamiento de fuerza y sobrecarga progres
 
 ---
 
-### Tutorial 2: Cómo entrenar en vivo aplicando Sobrecarga Progresiva, Notas y RIR
+### Entrenar en Vivo con Sobrecarga Progresiva, Notas y RIR
 
 1. Abre la pestaña **Calendario** o pulsa sobre la sesión programada para hoy.
 2. Pulsa en **Iniciar Entrenamiento**: la app pasará a la vista **En curso** y el cronómetro comenzará a contar.
@@ -311,12 +311,12 @@ Asistente técnico especializado en entrenamiento de fuerza y sobrecarga progres
    - Si entrenaste en una sesión anterior, toca el botón fantasma `👻 Última vez` para autorrellenar los datos de partida.
    - Si alcanzaste el tope de repeticiones objetivo, verás la píldora verde `📈 +2.5 kg`: tócala para aplicar la sobrecarga progresiva en tu serie efectiva.
    - En el selector de **RIR**, indica cuántas repeticiones te quedaron antes de llegar al fallo (ej: `2`). Si la serie fue al fallo, la app marcará automáticamente `0`.
-5. Si realizas un ejercicio básico con barra, pulsa el icono de barra para ver qué discos cargar exactamente por extremo.
+5. Si realizas un ejercicio básico con barra, pulsa el icono de barra <img src="img/icons/btn_plate_calc.png" width="18" height="18" valign="middle" alt="Calculadora de Discos" /> para ver qué discos cargar exactamente por extremo.
 6. Al terminar todos los ejercicios, pulsa **Finalizar Entrenamiento**: se guardará en tu historial, se evaluarán nuevos récords (PR) y podrás compartir tu tarjeta de entrenamiento en redes sociales.
 
 ---
 
-### Tutorial 3: Cómo gestionar la recuperación muscular y evitar el sobreentrenamiento
+### Gestionar la Recuperación Muscular y Prevenir Sobreentrenamiento
 
 1. Antes de iniciar una sesión, acude al **Calendario**.
 2. Observa la pastilla de resumen del widget de recuperación:
@@ -327,7 +327,7 @@ Asistente técnico especializado en entrenamiento de fuerza y sobrecarga progres
 
 ---
 
-### Tutorial 4: Cómo registrar medidas corporales y comparar fotos de evolución
+### Registrar Medidas Antropométricas y Comparar Fotos de Evolución
 
 1. Ve a la pestaña **Estadísticas** y pulsa en la sub-pestaña **Medidas y Fotos**.
 2. Introduce tu peso corporal matutino en ayunas (kg) y tu porcentaje de grasa corporal si dispones de plicómetro o báscula de bioimpedancia.
@@ -338,13 +338,13 @@ Asistente técnico especializado en entrenamiento de fuerza y sobrecarga progres
 
 ---
 
-### Tutorial 5: Cómo hacer copias de seguridad e importar desde Excel
+### Crear Copias de Seguridad (JSON) e Importar Rutinas desde Excel
 
-1. Ve a la pestaña **Exportar** (`ph-export`).
+1. Ve a la pestaña <img src="img/icons/nav_export.png" width="20" height="20" valign="middle" alt="Exportar" /> **Exportar**.
 2. Pulsa en **Exportar Copia de Seguridad (JSON)**: se descargará un archivo con toda tu información histórica.
 3. Guarda este archivo en Google Drive, tu ordenador o una tarjeta de memoria.
 4. Para migrar tus datos a otro dispositivo, abre Gym Tracker en el nuevo teléfono, entra en **Exportar / Importar**, selecciona **Importar Copia de Seguridad** y carga tu archivo JSON.
-5. Si tu entrenador te proporciona una rutina en Excel, pulsa en la pestaña **Ejercicios**, pulsa el botón verde `Importar Excel` y selecciona tu archivo para volcar los ejercicios y series automáticamente.
+5. Si tu entrenador te proporciona una rutina en Excel, pulsa en la pestaña **Ejercicios**, pulsa el botón verde <img src="img/icons/btn_import_excel.png" width="18" height="18" valign="middle" alt="Importar Excel" /> y selecciona tu archivo para volcar los ejercicios y series automáticamente.
 
 ---
 
@@ -364,9 +364,9 @@ Asistente técnico especializado en entrenamiento de fuerza y sobrecarga progres
 ## 📥 Instalación y Actualización
 
 ### Como Aplicación Nativa Android (Recomendado)
-1. Descarga el archivo `Gym tracker.apk` desde la carpeta [Archivos_Para_GitHub](file:///C:/Users/rocke/Documents/Proyectos%20Antigravity/Gym%20Tracker/Gym%20Tracker%20updates/Archivos_Para_GitHub) o desde la sección de **Releases** del repositorio.
+1. Descarga el archivo **Gym tracker.apk** directamente desde la sección de **[Releases](../../releases)** del repositorio en GitHub.
 2. Abre el archivo en tu teléfono Android y permite la instalación de fuentes desconocidas.
-3. ¡Listo! La app se ejecutará con rendimiento nativo, animaciones a 60/120 Hz y soporte para notificaciones locales de cronómetro.
+3. ¡Listo! La app se ejecutará con rendimiento nativo, animaciones fluidas a 60/120 Hz y notificaciones persistentes de cronómetro en segundo plano.
 
 ### Como Aplicación Web Progresiva (PWA)
 1. Abre la URL de la aplicación en Chrome, Samsung Internet o Safari en tu teléfono.
