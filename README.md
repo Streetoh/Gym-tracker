@@ -1,4 +1,4 @@
-# 🏋️ Gym Tracker — Tu Cuaderno de Entrenamiento Definitivo
+# 🏋️‍♂️ Gym Tracker — Tu Cuaderno de Entrenamiento Definitivo
 
 <div align="center">
 
@@ -18,8 +18,8 @@
 ## 📑 Tabla de Contenidos
 1. [🌟 Filosofía y Características Principales](#-filosofía-y-características-principales)
 2. [🧭 Desglose Completo de Menús y Funciones](#-desglose-completo-de-menús-y-funciones)
-   - [📅 1. Menú Calendario](#-1-menú-calendario)
-   - [🧩 2. Creador de Sesiones & Mesociclos](#-2-creador-de-sesiones--mesociclos)
+   - [📅 1. Menú Calendario & Recuperación](#-1-menú-calendario--recuperación)
+   - [🗂️ 2. Creador de Sesiones & Mesociclos](#-2-creador-de-sesiones--mesociclos)
    - [⏱️ 3. Menú En Curso (Entrenamiento Activo)](#️-3-menú-en-curso-entrenamiento-activo)
    - [🏋️ 4. Menú Ejercicios (Biblioteca de Movimientos)](#️-4-menú-ejercicios-biblioteca-de-movimientos)
    - [🕒 5. Menú Historial Global](#-5-menú-historial-global)
@@ -43,7 +43,7 @@ Gym Tracker nace de la frustración con las aplicaciones comerciales de gimnasio
 
 - **🔒 100% Offline & Privado**: Todos tus datos, notas personales, marcas y fotos corporales se almacenan de forma local y segura en tu propio dispositivo. Ningún servidor externo tiene acceso a tu información.
 - **📈 Sobrecarga Progresiva Automatizada**: El sistema analiza tus series de sesiones previas y te sugiere automáticamente el aumento exacto de peso (+2.5 kg en ejercicios básicos de barra, +1 kg en mancuernas o aislamiento) o de repeticiones (+1 rep) cuando alcanzas el límite superior de tu rango objetivo.
-- **🎯 Periodización por Mesociclos**: Soporte nativo para 3 fases clave de entrenamiento: **Hipertrofia**, **Pesados (Fuerza)** y **Alta Intensidad**, con series, repeticiones y descansos configurables individualmente por ejercicio y tipo de fase.
+- **🔄 Periodización por Mesociclos**: Soporte nativo para 3 fases clave de entrenamiento: **Hipertrofia**, **Pesados (Fuerza)** y **Alta Intensidad**, con series, repeticiones y descansos configurables individualmente por ejercicio y tipo de fase.
 - **🫀 Monitorización de Fatiga y Recuperación**: Estimación fisiológica de recuperación basada en el tiempo transcurrido desde tu último estímulo y en el volumen de series efectivas acumuladas en la semana.
 - **⚡ Fluidez y Cero Fricción**: Modales optimizados, autorrellenado de series en 1 toque con marcas fantasma (*Ghost Workout*), calculadoras de discos integradas y atajos rápidos.
 
@@ -54,7 +54,7 @@ Gym Tracker nace de la frustración con las aplicaciones comerciales de gimnasio
 ```
 Gym Tracker
 ├── 📅 Calendario (Plan semanal + Widget de Recuperación Muscular)
-├── 🧩 Creador de Sesiones (Plantillas visuales por grupos + Mesociclos)
+├── 🗂️ Creador de Sesiones (Plantillas visuales por grupos + Mesociclos)
 ├── ⏱️ En Curso (Entrenamiento activo con RIR, Ghost Mode y Sobrecarga)
 ├── 🏋️ Ejercicios (Biblioteca con fotos, notas fijas y soporte Excel)
 ├── 🕒 Historial (Registro de sesiones con marcado exclusivo de PRs)
@@ -65,13 +65,17 @@ Gym Tracker
 
 ---
 
-### 📅 1. Menú Calendario
+### 📅 1. Menú Calendario & Recuperación
 
 El centro de control de tu rutina semanal. Permite ver de un vistazo qué sesiones tocan cada día y cuál es el estado de recuperación de tu musculatura antes de empezar.
 
+<div align="center">
+  <img src="img/screenshots/01_calendar_view.png" alt="Vista Principal del Calendario Semanal" width="360" />
+</div>
+
 - **Navegación Temporal**:
-  - Selector de mes y año con vista rápida.
-  - Navegador de semanas con botón **"Hoy"** para regresar inmediatamente al día actual y flechas de desplazamiento entre semanas (`< Semana 45 >`).
+  - Selector de mes y año centrado con vista rápida.
+  - Navegador semanal centrado bajo el mes: botón **"Hoy"** a la izquierda para regresar inmediatamente a la fecha actual y flechas de desplazamiento entre semanas (`< Semana 45 >`).
   - Días de la semana interactivos (`L`, `M`, `X`, `J`, `V`, `S`, `D`) con bordes de color que identifican el tipo de sesión planificada:
     - 🔵 **Azul**: Hipertrofia.
     - 🔴 **Rojo**: Pesado.
@@ -84,6 +88,11 @@ El centro de control de tu rutina semanal. Permite ver de un vistazo qué sesion
     - `🔴 X fatigados`: Si algún grupo muscular ha sido entrenado hace menos de 24 horas.
   - **Pastillas rápidas de estado**: Chips para Pecho, Espalda, Piernas, Hombros, Bíceps y Tríceps indicando el descanso transcurrido.
   - **Silueta Anatómica Expandible**: Al tocar *"Ver mapa"*, se despliega una representación vectorial (SVG) de cuerpo entero (vista frontal y dorsal) donde cada músculo se colorea según su nivel de fatiga. Al tocar cualquier músculo, muestra el último entrenamiento y las horas de descanso.
+
+<div align="center">
+  <img src="img/screenshots/02_recovery_heatmap.png" alt="Mapa Anatómico Vectorial de Recuperación Muscular" width="360" />
+</div>
+
 - **Plan para el Día**:
   - Lista de sesiones asignadas a la fecha seleccionada.
   - Botón para iniciar el entrenamiento de inmediato en la vista *En curso*.
@@ -92,15 +101,20 @@ El centro de control de tu rutina semanal. Permite ver de un vistazo qué sesion
 
 ---
 
-### 🧩 2. Creador de Sesiones & Mesociclos
+### 🗂️ 2. Creador de Sesiones & Mesociclos
 
 Ubicado en la barra de navegación con el icono `ph-squares-four`. Es la herramienta integral para diseñar rutinas y programar temporadas completas de entrenamiento.
 
 #### Pestaña 1: Sesiones Predefinidas
 - **Selector Visual de Ejercicios por Grupo Muscular**:
-  - A diferencia de listas de texto planas, los ejercicios se presentan en tarjetas visuales con su imagen oficial, nombre y grupo muscular.
-  - Al pulsar sobre un ejercicio, se marca con un borde de selección distintivo en color de acento.
+  - Los ejercicios se presentan en tarjetas visuales con su ilustración anatómica oficial, nombre y grupo muscular.
+  - Al pulsar sobre un ejercicio, se marca con un borde de selección distintivo en color de acento y un badge numérico de orden.
   - Barra de búsqueda integrada y filtros rápidos por grupo muscular (Pecho, Espalda, Piernas, Hombros, Bíceps, Tríceps, Core, etc.).
+
+<div align="center">
+  <img src="img/screenshots/03_session_creator_visual.png" alt="Creador Visual de Sesiones Predefinidas con Tarjetas Ilustradas" width="360" />
+</div>
+
 - **Desglose Específico por Tipo de Sesión**:
   - Cada ejercicio de la sesión predefinida permite definir individualmente sus series, repeticiones y descansos para cada fase:
     - **Hipertrofia**: típicamente 3-4 series de 8-12 repeticiones.
@@ -108,19 +122,27 @@ Ubicado en la barra de navegación con el icono `ph-squares-four`. Es la herrami
     - **Alta Intensidad**: series efectivas combinadas con técnicas de intensidad (Dropset, Al fallo).
   - Al cambiar de tipo de sesión durante el entrenamiento, se cargan exactamente los valores predefinidos para esa fase sin mezclar datos.
 - **Lista de Sesiones Guardadas con Acordeón**:
-  - Cada tarjeta de sesión guardada se puede expandir para revisar la lista completa de ejercicios con su foto y desglose de series antes de planificarla.
+  - Cada tarjeta de sesión guardada se puede pulsar para desplegar el desglose completo de ejercicios que contiene.
   - Opciones de duplicar, editar o eliminar plantillas en 1 toque.
 
 #### Pestaña 2: Crear Mesociclo
-- Permite diseñar estructuras de entrenamiento a medio y largo plazo (por ejemplo, bloques estándar de 4 semanas de Hipertrofia $\rightarrow$ 4 semanas de Pesados $\rightarrow$ 4 semanas de Alta Intensidad).
+- Permite diseñar estructuras de entrenamiento a medio y largo plazo (por ejemplo, el bloque clásico de 12 semanas: 4 semanas de Hipertrofia $\rightarrow$ 4 semanas de Pesados $\rightarrow$ 4 semanas de Alta Intensidad).
 - **Asignación Automática**: Asigna las sesiones predefinidas a días concretos de la semana (Lunes, Miércoles, Viernes, etc.).
 - **Volcado al Calendario**: Selecciona una fecha de inicio y el generador programará automáticamente las semanas correspondientes en tu calendario sin tener que crear los días uno por uno.
+
+<div align="center">
+  <img src="img/screenshots/04_mesocycle_planner.png" alt="Planificador Automatizado de Mesociclos de 12 Semanas" width="360" />
+</div>
 
 ---
 
 ### ⏱️ 3. Menú En Curso (Entrenamiento Activo)
 
 La pantalla donde pasas el tiempo mientras entrenas en el gimnasio, optimizada para mínima fricción y máxima concentración.
+
+<div align="center">
+  <img src="img/screenshots/05_workout_rir_overload.png" alt="Pantalla de Entrenamiento en Vivo con RIR, Sobrecarga y Notas Fijas" width="360" />
+</div>
 
 - **Cronómetro de Sesión**:
   - Cuenta el tiempo total de entrenamiento transcurrido.
@@ -156,6 +178,10 @@ La pantalla donde pasas el tiempo mientras entrenas en el gimnasio, optimizada p
   - **Calculadora de Dropset (`%`)**: Calcula automáticamente bajadas del 15%, 20% o 25% con respecto al peso principal.
   - **Sustituir Ejercicio**: Si una máquina está ocupada, pulsa *Sustituir* para cambiarlo al vuelo por una variante equivalente del mismo grupo muscular.
   - **Avisos de Molestias Articulares**: Si tienes activada una molestia (ej: hombro o lumbar), el ejercicio mostrará una alerta preventiva con variantes seguras.
+
+<div align="center">
+  <img src="img/screenshots/06_plate_calc_modal.png" alt="Calculadora de Discos Olímpica Interactiva" width="360" />
+</div>
 
 ---
 
@@ -198,6 +224,10 @@ La central analítica de tu progreso físico y de rendimiento, agrupada en 4 sub
 - Filtro por tipo de sesión: **Hipertrofia**, **Pesado** y **Alta Intensidad**.
 - Selector de ejercicios organizado por grupos musculares con iconos temáticos.
 
+<div align="center">
+  <img src="img/screenshots/07_stats_fuerza.png" alt="Estadísticas de Evolución de Fuerza y 1RM" width="360" />
+</div>
+
 #### 2. 🫀 Pestaña Fatiga y Volumen
 - **Mapa Anatómico Completo**:
   - Muestra la silueta humana en vista frontal y posterior con los 10 grupos musculares principales coloreados dinámicamente según el descanso acumulado:
@@ -216,11 +246,19 @@ La central analítica de tu progreso físico y de rendimiento, agrupada en 4 sub
   - Diagrama de referencia táctil para medir con precisión: Pecho, Brazo Izquierdo, Brazo Derecho, Abdomen, Cintura, Caderas, Muslo Izquierdo y Muslo Derecho.
   - Historial cronológico con gráficas de evolución de peso y contornos.
 
+<div align="center">
+  <img src="img/screenshots/08_stats_medidas_fotos.png" alt="Registro Antropométrico y Fotos de Evolución Corporal" width="360" />
+</div>
+
 #### 4. 🏆 Pestaña Logros
 - **50 Logros Desbloqueables**: Retos motivacionales de tonelaje (Club 100 kg Banca, 250 toneladas, 1 Millón de kg), constancia, superación y variedad.
 - Barra de porcentaje global de logros obtenidos.
 - Filtros rápidos: **Desbloqueados** y **Pendientes**.
 - **Botón de Restablecimiento Protegido**: Permite reiniciar el muro de trofeos con 3 ventanas de confirmación consecutivas para prevenir borrados accidentales.
+
+<div align="center">
+  <img src="img/screenshots/09_stats_achievements.png" alt="Muro de Logros y Trofeos Desbloqueables" width="360" />
+</div>
 
 ---
 
@@ -253,7 +291,7 @@ Asistente técnico especializado en entrenamiento de fuerza y sobrecarga progres
 
 1. Dirígete a la pestaña **Sesiones** (`ph-squares-four`).
 2. En la sub-pestaña **Sesiones Predefinidas**, pulsa en *Crear Nueva Sesión Predefinida*.
-3. Selecciona los ejercicios que compondrán tu rutina pulsando sobre sus tarjetas visuales.
+3. Selecciona los ejercicios que compondrán tu rutina pulsando sobre sus tarjetas visuales ilustradas.
 4. Ajusta para cada ejercicio sus series y repeticiones objetivo para cada una de las 3 fases: Hipertrofia (ej: 3×10), Pesados (ej: 4×5) y Alta Intensidad (ej: 3×8 + dropset). Guarda la sesión (ej: "Torso A").
 5. Repite el proceso para los demás días de la semana (ej: "Pierna A", "Torso B", "Pierna B").
 6. Cambia a la sub-pestaña **Crear Mesociclo**.
@@ -267,7 +305,7 @@ Asistente técnico especializado en entrenamiento de fuerza y sobrecarga progres
 
 1. Abre la pestaña **Calendario** o pulsa sobre la sesión programada para hoy.
 2. Pulsa en **Iniciar Entrenamiento**: la app pasará a la vista **En curso** y el cronómetro comenzará a contar.
-3. Observa la cabecera de cada ejercicio: si tiene una nota fija (ej: *asiento altura 5*), verás la indicación 📌 inmediatamente.
+3. Observa la cabecera de cada ejercicio: si tiene una nota fija (ej: *asiento altura 5, polea 6*), verás la indicación 📌 inmediatamente.
 4. Al realizar tu primera serie:
    - Introduce el peso y las repeticiones logradas.
    - Si entrenaste en una sesión anterior, toca el botón fantasma `👻 Última vez` para autorrellenar los datos de partida.
