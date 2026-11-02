@@ -1193,6 +1193,7 @@ let state = {
     language: localStorage.getItem('gym_language') || 'es',
     exercises: (savedExercises && savedExercises.length > 0) ? savedExercises : (typeof defaultExercises !== 'undefined' ? defaultExercises : []),
     sessions: JSON.parse(localStorage.getItem('gym_sessions')) || [],
+    predefinedSessions: JSON.parse(localStorage.getItem('gym_routines')) || [],
     selectedDate: new Date(),
     currentWeekStart: new Date(),
     completedWorkouts: JSON.parse(localStorage.getItem('gym_completed')) || [],
@@ -1322,6 +1323,7 @@ window.manageWorkoutNotification = async (show) => {
 function saveState() {
     localStorage.setItem('gym_exercises', JSON.stringify(state.exercises));
     localStorage.setItem('gym_sessions', JSON.stringify(state.sessions));
+    localStorage.setItem('gym_routines', JSON.stringify(state.predefinedSessions || []));
     localStorage.setItem('gym_completed', JSON.stringify(state.completedWorkouts));
     localStorage.setItem('gym_groups', JSON.stringify(state.groups));
     localStorage.setItem('gym_active_workout', JSON.stringify(state.activeWorkoutState));
@@ -1524,7 +1526,10 @@ navItems.forEach(item => {
             if(aiClear) aiClear.style.display = isAi ? 'flex' : 'none';
         }
         
-        if (target === 'view-calendar') {
+        if (target === 'view-session-creator') {
+            headerTitle.textContent = getT('nav.sessionCreator') || 'Creador de sesiones';
+            if (typeof window.initSessionCreatorView === 'function') window.initSessionCreatorView();
+        } else if (target === 'view-calendar') {
             headerTitle.textContent = getT('header.calendar') || 'Calendario';
             if (typeof renderCalendar === 'function') renderCalendar();
         } else if (target === 'view-history') {
@@ -1585,7 +1590,6 @@ window.selectEventType = (type) => {
     
     const saveBtn = document.getElementById('btn-save-routine');
     if (saveBtn) saveBtn.textContent = getT('modals.routine.schedule') || 'Programar';
-    
     if(type === 'routine') {
         document.getElementById('modal-routine-title').textContent = getT('modals.routine.title') || 'Añadir Bloque (4 sem)';
         document.getElementById('routine-duration').value = '4';
@@ -1593,8 +1597,7 @@ window.selectEventType = (type) => {
     } else if (type === 'workout') {
         document.getElementById('modal-routine-title').textContent = getT('modals.routine.workoutTitle') || getT('modals.add.workout') || 'Entrenamiento Suelto';
         document.getElementById('routine-duration').value = '1';
-        openModal(modalAddRoutine);
-    } else if (type === 'goal') {
+        openModal(modalAddRoutine);} else if (type === 'goal') {
         openModal(modalSingleGoal);
     }
 };
@@ -8311,7 +8314,6 @@ window.editSession = (sessionId) => {
             exercises: grouped[key].exercises
         });
     }
-    
     renderRoutineItems();
     openModal(modalAddRoutine);
 };
@@ -12959,3 +12961,1233 @@ window.closeWelcomeTutorialModal = function() {
         m.classList.remove('active');
     }
 };
+
+
+// === START PREDEFINED SESSIONS & MESOCYCLE MODULE ===
+(function() {
+    const PHASES = ['hypertrophy', 'heavy', 'intensity'];
+
+    // Register translations
+    const i18nAdditions = {
+        es: {
+            navSessionCreator: 'Sesiones',
+            preTitle: 'Sesiones Predefinidas',
+            mesoShortTitle: 'Crear Mesociclo',
+            preDesc: 'Crea tus sesiones predefinidas seleccionando los ejercicios visualmente por grupo muscular y personaliza sus series y repeticiones para Hipertrofia, Pesado y Alta Intensidad.',
+            preCreateNew: 'Crear Nueva Sesión Predefinida',
+            quickCustomBtn: 'Sesión suelta o bloque puntual (sin plantilla)',
+            preSelectByMuscle: '2. Elige los Ejercicios (Toca las tarjetas para seleccionar)',
+            preConfigureSets: '3. Series y Repeticiones Independientes por Fase',
+            preSaveBtn: 'Guardar Sesión Predefinida',
+            mesoTitle: 'Planificador de Mesociclo (Lunes a Viernes)',
+            mesoDesc: 'Elige qué sesión predefinida se repetirá cada día de Lunes a Viernes. Con el Ciclo Completo de 12 Semanas se programan 4 semanas de Hipertrofia, 4 de Pesado y 4 de Alta Intensidad automáticamente.',
+            mesoStartDate: 'Lunes de Inicio del Mesociclo',
+            mesoWeeks: 'Estructura y Duración del Mesociclo',
+            mesoWeeklyPlan: 'Sesiones de Lunes a Viernes',
+            monday: '1. Lunes',
+            tuesday: '2. Martes',
+            wednesday: '3. Miércoles',
+            thursday: '4. Jueves',
+            friday: '5. Viernes',
+            mesoScheduleBtn: 'Establecer Mesociclo en el Calendario',
+            back: 'Volver'
+        },
+        en: {
+            navSessionCreator: 'Sessions',
+            preTitle: 'Predefined Sessions',
+            mesoShortTitle: 'Create Mesocycle',
+            preDesc: 'Create predefined sessions by visually selecting exercises by muscle group and customize independent sets & reps for Hypertrophy, Heavy, and High Intensity.',
+            preCreateNew: 'Create New Predefined Session',
+            quickCustomBtn: 'Single session or custom block (no template)',
+            preSelectByMuscle: '2. Choose Exercises (Tap cards to select)',
+            preConfigureSets: '3. Independent Sets & Reps by Phase',
+            preSaveBtn: 'Save Predefined Session',
+            mesoTitle: 'Mesocycle Planner (Monday to Friday)',
+            mesoDesc: 'Assign which predefined session repeats each day from Monday to Friday across 12 weeks (4 Hypertrophy -> 4 Heavy -> 4 High Intensity) or a 4-week block.',
+            mesoStartDate: 'Start Week (Monday)',
+            mesoWeeks: 'Mesocycle Structure & Duration',
+            mesoWeeklyPlan: 'Monday to Friday Sessions',
+            monday: '1. Monday',
+            tuesday: '2. Tuesday',
+            wednesday: '3. Wednesday',
+            thursday: '4. Thursday',
+            friday: '5. Friday',
+            mesoScheduleBtn: 'Schedule Mesocycle in Calendar',
+            back: 'Back'
+        },
+        ru: {
+            navSessionCreator: 'Сессии',
+            preTitle: 'Шаблоны тренировок',
+            mesoShortTitle: 'Мезоцикл',
+            preDesc: 'Создавайте шаблоны тренировок по мышечным группам и настраивайте подходы и повторения отдельно для Гипертрофии, Тяжелых и Высокой интенсивности.',
+            preCreateNew: 'Создать новый шаблон',
+            quickCustomBtn: 'Разовая тренировка (без шаблона)',
+            preSelectByMuscle: '2. Выберите упражнения (нажмите на карточки)',
+            preConfigureSets: '3. Подходы и повторения по фазам',
+            preSaveBtn: 'Сохранить шаблон',
+            mesoTitle: 'Планировщик мезоцикла (Пн–Пт)',
+            mesoDesc: 'Назначьте шаблоны с понедельника по пятницу (полный цикл 12 недель или блок 4 недели).',
+            mesoStartDate: 'Понедельник начала',
+            mesoWeeks: 'Структура и длительность',
+            mesoWeeklyPlan: 'Тренировки с Пн по Пт',
+            monday: '1. Понедельник',
+            tuesday: '2. Вторник',
+            wednesday: '3. Среда',
+            thursday: '4. Четверг',
+            friday: '5. Пятница',
+            mesoScheduleBtn: 'Запланировать мезоцикл в календаре',
+            back: 'Назад'
+        },
+        et: {
+            navSessionCreator: 'Sessioonid',
+            preTitle: 'Eelmääratud treeningud',
+            mesoShortTitle: 'Loo Mesotsükkel',
+            preDesc: 'Loo treeningumalle valides harjutusi lihasgruppide kaupa ja seadista seeriad eraldi Hüpertroofia, Raske ja Kõrge Intensiivsuse jaoks.',
+            preCreateNew: 'Loo uus mall',
+            quickCustomBtn: 'Üksik treening (ilma mallita)',
+            preSelectByMuscle: '2. Vali harjutused (puuduta kaarte)',
+            preConfigureSets: '3. Seeriad ja kordused faaside kaupa',
+            preSaveBtn: 'Salvesta mall',
+            mesoTitle: 'Mesotsükli planeerija (E–R)',
+            mesoDesc: 'Määra eelmääratud treening igaks päevaks esmaspäevast reedeni (12-nädalane täistsükkel või 4-nädalane plokk).',
+            mesoStartDate: 'Alguse esmaspäev',
+            mesoWeeks: 'Struktuur ja kestus',
+            mesoWeeklyPlan: 'Treeningud E–R',
+            monday: '1. Esmaspäev',
+            tuesday: '2. Teisipäev',
+            wednesday: '3. Kolmapäev',
+            thursday: '4. Neljapäev',
+            friday: '5. Reede',
+            mesoScheduleBtn: 'Planeeri mesotsükkel kalendrisse',
+            back: 'Tagasi'
+        },
+        uk: {
+            navSessionCreator: 'Сесії',
+            preTitle: 'Шаблони тренувань',
+            mesoShortTitle: 'Мезоцикл',
+            preDesc: 'Створюйте шаблони тренувань за групами м’язів та налаштовуйте підходи і повторення окремо для кожної фази.',
+            preCreateNew: 'Створити новий шаблон',
+            quickCustomBtn: 'Разове тренування (без шаблону)',
+            preSelectByMuscle: '2. Оберіть вправи (натисніть на картки)',
+            preConfigureSets: '3. Підходи та повторення за фазами',
+            preSaveBtn: 'Зберегти шаблон',
+            mesoTitle: 'Планувальник мезоциклу (Пн–Пт)',
+            mesoDesc: 'Призначте шаблони з понеділка по п’ятницю (повний цикл 12 тижнів або блок 4 тижні).',
+            mesoStartDate: 'Понеділок початку',
+            mesoWeeks: 'Структура та тривалість',
+            mesoWeeklyPlan: 'Тренування з Пн по Пт',
+            monday: '1. Понеділок',
+            tuesday: '2. Вівторок',
+            wednesday: '3. Середа',
+            thursday: '4. Четвер',
+            friday: '5. П’ятниця',
+            mesoScheduleBtn: 'Запланувати мезоцикл у календарі',
+            back: 'Назад'
+        }
+    };
+
+    if (typeof translations !== 'undefined') {
+        Object.keys(i18nAdditions).forEach(lang => {
+            if (!translations[lang]) return;
+            const t = i18nAdditions[lang];
+            translations[lang].nav = translations[lang].nav || {};
+            translations[lang].nav.sessionCreator = t.navSessionCreator;
+            translations[lang].header = translations[lang].header || {};
+            translations[lang].header['session-creator'] = t.navSessionCreator;
+            translations[lang].common = translations[lang].common || {};
+            translations[lang].common.back = t.back;
+            translations[lang].modals = translations[lang].modals || {};
+            translations[lang].modals.predefined = {
+                title: t.preTitle,
+                desc: t.preDesc,
+                createNew: t.preCreateNew,
+                quickCustomBtn: t.quickCustomBtn,
+                selectByMuscle: t.preSelectByMuscle,
+                configureSets: t.preConfigureSets,
+                saveBtn: t.preSaveBtn
+            };
+            translations[lang].modals.mesocycle = {
+                title: t.mesoTitle,
+                shortTitle: t.mesoShortTitle,
+                desc: t.mesoDesc,
+                startDate: t.mesoStartDate,
+                weeks: t.mesoWeeks,
+                weeklyPlan: t.mesoWeeklyPlan,
+                monday: t.monday,
+                tuesday: t.tuesday,
+                wednesday: t.wednesday,
+                thursday: t.thursday,
+                friday: t.friday,
+                scheduleBtn: t.mesoScheduleBtn
+            };
+        });
+        if (typeof updateLanguageUI === 'function') {
+            try { updateLanguageUI(); } catch (e) {}
+        }
+    }
+
+    let predefinedEditorItems = [];
+    let predefinedEditorType = 'hypertrophy';
+    let predefinedOpenGroups = [];
+
+    window.getPredefinedEditorItems = function() {
+        return predefinedEditorItems;
+    };
+
+    function getTranslatedGroupName(gName) {
+        if (!gName) return 'Sin Grupo';
+        const gKey = gName === 'Abdominales y core' ? 'core' : (gName === 'Tríceps' ? 'triceps' : (gName === 'Bíceps' ? 'biceps' : gName.toLowerCase()));
+        const trG = typeof getT === 'function' ? getT('groups.' + gKey) : gName;
+        return (trG && trG !== 'groups.' + gKey) ? trG : gName;
+    }
+
+    function getTranslatedTypeLabel(type) {
+        if (type === 'heavy') return (typeof getT === 'function' && getT('types.heavy') && getT('types.heavy') !== 'types.heavy') ? getT('types.heavy') : 'Pesado';
+        if (type === 'intensity') return (typeof getT === 'function' && getT('types.intensity') && getT('types.intensity') !== 'types.intensity') ? getT('types.intensity') : 'Alta Intensidad';
+        return (typeof getT === 'function' && getT('types.hypertrophy') && getT('types.hypertrophy') !== 'types.hypertrophy') ? getT('types.hypertrophy') : 'Hipertrofia';
+    }
+
+    function getTypeColor(type) {
+        if (type === 'heavy') return 'var(--color-heavy)';
+        if (type === 'intensity') return 'var(--color-intensity)';
+        return 'var(--color-hypertrophy)';
+    }
+
+    // Build default sets for a given exercise and phase based on ex.defaults
+    function buildDefaultSetsForPhase(dbEx, phase, isSuperset) {
+        const rawDefault = (dbEx && dbEx.defaults && dbEx.defaults[phase]) ? String(dbEx.defaults[phase]) : (phase === 'heavy' ? '(6-8)' : phase === 'intensity' ? '(10-12 + al fallo)' : '(10-12)');
+        let mainSetType = 'Efectiva';
+        if (phase === 'intensity') {
+            const lower = rawDefault.toLowerCase();
+            if (lower.includes('dropset') && lower.includes('fallo')) {
+                mainSetType = 'Dropset fallo';
+            } else if (lower.includes('fallo')) {
+                mainSetType = 'Al fallo';
+            } else if (lower.includes('+') || lower.includes('dropset')) {
+                mainSetType = 'Dropset';
+            }
+        }
+        if (isSuperset) {
+            return [
+                { type: 'Efectiva', reps: rawDefault, weight: 0 },
+                { type: 'Efectiva', reps: rawDefault, weight: 0 },
+                { type: mainSetType, reps: rawDefault, weight: 0 }
+            ];
+        }
+        return [
+            { type: 'Calentamiento', reps: rawDefault, weight: 0 },
+            { type: 'Aproximación', reps: rawDefault, weight: 0 },
+            { type: mainSetType, reps: rawDefault, weight: 0 }
+        ];
+    }
+
+    function ensureSetsByPhase(exObj, isSuperset) {
+        const dbEx = exObj.dbEx || (state.exercises || []).find(x => x.id === exObj.exerciseId) || { id: exObj.exerciseId, name: exObj.name || 'Ejercicio', defaults: {} };
+        exObj.dbEx = dbEx;
+        if (!exObj.setsByPhase || typeof exObj.setsByPhase !== 'object') {
+            exObj.setsByPhase = {};
+        }
+        PHASES.forEach(p => {
+            if (!Array.isArray(exObj.setsByPhase[p]) || exObj.setsByPhase[p].length === 0) {
+                if (Array.isArray(exObj.sets) && exObj.sets.length > 0 && p === 'hypertrophy') {
+                    exObj.setsByPhase[p] = exObj.sets.map(s => ({
+                        type: s.type || 'Efectiva',
+                        reps: String(s.reps || s.targetReps || '10'),
+                        weight: parseFloat(s.weight) || 0
+                    }));
+                } else {
+                    exObj.setsByPhase[p] = buildDefaultSetsForPhase(dbEx, p, isSuperset);
+                }
+            }
+        });
+        return exObj;
+    }
+
+    function buildPhaseWorkoutExercises(cleanItems, phase) {
+        const workoutExercises = [];
+        cleanItems.forEach(item => {
+            const supersetId = item.isSuperset ? ('ss_' + phase + '_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6)) : null;
+            const sName = item.isSuperset ? item.name : null;
+
+            (item.exercises || []).forEach(e => {
+                const dbEx = (state.exercises || []).find(x => x.id === e.exerciseId) || e.dbEx || { id: e.exerciseId, name: e.name || 'Ejercicio', group: 'Sin Grupo' };
+                const exName = dbEx.name || e.name || 'Ejercicio';
+                const phaseSets = (e.setsByPhase && Array.isArray(e.setsByPhase[phase]) && e.setsByPhase[phase].length > 0)
+                    ? e.setsByPhase[phase]
+                    : (Array.isArray(e.sets) && e.sets.length > 0 ? e.sets : buildDefaultSetsForPhase(dbEx, phase, item.isSuperset));
+
+                const formattedSets = phaseSets.map((s, idx) => {
+                    const nextType = idx < phaseSets.length - 1 ? phaseSets[idx + 1].type : null;
+                    const restVal = typeof calculateRestTime === 'function' ? calculateRestTime(s.type, nextType, phase, item.isSuperset) : (s.restTime || '60s');
+                    return {
+                        type: s.type || 'Efectiva',
+                        weight: parseFloat(s.weight) || 0,
+                        targetReps: String(s.reps || s.targetReps || '10'),
+                        reps: '',
+                        repsDrop: s.repsDrop || '',
+                        weightDrop: parseFloat(s.weightDrop) || 0,
+                        restTime: restVal
+                    };
+                });
+
+                workoutExercises.push({
+                    exerciseId: e.exerciseId,
+                    name: exName,
+                    supersetId: supersetId,
+                    supersetName: sName,
+                    sets: formattedSets,
+                    comments: ''
+                });
+            });
+        });
+        return workoutExercises;
+    }
+
+    window.createPredefinedSessionObject = function({ id, name, type, items }) {
+        const cleanItems = JSON.parse(JSON.stringify(items || []));
+        const groupSet = new Set();
+
+        cleanItems.forEach(item => {
+            (item.exercises || []).forEach(e => {
+                ensureSetsByPhase(e, item.isSuperset);
+                const dbEx = e.dbEx;
+                if (dbEx && dbEx.group && dbEx.group !== 'Sin Grupo') {
+                    groupSet.add(dbEx.group);
+                }
+            });
+        });
+
+        const exercisesByPhase = {
+            hypertrophy: buildPhaseWorkoutExercises(cleanItems, 'hypertrophy'),
+            heavy: buildPhaseWorkoutExercises(cleanItems, 'heavy'),
+            intensity: buildPhaseWorkoutExercises(cleanItems, 'intensity')
+        };
+
+        return {
+            id: id || ('tpl_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6)),
+            name: (name || 'Sesión Predefinida').trim(),
+            type: type || 'hypertrophy',
+            groups: Array.from(groupSet),
+            routineItems: cleanItems,
+            exercisesByPhase: exercisesByPhase,
+            exercises: exercisesByPhase.hypertrophy,
+            updatedAt: new Date().toISOString()
+        };
+    };
+
+    // ============================================================
+    // VIEW INITIALIZATION & TABS
+    // ============================================================
+    window.initSessionCreatorView = function() {
+        window.renderPredefinedSessionsList();
+        window.populateMesocycleDropdowns();
+        const startInput = document.getElementById('mesocycle-start-date');
+        if (startInput && !startInput.value) {
+            const monday = typeof getMonday === 'function' ? getMonday(state.selectedDate || new Date()) : new Date();
+            startInput.value = typeof dateToInputFormat === 'function' ? dateToInputFormat(monday) : monday.toISOString().split('T')[0];
+        }
+    };
+
+    window.switchSessionCreatorTab = function(tab) {
+        const tabTemplates = document.getElementById('sc-tab-templates');
+        const tabMeso = document.getElementById('sc-tab-mesocycle');
+        const btnTemplates = document.getElementById('btn-sc-tab-templates');
+        const btnMeso = document.getElementById('btn-sc-tab-mesocycle');
+
+        if (tab === 'mesocycle') {
+            if (tabTemplates) tabTemplates.style.display = 'none';
+            if (tabMeso) tabMeso.style.display = 'block';
+            if (btnTemplates) { btnTemplates.className = 'btn-secondary'; btnTemplates.style.border = 'none'; }
+            if (btnMeso) { btnMeso.className = 'btn-primary'; }
+            const startInput = document.getElementById('mesocycle-start-date');
+            if (startInput && !startInput.value) {
+                const monday = typeof getMonday === 'function' ? getMonday(state.selectedDate || new Date()) : new Date();
+                startInput.value = typeof dateToInputFormat === 'function' ? dateToInputFormat(monday) : monday.toISOString().split('T')[0];
+            }
+            window.populateMesocycleDropdowns();
+        } else {
+            if (tabTemplates) tabTemplates.style.display = 'block';
+            if (tabMeso) tabMeso.style.display = 'none';
+            if (btnTemplates) { btnTemplates.className = 'btn-primary'; }
+            if (btnMeso) { btnMeso.className = 'btn-secondary'; btnMeso.style.border = 'none'; }
+            window.renderPredefinedSessionsList();
+        }
+    };
+
+    window.openPredefinedSessionsModal = function() {
+        const navBtn = document.querySelector('.nav-item[data-target="view-session-creator"]');
+        if (navBtn) navBtn.click();
+        window.switchSessionCreatorTab('templates');
+    };
+
+    window.openMesocycleBuilderModal = function() {
+        const navBtn = document.querySelector('.nav-item[data-target="view-session-creator"]');
+        if (navBtn) navBtn.click();
+        window.switchSessionCreatorTab('mesocycle');
+    };
+
+    window.showPredefinedListView = function() {
+        const listView = document.getElementById('predefined-list-view');
+        const editorView = document.getElementById('predefined-editor-view');
+        if (listView) listView.style.display = 'block';
+        if (editorView) editorView.style.display = 'none';
+        window.renderPredefinedSessionsList();
+    };
+
+    window.renderPredefinedSessionsList = function() {
+        const container = document.getElementById('predefined-sessions-list');
+        if (!container) return;
+        const templates = state.predefinedSessions || [];
+        if (templates.length === 0) {
+            container.innerHTML = `<div class="empty-state" style="padding: 24px; text-align: center; color: var(--text-secondary); background: var(--bg-surface); border-radius: 14px; border: 1px dashed var(--border-color);">
+                <i class="ph-bold ph-bookmarks" style="font-size: 32px; opacity: 0.5; margin-bottom: 8px;"></i>
+                <div style="font-weight: 700; font-size: 14px;">No tienes sesiones predefinidas guardadas</div>
+                <div style="font-size: 12px; margin-top: 4px;">Pulsa en "Crear Nueva Sesión Predefinida" para empezar.</div>
+            </div>`;
+            return;
+        }
+
+        container.innerHTML = '';
+        templates.forEach(tpl => {
+            const card = document.createElement('div');
+            card.className = 'predefined-session-card';
+            card.style.cssText = 'background: var(--bg-surface); border: 1px solid var(--border-color); border-left: 5px solid var(--color-accent); border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);';
+
+            const exList = (tpl.exercisesByPhase && tpl.exercisesByPhase.hypertrophy) ? tpl.exercisesByPhase.hypertrophy : (tpl.exercises || []);
+            const groupsText = (tpl.groups && tpl.groups.length > 0)
+                ? tpl.groups.map(g => getTranslatedGroupName(g)).join(', ')
+                : 'Varios grupos';
+            const exPreview = exList.slice(0, 5).map(e => typeof getTrExName === 'function' ? getTrExName(e.name) : e.name).join(' • ') + (exList.length > 5 ? ` (+${exList.length - 5})` : '');
+            const safeName = typeof window.escapeHtml === 'function' ? window.escapeHtml(tpl.name) : tpl.name;
+
+            const hypSets = (tpl.exercisesByPhase && tpl.exercisesByPhase.hypertrophy) ? tpl.exercisesByPhase.hypertrophy.reduce((acc, e) => acc + (e.sets ? e.sets.length : 0), 0) : 0;
+            const heaSets = (tpl.exercisesByPhase && tpl.exercisesByPhase.heavy) ? tpl.exercisesByPhase.heavy.reduce((acc, e) => acc + (e.sets ? e.sets.length : 0), 0) : 0;
+            const intSets = (tpl.exercisesByPhase && tpl.exercisesByPhase.intensity) ? tpl.exercisesByPhase.intensity.reduce((acc, e) => acc + (e.sets ? e.sets.length : 0), 0) : 0;
+
+            let exercisesDetailsHtml = '';
+            if (tpl.routineItems && tpl.routineItems.length > 0) {
+                let itemCounter = 1;
+                tpl.routineItems.forEach(item => {
+                    const isSs = !!item.isSuperset;
+                    const ssHeader = isSs ? `<div style="font-size: 11px; font-weight: 800; color: #8b5cf6; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px; margin-bottom: 4px;"><i class="ph-bold ph-link"></i> ${item.name || 'Superserie'}</div>` : '';
+                    
+                    const exRows = (item.exercises || []).map(ex => {
+                        const dbEx = (state.exercises || []).find(e => e.id === ex.exerciseId) || ex.dbEx || { id: ex.exerciseId, name: ex.name || 'Ejercicio', group: 'Sin Grupo' };
+                        const trName = typeof getTrExName === 'function' ? getTrExName(dbEx.name) : dbEx.name;
+                        const imgHtml = dbEx.imageData 
+                            ? `<img src="${dbEx.imageData}" style="width: 38px; height: 38px; object-fit: cover; border-radius: 8px; flex-shrink: 0;">`
+                            : `<div style="width: 38px; height: 38px; border-radius: 8px; background: var(--bg-surface-elevated); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 16px; flex-shrink: 0;"><i class="ph ph-barbell"></i></div>`;
+                        
+                        const hypInfo = ex.setsByPhase?.hypertrophy?.length ? `${ex.setsByPhase.hypertrophy.length} series (${ex.setsByPhase.hypertrophy.map(s => s.reps).filter(Boolean)[0] || '10-12'})` : '-';
+                        const heaInfo = ex.setsByPhase?.heavy?.length ? `${ex.setsByPhase.heavy.length} series (${ex.setsByPhase.heavy.map(s => s.reps).filter(Boolean)[0] || '6-8'})` : '-';
+                        const intInfo = ex.setsByPhase?.intensity?.length ? `${ex.setsByPhase.intensity.length} series (${ex.setsByPhase.intensity.map(s => s.reps).filter(Boolean)[0] || 'Al fallo'})` : '-';
+
+                        return `
+                            <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-surface-elevated); padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border-color);">
+                                ${imgHtml}
+                                <div style="flex: 1; min-width: 0;">
+                                    <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
+                                        <span style="font-size: 11px; font-weight: 800; background: rgba(255,255,255,0.08); color: var(--text-secondary); padding: 1px 5px; border-radius: 4px;">#${itemCounter++}</span>
+                                        <span style="font-size: 13px; font-weight: 700; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${trName}</span>
+                                        <span style="font-size: 10.5px; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 1px 6px; border-radius: 4px;">${dbEx.group || 'Sin Grupo'}</span>
+                                    </div>
+                                    <div style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 10.5px; margin-top: 4px;">
+                                        <span style="color: var(--color-hypertrophy);">🔵 <strong>Hipertrofia:</strong> ${hypInfo}</span>
+                                        <span style="color: var(--color-heavy);">🔴 <strong>Pesado:</strong> ${heaInfo}</span>
+                                        <span style="color: var(--color-intensity);">🟢 <strong>Alta Int:</strong> ${intInfo}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    exercisesDetailsHtml += `
+                        <div style="${isSs ? 'border-left: 3px solid #8b5cf6; padding-left: 8px; margin-bottom: 6px;' : 'margin-bottom: 6px;'}">
+                            ${ssHeader}
+                            <div style="display: flex; flex-direction: column; gap: 6px;">${exRows}</div>
+                        </div>
+                    `;
+                });
+            } else if (exList.length > 0) {
+                let itemCounter = 1;
+                exercisesDetailsHtml = exList.map(e => {
+                    const dbEx = (state.exercises || []).find(x => x.id === e.exerciseId) || { name: e.name || 'Ejercicio', group: 'Sin Grupo' };
+                    const trName = typeof getTrExName === 'function' ? getTrExName(dbEx.name) : dbEx.name;
+                    const imgHtml = dbEx.imageData 
+                        ? `<img src="${dbEx.imageData}" style="width: 38px; height: 38px; object-fit: cover; border-radius: 8px; flex-shrink: 0;">`
+                        : `<div style="width: 38px; height: 38px; border-radius: 8px; background: var(--bg-surface-elevated); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 16px; flex-shrink: 0;"><i class="ph ph-barbell"></i></div>`;
+                    const setsCount = e.sets ? e.sets.length : 3;
+                    return `
+                        <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-surface-elevated); padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border-color); margin-bottom: 6px;">
+                            ${imgHtml}
+                            <div style="flex: 1; min-width: 0;">
+                                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
+                                    <span style="font-size: 11px; font-weight: 800; background: rgba(255,255,255,0.08); color: var(--text-secondary); padding: 1px 5px; border-radius: 4px;">#${itemCounter++}</span>
+                                    <span style="font-size: 13px; font-weight: 700; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${trName}</span>
+                                </div>
+                                <div style="font-size: 11px; color: var(--text-secondary);">${setsCount} series</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            card.innerHTML = `
+                <div class="predefined-card-header" style="cursor: pointer; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; user-select: none;">
+                    <div style="flex: 1; min-width: 0;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px;">
+                            <div style="font-size: 16px; font-weight: 800; color: var(--text-primary);">${safeName}</div>
+                            <div class="predefined-card-caret" style="color: var(--text-secondary); font-size: 18px; transition: transform 0.2s ease;">
+                                <i class="ph-bold ph-caret-down"></i>
+                            </div>
+                        </div>
+                        <div style="font-size: 12.5px; color: var(--color-accent); font-weight: 700; margin-bottom: 6px;">
+                            💪 ${groupsText} (${exList.length} ejercicios)
+                        </div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px;">
+                            <span style="font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: rgba(37, 99, 235, 0.12); color: var(--color-hypertrophy); border: 1px solid rgba(37, 99, 235, 0.3);">🔵 Hipertrofia: ${hypSets} series</span>
+                            <span style="font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: rgba(220, 38, 38, 0.12); color: var(--color-heavy); border: 1px solid rgba(220, 38, 38, 0.3);">🔴 Pesado: ${heaSets} series</span>
+                            <span style="font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: var(--color-intensity); border: 1px solid rgba(16, 185, 129, 0.3);">🟢 Alta Int.: ${intSets} series</span>
+                        </div>
+                        <div class="predefined-card-preview-text" style="font-size: 12px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            ${exPreview}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="predefined-card-details" style="display: none; flex-direction: column; gap: 8px; padding-top: 10px; border-top: 1px dashed var(--border-color);">
+                    <div style="font-size: 12px; font-weight: 800; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
+                        Ejercicios incluidos (${exList.length}):
+                    </div>
+                    ${exercisesDetailsHtml}
+                </div>
+
+                <div style="display: flex; gap: 8px; border-top: 1px solid var(--border-color); padding-top: 10px;">
+                    <button type="button" class="btn-primary schedule-tpl-btn" style="flex: 2; padding: 9px 12px; font-size: 12.5px; font-weight: 700; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                        <i class="ph-bold ph-calendar-plus"></i> <span>Programar en Fecha</span>
+                    </button>
+                    <button type="button" class="btn-secondary edit-tpl-btn" style="flex: 1; padding: 9px 12px; font-size: 12.5px; font-weight: 700; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                        <i class="ph ph-pencil-simple"></i> <span>Editar</span>
+                    </button>
+                    <button type="button" class="btn-secondary del-tpl-btn" style="padding: 9px 12px; font-size: 12.5px; border-radius: 10px; color: var(--color-heavy); border-color: var(--color-heavy);">
+                        <i class="ph ph-trash"></i>
+                    </button>
+                </div>
+            `;
+
+            const headerEl = card.querySelector('.predefined-card-header');
+            const detailsEl = card.querySelector('.predefined-card-details');
+            const caretEl = card.querySelector('.predefined-card-caret');
+            const previewTextEl = card.querySelector('.predefined-card-preview-text');
+
+            if (headerEl && detailsEl) {
+                headerEl.addEventListener('click', () => {
+                    const isExpanded = detailsEl.style.display === 'flex' || detailsEl.style.display === 'block';
+                    if (isExpanded) {
+                        detailsEl.style.display = 'none';
+                        if (caretEl) caretEl.style.transform = 'rotate(0deg)';
+                        if (previewTextEl) previewTextEl.style.display = 'block';
+                    } else {
+                        detailsEl.style.display = 'flex';
+                        if (caretEl) caretEl.style.transform = 'rotate(180deg)';
+                        if (previewTextEl) previewTextEl.style.display = 'none';
+                    }
+                });
+            }
+
+            card.querySelector('.schedule-tpl-btn')?.addEventListener('click', (e) => {
+                if (e && e.stopPropagation) e.stopPropagation();
+                window.openScheduleSinglePredefinedModal(tpl.id);
+            });
+            card.querySelector('.edit-tpl-btn')?.addEventListener('click', (e) => {
+                if (e && e.stopPropagation) e.stopPropagation();
+                window.openPredefinedCreator(tpl.id);
+            });
+            card.querySelector('.del-tpl-btn')?.addEventListener('click', (e) => {
+                if (e && e.stopPropagation) e.stopPropagation();
+                window.deletePredefinedSession(tpl.id);
+            });
+
+            container.appendChild(card);
+        });
+    };
+
+
+    window.openScheduleSinglePredefinedModal = function(tplId) {
+        const tpl = (state.predefinedSessions || []).find(t => String(t.id) === String(tplId));
+        if (!tpl) return;
+        const idInput = document.getElementById('schedule-predefined-tpl-id');
+        const dateInput = document.getElementById('schedule-predefined-date');
+        const titleEl = document.getElementById('schedule-predefined-modal-title');
+        if (idInput) idInput.value = tpl.id;
+        if (dateInput) dateInput.value = typeof dateToInputFormat === 'function' ? dateToInputFormat(state.selectedDate || new Date()) : new Date().toISOString().split('T')[0];
+        if (titleEl) titleEl.textContent = 'Programar: ' + tpl.name;
+        const modal = document.getElementById('modal-schedule-predefined');
+        if (modal) openModal(modal);
+    };
+
+    window.confirmScheduleSinglePredefined = function() {
+        const tplId = document.getElementById('schedule-predefined-tpl-id')?.value;
+        const dateVal = document.getElementById('schedule-predefined-date')?.value;
+        const phase = document.getElementById('schedule-predefined-phase')?.value || 'hypertrophy';
+        const weeks = parseInt(document.getElementById('schedule-predefined-weeks')?.value) || 1;
+        const tpl = (state.predefinedSessions || []).find(t => String(t.id) === String(tplId));
+        if (!tpl) return;
+
+        const baseDate = dateVal ? inputToDate(dateVal) : (state.selectedDate || new Date());
+        const phaseExercises = (tpl.exercisesByPhase && tpl.exercisesByPhase[phase])
+            ? tpl.exercisesByPhase[phase]
+            : buildPhaseWorkoutExercises(tpl.routineItems || [], phase);
+
+        const blockId = weeks > 1 ? ('blk_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6)) : null;
+        const weekWord = (typeof getT === 'function' && getT('calendar.week') && getT('calendar.week') !== 'calendar.week') ? getT('calendar.week') : 'Semana';
+
+        for (let w = 0; w < weeks; w++) {
+            const d = new Date(baseDate);
+            d.setDate(baseDate.getDate() + (w * 7));
+            state.sessions.push({
+                id: Date.now().toString() + '_' + w + '_' + Math.random().toString(36).slice(2, 6),
+                blockId: blockId,
+                templateId: tpl.id,
+                date: formatDate(d),
+                name: weeks > 1 ? `${tpl.name} (${weekWord} ${w + 1})` : tpl.name,
+                type: phase,
+                exercises: JSON.parse(JSON.stringify(phaseExercises))
+            });
+        }
+
+        saveState();
+        const modal = document.getElementById('modal-schedule-predefined');
+        if (modal) closeModal(modal);
+        if (typeof renderCalendar === 'function') renderCalendar();
+        alert('Sesión programada correctamente en el Calendario.');
+    };
+
+    window.deletePredefinedSession = function(tplId) {
+        if (!confirm('¿Eliminar esta sesión predefinida? Las sesiones ya programadas en el calendario no se borrarán.')) return;
+        state.predefinedSessions = (state.predefinedSessions || []).filter(t => String(t.id) !== String(tplId));
+        saveState();
+        window.renderPredefinedSessionsList();
+        window.populateMesocycleDropdowns();
+    };
+
+    // ============================================================
+    // EDITOR: VISUAL MUSCLE CARDS & INDEPENDENT 3-PHASE SETS
+    // ============================================================
+    window.openPredefinedCreator = function(editId) {
+        const listView = document.getElementById('predefined-list-view');
+        const editorView = document.getElementById('predefined-editor-view');
+        if (listView) listView.style.display = 'none';
+        if (editorView) editorView.style.display = 'block';
+
+        const idInput = document.getElementById('predefined-edit-id');
+        const nameInput = document.getElementById('predefined-session-name');
+        const searchInput = document.getElementById('predefined-exercise-search');
+        const headingEl = document.getElementById('predefined-editor-heading');
+        if (searchInput) searchInput.value = '';
+
+        predefinedOpenGroups = [];
+
+        if (editId) {
+            const existing = (state.predefinedSessions || []).find(t => String(t.id) === String(editId));
+            if (existing) {
+                if (headingEl) headingEl.textContent = 'Editar Sesión Predefinida';
+                if (idInput) idInput.value = existing.id;
+                if (nameInput) nameInput.value = existing.name || '';
+                predefinedEditorType = existing.type || 'hypertrophy';
+
+                if (existing.routineItems && existing.routineItems.length > 0) {
+                    predefinedEditorItems = JSON.parse(JSON.stringify(existing.routineItems)).map(item => ({
+                        id: item.id || ('pitem_' + Date.now() + Math.random()),
+                        isSuperset: !!item.isSuperset,
+                        name: item.name || '',
+                        exercises: (item.exercises || []).map(ex => {
+                            const dbEx = (state.exercises || []).find(e => e.id === ex.exerciseId) || ex.dbEx || { id: ex.exerciseId, name: ex.name || 'Ejercicio', group: 'Sin Grupo' };
+                            if (dbEx.group && !predefinedOpenGroups.includes(dbEx.group)) predefinedOpenGroups.push(dbEx.group);
+                            return ensureSetsByPhase({
+                                exerciseId: ex.exerciseId,
+                                dbEx: dbEx,
+                                setsByPhase: ex.setsByPhase || null,
+                                sets: ex.sets || null
+                            }, !!item.isSuperset);
+                        })
+                    }));
+                } else {
+                    predefinedEditorItems = [];
+                }
+            }
+        } else {
+            if (headingEl) headingEl.textContent = 'Nueva Sesión Predefinida';
+            if (idInput) idInput.value = '';
+            if (nameInput) nameInput.value = '';
+            predefinedEditorType = 'hypertrophy';
+            predefinedEditorItems = [];
+        }
+
+        window.selectPredefinedType(predefinedEditorType, true);
+        window.renderPredefinedMuscleAccordion();
+        window.renderPredefinedEditorItems();
+    };
+
+    function syncPredefinedSetsFromDOM() {
+        const ul = document.getElementById('predefined-selected-exercises-list');
+        if (!ul) return;
+        const liItems = ul.querySelectorAll('li[data-id]');
+        liItems.forEach((li, itemIdx) => {
+            const item = predefinedEditorItems[itemIdx];
+            if (item && item.exercises) {
+                const rows = li.querySelectorAll('.predefined-set-row');
+                let rowCounter = 0;
+                item.exercises.forEach(ex => {
+                    ensureSetsByPhase(ex, item.isSuperset);
+                    const activeSets = ex.setsByPhase[predefinedEditorType];
+                    (activeSets || []).forEach(set => {
+                        const r = rows[rowCounter++];
+                        if (r) {
+                            const tSel = r.querySelector('.set-type');
+                            const rIn = r.querySelector('.set-reps');
+                            const wIn = r.querySelector('.set-weight');
+                            if (tSel && tSel.value) set.type = tSel.value;
+                            if (rIn && rIn.value !== '') set.reps = rIn.value;
+                            if (wIn && wIn.value !== '') set.weight = parseFloat(wIn.value) || 0;
+                        }
+                    });
+                });
+            }
+        });
+    }
+
+    window.selectPredefinedType = function(type, skipDomSync) {
+        if (!skipDomSync) {
+            syncPredefinedSetsFromDOM();
+        }
+        predefinedEditorType = PHASES.includes(type) ? type : 'hypertrophy';
+
+        const selector = document.getElementById('predefined-type-selector');
+        if (selector) {
+            selector.querySelectorAll('.type-btn').forEach(btn => {
+                btn.classList.toggle('selected', btn.dataset.type === predefinedEditorType);
+            });
+        }
+
+        const banner = document.getElementById('predefined-active-phase-banner');
+        if (banner) {
+            if (predefinedEditorType === 'heavy') {
+                banner.style.background = 'rgba(220, 38, 38, 0.12)';
+                banner.style.color = 'var(--color-heavy)';
+                banner.style.borderColor = 'rgba(220, 38, 38, 0.35)';
+                banner.innerHTML = '🔴 Editando series y repeticiones independientes para: <strong>Pesado</strong>';
+            } else if (predefinedEditorType === 'intensity') {
+                banner.style.background = 'rgba(16, 185, 129, 0.12)';
+                banner.style.color = 'var(--color-intensity)';
+                banner.style.borderColor = 'rgba(16, 185, 129, 0.35)';
+                banner.innerHTML = '🟢 Editando series y repeticiones independientes para: <strong>Alta Intensidad</strong>';
+            } else {
+                banner.style.background = 'rgba(37, 99, 235, 0.12)';
+                banner.style.color = 'var(--color-hypertrophy)';
+                banner.style.borderColor = 'rgba(37, 99, 235, 0.35)';
+                banner.innerHTML = '🔵 Editando series y repeticiones independientes para: <strong>Hipertrofia</strong>';
+            }
+        }
+
+        window.renderPredefinedEditorItems();
+    };
+
+    function getSelectedExerciseIdsInPredefined() {
+        const ids = [];
+        predefinedEditorItems.forEach(item => {
+            (item.exercises || []).forEach(ex => {
+                if (ex.exerciseId) ids.push(ex.exerciseId);
+            });
+        });
+        return ids;
+    }
+
+    window.togglePredefinedExerciseSelection = function(exId) {
+        syncPredefinedSetsFromDOM();
+        const selectedIds = getSelectedExerciseIdsInPredefined();
+        const isAlreadySelected = selectedIds.includes(exId);
+
+        if (isAlreadySelected) {
+            predefinedEditorItems = predefinedEditorItems.map(item => {
+                item.exercises = (item.exercises || []).filter(x => x.exerciseId !== exId);
+                return item;
+            }).filter(item => item.exercises && item.exercises.length > 0);
+        } else {
+            const dbEx = (state.exercises || []).find(e => e.id === exId);
+            if (!dbEx) return;
+            const newExObj = ensureSetsByPhase({
+                exerciseId: dbEx.id,
+                dbEx: dbEx,
+                setsByPhase: {
+                    hypertrophy: buildDefaultSetsForPhase(dbEx, 'hypertrophy', false),
+                    heavy: buildDefaultSetsForPhase(dbEx, 'heavy', false),
+                    intensity: buildDefaultSetsForPhase(dbEx, 'intensity', false)
+                }
+            }, false);
+
+            predefinedEditorItems.push({
+                id: 'pitem_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+                isSuperset: false,
+                exercises: [newExObj]
+            });
+        }
+
+        window.renderPredefinedMuscleAccordion();
+        window.renderPredefinedEditorItems();
+    };
+
+    // Visual Grid of Exercise Cards with Photos separated by Muscle Group
+    window.renderPredefinedMuscleAccordion = function() {
+        const container = document.getElementById('predefined-muscle-groups-accordion');
+        const badgeEl = document.getElementById('predefined-selected-count-badge');
+        if (!container) return;
+
+        const searchVal = (document.getElementById('predefined-exercise-search')?.value || '').trim().toLowerCase();
+        const selectedIds = getSelectedExerciseIdsInPredefined();
+        if (badgeEl) {
+            badgeEl.textContent = `${selectedIds.length} seleccionado${selectedIds.length === 1 ? '' : 's'}`;
+        }
+
+        container.innerHTML = '';
+        const grouped = {};
+        (state.groups || []).forEach(g => { grouped[g] = []; });
+        (state.exercises || []).forEach(ex => {
+            const g = ex.group || 'Sin Grupo';
+            if (!grouped[g]) grouped[g] = [];
+            const trName = typeof getTrExName === 'function' ? getTrExName(ex.name) : ex.name;
+            const trGroup = getTranslatedGroupName(g);
+            if (!searchVal || ex.name.toLowerCase().includes(searchVal) || trName.toLowerCase().includes(searchVal) || trGroup.toLowerCase().includes(searchVal)) {
+                grouped[g].push(ex);
+            }
+        });
+
+        Object.keys(grouped).forEach(gName => {
+            const exList = grouped[gName];
+            if (!exList || exList.length === 0) return;
+
+            const selectedInGroup = exList.filter(e => selectedIds.includes(e.id)).length;
+            const isOpen = searchVal.length > 0 || predefinedOpenGroups.includes(gName);
+
+            const groupDiv = document.createElement('div');
+            groupDiv.style.cssText = 'border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; background: var(--bg-surface-elevated);';
+
+            const header = document.createElement('div');
+            header.style.cssText = 'padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 800; font-size: 14px; user-select: none;';
+            header.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 18px;">${typeof getGroupEmoji === 'function' ? getGroupEmoji(gName) : '💪'}</span>
+                    <span>${getTranslatedGroupName(gName)}</span>
+                    ${selectedInGroup > 0
+                        ? `<span style="background: var(--color-accent); color: #fff; font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 999px;">${selectedInGroup} selec.</span>`
+                        : `<span style="color: var(--text-secondary); font-size: 12px; font-weight: 500;">(${exList.length})</span>`}
+                </div>
+                <i class="ph-bold ph-caret-${isOpen ? 'up' : 'down'}" style="font-size: 15px; color: var(--text-secondary);"></i>
+            `;
+
+            const gridBody = document.createElement('div');
+            gridBody.style.cssText = `display: ${isOpen ? 'grid' : 'none'}; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 10px; padding: 12px; border-top: 1px solid var(--border-color); background: var(--bg-surface);`;
+
+            header.addEventListener('click', () => {
+                if (predefinedOpenGroups.includes(gName)) {
+                    predefinedOpenGroups = predefinedOpenGroups.filter(g => g !== gName);
+                } else {
+                    predefinedOpenGroups.push(gName);
+                }
+                window.renderPredefinedMuscleAccordion();
+            });
+
+            exList.forEach(ex => {
+                const orderIdx = selectedIds.indexOf(ex.id);
+                const isSelected = orderIdx !== -1;
+                const trName = typeof getTrExName === 'function' ? getTrExName(ex.name) : ex.name;
+
+                const card = document.createElement('div');
+                card.style.cssText = `
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    border-radius: 12px;
+                    overflow: hidden;
+                    cursor: pointer;
+                    user-select: none;
+                    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+                    border: ${isSelected ? '2.5px solid var(--color-accent)' : '1.5px solid var(--border-color)'};
+                    background: ${isSelected ? 'rgba(37, 99, 235, 0.12)' : 'var(--bg-surface-elevated)'};
+                    box-shadow: ${isSelected ? '0 0 0 3px rgba(37, 99, 235, 0.25)' : '0 2px 5px rgba(0,0,0,0.1)'};
+                `;
+
+                const imgHtml = ex.imageData
+                    ? `<img src="${ex.imageData}" alt="" loading="lazy" style="width: 100%; height: 105px; object-fit: cover; background: #fff; display: block;">`
+                    : `<div style="width: 100%; height: 105px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.04); color: var(--text-secondary); font-size: 32px;"><i class="ph ph-barbell"></i></div>`;
+
+                const badgeHtml = isSelected
+                    ? `<div style="position: absolute; top: 6px; right: 6px; width: 26px; height: 26px; border-radius: 50%; background: var(--color-accent); color: #fff; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.4);">${orderIdx + 1}</div>`
+                    : '';
+
+                card.innerHTML = `
+                    ${imgHtml}
+                    ${badgeHtml}
+                    <div style="padding: 8px 8px 10px 8px; flex: 1; display: flex; align-items: center; justify-content: center; text-align: center;">
+                        <span style="font-size: 11.5px; font-weight: ${isSelected ? '800' : '600'}; color: ${isSelected ? 'var(--color-accent)' : 'var(--text-primary)'}; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">${trName}</span>
+                    </div>
+                `;
+
+                card.addEventListener('click', () => {
+                    window.togglePredefinedExerciseSelection(ex.id);
+                });
+
+                gridBody.appendChild(card);
+            });
+
+            groupDiv.appendChild(header);
+            groupDiv.appendChild(gridBody);
+            container.appendChild(groupDiv);
+        });
+    };
+
+    // Render sets & reps ONLY for the currently active phase (predefinedEditorType)
+    window.renderPredefinedEditorItems = function() {
+        const ul = document.getElementById('predefined-selected-exercises-list');
+        if (!ul) return;
+        ul.innerHTML = '';
+
+        if (predefinedEditorItems.length === 0) {
+            ul.innerHTML = '<li style="padding: 20px; text-align: center; color: var(--text-secondary); font-size: 13px; border: 1px dashed var(--border-color); border-radius: 12px;">Abre un grupo muscular arriba y pulsa sobre las tarjetas de los ejercicios para añadirlos a la sesión.</li>';
+            return;
+        }
+
+        const phaseColor = getTypeColor(predefinedEditorType);
+        const phaseLabel = getTranslatedTypeLabel(predefinedEditorType);
+
+        predefinedEditorItems.forEach((item, index) => {
+            const li = document.createElement('li');
+            li.dataset.id = item.id;
+            li.style.cssText = `display: flex; flex-direction: column; background: var(--bg-surface-elevated); padding: 12px; margin-bottom: 10px; border-radius: 12px; border: 1px solid var(--border-color); border-left: 4px solid ${phaseColor};`;
+
+            const topRow = document.createElement('div');
+            topRow.style.cssText = 'display: flex; width: 100%; align-items: center; gap: 8px;';
+
+            const chk = document.createElement('input');
+            chk.type = 'checkbox';
+            chk.value = item.id;
+            chk.className = 'predefined-builder-chk';
+            chk.style.cssText = 'width: 16px; height: 16px; accent-color: var(--color-accent);';
+
+            const titleDiv = document.createElement('div');
+            titleDiv.style.flex = '1';
+
+            if (item.isSuperset) {
+                titleDiv.innerHTML = `<strong style="color: ${phaseColor}; font-size: 13.5px;"><i class="ph ph-link"></i> ${item.name || 'Superserie'}</strong>`;
+            } else {
+                const ex0 = item.exercises[0];
+                const exName = ex0 && ex0.dbEx ? (typeof getTrExName === 'function' ? getTrExName(ex0.dbEx.name) : ex0.dbEx.name) : 'Ejercicio';
+                const defRef = (ex0 && ex0.dbEx && ex0.dbEx.defaults && ex0.dbEx.defaults[predefinedEditorType]) ? ex0.dbEx.defaults[predefinedEditorType] : '';
+                titleDiv.innerHTML = `
+                    <span style="font-size: 13.5px; font-weight: 800; color: var(--text-primary);">${index + 1}. ${exName}</span>
+                    ${defRef ? `<span style="font-size: 11px; color: ${phaseColor}; font-weight: 700; margin-left: 6px;">Ref ${phaseLabel}: ${defRef}</span>` : ''}
+                `;
+            }
+
+            topRow.appendChild(chk);
+            topRow.appendChild(titleDiv);
+
+            if (item.isSuperset) {
+                const btnUngroup = document.createElement('button');
+                btnUngroup.type = 'button';
+                btnUngroup.className = 'btn-icon';
+                btnUngroup.innerHTML = '<i class="ph ph-link-break"></i>';
+                btnUngroup.onclick = () => {
+                    syncPredefinedSetsFromDOM();
+                    const singles = item.exercises.map(e => ({
+                        id: 'pitem_' + Date.now() + Math.random(),
+                        isSuperset: false,
+                        exercises: [e]
+                    }));
+                    predefinedEditorItems.splice(index, 1, ...singles);
+                    window.renderPredefinedEditorItems();
+                };
+                topRow.appendChild(btnUngroup);
+            }
+
+            const btnRemoveItem = document.createElement('button');
+            btnRemoveItem.type = 'button';
+            btnRemoveItem.className = 'btn-icon';
+            btnRemoveItem.style.color = 'var(--color-heavy)';
+            btnRemoveItem.innerHTML = '<i class="ph ph-trash"></i>';
+            btnRemoveItem.onclick = () => {
+                syncPredefinedSetsFromDOM();
+                predefinedEditorItems.splice(index, 1);
+                window.renderPredefinedMuscleAccordion();
+                window.renderPredefinedEditorItems();
+            };
+            topRow.appendChild(btnRemoveItem);
+
+            li.appendChild(topRow);
+
+            (item.exercises || []).forEach(ex => {
+                ensureSetsByPhase(ex, item.isSuperset);
+                const activeSets = ex.setsByPhase[predefinedEditorType];
+
+                const exContainer = document.createElement('div');
+                exContainer.style.cssText = 'width: 100%; margin-top: 10px; border-top: 1px solid var(--border-color); padding-top: 10px;';
+                if (item.isSuperset && ex.dbEx) {
+                    const defRef = (ex.dbEx.defaults && ex.dbEx.defaults[predefinedEditorType]) ? ex.dbEx.defaults[predefinedEditorType] : '';
+                    exContainer.innerHTML = `<div style="font-size: 12.5px; font-weight: 700; margin-bottom: 6px; color: var(--text-secondary);">- ${typeof getTrExName === 'function' ? getTrExName(ex.dbEx.name) : ex.dbEx.name} ${defRef ? `<span style="color:${phaseColor};">(${defRef})</span>` : ''}</div>`;
+                }
+
+                const setsList = document.createElement('div');
+
+                const renderSets = () => {
+                    setsList.innerHTML = '';
+                    activeSets.forEach((set, setIdx) => {
+                        const row = document.createElement('div');
+                        row.className = 'predefined-set-row';
+                        row.style.cssText = 'display: flex; align-items: center; gap: 8px; margin-bottom: 6px;';
+                        const getSetLabel = (t) => typeof getSetTypeT === 'function' ? getSetTypeT(t) : t;
+                        row.innerHTML = `
+                            <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); width: 18px;">${setIdx + 1}</div>
+                            <select class="set-input set-type" style="flex: 1; padding: 5px 6px; border-radius: 6px; font-size: 12px; height: auto;">
+                                <option value="Calentamiento" ${set.type === 'Calentamiento' ? 'selected' : ''}>${getSetLabel('Calentamiento')}</option>
+                                <option value="Aproximación" ${set.type === 'Aproximación' ? 'selected' : ''}>${getSetLabel('Aproximación')}</option>
+                                <option value="Efectiva" ${set.type === 'Efectiva' ? 'selected' : ''}>${getSetLabel('Efectiva')}</option>
+                                <option value="Al fallo" ${set.type === 'Al fallo' ? 'selected' : ''}>${getSetLabel('Al fallo')}</option>
+                                <option value="Dropset" ${set.type === 'Dropset' ? 'selected' : ''}>${getSetLabel('Dropset')}</option>
+                                <option value="Dropset fallo" ${set.type === 'Dropset fallo' ? 'selected' : ''}>${getSetLabel('Dropset fallo')}</option>
+                            </select>
+                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                <span style="font-size: 9px; color: var(--text-secondary); line-height: 1;">reps (${phaseLabel})</span>
+                                <input type="text" class="set-input set-reps" value="${set.reps || '10'}" style="width: 96px; padding: 5px 6px; border-radius: 6px; font-size: 12px; height: auto; text-align: center;">
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                <span style="font-size: 9px; color: var(--text-secondary); line-height: 1;">kg (opc.)</span>
+                                <input type="number" step="any" inputmode="numeric" class="set-input set-weight" value="${set.weight || ''}" placeholder="0" style="width: 54px; padding: 5px 6px; border-radius: 6px; font-size: 12px; height: auto; text-align: center;">
+                            </div>
+                            <button type="button" class="btn-icon del-set-btn" style="color: var(--color-heavy);"><i class="ph ph-trash"></i></button>
+                        `;
+
+                        row.querySelector('.set-type')?.addEventListener('change', (e) => { set.type = e.target.value; });
+                        row.querySelector('.set-reps')?.addEventListener('input', (e) => { set.reps = e.target.value; });
+                        row.querySelector('.set-weight')?.addEventListener('input', (e) => { set.weight = parseFloat(e.target.value) || 0; });
+                        row.querySelector('.del-set-btn')?.addEventListener('click', () => {
+                            syncPredefinedSetsFromDOM();
+                            activeSets.splice(setIdx, 1);
+                            renderSets();
+                        });
+
+                        setsList.appendChild(row);
+                    });
+                };
+                renderSets();
+
+                const addSetBtn = document.createElement('button');
+                addSetBtn.type = 'button';
+                addSetBtn.className = 'add-set-btn';
+                addSetBtn.style.marginTop = '4px';
+                addSetBtn.textContent = '+ Añadir serie en ' + phaseLabel;
+                addSetBtn.onclick = () => {
+                    syncPredefinedSetsFromDOM();
+                    const defReps = (ex.dbEx && ex.dbEx.defaults && ex.dbEx.defaults[predefinedEditorType]) ? String(ex.dbEx.defaults[predefinedEditorType]) : '10';
+                    const lastSet = activeSets[activeSets.length - 1] || { type: 'Efectiva', reps: defReps, weight: 0 };
+                    activeSets.push({
+                        type: lastSet.type === 'Calentamiento' || lastSet.type === 'Aproximación' ? 'Efectiva' : (lastSet.type || 'Efectiva'),
+                        reps: lastSet.reps || defReps,
+                        weight: lastSet.weight || 0
+                    });
+                    renderSets();
+                };
+
+                exContainer.appendChild(setsList);
+                exContainer.appendChild(addSetBtn);
+                li.appendChild(exContainer);
+            });
+
+            ul.appendChild(li);
+        });
+    };
+
+    window.createPredefinedSuperset = function() {
+        syncPredefinedSetsFromDOM();
+        const checked = Array.from(document.querySelectorAll('.predefined-builder-chk:checked')).map(c => c.value);
+        if (checked.length < 2) {
+            return alert('Marca las casillas de al menos 2 ejercicios abajo para unirlos en una Superserie.');
+        }
+        let combined = [];
+        predefinedEditorItems.forEach(item => {
+            if (checked.includes(item.id)) combined = combined.concat(item.exercises);
+        });
+        predefinedEditorItems = predefinedEditorItems.filter(item => !checked.includes(item.id));
+        const groups = [...new Set(combined.map(e => (e.dbEx && e.dbEx.group) || 'Sin Grupo'))];
+        predefinedEditorItems.push({
+            id: 'pitem_' + Date.now(),
+            isSuperset: true,
+            name: `Superserie de ${groups.join(' y ')}`,
+            exercises: combined
+        });
+        window.renderPredefinedEditorItems();
+    };
+
+    window.removeSelectedPredefinedItems = function() {
+        syncPredefinedSetsFromDOM();
+        const checked = Array.from(document.querySelectorAll('.predefined-builder-chk:checked')).map(c => c.value);
+        if (checked.length === 0) return;
+        predefinedEditorItems = predefinedEditorItems.filter(item => !checked.includes(item.id));
+        window.renderPredefinedMuscleAccordion();
+        window.renderPredefinedEditorItems();
+    };
+
+    window.savePredefinedSession = function() {
+        syncPredefinedSetsFromDOM();
+        const idVal = document.getElementById('predefined-edit-id')?.value || '';
+        const nameVal = (document.getElementById('predefined-session-name')?.value || '').trim();
+
+        if (!nameVal) {
+            return alert('Por favor, escribe un nombre para la sesión predefinida (ej. Día 1: Empuje, Pierna...).');
+        }
+        if (predefinedEditorItems.length === 0) {
+            return alert('Selecciona al menos 1 ejercicio pulsando sobre las tarjetas de los grupos musculares.');
+        }
+
+        const tplObj = window.createPredefinedSessionObject({
+            id: idVal || undefined,
+            name: nameVal,
+            type: predefinedEditorType,
+            items: predefinedEditorItems
+        });
+
+        state.predefinedSessions = state.predefinedSessions || [];
+        const existingIdx = state.predefinedSessions.findIndex(t => String(t.id) === String(tplObj.id));
+        if (existingIdx !== -1) {
+            state.predefinedSessions[existingIdx] = tplObj;
+        } else {
+            state.predefinedSessions.push(tplObj);
+        }
+
+        saveState();
+        window.populateMesocycleDropdowns();
+        window.showPredefinedListView();
+    };
+
+    // ============================================================
+    // MESOCYCLE BUILDER (12-WEEK FULL CYCLE OR 4-WEEK PHASE)
+    // ============================================================
+    window.populateMesocycleDropdowns = function() {
+        const templates = state.predefinedSessions || [];
+        for (let d = 0; d < 5; d++) {
+            const sel = document.getElementById('meso-day-' + d);
+            if (!sel) continue;
+            const prevVal = sel.value;
+            let html = '<option value="">😴 Descanso (Sin sesión)</option>';
+            templates.forEach(tpl => {
+                const exCount = (tpl.exercises || []).length;
+                const safeName = typeof window.escapeHtml === 'function' ? window.escapeHtml(tpl.name) : tpl.name;
+                html += `<option value="${tpl.id}">📋 ${safeName} (${exCount} ejercicios)</option>`;
+            });
+            sel.innerHTML = html;
+            if (prevVal && templates.some(t => String(t.id) === String(prevVal))) {
+                sel.value = prevVal;
+            }
+        }
+        window.updateMesocycleSummaryPreview();
+    };
+
+    window.updateMesocycleSummaryPreview = function() {
+        const previewEl = document.getElementById('mesocycle-summary-preview');
+        if (!previewEl) return;
+        const mode = document.getElementById('mesocycle-mode')?.value || 'cycle_12';
+        const weeks = mode === 'cycle_12' ? 12 : 4;
+        let activeDays = 0;
+        for (let d = 0; d < 5; d++) {
+            const val = document.getElementById('meso-day-' + d)?.value;
+            if (val) activeDays++;
+        }
+        const totalSessions = activeDays * weeks;
+        if (activeDays === 0) {
+            previewEl.innerHTML = 'Selecciona al menos una sesión predefinida de Lunes a Viernes.';
+        } else if (mode === 'cycle_12') {
+            previewEl.innerHTML = `Se programarán <strong>${totalSessions} sesiones</strong> (<strong>12 semanas</strong>):<br>🔵 Sem 1–4: <strong>Hipertrofia</strong> &rarr; 🔴 Sem 5–8: <strong>Pesado</strong> &rarr; 🟢 Sem 9–12: <strong>Alta Intensidad</strong>.`;
+        } else {
+            const pName = mode === 'phase_heavy' ? 'Pesado' : mode === 'phase_intensity' ? 'Alta Intensidad' : 'Hipertrofia';
+            previewEl.innerHTML = `Se programarán <strong>${totalSessions} sesiones</strong> durante <strong>4 semanas</strong> con las series y repeticiones de <strong>${pName}</strong>.`;
+        }
+    };
+
+    window.scheduleMesocycle = function() {
+        const startVal = document.getElementById('mesocycle-start-date')?.value;
+        const baseDate = startVal ? inputToDate(startVal) : getMonday(state.selectedDate || new Date());
+        const startMonday = getMonday(baseDate);
+        const mode = document.getElementById('mesocycle-mode')?.value || 'cycle_12';
+        const totalWeeks = mode === 'cycle_12' ? 12 : 4;
+
+        const daySelections = [];
+        for (let d = 0; d < 5; d++) {
+            const val = document.getElementById('meso-day-' + d)?.value || '';
+            daySelections.push(val);
+        }
+
+        if (!daySelections.some(v => !!v)) {
+            alert('Por favor, asigna al menos una sesión predefinida entre el Lunes y el Viernes.');
+            return 0;
+        }
+
+        const mesocycleBlockId = 'meso_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+        const weekWord = (typeof getT === 'function' && getT('calendar.week') && getT('calendar.week') !== 'calendar.week') ? getT('calendar.week') : 'Semana';
+        let createdCount = 0;
+
+        for (let w = 0; w < totalWeeks; w++) {
+            let phaseForWeek = 'hypertrophy';
+            if (mode === 'cycle_12') {
+                if (w < 4) phaseForWeek = 'hypertrophy';
+                else if (w < 8) phaseForWeek = 'heavy';
+                else phaseForWeek = 'intensity';
+            } else if (mode === 'phase_heavy') {
+                phaseForWeek = 'heavy';
+            } else if (mode === 'phase_intensity') {
+                phaseForWeek = 'intensity';
+            } else {
+                phaseForWeek = 'hypertrophy';
+            }
+
+            for (let d = 0; d < 5; d++) {
+                const tplId = daySelections[d];
+                if (!tplId) continue;
+                const tpl = (state.predefinedSessions || []).find(t => String(t.id) === String(tplId));
+                if (!tpl) continue;
+
+                const sessionDate = new Date(startMonday);
+                sessionDate.setDate(startMonday.getDate() + (w * 7) + d);
+
+                const sourceExercises = (tpl.exercisesByPhase && tpl.exercisesByPhase[phaseForWeek])
+                    ? tpl.exercisesByPhase[phaseForWeek]
+                    : buildPhaseWorkoutExercises(tpl.routineItems || [], phaseForWeek);
+
+                const clonedExercises = JSON.parse(JSON.stringify(sourceExercises || [])).map(ex => ({
+                    ...ex,
+                    supersetId: ex.supersetId ? (ex.supersetId + '_w' + w + '_d' + d) : null,
+                    sets: (ex.sets || []).map(s => ({
+                        ...s,
+                        reps: ''
+                    }))
+                }));
+
+                state.sessions.push({
+                    id: Date.now().toString() + '_w' + w + '_d' + d + '_' + Math.random().toString(36).slice(2, 6),
+                    blockId: mesocycleBlockId,
+                    mesocycleId: mesocycleBlockId,
+                    templateId: tpl.id,
+                    date: formatDate(sessionDate),
+                    name: `${tpl.name} (${weekWord} ${w + 1})`,
+                    type: phaseForWeek,
+                    exercises: clonedExercises
+                });
+                createdCount++;
+            }
+        }
+
+        saveState();
+        if (typeof renderCalendar === 'function') renderCalendar();
+        alert(`¡Mesociclo programado con éxito! Se han establecido ${createdCount} sesiones en tu Calendario.`);
+        return createdCount;
+    };
+})();
+// === END PREDEFINED SESSIONS & MESOCYCLE MODULE ===

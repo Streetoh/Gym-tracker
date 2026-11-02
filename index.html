@@ -139,6 +139,10 @@
                     <i class="ph ph-calendar-blank"></i>
                     <span data-i18n="nav.calendar">Calendario</span>
                 </button>
+                <button class="nav-item" data-target="view-session-creator">
+                    <i class="ph ph-squares-four"></i>
+                    <span data-i18n="nav.sessionCreator">Sesiones</span>
+                </button>
                 <button class="nav-item" data-target="view-workout">
                     <i class="ph ph-play-circle"></i>
                     <span data-i18n="nav.workout">En curso</span>
@@ -228,7 +232,7 @@
                         <button id="btn-export-calendar" class="btn-secondary"><i class="ph ph-upload-simple"></i> <span data-i18n="export.exportPlanned">Exportar sesiones</span></button>
                         <button id="btn-import-calendar" class="btn-secondary"><i class="ph ph-download-simple"></i> <span data-i18n="export.importPlanned">Importar sesiones</span></button>
                     </div>
-                    <button id="btn-create-session-calendar" class="btn-primary-calendar"><i class="ph-bold ph-calendar-plus"></i> <span data-i18n="calendar.createSession">Crear sesión</span></button>
+                    <button id="btn-create-session-calendar" class="btn-primary-calendar" style="display: none;"><i class="ph-bold ph-calendar-plus"></i> <span data-i18n="calendar.createSession">Crear sesión</span></button>
                     <input type="file" id="file-import-calendar" accept=".json" style="display: none;">
                 </div>
                 <div class="calendar-header-week">
@@ -493,6 +497,180 @@
                 </div>
             </section>
 
+            <!-- SESSION CREATOR VIEW -->
+            <section id="view-session-creator" class="view">
+                <!-- Top Sub-Navigation Tabs -->
+                <div style="display: flex; gap: 8px; margin-bottom: 18px; background: var(--bg-surface); padding: 6px; border-radius: 14px; border: 1px solid var(--border-color);">
+                    <button type="button" id="btn-sc-tab-templates" class="btn-primary" style="flex: 1; padding: 10px 12px; font-size: 13.5px; font-weight: 700; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="switchSessionCreatorTab('templates')">
+                        <i class="ph-bold ph-bookmarks" style="font-size: 17px;"></i>
+                        <span data-i18n="modals.predefined.title">Sesiones Predefinidas</span>
+                    </button>
+                    <button type="button" id="btn-sc-tab-mesocycle" class="btn-secondary" style="flex: 1; padding: 10px 12px; font-size: 13.5px; font-weight: 700; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px; border: none;" onclick="switchSessionCreatorTab('mesocycle')">
+                        <i class="ph-bold ph-calendar-check" style="font-size: 17px;"></i>
+                        <span data-i18n="modals.mesocycle.shortTitle">Crear Mesociclo</span>
+                    </button>
+                </div>
+
+                <!-- TAB 1: PREDEFINED SESSIONS (LIST + VISUAL EDITOR) -->
+                <div id="sc-tab-templates">
+                    <!-- Sub-view 1: List of saved predefined sessions -->
+                    <div id="predefined-list-view">
+                        <div class="card" style="padding: 16px; margin-bottom: 16px; border-radius: 16px; background: var(--bg-surface); border: 1px solid var(--border-color);">
+                            <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0 0 14px 0; line-height: 1.45;" data-i18n="modals.predefined.desc">
+                                Crea tus sesiones predefinidas seleccionando los ejercicios visualmente por grupo muscular y personaliza sus series y repeticiones para <strong>Hipertrofia</strong>, <strong>Pesado</strong> y <strong>Alta Intensidad</strong>.
+                            </p>
+                            <button type="button" id="btn-new-predefined-session" class="btn-primary full-width" style="padding: 13px; font-weight: 700; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 10px;" onclick="openPredefinedCreator()">
+                                <i class="ph-bold ph-plus-circle" style="font-size: 19px;"></i>
+                                <span data-i18n="modals.predefined.createNew">Crear Nueva Sesión Predefinida</span>
+                            </button>
+                            <button type="button" id="btn-quick-custom-session" class="btn-secondary full-width" style="padding: 10px 12px; font-size: 13px; font-weight: 600; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="openModal(document.getElementById('modal-event-type'))">
+                                <i class="ph-bold ph-lightning" style="color: #f59e0b; font-size: 16px;"></i>
+                                <span data-i18n="modals.predefined.quickCustomBtn">Sesión suelta o bloque puntual (sin plantilla)</span>
+                            </button>
+                        </div>
+
+                        <div id="predefined-sessions-list" style="display: flex; flex-direction: column; gap: 12px;">
+                            <!-- Injected via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Sub-view 2: Create / Edit a predefined session -->
+                    <div id="predefined-editor-view" style="display: none;">
+                        <div class="card" style="padding: 16px; border-radius: 16px; background: var(--bg-surface); border: 1px solid var(--border-color); margin-bottom: 16px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+                                <button type="button" class="btn-secondary" style="padding: 7px 12px; font-size: 12.5px; border-radius: 10px; display: inline-flex; align-items: center; gap: 6px;" onclick="showPredefinedListView()">
+                                    <i class="ph-bold ph-arrow-left"></i> <span data-i18n="common.back">Volver</span>
+                                </button>
+                                <h3 id="predefined-editor-heading" style="margin: 0; font-size: 16px; font-weight: 800; color: var(--text-primary);">Nueva Sesión Predefinida</h3>
+                            </div>
+
+                            <input type="hidden" id="predefined-edit-id" value="">
+
+                            <div class="form-group" style="margin-bottom: 16px;">
+                                <label style="font-weight: 700; font-size: 13.5px;" data-i18n="modals.routine.name">1. Nombre de la Sesión Predefinida</label>
+                                <input type="text" id="predefined-session-name" placeholder="Ej. Día 1: Empuje (Pecho, Hombro, Tríceps)" class="form-input" style="font-size: 14px; padding: 11px 14px; border-radius: 10px;">
+                            </div>
+
+                            <!-- STEP 2: VISUAL EXERCISE CARDS BY MUSCLE GROUP -->
+                            <div class="form-group" style="margin-bottom: 18px;">
+                                <label style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span style="font-weight: 700; font-size: 13.5px;" data-i18n="modals.predefined.selectByMuscle">2. Elige los Ejercicios (Toca las tarjetas para seleccionar)</span>
+                                    <span id="predefined-selected-count-badge" style="font-size: 12px; background: rgba(37, 99, 235, 0.15); color: var(--color-accent); padding: 3px 10px; border-radius: 999px; font-weight: 800;">0 seleccionados</span>
+                                </label>
+                                <input type="text" id="predefined-exercise-search" placeholder="🔍 Buscar ejercicio o grupo muscular..." class="form-input" style="margin-bottom: 10px; padding: 10px 14px; font-size: 13.5px; border-radius: 10px;" oninput="renderPredefinedMuscleAccordion()">
+                                <div id="predefined-muscle-groups-accordion" style="display: flex; flex-direction: column; gap: 10px;">
+                                    <!-- Visual exercise square cards grouped by muscle injected via JS -->
+                                </div>
+                            </div>
+
+                            <!-- STEP 3: INDEPENDENT SETS & REPS PER PHASE -->
+                            <div class="form-group" style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border-color);">
+                                <label style="font-weight: 700; font-size: 13.5px; margin-bottom: 6px; display: block;" data-i18n="modals.predefined.configureSets">
+                                    3. Series y Repeticiones Independientes por Fase
+                                </label>
+                                <p style="font-size: 12px; color: var(--text-secondary); margin: 0 0 10px 0; line-height: 1.4;">
+                                    Cada pestaña (<strong>Hipertrofia</strong>, <strong>Pesado</strong> y <strong>Alta Int.</strong>) guarda sus propias series y repeticiones por separado. Cambia de pestaña para ajustar cada fase a tu gusto:
+                                </p>
+
+                                <div class="block-type-selector" id="predefined-type-selector" style="margin-bottom: 12px;">
+                                    <button type="button" class="type-btn hypertrophy selected" data-type="hypertrophy" onclick="selectPredefinedType('hypertrophy')" data-i18n="types.hypertrophy">Hipertrofia</button>
+                                    <button type="button" class="type-btn heavy" data-type="heavy" onclick="selectPredefinedType('heavy')" data-i18n="types.heavy">Pesado</button>
+                                    <button type="button" class="type-btn intensity" data-type="intensity" onclick="selectPredefinedType('intensity')" data-i18n="types.intensity">Alta Int.</button>
+                                </div>
+
+                                <div id="predefined-active-phase-banner" style="padding: 8px 12px; border-radius: 8px; font-size: 12.5px; font-weight: 700; margin-bottom: 10px; background: rgba(37, 99, 235, 0.12); color: var(--color-hypertrophy); border: 1px solid rgba(37, 99, 235, 0.3);">
+                                    🔵 Editando series y repeticiones para la fase de: <span>Hipertrofia</span>
+                                </div>
+
+                                <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                                    <button type="button" class="btn-secondary" style="flex: 1; font-size: 12px; padding: 8px;" onclick="createPredefinedSuperset()">
+                                        <i class="ph ph-link"></i> <span data-i18n="modals.routine.createSuperset">Crear Superserie</span>
+                                    </button>
+                                    <button type="button" class="btn-secondary" style="flex: 1; font-size: 12px; padding: 8px; color: var(--color-heavy); border-color: var(--color-heavy);" onclick="removeSelectedPredefinedItems()">
+                                        <i class="ph ph-trash"></i> <span data-i18n="common.delete">Quitar Marcados</span>
+                                    </button>
+                                </div>
+
+                                <ul id="predefined-selected-exercises-list" class="selected-items-list" style="list-style: none; padding: 0; margin: 0;"></ul>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-color);">
+                                <button type="button" class="btn-secondary" style="flex: 1; padding: 13px; border-radius: 12px;" onclick="showPredefinedListView()" data-i18n="common.cancel">Cancelar</button>
+                                <button type="button" class="btn-primary" style="flex: 2; padding: 13px; font-weight: 700; border-radius: 12px;" onclick="savePredefinedSession()" data-i18n="modals.predefined.saveBtn">Guardar Sesión Predefinida</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: MESOCYCLE BUILDER (MONDAY TO FRIDAY) -->
+                <div id="sc-tab-mesocycle" style="display: none;">
+                    <div class="card" style="padding: 18px; border-radius: 16px; background: var(--bg-surface); border: 1px solid var(--border-color);">
+                        <h3 style="margin: 0 0 6px 0; font-size: 17px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                            <i class="ph-bold ph-calendar-check" style="color: #10b981; font-size: 21px;"></i>
+                            <span data-i18n="modals.mesocycle.title">Planificador de Mesociclo (Lunes a Viernes)</span>
+                        </h3>
+                        <p style="font-size: 13px; color: var(--text-secondary); margin: 0 0 16px 0; line-height: 1.45;" data-i18n="modals.mesocycle.desc">
+                            Elige qué sesión predefinida se repetirá cada día de Lunes a Viernes. Si eliges el <strong>Ciclo Completo de 12 Semanas</strong>, la app programará automáticamente 4 semanas de Hipertrofia, 4 de Pesado y 4 de Alta Intensidad con las series y repeticiones específicas de cada fase.
+                        </p>
+
+                        <div style="display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 16px;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-size: 13px; font-weight: 700;" data-i18n="modals.mesocycle.startDate">Lunes de Inicio del Mesociclo</label>
+                                <input type="date" id="mesocycle-start-date" class="form-input" style="padding: 10px 12px; font-size: 14px; border-radius: 10px;">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label style="font-size: 13px; font-weight: 700;" data-i18n="modals.mesocycle.weeks">Estructura y Duración del Mesociclo</label>
+                                <select id="mesocycle-mode" class="form-input" style="padding: 10px 12px; font-size: 14px; border-radius: 10px; font-weight: 600;" onchange="updateMesocycleSummaryPreview()">
+                                    <option value="cycle_12" selected>🔥 Ciclo Completo 12 Semanas (4 Hipertrofia → 4 Pesado → 4 Alta Int.)</option>
+                                    <option value="phase_hypertrophy">🔵 Bloque 4 Semanas — Solo Hipertrofia</option>
+                                    <option value="phase_heavy">🔴 Bloque 4 Semanas — Solo Pesado</option>
+                                    <option value="phase_intensity">🟢 Bloque 4 Semanas — Solo Alta Intensidad</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <label style="font-size: 13.5px; font-weight: 700; color: var(--text-primary);" data-i18n="modals.mesocycle.weeklyPlan">Sesiones de Lunes a Viernes</label>
+                            <button type="button" onclick="switchSessionCreatorTab('templates'); openPredefinedCreator();" style="background: none; border: none; color: var(--color-accent); font-size: 12.5px; font-weight: 700; cursor: pointer; padding: 0;">
+                                + Crear nueva plantilla
+                            </button>
+                        </div>
+
+                        <div id="mesocycle-days-container" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+                            <div class="meso-day-row" style="background: var(--bg-surface-elevated); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 6px;">
+                                <span style="font-weight: 700; font-size: 13.5px; color: var(--text-primary);" data-i18n="modals.mesocycle.monday">1. Lunes</span>
+                                <select id="meso-day-0" class="form-input meso-day-select" style="padding: 9px 10px; font-size: 13.5px; border-radius: 8px;" onchange="updateMesocycleSummaryPreview()"></select>
+                            </div>
+                            <div class="meso-day-row" style="background: var(--bg-surface-elevated); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 6px;">
+                                <span style="font-weight: 700; font-size: 13.5px; color: var(--text-primary);" data-i18n="modals.mesocycle.tuesday">2. Martes</span>
+                                <select id="meso-day-1" class="form-input meso-day-select" style="padding: 9px 10px; font-size: 13.5px; border-radius: 8px;" onchange="updateMesocycleSummaryPreview()"></select>
+                            </div>
+                            <div class="meso-day-row" style="background: var(--bg-surface-elevated); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 6px;">
+                                <span style="font-weight: 700; font-size: 13.5px; color: var(--text-primary);" data-i18n="modals.mesocycle.wednesday">3. Miércoles</span>
+                                <select id="meso-day-2" class="form-input meso-day-select" style="padding: 9px 10px; font-size: 13.5px; border-radius: 8px;" onchange="updateMesocycleSummaryPreview()"></select>
+                            </div>
+                            <div class="meso-day-row" style="background: var(--bg-surface-elevated); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 6px;">
+                                <span style="font-weight: 700; font-size: 13.5px; color: var(--text-primary);" data-i18n="modals.mesocycle.thursday">4. Jueves</span>
+                                <select id="meso-day-3" class="form-input meso-day-select" style="padding: 9px 10px; font-size: 13.5px; border-radius: 8px;" onchange="updateMesocycleSummaryPreview()"></select>
+                            </div>
+                            <div class="meso-day-row" style="background: var(--bg-surface-elevated); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 6px;">
+                                <span style="font-weight: 700; font-size: 13.5px; color: var(--text-primary);" data-i18n="modals.mesocycle.friday">5. Viernes</span>
+                                <select id="meso-day-4" class="form-input meso-day-select" style="padding: 9px 10px; font-size: 13.5px; border-radius: 8px;" onchange="updateMesocycleSummaryPreview()"></select>
+                            </div>
+                        </div>
+
+                        <div id="mesocycle-summary-preview" style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.35); color: var(--text-primary); padding: 12px 14px; border-radius: 10px; font-size: 13px; text-align: center; margin-bottom: 14px; line-height: 1.45;">
+                            Selecciona al menos una sesión predefinida de Lunes a Viernes.
+                        </div>
+
+                        <button type="button" id="btn-schedule-mesocycle" class="btn-primary full-width" style="background-color: #10b981; border-color: #10b981; padding: 14px; font-weight: 800; border-radius: 12px; font-size: 15px;" onclick="scheduleMesocycle()">
+                            <i class="ph-bold ph-calendar-check"></i> <span data-i18n="modals.mesocycle.scheduleBtn">Establecer Mesociclo en el Calendario</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <!-- END SESSION CREATOR VIEW -->
+
             <!-- EXPORT VIEW -->
             <section id="view-export" class="view">
                 <div style="display:flex; gap: 8px; margin-bottom: 24px;">
@@ -659,7 +837,7 @@
                 <button class="btn-secondary full-width" style="margin-bottom: 12px; padding: 16px;" onclick="selectEventType('workout')">
                     <i class="ph ph-barbell" style="font-size: 24px; margin-bottom: 4px;"></i><br><span data-i18n="modals.add.workout">Entrenamiento Suelto (Hoy)</span>
                 </button>
-                <button class="btn-secondary full-width" style="padding: 16px;" onclick="selectEventType('goal')">
+                <button class="btn-secondary full-width" style="padding: 16px; display: none;" onclick="selectEventType('goal')">
                     <i class="ph ph-sneaker" style="font-size: 24px; margin-bottom: 4px;"></i><br><span data-i18n="modals.add.goal">Objetivo de Pasos (Hoy)</span>
                 </button>
             </div>
@@ -786,6 +964,42 @@
             </div>
         </div>
     </div>
+
+    <!-- Schedule Single Predefined Modal -->
+    <div id="modal-schedule-predefined" class="modal">
+        <div class="modal-content" style="max-width: 420px; margin: auto; border-radius: 20px;">
+            <div class="modal-header">
+                <h3 id="schedule-predefined-modal-title" style="font-size: 16px; font-weight: 800;">Programar en Calendario</h3>
+                <button class="close-modal"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="schedule-predefined-tpl-id" value="">
+                <div class="form-group">
+                    <label style="font-weight: 700; font-size: 13px;">Fecha en el Calendario</label>
+                    <input type="date" id="schedule-predefined-date" class="form-input" style="padding: 10px; border-radius: 10px;">
+                </div>
+                <div class="form-group">
+                    <label style="font-weight: 700; font-size: 13px;">¿Qué fase de series y repeticiones quieres usar?</label>
+                    <select id="schedule-predefined-phase" class="form-input" style="padding: 10px; border-radius: 10px; font-weight: 600;">
+                        <option value="hypertrophy">🔵 Hipertrofia (Series y reps de Hipertrofia)</option>
+                        <option value="heavy">🔴 Pesado (Series y reps de Pesado)</option>
+                        <option value="intensity">🟢 Alta Intensidad (Series y reps de Alta Int.)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label style="font-weight: 700; font-size: 13px;">Repetición</label>
+                    <select id="schedule-predefined-weeks" class="form-input" style="padding: 10px; border-radius: 10px;">
+                        <option value="1">Solo ese día (1 sesión)</option>
+                        <option value="4">Repetir 4 semanas ese mismo día</option>
+                    </select>
+                </div>
+                <button type="button" class="btn-primary full-width" style="padding: 13px; font-weight: 700; border-radius: 12px; margin-top: 8px;" onclick="confirmScheduleSinglePredefined()">
+                    <i class="ph-bold ph-calendar-plus"></i> Establecer en el Calendario
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- End Schedule Single Predefined Modal -->
 
     <!-- Select Exercises for Routine Modal -->
     <div id="modal-select-exercises" class="modal">
