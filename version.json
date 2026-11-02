@@ -1,55 +1,29 @@
 {
-  "version": "1.2.8",
-  "versionCode": 128,
-  "releaseDate": "04/09/2026",
+  "version": "1.3.0",
+  "versionCode": 130,
+  "releaseDate": "02/11/2026",
   "downloadUrl": "https://github.com/Streetoh/Gym-tracker/releases",
   "githubUrl": "https://github.com/Streetoh/Gym-tracker",
   "changelog": {
     "es": [
-      "🎯 **Filtros de Logros Optimizados**: Eliminada la pestaña genérica 'Todos'; ahora se muestran únicamente las pestañas **Desbloqueados** (seleccionada por defecto) y **Pendientes**.",
-      "🔄 **Botón de Restablecimiento de Logros**: Nueva opción para reiniciar todo el progreso de logros desde cero si se desea empezar de nuevo, protegido de forma segura con 3 ventanas de confirmación consecutivas.",
-      "🏆 **Marcado de Récords (PR) en Historial**: En el desglose de sesión del historial, el distintivo PR se muestra exclusivamente en la primera serie donde se batió la marca, evitando repeticiones innecesarias en series idénticas posteriores.",
-      "📖 **Tutorial Interactivo Completo**: Pestaña 'En curso' actualizada con explicación detallada y captura de alta resolución de la calculadora de porcentajes para Dropset (%). Títulos y descripciones de ejercicios limpios y claros.",
-      "🎯 **Estandarización y Títulos de Logros**: Formato de nombres normalizado sin mayúsculas excesivas en los 50 logros. Ajuste exacto en 'El despertar de Carlo' (sesión de al menos 30 min un domingo a las 03:00 AM) y 'Día de pierna saltado'.",
-      "🏋️ **Calculadora de Discos Olímpica (20 kg)**: Barra olímpica estándar fijada en 20 kg con desglose gráfico de discos por cada lado.",
-      "⚡ **Máxima Fluidez y Estabilidad**: Dimensiones fijas uniformes en ventanas modales y eliminación de botones redundantes."
+      "🧩 **Creador de Sesiones & Mesociclos**: Nuevo menú visual con selección de ejercicios por grupo muscular mediante tarjetas interactivas y programación de mesociclos en bloques (Hipertrofia, Pesados, Alta Intensidad) con series y repeticiones personalizables por ejercicio.",
+      "⚡ **Sobrecarga Progresiva Automática**: Sugerencias inteligentes basadas en tu rendimiento anterior (+2.5 kg en barra, +1 kg en mancuernas / +1 rep) aplicables con un toque.",
+      "📌 **Notas Fijas de Máquinas y Técnica**: Registra ajustes de asientos, poleas o notas técnicas directamente en cada ejercicio con persistencia.",
+      "🫀 **Recuperación Muscular en Calendario**: Widget interactivo en el calendario con estado en tiempo real (Listo, Recuperando, Fatigado) y mapa anatómico interactivo.",
+      "⏱️ **Selector de RIR (Repeticiones en Reserva)**: Registra el esfuerzo real de cada serie con auto-selección a fallo (RIR 0).",
+      "📊 **Estadísticas Unificadas**: Progresión de fuerza, fatiga muscular, medidas corporales (con fotos Antes/Después) y muro de logros integrados en un solo lugar."
     ],
     "en": [
-      "🎯 **Streamlined Achievement Filters**: Removed the redundant 'All' filter tab; now exclusively displaying **Unlocked** (active by default) and **Locked** tabs.",
-      "🔄 **Reset Achievements Button**: New feature to reset all achievement progress from scratch, protected by 3 sequential confirmation dialogs to prevent accidental resets.",
-      "🏆 **History PR Set Highlighting**: In workout history logs, the PR badge is now cleanly marked only on the first set that broke the personal record.",
-      "📖 **Complete Interactive Guide**: Live workout tab updated with dropset percentage calculator (%) walkthrough and high-res screenshot. Clean exercise descriptions.",
-      "🎯 **Achievements Standardization**: Normalized sentence-case titles across all 50 achievements, updated triggers for 'Carlo's awakening' (Sunday 03:00 AM, 30+ min) and 'Skipped leg day'.",
-      "🏋️ **Olympic Plate Calculator (20 kg)**: Default Olympic bar set to 20 kg with automatic plate breakdown per side.",
-      "⚡ **Fluidity & Modal Stability**: Consistent fixed window sizes across modal transitions."
-    ],
-    "ru": [
-      "🎯 **Оптимизированные фильтры достижений**: Удалена вкладка «Все», отображаются только «Разблокированные» (по умолчанию) и «В ожидании».",
-      "🔄 **Кнопка сброса достижений**: Возможность начать получение достижений с нуля, защищенная 3 окнами подтверждения.",
-      "🏆 **Отметка рекордов (PR) в истории**: Знак рекорда отмечается только на первом подходе, побившем рекорд.",
-      "📖 **Интерактивное руководство**: Добавлен раздел калькулятора дропсетов (%) в активной тренировке.",
-      "🎯 **50 Достижений**: Нормализация названий, обновленные условия для особых достижений.",
-      "🏋️ **Олимпийский гриф 20 кг**: Стандартный вес грифа 20 кг."
-    ],
-    "et": [
-      "🎯 **Optimeeritud saavutuste filtrid**: Eemaldatud üldine 'Kõik' filter; kuvatakse ainult vahekaardid 'Avatud' (vaikimisi valitud) ja 'Ootel'.",
-      "🔄 **Saavutuste lähtestamise nupp**: Võimalus alustada saavutuste kogumist nullist, kaitstud 3 järjestikuse kinnitusaknaga.",
-      "🏆 **Rekordite (PR) märkimine ajaloos**: Rekordimärk kuvatakse ainult esimesel seerial, mis rekordi ületas.",
-      "📖 **Interaktiivne juhend**: Lisatud dropset kalkulaatori (%) juhend ja selgitused.",
-      "🎯 **50 Saavutust**: Standardiseeritud pealkirjad ja uuendatud reeglid.",
-      "🏋️ **Olümpiakang 20 kg**: Kangi baaskaal 20 kg automaatse ketaste arvutusega."
-    ],
-    "uk": [
-      "🎯 **Оптимізовані фільтри досягнень**: Вилучено вкладку «Всі», відображаються лише «Відкриті» (за замовчуванням) та «В очікуванні».",
-      "🔄 **Кнопка скидання досягнень**: Можливість почати відкриття досягнень спочатку, захищена 3 послідовними вікнами підтвердження.",
-      "🏆 **Відмітка рекордів (PR) в історії**: Знак рекорду відображається тільки на першому підході, що побив рекорд.",
-      "📖 **Інтерактивний посібник**: Додано розділ калькулятора дропсетів (%) у тренуванні.",
-      "🎯 **50 Досягнень**: Нормалізовані назви та оновлені умови досягнень.",
-      "🏋️ **Олімпійський гриф 20 кг**: Базова вага грифа 20 кг."
+      "🧩 **Session Creator & Mesocycles**: Visual exercise card selector by muscle group and customizable mesocycle planner across Hypertrophy, Heavy, and High Intensity phases.",
+      "⚡ **Auto-Progressive Overload**: Smart recommendations (+2.5 kg on bar, +1 kg on dumbbells / +1 rep) applicable with one touch.",
+      "📌 **Pinned Machine & Form Notes**: Save persistent setup notes (seat, pulley height, technique) per exercise.",
+      "🫀 **Muscle Recovery Widget in Calendar**: Real-time recovery status and expandable anatomical silhouette.",
+      "⏱️ **RIR (Reps in Reserve) Logging**: Track RIR on every set with auto failure detection (RIR 0).",
+      "📊 **Unified Statistics Hub**: Strength charts, muscle recovery, body measurements with Before/After photos, and achievements in one place."
     ]
   },
   "releaseNotes": {
-    "es": "v1.2.8:\\n- Botón de restablecimiento de logros protegido con 3 ventanas de confirmación.\\n- Marcado exclusivo de PR en la primera serie que superó la marca en el historial.\\n- Guía interactiva actualizada con calculadora de dropset (%).\\n- Nombres de logros normalizados y triggers ajustados.\\n- Rendimiento y fluidez optimizados.",
-    "en": "v1.2.8:\\n- Reset achievements button with 3-step confirmation.\\n- Single set PR badge in history logs.\\n- Interactive tutorial updated with % dropset calculator.\\n- Normalized achievement titles and refined triggers.\\n- Enhanced stability and performance."
+    "es": "v1.3.0:\\n- Creador de sesiones predefinidas visual por grupos musculares y bloques de mesociclos.\\n- Sobrecarga progresiva automática inteligente.\\n- Selector de RIR con detección automática a fallo.\\n- Widget de recuperación muscular y silueta anatómica interactiva en calendario.\\n- Menú unificado de Estadísticas (Fuerza, Fatiga, Medidas/Fotos, Logros).\\n- Notas fijas persistentes para ajuste de máquinas.",
+    "en": "v1.3.0:\\n- Visual predefined session creator and mesocycle block planner.\\n- Smart automated progressive overload recommendations.\\n- RIR logging with auto failure detection.\\n- Interactive muscle recovery widget in calendar.\\n- Unified Statistics hub (Strength, Fatigue, Measurements/Photos, Achievements).\\n- Persistent machine setup notes."
   }
 }

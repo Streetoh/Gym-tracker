@@ -1838,6 +1838,7 @@ const translations = {
         },
         "nav": {
             "menu": "Menú",
+            "statistics": "Estadísticas",
             "ai": "Asistente IA",
             "calendar": "Calendario",
             "exercises": "Ejercicios",
@@ -1849,6 +1850,7 @@ const translations = {
             "tutorial": "Guía y Tutorial"
         },
         "header": {
+            "statistics": "Estadísticas",
             "ai": "Asistente IA",
             "title": "Calendario",
             "calendar": "Calendario",
@@ -2257,6 +2259,7 @@ const translations = {
         },
         "nav": {
             "menu": "Menu",
+            "statistics": "Statistics",
             "ai": "AI Assistant",
             "calendar": "Calendar",
             "exercises": "Exercises",
@@ -2268,6 +2271,7 @@ const translations = {
             "tutorial": "Guía y Tutorial"
         },
         "header": {
+            "statistics": "Statistics",
             "ai": "AI Assistant",
             "title": "Calendar",
             "calendar": "Calendar",
@@ -3928,6 +3932,7 @@ const renderCalendar = () => {
     }
     
     renderTodaySessions();
+    if (typeof updateCalendarRecoveryWidget === 'function') updateCalendarRecoveryWidget();
 };
 
 document.getElementById('prev-week').addEventListener('click', () => {
@@ -4331,6 +4336,8 @@ function syncActiveWorkoutInputsFromDOM() {
                         if (rInput && rInput.value !== '') set.reps = rInput.value;
                         if (rDropInput && rDropInput.value !== '') set.repsDrop = rDropInput.value;
                         if (tSelect && tSelect.value) set.type = tSelect.value;
+                        const rirSelect = row.querySelector('.rir-select');
+                        if (rirSelect) set.rir = rirSelect.value;
                     }
                 });
             }
@@ -5687,6 +5694,7 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                     <div style="font-size:12px; color:var(--text-secondary); text-align:center;">${getT('workout.type') || 'Tipo'}</div>
                     <div style="font-size:12px; color:var(--text-secondary); text-align:center;">${getT('workout.reps') || 'Reps'}</div>
                     <div style="font-size:12px; color:var(--text-secondary); width: 50px; text-align:center;">${getT('workout.kg') || 'Kg'}</div>
+                    <div style="font-size:12px; color:var(--text-secondary); width: 44px; text-align:center;" title="Repeticiones en Reserva (RIR)">RIR</div>
                 </div>
             `;
             
@@ -5804,6 +5812,16 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                         ${repsHtml}
                     </div>
                     <div style="display:flex; flex-direction:column; align-items:flex-start; justify-content: flex-start;">${weightHtml}</div>
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content: flex-start;">
+                        <select class="set-input rir-select" style="width: 44px; height: 32px; text-align: center; font-size: 11.5px; font-weight: 600; padding: 2px; border-radius: 6px; ${disabledStyle}" ${disabledAttr} title="Repeticiones en Reserva (RIR)">
+                            <option value="" ${(!set.rir && set.rir !== 0 && set.rir !== '0') ? 'selected' : ''}>-</option>
+                            <option value="0" ${(set.rir === '0' || set.rir === 0 || ((!set.rir && set.rir !== 0) && (set.type === 'Al fallo' || set.type === 'Dropset fallo'))) ? 'selected' : ''}>0</option>
+                            <option value="1" ${(set.rir === '1' || set.rir === 1) ? 'selected' : ''}>1</option>
+                            <option value="2" ${(set.rir === '2' || set.rir === 2) ? 'selected' : ''}>2</option>
+                            <option value="3" ${(set.rir === '3' || set.rir === 3) ? 'selected' : ''}>3</option>
+                            <option value="4+" ${(set.rir === '4+' || set.rir === '4' || set.rir === 4) ? 'selected' : ''}>4+</option>
+                        </select>
+                    </div>
                 `;
                 
                 const wInput = setRow.querySelector('.weight-input');
@@ -5844,6 +5862,13 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                         set.reps = e.target.value; 
                         checkSetPR(ex.exerciseId, set.weight, set.reps, setRow, setIndex);
                         autoSaveWorkout(); 
+                    });
+                }
+                const rirInput = setRow.querySelector('.rir-select');
+                if (rirInput) {
+                    rirInput.addEventListener('change', (e) => {
+                        set.rir = e.target.value;
+                        autoSaveWorkout();
                     });
                 }
                 if (rDropInput) {
@@ -8863,7 +8888,7 @@ window.generateDashboard = function(mode) {
     }
 };
 
-const CURRENT_APP_VERSION = '1.2.8';
+const CURRENT_APP_VERSION = '1.3.0';
 function compareVersions(v1, v2) {
     const p1 = String(v1).split('.').map(Number);
     const p2 = String(v2).split('.').map(Number);
@@ -8879,27 +8904,21 @@ window.latestUpdateData = null;
 
 const DEFAULT_APP_CHANGELOG = {
     es: [
-        "🏃 **Pestaña de Actividad & Samsung Health**: Integración con el sensor de podómetro del dispositivo y enlace directo con Samsung Health a través de Conexión de Salud (Health Connect), mostrando pasos diarios, distancia real en km, calorías y sesiones de entrenamiento.",
-        "🏆 **36 Logros y Medallas Desbloqueables**: 10 nuevos hitos míticos implementados (Club 100 kg Banca, Respeto al Leg Day, 250t, 500t, 1 Millón de kg, Sesión Gladiador 20t, Maestro de la Biomecánica, El Escultor, Vientre de Acero, Embajador del Esfuerzo).",
-        "🌐 **Apertura en Navegador por Defecto**: Todos los enlaces externos y descargas ahora se abren en el navegador predeterminado del teléfono (Samsung Internet, Brave, Firefox, etc.) mediante intent nativo de Android en lugar de forzar Chrome.",
-        "🩺 **Gestor de Molestias y Articulaciones Sensibles**: Registra molestias en hombros, codos, rodillas, lumbares, muñecas o caderas y recibe avisos inteligentes preventivos durante el entreno ('⚠️ Cuidado: Hombro') con sugerencias de variantes seguras sustituibles en 1 toque.",
-        "👻 **Modo Fantasma en Vivo (Ghost Workout)**: Durante tu entrenamiento en vivo, cada serie muestra de forma tenue tu marca anterior ('Última vez: X kg × Y reps') para saber exactamente qué tienes que batir, con autorrellenado automático en 1 toque al tocar la marca.",
-        "📸 **Tarjeta para Historias (PNG Nativo)**: Compartición directa del archivo de imagen a Instagram Stories, WhatsApp y Telegram.",
-        "💾 **Descarga Directa en Dispositivo**: Guardado directo de la imagen de tarjeta de entreno en la galería/almacenamiento.",
-        "✏️ **Edición de Sesiones Finalizadas**: Rediseño limpio de cabecera con botón de editar y distintivo verde sin textos redundantes.",
-        "🔄 **Sincronización Total con el Historial**: Actualización en tiempo real de pesos y repeticiones editadas en el historial y marcas personales (PRs)."
-],
+        "🧩 **Creador de Sesiones & Mesociclos**: Nuevo menú visual con selección de ejercicios por grupo muscular mediante tarjetas interactivas y programación de mesociclos en bloques (Hipertrofia, Pesados, Alta Intensidad) con series y repeticiones personalizables por ejercicio.",
+        "⚡ **Sobrecarga Progresiva Automática**: Sugerencias inteligentes basadas en tu rendimiento anterior (+2.5 kg en barra, +1 kg en mancuernas / +1 rep) aplicables con un toque.",
+        "📌 **Notas Fijas de Máquinas y Técnica**: Registra ajustes de asientos, poleas o notas técnicas directamente en cada ejercicio con persistencia.",
+        "🫀 **Recuperación Muscular en Calendario**: Widget interactivo en el calendario con estado en tiempo real (Listo, Recuperando, Fatigado) y mapa anatómico interactivo.",
+        "⏱️ **Selector de RIR (Repeticiones en Reserva)**: Registra el esfuerzo real de cada serie con auto-selección a fallo (RIR 0).",
+        "📊 **Estadísticas Unificadas**: Progresión de fuerza, fatiga muscular, medidas corporales (con fotos Antes/Después) y muro de logros integrados en un solo lugar."
+    ],
     en: [
-        "🏃 **Activity Tab & Samsung Health Integration**: Native pedometer hardware sensor integration and direct Samsung Health linking via Health Connect, displaying daily steps, real distance in km, calories, and training sessions.",
-        "🏆 **36 Unlockable Achievements & Trophies**: 10 new iconic milestones implemented (Bench Club 100 kg, Leg Day Respect, 250t, 500t, 1M kg, Gladiator Session 20t, Technique Master, The Sculptor, Steel Waist, Story Ambassador).",
-        "🌐 **Default Browser Support**: External links and downloads now open in your phone's selected default browser (Samsung Internet, Brave, Firefox, etc.) via native Android intent instead of forcing Chrome.",
-        "🩺 **Joint Discomfort & Injury Manager**: Log active discomfort in shoulders, elbows, knees, lower back, wrists, or hips and receive live preventive alerts ('⚠️ Careful: Shoulder') with 1-tap safe exercise replacements.",
-        "👻 **Live Ghost Workout Mode**: Every set displays your previous performance ('Last time: X kg × Y reps') so you know what to beat, with 1-tap autofill by tapping the ghost tag.",
-        "📸 **Story Cards (Native PNG)**: Share real image files directly to Instagram Stories, WhatsApp, and Telegram.",
-        "💾 **Direct Device Download**: Working save image to device/gallery button.",
-        "✏️ **Completed Session Editing**: Clean header layout without redundant text.",
-        "🔄 **Full History Sync**: Real-time update of edited weights and reps in the History tab and PRs."
-]
+        "🧩 **Session Creator & Mesocycles**: Visual exercise card selector by muscle group and customizable mesocycle planner across Hypertrophy, Heavy, and High Intensity phases.",
+        "⚡ **Auto-Progressive Overload**: Smart recommendations (+2.5 kg on bar, +1 kg on dumbbells / +1 rep) applicable with one touch.",
+        "📌 **Pinned Machine & Form Notes**: Save persistent setup notes (seat, pulley height, technique) per exercise.",
+        "🫀 **Muscle Recovery Widget in Calendar**: Real-time recovery status and expandable anatomical silhouette.",
+        "⏱️ **RIR (Reps in Reserve) Logging**: Track RIR on every set with auto failure detection (RIR 0).",
+        "📊 **Unified Statistics Hub**: Strength charts, muscle recovery, body measurements with Before/After photos, and achievements in one place."
+    ]
 };
 
 function getChangelogForLanguage(changelogData, lang) {
@@ -9070,7 +9089,7 @@ window.openUpdateModal = function(customData) {
     }
     const dataToUse = customData || window.latestUpdateData || {
         version: CURRENT_APP_VERSION,
-        releaseDate: "02/09/2026",
+        releaseDate: "02/11/2026",
         changelog: DEFAULT_APP_CHANGELOG
     };
     window.renderUpdateModalContent(dataToUse);
@@ -9303,6 +9322,9 @@ window.switchProgressionTab = function(tabName) {
         renderWeeklyMuscleVolume();
     } else if (tabName === 'achievements') {
         renderAchievementsView();
+    } else if (tabName === 'measurements') {
+        if (typeof renderEvolutionView === 'function') renderEvolutionView();
+        if (typeof renderEvolutionHistory === 'function') renderEvolutionHistory();
     }
 };
 
@@ -9412,6 +9434,177 @@ function getWorkoutTimestamp(w) {
     return 0;
 }
 window.getWorkoutTimestamp = getWorkoutTimestamp;
+
+// =========================================================================
+// RECOVERY STATUS & CALENDAR HEATMAP INTEGRATION
+// =========================================================================
+window.getMuscleRecoveryStatus = function() {
+    const completed = (typeof state !== 'undefined' && Array.isArray(state.completedWorkouts)) ? state.completedWorkouts : [];
+    const exercisesList = (typeof state !== 'undefined' && Array.isArray(state.exercises)) ? state.exercises : [];
+    const defaultEx = (typeof defaultExercises !== 'undefined' && Array.isArray(defaultExercises)) ? defaultExercises : [];
+    const now = Date.now();
+    const muscleStats = {
+        'Pecho': { lastTime: 0 },
+        'Espalda': { lastTime: 0 },
+        'Hombros': { lastTime: 0 },
+        'Bíceps': { lastTime: 0 },
+        'Tríceps': { lastTime: 0 },
+        'Piernas': { lastTime: 0 },
+        'Cuádriceps': { lastTime: 0 },
+        'Isquios': { lastTime: 0 },
+        'Gemelos': { lastTime: 0 },
+        'Glúteos': { lastTime: 0 },
+        'Core': { lastTime: 0 }
+    };
+
+    completed.forEach(w => {
+        const wTime = (typeof getWorkoutTimestamp === 'function') ? getWorkoutTimestamp(w) : (Number(w.completedAt) || Number(w.dateTimestamp) || 0);
+        if (!w || !w.exercises) return;
+
+        w.exercises.forEach(ex => {
+            let exObj = exercisesList.find(e => e.id === ex.exerciseId) || defaultEx.find(e => e.id === ex.exerciseId);
+            const group = ex.group || (exObj && exObj.group) || '';
+            const name = ex.name || (exObj && exObj.name) || '';
+            const m = (typeof normalizeMuscleName === 'function') ? normalizeMuscleName(group || name) : (group || 'Pecho');
+
+            if (muscleStats[m]) {
+                if (wTime > muscleStats[m].lastTime) muscleStats[m].lastTime = wTime;
+            }
+            const groupLower = (group || '').toLowerCase();
+            const nameLower = (name || '').toLowerCase();
+            if (groupLower.includes('pierna') || nameLower.includes('pierna') || m === 'Cuádriceps') {
+                if (wTime > muscleStats['Piernas'].lastTime) muscleStats['Piernas'].lastTime = wTime;
+                if (wTime > muscleStats['Cuádriceps'].lastTime) muscleStats['Cuádriceps'].lastTime = wTime;
+            }
+        });
+    });
+
+    const result = {};
+    Object.keys(muscleStats).forEach(muscle => {
+        const stat = muscleStats[muscle];
+        let hoursAgo = Infinity;
+        let status = 'ready';
+        let color = '#10b981';
+        let label = 'Listo';
+
+        if (stat.lastTime > 0) {
+            hoursAgo = Math.round((now - stat.lastTime) / (1000 * 60 * 60));
+            if (hoursAgo < 24) {
+                status = 'fatigued';
+                color = '#ef4444';
+                label = 'Fatigado';
+            } else if (hoursAgo <= 60) {
+                status = 'recovering';
+                color = '#f59e0b';
+                label = 'Recuperando';
+            } else {
+                status = 'ready';
+                color = '#10b981';
+                label = 'Listo';
+            }
+        }
+        result[muscle] = {
+            muscle,
+            lastTime: stat.lastTime,
+            hoursAgo,
+            status,
+            color,
+            label
+        };
+    });
+
+    return result;
+};
+
+window.updateCalendarRecoveryWidget = function() {
+    const badge = document.getElementById('calendar-recovery-summary-badge');
+    const chipsContainer = document.getElementById('calendar-recovery-chips');
+    if (!badge && !chipsContainer) return;
+
+    const recovery = window.getMuscleRecoveryStatus();
+    const primaryMuscles = ['Pecho', 'Espalda', 'Piernas', 'Hombros', 'Bíceps', 'Tríceps'];
+    
+    let fatiguedCount = 0;
+    let recoveringCount = 0;
+
+    Object.keys(recovery).forEach(m => {
+        if (recovery[m].status === 'fatigued') fatiguedCount++;
+        else if (recovery[m].status === 'recovering') recoveringCount++;
+    });
+
+    if (badge) {
+        if (fatiguedCount > 0) {
+            badge.style.background = 'rgba(239, 68, 68, 0.15)';
+            badge.style.borderColor = 'rgba(239, 68, 68, 0.35)';
+            badge.style.color = '#ef4444';
+            badge.textContent = `🔴 ${fatiguedCount} fatigado${fatiguedCount > 1 ? 's' : ''}`;
+        } else if (recoveringCount > 0) {
+            badge.style.background = 'rgba(245, 158, 11, 0.15)';
+            badge.style.borderColor = 'rgba(245, 158, 11, 0.35)';
+            badge.style.color = '#f59e0b';
+            badge.textContent = `🟡 ${recoveringCount} recuperando`;
+        } else {
+            badge.style.background = 'rgba(16, 185, 129, 0.15)';
+            badge.style.borderColor = 'rgba(16, 185, 129, 0.35)';
+            badge.style.color = '#10b981';
+            badge.textContent = '🟢 Todo Listo';
+        }
+    }
+
+    if (chipsContainer) {
+        chipsContainer.innerHTML = primaryMuscles.map(m => {
+            const info = recovery[m] || { status: 'ready', color: '#10b981', label: 'Listo', hoursAgo: Infinity };
+            let subtext = info.label;
+            if (info.status === 'fatigued' && info.hoursAgo < 24) subtext = `${info.hoursAgo}h`;
+            else if (info.status === 'recovering') subtext = `${info.hoursAgo}h`;
+            return `<div class="recovery-chip" title="${m}: ${info.label} (${info.hoursAgo === Infinity ? 'Descansado' : 'hace ' + info.hoursAgo + 'h'})"><span class="recovery-chip-dot" style="background:${info.color};"></span><span>${m}</span><span style="opacity:0.75; font-size:10px;">${subtext}</span></div>`;
+        }).join('');
+    }
+};
+
+window.toggleCalendarRecoveryHeatmap = function() {
+    const mount = document.getElementById('calendar-recovery-mount');
+    const icon = document.getElementById('calendar-recovery-icon');
+    const toggleText = document.getElementById('calendar-recovery-toggle-text');
+    if (!mount) return;
+
+    const isHidden = mount.style.display === 'none' || !mount.style.display;
+    if (isHidden) {
+        mount.style.display = 'block';
+        if (icon) icon.className = 'ph-bold ph-caret-up';
+        if (toggleText) toggleText.textContent = 'Ocultar mapa';
+        
+        const silMount = document.getElementById('calendar-anatomy-silhouette-mount');
+        if (silMount && (!silMount.innerHTML || silMount.innerHTML.trim() === '')) {
+            silMount.innerHTML = (typeof ANATOMY_SVG_MARKUP !== 'undefined') ? ANATOMY_SVG_MARKUP : '';
+        }
+        
+        if (silMount) {
+            const recovery = window.getMuscleRecoveryStatus();
+            silMount.querySelectorAll('.anatomy-svg .muscle-group').forEach(el => {
+                const muscle = el.getAttribute('data-muscle');
+                const info = recovery[muscle] || { color: '#10b981', label: 'Listo' };
+                el.setAttribute('fill', info.color);
+
+                el.onclick = () => {
+                    silMount.querySelectorAll('.anatomy-svg .muscle-group').forEach(m => m.classList.remove('active'));
+                    el.classList.add('active');
+                    const detailEl = document.getElementById('calendar-anatomy-selected-muscle-detail');
+                    if (detailEl) {
+                        const mInfo = recovery[muscle] || { status: 'ready', color: '#10b981', label: 'Listo', hoursAgo: Infinity };
+                        const agoText = mInfo.hoursAgo === Infinity ? 'Más de 7 días (totalmente recuperado)' : `Hace ${mInfo.hoursAgo} horas`;
+                        detailEl.innerHTML = `<span style="font-weight:700; color:${mInfo.color};">${muscle}:</span> Estado <strong>${mInfo.label}</strong>. Último entreno: ${agoText}.`;
+                    }
+                };
+            });
+        }
+    } else {
+        mount.style.display = 'none';
+        if (icon) icon.className = 'ph-bold ph-caret-down';
+        if (toggleText) toggleText.textContent = 'Ver mapa';
+    }
+};
+
 
 window.refreshMuscleFatigueMap = function() {
     const mount = document.getElementById('anatomy-silhouette-mount');

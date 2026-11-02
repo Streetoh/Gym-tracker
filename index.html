@@ -160,10 +160,10 @@
             <span data-i18n="nav.activity">Actividad</span>
         </button>
         <button class="nav-item" data-target="view-progression">
-                    <i class="ph ph-trend-up"></i>
-                    <span data-i18n="nav.progression">Progresión</span>
+                    <i class="ph-bold ph-chart-line-up"></i>
+                    <span data-i18n="nav.statistics">Estadísticas</span>
                 </button>
-                <button class="nav-item" data-target="view-evolution">
+                <button class="nav-item" data-target="view-evolution" style="display: none !important;">
                     <i class="ph ph-user"></i>
                     <span data-i18n="nav.evolution">Evolución</span>
                 </button>
@@ -181,7 +181,7 @@
 
             <!-- MOBILE DRAWER FOOTER (APP VERSION) -->
             <div class="mobile-drawer-footer" style="padding: 12px 16px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px; align-items: center;">
-                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); window.openUpdateModal();" data-i18n-title="update.viewNews" title="Ver novedades">Gym Tracker v1.2.8</span>
+                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); window.openUpdateModal();" data-i18n-title="update.viewNews" title="Ver novedades">Gym Tracker v1.3.0</span>
                 
                 <button id="btn-open-tutorial-guide" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); openWelcomeTutorialModal();">
                     <i class="ph-bold ph-book-open" style="font-size: 15px; color: #10b981;"></i> <span data-i18n="nav.tutorial">Guía y Tutorial</span>
@@ -252,6 +252,30 @@
                     <!-- Days injected via JS -->
                 </div>
                 
+                <!-- MUSCLE RECOVERY WIDGET -->
+                <div id="calendar-recovery-widget" class="calendar-recovery-widget">
+                    <div class="calendar-recovery-header" id="calendar-recovery-header" onclick="toggleCalendarRecoveryHeatmap()">
+                        <div class="recovery-header-left">
+                            <i class="ph-bold ph-heartbeat" style="color: var(--color-accent); font-size: 18px;"></i>
+                            <span class="recovery-title" data-i18n="calendar.muscleRecovery">Recuperación Muscular</span>
+                            <span id="calendar-recovery-summary-badge" class="recovery-badge">🟢 Listo</span>
+                        </div>
+                        <div class="recovery-header-right">
+                            <span class="recovery-toggle-hint" id="calendar-recovery-toggle-text">Ver mapa</span>
+                            <i id="calendar-recovery-icon" class="ph-bold ph-caret-down"></i>
+                        </div>
+                    </div>
+                    <div id="calendar-recovery-chips" class="calendar-recovery-chips">
+                        <!-- Quick status chips injected via JS -->
+                    </div>
+                    <div id="calendar-recovery-mount" class="calendar-recovery-mount" style="display: none;">
+                        <div id="calendar-anatomy-silhouette-mount"></div>
+                        <div id="calendar-anatomy-selected-muscle-detail" style="font-size: 12px; color: var(--text-secondary); text-align: center; margin-top: 10px; background: var(--bg-surface); padding: 8px; border-radius: 8px; border: 1px solid var(--border-color);">
+                            Toca cualquier músculo para ver su detalle de descanso.
+                        </div>
+                    </div>
+                </div>
+
                 <div class="today-sessions">
                     <h3 id="selected-day-label" data-i18n="calendar.dayPlan">Plan para el día</h3>
                     <div id="day-sessions-list" class="sessions-list">
@@ -305,6 +329,9 @@
                     </button>
                     <button type="button" id="tab-btn-prog-fatigue" class="prog-tab-btn" onclick="switchProgressionTab('fatigue')" style="flex: 1; padding: 10px 6px; font-size: 12px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
                         <i class="ph-bold ph-heartbeat"></i> <span data-i18n="progression.tabFatigue">Fatiga y Volumen</span>
+                    </button>
+                    <button type="button" id="tab-btn-prog-measurements" class="prog-tab-btn" onclick="switchProgressionTab('measurements')" style="flex: 1; padding: 10px 6px; font-size: 12px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                        <i class="ph-bold ph-ruler"></i> <span data-i18n="progression.tabMeasurements">Medidas y Fotos</span>
                     </button>
                     <button type="button" id="tab-btn-prog-achievements" class="prog-tab-btn" onclick="switchProgressionTab('achievements')" style="flex: 1; padding: 10px 6px; font-size: 12px; font-weight: 600; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
                         <i class="ph-bold ph-trophy"></i> <span data-i18n="progression.tabAchievements">Logros</span>
@@ -419,82 +446,94 @@
                         </div>
                     </div>
                 </div> <!-- End prog-subview-achievements -->
+
+                <!-- SUB-VIEW 4: MEASUREMENTS & PHOTOS -->
+                <div id="prog-subview-measurements" class="prog-subview" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <div>
+                            <h3 style="font-size: 16px; font-weight: 700; margin: 0 0 4px 0; display: flex; align-items: center; gap: 8px;">
+                                <i class="ph-bold ph-ruler" style="color: var(--color-accent); font-size: 20px;"></i>
+                                <span data-i18n="evolution.measurementsTitle">Medidas Corporales y Fotos</span>
+                            </h3>
+                            <p style="color: var(--text-secondary); font-size: 13px; margin: 0;" data-i18n="evolution.desc">Registra y observa tus cambios físicos, medidas corporales, peso y porcentaje de grasa con el paso del tiempo.</p>
+                        </div>
+                    </div>
+                    <button id="btn-open-photo-compare" class="btn-secondary full-width" style="margin-bottom: 20px; padding: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; border-radius: 14px;" onclick="openPhotoComparisonModal()">
+                        <i class="ph-bold ph-images" style="font-size: 20px; color: var(--color-accent);"></i>
+                        <span data-i18n="compare.btnOpen">Comparar Fotos Antes / Después</span>
+                    </button>
+                    <div class="card" style="padding: 16px; margin-bottom: 16px;">
+                        <h3 style="font-size: 16px; margin-bottom: 12px;" data-i18n="evolution.newRecord">Nuevo Registro</h3>
+                        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                            <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evolution-weight" placeholder="Peso (kg)" data-i18n-placeholder="evolution.weightPlaceholder" class="form-input" style="flex: 1;">
+                            <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evolution-bf" placeholder="% Grasa" data-i18n-placeholder="evolution.bfPlaceholder" class="form-input" style="flex: 1;">
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <label style="display:block; font-size: 14px; margin-bottom: 8px; color: var(--text-secondary);" data-i18n="evolution.photosLabel">Fotos (Frontal, Lateral, Espalda)</label>
+                            <div style="display: flex; gap: 8px;">
+                                <input type="file" id="evolution-photo-front" accept="image/*" class="form-input" style="flex: 1; padding: 8px; font-size: 12px;">
+                                <input type="file" id="evolution-photo-side" accept="image/*" class="form-input" style="flex: 1; padding: 8px; font-size: 12px;">
+                                <input type="file" id="evolution-photo-back" accept="image/*" class="form-input" style="flex: 1; padding: 8px; font-size: 12px;">
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 16px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+                            <label style="display:block; font-size: 15px; font-weight: 600; margin-bottom: 12px; color: var(--text-primary);" data-i18n="evolution.measurementsTitle">Medidas Corporales (cm)</label>
+                            <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: center;">
+                                <div style="flex: 0 0 auto; text-align: center;">
+                                    <img src="img/body-measurements.png?v=5" style="width: 220px; max-width: 100%; border-radius: 12px; border: 1px solid var(--border-color); background: #ffffff; padding: 6px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" alt="Referencia de medidas" onclick="document.getElementById('lightbox-img').src=this.src; document.getElementById('modal-lightbox').classList.add('active');" title="Toca para ampliar">
+                                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Toca para ampliar</div>
+                                </div>
+                                <div style="flex: 1; min-width: 260px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px 16px;">
+                                    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                                        <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m1">1. Pecho</label>
+                                        <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m1" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    </div>
+                                    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                                        <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m2">2. Brazo Izq.</label>
+                                        <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m2" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    </div>
+                                    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                                        <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m3">3. Brazo Der.</label>
+                                        <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m3" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    </div>
+                                    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                                        <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m4">4. Abdomen</label>
+                                        <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m4" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    </div>
+                                    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                                        <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m5">5. Cintura</label>
+                                        <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m5" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    </div>
+                                    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                                        <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m6">6. Caderas</label>
+                                        <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m6" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    </div>
+                                    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                                        <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m7">7. Muslo Izq.</label>
+                                        <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m7" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    </div>
+                                    <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
+                                        <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m8">8. Muslo Der.</label>
+                                        <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m8" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="btn-save-evolution" class="btn-primary" style="width: 100%;" data-i18n="evolution.saveRecord">Guardar Registro</button>
+                    </div>
+
+                    <div id="evolution-chart-card" class="card" style="display: none; padding: 16px; margin-bottom: 16px;"><canvas id="evolution-chart"></canvas></div>
+
+                    <div id="evolution-history">
+                        <!-- Injected via JS -->
+                    </div>
+                </div> <!-- End prog-subview-measurements -->
             </section>
 
-            <!-- EVOLUTION VIEW -->
-            <section id="view-evolution" class="view">
-                <h2 style="font-size: 18px; margin-bottom: 8px;" data-i18n="evolution.measurementsTitle">Evolución Física</h2>
-                <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; word-wrap: break-word; white-space: normal;" data-i18n="evolution.desc">Registra y observa tus cambios físicos, medidas corporales, peso y porcentaje de grasa con el paso del tiempo.</p>
-                <button id="btn-open-photo-compare" class="btn-secondary full-width" style="margin-bottom: 20px; padding: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 600; border-radius: 14px;" onclick="openPhotoComparisonModal()">
-                    <i class="ph-bold ph-images" style="font-size: 20px; color: var(--color-accent);"></i>
-                    <span data-i18n="compare.btnOpen">Comparar Fotos Antes / Después</span>
-                </button>
-                <div class="card" style="padding: 16px; margin-bottom: 16px;">
-                    <h3 style="font-size: 16px; margin-bottom: 12px;" data-i18n="evolution.newRecord">Nuevo Registro</h3>
-                    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-                        <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evolution-weight" placeholder="Peso (kg)" data-i18n-placeholder="evolution.weightPlaceholder" class="form-input" style="flex: 1;">
-                        <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evolution-bf" placeholder="% Grasa" data-i18n-placeholder="evolution.bfPlaceholder" class="form-input" style="flex: 1;">
-                    </div>
-                    <div style="margin-bottom: 12px;">
-                        <label style="display:block; font-size: 14px; margin-bottom: 8px; color: var(--text-secondary);" data-i18n="evolution.photosLabel">Fotos (Frontal, Lateral, Espalda)</label>
-                        <div style="display: flex; gap: 8px;">
-                            <input type="file" id="evolution-photo-front" accept="image/*" class="form-input" style="flex: 1; padding: 8px; font-size: 12px;">
-                            <input type="file" id="evolution-photo-side" accept="image/*" class="form-input" style="flex: 1; padding: 8px; font-size: 12px;">
-                            <input type="file" id="evolution-photo-back" accept="image/*" class="form-input" style="flex: 1; padding: 8px; font-size: 12px;">
-                        </div>
-                    </div>
-
-                    <div style="margin-bottom: 16px; border-top: 1px solid var(--border-color); padding-top: 16px;">
-                        <label style="display:block; font-size: 15px; font-weight: 600; margin-bottom: 12px; color: var(--text-primary);" data-i18n="evolution.measurementsTitle">Medidas Corporales (cm)</label>
-                        <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: center;">
-                            <div style="flex: 0 0 auto; text-align: center;">
-                                <img src="img/body-measurements.png?v=5" style="width: 220px; max-width: 100%; border-radius: 12px; border: 1px solid var(--border-color); background: #ffffff; padding: 6px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" alt="Referencia de medidas" onclick="document.getElementById('lightbox-img').src=this.src; document.getElementById('modal-lightbox').classList.add('active');" title="Toca para ampliar">
-                                <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Toca para ampliar</div>
-                            </div>
-                            <div style="flex: 1; min-width: 260px; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px 16px;">
-                                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
-                                    <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m1">1. Pecho</label>
-                                    <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m1" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
-                                </div>
-                                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
-                                    <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m2">2. Brazo Izq.</label>
-                                    <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m2" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
-                                </div>
-                                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
-                                    <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m3">3. Brazo Der.</label>
-                                    <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m3" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
-                                </div>
-                                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
-                                    <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m4">4. Abdomen</label>
-                                    <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m4" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
-                                </div>
-                                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
-                                    <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m5">5. Cintura</label>
-                                    <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m5" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
-                                </div>
-                                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
-                                    <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m6">6. Caderas</label>
-                                    <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m6" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
-                                </div>
-                                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
-                                    <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m7">7. Muslo Izq.</label>
-                                    <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m7" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
-                                </div>
-                                <div style="display:flex; align-items:center; justify-content:space-between; gap:8px;">
-                                    <label style="font-size: 13px; font-weight: 500; color: var(--text-secondary); flex: 1;" data-i18n="evolution.m8">8. Muslo Der.</label>
-                                    <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" id="evol-m8" class="form-input" style="padding: 8px; font-size: 14px; font-weight: 600; text-align: center; width: 68px; border-radius: 8px;">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <button id="btn-save-evolution" class="btn-primary" style="width: 100%;" data-i18n="evolution.saveRecord">Guardar Registro</button>
-                </div>
-
-                <div id="evolution-chart-card" class="card" style="display: none; padding: 16px; margin-bottom: 16px;"><canvas id="evolution-chart"></canvas></div>
-
-                <div id="evolution-history">
-                    <!-- Injected via JS -->
-                </div>
+            <!-- EVOLUTION VIEW (CONSOLIDATED INTO STATS) -->
+            <section id="view-evolution" class="view" style="display: none !important;">
+                <div style="padding: 24px; text-align: center; color: var(--text-secondary);">Redirigiendo a Estadísticas...</div>
             </section>
 
             <!-- SESSION CREATOR VIEW -->
