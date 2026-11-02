@@ -181,9 +181,12 @@
 
             <!-- MOBILE DRAWER FOOTER (APP VERSION) -->
             <div class="mobile-drawer-footer" style="padding: 12px 16px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px; align-items: center;">
-                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); window.openUpdateModal();" data-i18n-title="update.viewNews" title="Ver novedades">Gym Tracker v1.3.0</span>
+                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="window.handleVersionClick(event);" data-i18n-title="update.viewNews" title="Ver novedades">Gym Tracker v1.3.0</span>
                 
-                <button id="btn-open-tutorial-guide" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); openWelcomeTutorialModal();">
+                                <button id="btn-open-pro-paywall" style="font-size: 13px; font-weight: 800; padding: 10px 14px; border-radius: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #000; border: none; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35); margin-bottom: 2px;" onclick="window.handleProDrawerClick();">
+                    <i class="ph-fill ph-crown" style="font-size: 17px; color: #000;"></i> <span data-i18n="pro.drawerBtn">Gym Tracker PRO</span>
+                </button>
+<button id="btn-open-tutorial-guide" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); openWelcomeTutorialModal();">
                     <i class="ph-bold ph-book-open" style="font-size: 15px; color: #10b981;"></i> <span data-i18n="nav.tutorial">Guía y Tutorial</span>
                 </button>
                 <button id="btn-manual-check-update" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); checkForUpdates(true);">
@@ -1732,6 +1735,132 @@
     <div id="modal-welcome-tutorial" class="modal" style="display: none; position: fixed; inset: 0; z-index: 999999; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(5px); padding: 12px;">
         <div class="modal-backdrop" style="position: absolute; inset: 0;" onclick="closeWelcomeTutorialModal()"></div>
         <iframe id="iframe-welcome-tutorial" src="tutorial-preview.html" style="width: 100%; max-width: 680px; height: min(92vh, 760px); border: none; border-radius: 24px; position: relative; z-index: 1000000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); background: #0f172a;"></iframe>
+    </div>
+
+
+    <!-- MODAL PAYWALL / COMPARATIVA PRO (Estilo Hevy) -->
+    <div id="modal-paywall-compare" class="modal" style="display: none; position: fixed; inset: 0; z-index: 100005; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); padding: 12px;">
+        <div class="modal-backdrop" style="position: absolute; inset: 0;" onclick="window.closePaywallModal()"></div>
+        <div class="modal-content" style="max-width: 440px; width: 100%; max-height: 94vh; margin: auto; border-radius: 28px; padding: 22px 20px; background: #07090e; border: 1px solid #1e2433; box-shadow: 0 25px 60px -15px rgba(0,0,0,0.9); display: flex; flex-direction: column; position: relative; z-index: 10; overflow-y: auto; color: #fff;">
+            
+            <!-- HEADER -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <div style="width: 32px;"></div>
+                <h2 style="font-size: 18px; font-weight: 800; text-align: center; margin: 0; color: #ffffff;" data-i18n="pro.modalTitle">¿Necesitas comparar?</h2>
+                <button type="button" class="btn-icon" onclick="window.closePaywallModal()" style="width: 32px; height: 32px; border-radius: 50%; background: #151a26; color: #94a3b8; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <i class="ph-bold ph-x" style="font-size: 16px;"></i>
+                </button>
+            </div>
+
+            <!-- COMPARISON TABLE -->
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; font-size: 13px;">
+                <!-- Column Headers -->
+                <div style="display: grid; grid-template-columns: 1fr 70px 70px; align-items: center; padding-bottom: 6px; border-bottom: 1px solid #1e2433; font-size: 12.5px; font-weight: 700;">
+                    <span style="color: #64748b;"></span>
+                    <span style="text-align: center; color: #94a3b8;" data-i18n="pro.colFree">Gratis</span>
+                    <span style="text-align: center; color: #fbbf24; display: flex; align-items: center; justify-content: center; gap: 4px;">
+                        <i class="ph-fill ph-crown" style="font-size: 12px;"></i> <span data-i18n="pro.colPro">Pro</span>
+                    </span>
+                </div>
+
+                <!-- Row 1: Entrenamientos ilimitados -->
+                <div style="display: grid; grid-template-columns: 1fr 70px 70px; align-items: center; padding: 4px 0;">
+                    <span style="color: #e2e8f0; font-weight: 500;" data-i18n="pro.rowWorkouts">Entrenamientos ilimitados</span>
+                    <span style="text-align: center; color: #3b82f6; font-size: 17px; font-weight: 900;">✓</span>
+                    <span style="text-align: center; color: #3b82f6; font-size: 17px; font-weight: 900;">✓</span>
+                </div>
+
+                <!-- Row 2: Ejercicios personalizados (ILIMITADOS EN AMBOS) -->
+                <div style="display: grid; grid-template-columns: 1fr 70px 70px; align-items: center; padding: 4px 0;">
+                    <span style="color: #e2e8f0; font-weight: 500;" data-i18n="pro.rowCustomExercises">Ejercicios personalizados</span>
+                    <span style="text-align: center; color: #3b82f6; font-size: 17px; font-weight: 900;">✓</span>
+                    <span style="text-align: center; color: #3b82f6; font-size: 17px; font-weight: 900;">✓</span>
+                </div>
+
+                <!-- Row 3: Plantillas / Sesiones predefinidas -->
+                <div style="display: grid; grid-template-columns: 1fr 70px 70px; align-items: center; padding: 4px 0;">
+                    <span style="color: #e2e8f0; font-weight: 500;" data-i18n="pro.rowRoutines">Crea Rutinas ilimitadas</span>
+                    <span style="text-align: center; color: #94a3b8; font-size: 12px; font-weight: 600;" data-i18n="pro.val4Max">4 máx</span>
+                    <span style="text-align: center; color: #3b82f6; font-size: 17px; font-weight: 900;">✓</span>
+                </div>
+
+                <!-- Row 4: Historial gráfico (2 meses vs Ilimitado) -->
+                <div style="display: grid; grid-template-columns: 1fr 70px 70px; align-items: center; padding: 4px 0;">
+                    <span style="color: #e2e8f0; font-weight: 500;" data-i18n="pro.rowHistory">Historial Gráfico Ilimitado</span>
+                    <span style="text-align: center; color: #94a3b8; font-size: 12px; font-weight: 600;" data-i18n="pro.val2Months">2 meses</span>
+                    <span style="text-align: center; color: #3b82f6; font-size: 17px; font-weight: 900;">✓</span>
+                </div>
+
+                <!-- Row 5: Sobrecarga progresiva automática -->
+                <div style="display: grid; grid-template-columns: 1fr 70px 70px; align-items: center; padding: 4px 0;">
+                    <span style="color: #e2e8f0; font-weight: 500;" data-i18n="pro.rowOverload">Sobrecarga Inteligente automática</span>
+                    <span style="text-align: center; color: #475569; font-size: 15px; font-weight: 700;">✕</span>
+                    <span style="text-align: center; color: #3b82f6; font-size: 17px; font-weight: 900;">✓</span>
+                </div>
+
+                <!-- Row 6: Mesociclos -->
+                <div style="display: grid; grid-template-columns: 1fr 70px 70px; align-items: center; padding: 4px 0;">
+                    <span style="color: #e2e8f0; font-weight: 500;" data-i18n="pro.rowMesocycles">Periodizador de Mesociclos</span>
+                    <span style="text-align: center; color: #475569; font-size: 15px; font-weight: 700;">✕</span>
+                    <span style="text-align: center; color: #3b82f6; font-size: 17px; font-weight: 900;">✓</span>
+                </div>
+
+                <!-- Row 7: Molestias articulares (sugerencias) -->
+                <div style="display: grid; grid-template-columns: 1fr 70px 70px; align-items: center; padding: 4px 0;">
+                    <span style="color: #e2e8f0; font-weight: 500;" data-i18n="pro.rowJoints">Sugerencias Molestias Articulares</span>
+                    <span style="text-align: center; color: #475569; font-size: 15px; font-weight: 700;">✕</span>
+                    <span style="text-align: center; color: #3b82f6; font-size: 17px; font-weight: 900;">✓</span>
+                </div>
+
+                <!-- Row 8: Actualizaciones futuras -->
+                <div style="display: grid; grid-template-columns: 1fr 70px 70px; align-items: center; padding: 4px 0;">
+                    <span style="color: #e2e8f0; font-weight: 500;" data-i18n="pro.rowUpdates">Actualizaciones futuras gratis</span>
+                    <span style="text-align: center; color: #94a3b8; font-size: 11px;">Base</span>
+                    <span style="text-align: center; color: #3b82f6; font-size: 17px; font-weight: 900;">✓</span>
+                </div>
+            </div>
+
+            <!-- QUESTION DIVIDER -->
+            <div style="text-align: center; color: #94a3b8; font-size: 13.5px; font-weight: 600; margin-bottom: 14px;" data-i18n="pro.anyQuestion">¿Alguna pregunta?</div>
+
+            <!-- PRICING CARDS -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 18px;">
+                <!-- 1. MENSUAL -->
+                <div id="paywall-plan-monthly" class="paywall-plan-card" onclick="window.selectPaywallPlan('monthly')" style="background: #111622; border: 1.5px solid #1e2433; border-radius: 16px; padding: 12px 6px; text-align: center; cursor: pointer; transition: all 0.2s ease; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="font-size: 12px; font-weight: 700; color: #94a3b8; margin-bottom: 6px;" data-i18n="pro.planMonthly">Mensual</div>
+                    <div style="font-size: 16px; font-weight: 900; color: #ffffff; margin-bottom: 4px;">2,99 €</div>
+                    <div style="font-size: 10px; color: #64748b; line-height: 1.2;" data-i18n="pro.billedMonthly">Facturado mensualmente</div>
+                </div>
+
+                <!-- 2. ANUAL (DESTACADO POR DEFECTO) -->
+                <div id="paywall-plan-annual" class="paywall-plan-card selected" onclick="window.selectPaywallPlan('annual')" style="background: #111622; border: 1.5px solid #007aff; border-radius: 16px; padding: 12px 6px; text-align: center; cursor: pointer; transition: all 0.2s ease; position: relative; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 0 16px rgba(0, 122, 255, 0.25);">
+                    <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #007aff; color: #fff; font-size: 9.5px; font-weight: 800; padding: 2px 7px; border-radius: 8px; white-space: nowrap;" data-i18n="pro.badgeSave44">Ahorra 44 %</div>
+                    <div style="font-size: 12px; font-weight: 700; color: #94a3b8; margin-bottom: 6px;" data-i18n="pro.planAnnual">Anual</div>
+                    <div style="font-size: 16px; font-weight: 900; color: #ffffff; margin-bottom: 4px;">19,99 €</div>
+                    <div style="font-size: 10px; color: #64748b; line-height: 1.2;" data-i18n="pro.billedAnnually">Facturado anualmente</div>
+                </div>
+
+                <!-- 3. PARA SIEMPRE (LIFETIME) -->
+                <div id="paywall-plan-lifetime" class="paywall-plan-card" onclick="window.selectPaywallPlan('lifetime')" style="background: #111622; border: 1.5px solid #1e2433; border-radius: 16px; padding: 12px 6px; text-align: center; cursor: pointer; transition: all 0.2s ease; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div style="font-size: 12px; font-weight: 700; color: #fbbf24; margin-bottom: 6px;" data-i18n="pro.planLifetime">Para Siempre</div>
+                    <div style="font-size: 16px; font-weight: 900; color: #ffffff; margin-bottom: 4px;">49,99 €</div>
+                    <div style="font-size: 10px; color: #64748b; line-height: 1.2;" data-i18n="pro.billedLifetime">Paga una sola vez</div>
+                </div>
+            </div>
+
+            <!-- CALL TO ACTION BUTTON -->
+            <button id="btn-paywall-action" onclick="window.handleProPurchase()" style="background: #007aff; color: #ffffff; font-size: 15px; font-weight: 800; padding: 14px; border-radius: 14px; border: none; width: 100%; cursor: pointer; margin-bottom: 12px; transition: transform 0.15s ease, background 0.15s ease;">
+                <span id="paywall-action-text" data-i18n="pro.subscribeAnnual">Suscribirse al plan Anual</span>
+            </button>
+
+            <!-- FOOTER LINKS -->
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                <button type="button" onclick="window.closePaywallModal()" style="background: none; border: none; color: #007aff; font-size: 13.5px; font-weight: 600; cursor: pointer;" data-i18n="pro.notNow">Ahora no</button>
+                <div style="font-size: 10.5px; color: #475569;" data-i18n="pro.cancelAnytime">Cancela tu suscripción en cualquier momento.</div>
+                <button type="button" onclick="window.restorePurchases()" style="background: none; border: none; color: #64748b; font-size: 11px; text-decoration: underline; cursor: pointer; margin-top: 2px;" data-i18n="pro.restorePurchases">Restaurar compras anteriores</button>
+            </div>
+
+        </div>
     </div>
 
 </body>

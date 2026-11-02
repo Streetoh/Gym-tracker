@@ -3900,6 +3900,7 @@ const updateLanguageUI = () => {
             window.renderUpdateModalContent(window.latestUpdateData);
         }
         if (typeof updateCalendarRecoveryWidget === 'function') updateCalendarRecoveryWidget();
+        if (typeof window.updateProUIBadges === 'function') window.updateProUIBadges();
         if (typeof window.renderPredefinedSessionsList === 'function' && document.getElementById('predefined-list-view')?.style.display !== 'none') {
             window.renderPredefinedSessionsList();
         }
@@ -14650,3 +14651,339 @@ window.closeWelcomeTutorialModal = function() {
     };
 })();
 // === END PREDEFINED SESSIONS & MESOCYCLE MODULE ===
+
+
+
+// Global Native-Style Toast Notification
+window.showToast = function(msg, duration = 2400) {
+    let toast = document.getElementById('app-global-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'app-global-toast';
+        toast.style.cssText = 'position: fixed; bottom: 85px; left: 50%; transform: translateX(-50%) translateY(20px); background: #182030; color: #fff; font-size: 13px; font-weight: 600; padding: 10px 18px; border-radius: 9999px; border: 1px solid rgba(255,255,255,0.18); box-shadow: 0 10px 25px rgba(0,0,0,0.6); pointer-events: none; opacity: 0; transition: opacity 0.25s ease, transform 0.25s ease; z-index: 1000000; max-width: 90vw; text-align: center;';
+        document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.style.opacity = '1';
+    toast.style.transform = 'translateX(-50%) translateY(0)';
+    clearTimeout(window._toastTimeout);
+    window._toastTimeout = setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(20px)';
+    }, duration);
+};
+
+// === GYM TRACKER PRO & SUBSCRIPTION CONTROLLER ===
+(function() {
+    const PRO_TRANSLATIONS = {
+        es: {
+            drawerBtn: "Gym Tracker PRO",
+            modalTitle: "¿Necesitas comparar?",
+            colFree: "Gratis",
+            colPro: "Pro",
+            rowWorkouts: "Entrenamientos ilimitados",
+            rowCustomExercises: "Ejercicios personalizados",
+            rowRoutines: "Crea Rutinas ilimitadas",
+            rowHistory: "Historial Gráfico Ilimitado",
+            rowOverload: "Sobrecarga Inteligente sugerida",
+            rowMesocycles: "Periodizador de Mesociclos",
+            rowJoints: "Sugerencias Molestias Articulares",
+            rowUpdates: "Actualizaciones futuras gratis",
+            val4Max: "4 máx",
+            val2Months: "2 meses",
+            anyQuestion: "¿Alguna pregunta?",
+            planMonthly: "Mensual",
+            billedMonthly: "Facturado mensualmente",
+            planAnnual: "Anual",
+            billedAnnually: "Facturado anualmente",
+            badgeSave44: "Ahorra 44 %",
+            planLifetime: "Para Siempre",
+            billedLifetime: "Paga una sola vez",
+            subscribeAnnual: "Suscribirse al plan Anual",
+            subscribeMonthly: "Suscribirse al plan Mensual",
+            buyLifetime: "Comprar Para Siempre (49,99 €)",
+            notNow: "Ahora no",
+            cancelAnytime: "Cancela tu suscripción en cualquier momento.",
+            restorePurchases: "Restaurar compras anteriores",
+            billingNotice: "Iniciando pasarela de Google Play Billing...",
+            restoring: "Consultando compras activas en Google Play...",
+            noPurchasesFound: "No se encontraron compras activas en tu cuenta de Google Play.",
+            purchaseSuccess: "¡Gym Tracker PRO activado con éxito!",
+            devActivated: "Gym Tracker PRO Activado (Modo desarrollador / prueba)",
+            devDeactivated: "Gym Tracker GRATIS Activado"
+        },
+        en: {
+            drawerBtn: "Gym Tracker PRO",
+            modalTitle: "Need to compare?",
+            colFree: "Free",
+            colPro: "Pro",
+            rowWorkouts: "Unlimited workouts",
+            rowCustomExercises: "Custom exercises",
+            rowRoutines: "Unlimited custom routines",
+            rowHistory: "Unlimited chart history",
+            rowOverload: "Smart progressive overload",
+            rowMesocycles: "Mesocycles periodizer",
+            rowJoints: "Joint stress smart suggestions",
+            rowUpdates: "Free future updates",
+            val4Max: "4 max",
+            val2Months: "2 months",
+            anyQuestion: "Any questions?",
+            planMonthly: "Monthly",
+            billedMonthly: "Billed monthly",
+            planAnnual: "Annual",
+            billedAnnually: "Billed annually",
+            badgeSave44: "Save 44%",
+            planLifetime: "Lifetime",
+            billedLifetime: "Pay once, yours forever",
+            subscribeAnnual: "Subscribe to Annual plan",
+            subscribeMonthly: "Subscribe to Monthly plan",
+            buyLifetime: "Get Lifetime Access (49.99 €)",
+            notNow: "Not now",
+            cancelAnytime: "Cancel your subscription at any time.",
+            restorePurchases: "Restore previous purchases",
+            billingNotice: "Opening Google Play Billing...",
+            restoring: "Checking active purchases on Google Play...",
+            noPurchasesFound: "No active purchases found for your Google Play account.",
+            purchaseSuccess: "Gym Tracker PRO successfully activated!",
+            devActivated: "Gym Tracker PRO Activated (Dev/Testing Mode)",
+            devDeactivated: "Gym Tracker FREE Activated"
+        }
+    };
+
+    // Extend global translations
+    function injectProTranslations() {
+        if (typeof translations !== 'undefined') {
+            Object.keys(PRO_TRANSLATIONS).forEach(lang => {
+                if (!translations[lang]) translations[lang] = {};
+                translations[lang].pro = Object.assign({}, PRO_TRANSLATIONS[lang], translations[lang].pro || {});
+            });
+            // Fallback for other languages (ru, uk, et, etc.)
+            Object.keys(translations).forEach(lang => {
+                if (!translations[lang].pro) {
+                    translations[lang].pro = Object.assign({}, PRO_TRANSLATIONS.en);
+                }
+            });
+        }
+    }
+
+    injectProTranslations();
+
+    // Check if user has PRO
+    window.isProUser = function() {
+        try {
+            const raw = localStorage.getItem('gym_tracker_license');
+            if (raw) {
+                const lic = JSON.parse(raw);
+                if (lic && (lic.isPro === true || lic.plan === 'lifetime' || lic.plan === 'annual' || lic.plan === 'monthly')) {
+                    return true;
+                }
+            }
+        } catch(e) {}
+        return false;
+    };
+
+    // Set or clear PRO status
+    window.setProStatus = function(isPro, plan = 'lifetime') {
+        try {
+            if (isPro) {
+                localStorage.setItem('gym_tracker_license', JSON.stringify({
+                    isPro: true,
+                    plan: plan,
+                    unlockedAt: new Date().toISOString()
+                }));
+            } else {
+                localStorage.removeItem('gym_tracker_license');
+            }
+            window.updateProUIBadges();
+        } catch(e) {}
+    };
+
+    // Dev toggle helper
+    // Secret multi-tap gesture for Developer Mode (5 fast taps on version text)
+    let versionTapCount = 0;
+    let versionTapTimer = null;
+
+    window.handleVersionClick = function(event) {
+        if (event) event.stopPropagation();
+        versionTapCount++;
+        clearTimeout(versionTapTimer);
+
+        versionTapTimer = setTimeout(() => {
+            if (versionTapCount < 5) {
+                if (typeof closeMobileDrawer === 'function') closeMobileDrawer();
+                if (typeof window.openUpdateModal === 'function') window.openUpdateModal();
+            }
+            versionTapCount = 0;
+        }, 500);
+
+        if (versionTapCount >= 2 && versionTapCount < 5) {
+            const remaining = 5 - versionTapCount;
+            const msg = (state?.language === 'en')
+                ? `You are ${remaining} tap(s) away from Developer Mode...`
+                : (remaining === 1 ? '¡Estás a 1 toque de cambiar el Modo Desarrollador!' : `Estás a ${remaining} toques del Modo Desarrollador...`);
+            if (typeof showToast === 'function') showToast(msg);
+            else {
+                const banner = document.getElementById('dev-mode-hint-banner');
+                if (banner) { banner.textContent = msg; banner.style.display = 'block'; setTimeout(() => banner.style.display = 'none', 1200); }
+            }
+        } else if (versionTapCount >= 5) {
+            clearTimeout(versionTapTimer);
+            versionTapCount = 0;
+            window.toggleProDevMode();
+        }
+    };
+
+    // Smart Pro Drawer click: If already pro, prompt to switch back or see plans
+    window.handleProDrawerClick = function() {
+        if (typeof closeMobileDrawer === 'function') closeMobileDrawer();
+        const isPro = window.isProUser();
+        if (isPro) {
+            const isEn = (state?.language === 'en');
+            const confirmMsg = isEn
+                ? 'You currently have Gym Tracker PRO active.\n\nDo you want to switch back to the FREE version to test restrictions?'
+                : 'Tienes Gym Tracker PRO activo actualmente.\n\n¿Deseas volver a la versión GRATIS para probar las restricciones?';
+            if (confirm(confirmMsg)) {
+                window.setProStatus(false);
+                const toastMsg = isEn ? 'Gym Tracker FREE active (test restrictions applied)' : 'Gym Tracker GRATIS activado (restricciones de prueba)';
+                if (typeof showToast === 'function') showToast(toastMsg);
+                else alert(toastMsg);
+                return;
+            }
+        }
+        window.openPaywallModal();
+    };
+
+    window.toggleProDevMode = function() {
+        const current = window.isProUser();
+        window.setProStatus(!current);
+        const tObj = (typeof translations !== 'undefined' && translations[state?.language || 'es']?.pro) || PRO_TRANSLATIONS.es;
+        const msg = !current ? tObj.devActivated : tObj.devDeactivated;
+        if (typeof showToast === 'function') showToast(msg);
+        else alert(msg);
+        return !current;
+    };
+
+    // Update Pro UI badges across drawer & headers
+    window.updateProUIBadges = function() {
+        const isPro = window.isProUser();
+        const btn = document.getElementById('btn-open-pro-paywall');
+        if (btn) {
+            if (isPro) {
+                btn.innerHTML = '<i class="ph-fill ph-crown" style="font-size: 16px; color: #fbbf24;"></i> <span>Gym Tracker PRO ✓</span>';
+                btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+                btn.style.color = '#ffffff';
+            } else {
+                const label = (typeof getT === 'function' ? getT('pro.drawerBtn') : 'Gym Tracker PRO');
+                btn.innerHTML = '<i class="ph-fill ph-crown" style="font-size: 16px;"></i> <span>' + (label && label !== 'pro.drawerBtn' ? label : 'Gym Tracker PRO') + '</span>';
+                btn.style.background = 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)';
+                btn.style.color = '#000000';
+            }
+        }
+    };
+
+    let selectedPlan = 'annual';
+
+    window.openPaywallModal = function(triggerContext) {
+        injectProTranslations();
+        const modal = document.getElementById('modal-paywall-compare');
+        if (!modal) return;
+        modal.classList.add('active');
+        modal.style.display = 'flex';
+        modal.style.opacity = '1';
+        modal.style.pointerEvents = 'auto';
+        document.body.style.overflow = 'hidden';
+        window.selectPaywallPlan('annual');
+
+        // Apply translations to data-i18n elements inside modal
+        try {
+            modal.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (key && typeof getT === 'function') {
+                    const text = getT(key);
+                    if (text && text !== key) el.innerHTML = text;
+                }
+            });
+        } catch(e) {}
+    };
+
+    window.closePaywallModal = function() {
+        const modal = document.getElementById('modal-paywall-compare');
+        if (!modal) return;
+        modal.classList.remove('active');
+        modal.style.display = 'none';
+        modal.style.opacity = '';
+        modal.style.pointerEvents = '';
+        document.body.style.overflow = '';
+    };
+
+    window.selectPaywallPlan = function(planId) {
+        selectedPlan = planId;
+        ['monthly', 'annual', 'lifetime'].forEach(id => {
+            const card = document.getElementById('paywall-plan-' + id);
+            if (card) {
+                if (id === planId) {
+                    card.classList.add('selected');
+                    card.style.borderColor = '#007aff';
+                    card.style.boxShadow = '0 0 16px rgba(0, 122, 255, 0.35)';
+                } else {
+                    card.classList.remove('selected');
+                    card.style.borderColor = '#1e2433';
+                    card.style.boxShadow = 'none';
+                }
+            }
+        });
+
+        const actionBtnText = document.getElementById('paywall-action-text');
+        if (actionBtnText && typeof getT === 'function') {
+            if (planId === 'annual') actionBtnText.textContent = getT('pro.subscribeAnnual');
+            else if (planId === 'monthly') actionBtnText.textContent = getT('pro.subscribeMonthly');
+            else if (planId === 'lifetime') actionBtnText.textContent = getT('pro.buyLifetime');
+        }
+    };
+
+    window.handleProPurchase = function() {
+        const tObj = (typeof translations !== 'undefined' && translations[state?.language || 'es']?.pro) || PRO_TRANSLATIONS.es;
+        if (typeof showToast === 'function') showToast(tObj.billingNotice);
+
+        setTimeout(() => {
+            const planNames = { monthly: 'Mensual (2,99 €/mes)', annual: 'Anual (19,99 €/año)', lifetime: 'Para Siempre (49,99 € único)' };
+            const confirmMsg = `[Google Play Billing]
+
+¿Confirmar suscripción/compra a "${planNames[selectedPlan] || selectedPlan}"?`;
+            if (confirm(confirmMsg)) {
+                window.setProStatus(true, selectedPlan);
+                window.closePaywallModal();
+                if (typeof showToast === 'function') showToast(tObj.purchaseSuccess);
+                else alert(tObj.purchaseSuccess);
+            }
+        }, 500);
+    };
+
+    window.restorePurchases = function() {
+        const tObj = (typeof translations !== 'undefined' && translations[state?.language || 'es']?.pro) || PRO_TRANSLATIONS.es;
+        if (typeof showToast === 'function') showToast(tObj.restoring);
+
+        setTimeout(() => {
+            const isPro = window.isProUser();
+            if (isPro) {
+                if (typeof showToast === 'function') showToast(tObj.purchaseSuccess);
+                window.closePaywallModal();
+            } else {
+                if (typeof showToast === 'function') showToast(tObj.noPurchasesFound);
+                else alert(tObj.noPurchasesFound);
+            }
+        }, 800);
+    };
+
+    // Auto-init on DOMContentLoaded
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            injectProTranslations();
+            window.updateProUIBadges();
+        });
+    } else {
+        injectProTranslations();
+        window.updateProUIBadges();
+    }
+})();
+// === END GYM TRACKER PRO & SUBSCRIPTION CONTROLLER ===
