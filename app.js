@@ -4150,6 +4150,8 @@ const editExercise = (ex) => {
     document.getElementById('exercise-image-data').value = imgData;
     const descEl = document.getElementById('exercise-description');
     if (descEl) descEl.value = ex.description || '';
+    const pinnedNotesEl = document.getElementById('exercise-pinned-notes');
+    if (pinnedNotesEl) pinnedNotesEl.value = ex.pinnedNotes || '';
     const preview = document.getElementById('exercise-image-preview');
     const removeImgBtn = document.getElementById('btn-remove-exercise-image');
     if (imgData && preview) {
@@ -4463,6 +4465,7 @@ document.getElementById('btn-save-exercise').addEventListener('click', () => {
             ex.youtubeLink = yLink;
             ex.imageData = iData;
             ex.description = document.getElementById('exercise-description').value;
+            ex.pinnedNotes = (document.getElementById('exercise-pinned-notes')?.value || '').trim();
             ex.max1RM = max1rm;
             ex.prHyp = prHyp;
             ex.prHeavy = prHeavy;
@@ -4473,6 +4476,7 @@ document.getElementById('btn-save-exercise').addEventListener('click', () => {
             id: Date.now().toString(),
             name, group, youtubeLink: yLink, imageData: iData,
             description: document.getElementById('exercise-description').value,
+            pinnedNotes: (document.getElementById('exercise-pinned-notes')?.value || '').trim(),
             defaults: { hypertrophy: rH, heavy: rHe, intensity: rI },
             max1RM: max1rm, prHyp: prHyp, prHeavy: prHeavy
         });
@@ -5290,6 +5294,112 @@ window.copyGhostPerformance = function(flatExIdx, setIndex, wt, reps) {
     if (typeof renderWorkout === 'function') renderWorkout();
 };
 
+window.getProgressiveOverloadSuggestion = getProgressiveOverloadSuggestion;
+function getProgressiveOverloadSuggestion(exerciseIdOrObj, sessionType, targetRepsStr, lastPerf) {
+    if (!exerciseIdOrObj || !lastPerf) return null;
+    const lastWeight = parseFloat(lastPerf.weight) || 0;
+    const lastReps = parseFloat(lastPerf.reps) || 0;
+    if (lastWeight <= 0 && lastReps <= 0) return null;
+
+    let dbEx = null;
+    let exerciseId = null;
+    if (typeof exerciseIdOrObj === 'object' && exerciseIdOrObj !== null) {
+        dbEx = exerciseIdOrObj;
+        exerciseId = dbEx.exerciseId || dbEx.id;
+    } else {
+        exerciseId = exerciseIdOrObj;
+        dbEx = (state && state.exercises) ? state.exercises.find(e => e.id === exerciseId) : null;
+        if (!dbEx && typeof activeSession !== 'undefined' && activeSession && Array.isArray(activeSession.exercises)) {
+            dbEx = activeSession.exercises.find(e => e.exerciseId === exerciseId || e.id === exerciseId);
+        }
+    }
+
+    const exName = dbEx ? (dbEx.name || '') : '';
+    const exGroup = dbEx ? (dbEx.group || '') : '';
+
+    let minTarget = 10;
+    let maxTarget = 12;
+
+    if (targetRepsStr && typeof targetRepsStr === 'string') {
+        const cleaned = targetRepsStr.split('+')[0].replace(/[()]/g, '').trim();
+        const rangeMatch = cleaned.match(/(\d+)\s*[-–—]\s*(\d+)/);
+        if (rangeMatch) {
+            minTarget = parseInt(rangeMatch[1], 10);
+            maxTarget = parseInt(rangeMatch[2], 10);
+        } else {
+            const singleMatch = cleaned.match(/\d+/);
+            if (singleMatch) {
+                minTarget = parseInt(singleMatch[0], 10);
+                maxTarget = minTarget;
+            }
+        }
+    }
+
+    let isCompound = false;
+    if (typeof isBarbellExercise === 'function' && isBarbellExercise(dbEx || { name: exName })) {
+        isCompound = true;
+    } else if (/prensa|sentadilla|squat|deadlift|peso muerto|remo con barra|bench press|press de banca|press banca|hack/i.test(exName)) {
+        isCompound = true;
+    } else if (/\b(pierna|piernas|espalda|pecho)\b/i.test(exGroup) && !/mancuerna|dumbbell|curl|aperturas|elevaciones|cruces/i.test(exName)) {
+        isCompound = true;
+    }
+
+    const weightIncrement = isCompound ? 2.5 : 1.0;
+
+    if (lastReps >= maxTarget) {
+        const suggestedWeight = Math.round((lastWeight + weightIncrement) * 100) / 100;
+        const suggestedReps = minTarget;
+        return {
+            type: 'weight',
+            suggestedWeight: suggestedWeight,
+            suggestedReps: suggestedReps,
+            delta: weightIncrement,
+            label: `🚀 Sugerencia: ${suggestedWeight} kg (+${weightIncrement} kg)`
+        };
+    } else {
+        const suggestedWeight = lastWeight;
+        const suggestedReps = lastReps > 0 ? (lastReps + 1) : minTarget;
+        return {
+            type: 'reps',
+            suggestedWeight: suggestedWeight,
+            suggestedReps: suggestedReps,
+            delta: 1,
+            label: `🎯 Objetivo: ${suggestedWeight} kg × ${suggestedReps} reps (+1)`
+        };
+    }
+}
+
+window.saveExercisePinnedNote = saveExercisePinnedNote;
+function saveExercisePinnedNote(exerciseId, note) {
+    if (!exerciseId || !state || !state.exercises) return;
+    const dbEx = state.exercises.find(e => e.id === exerciseId);
+    if (dbEx) {
+        dbEx.pinnedNotes = (note || '').trim();
+        saveState();
+    }
+}
+
+window.applyOverloadSuggestion = applyOverloadSuggestion;
+function applyOverloadSuggestion(flatExIndex, setIndex, suggestedWeight, suggestedReps) {
+    if (!activeSession || !activeSession.exercises) return;
+    const ex = activeSession.exercises[flatExIndex];
+    if (!ex || !ex.sets || !ex.sets[setIndex]) return;
+
+    const set = ex.sets[setIndex];
+    if (suggestedWeight !== undefined && suggestedWeight !== null) {
+        set.weight = parseFloat(suggestedWeight) || 0;
+    }
+    if (suggestedReps !== undefined && suggestedReps !== null && String(suggestedReps).trim() !== '') {
+        set.reps = String(suggestedReps);
+    }
+
+    if (typeof autoSaveWorkout === 'function') autoSaveWorkout();
+    if (typeof checkSetPR === 'function') {
+        checkSetPR(ex.exerciseId, set.weight, set.reps, null, setIndex);
+    }
+    if (typeof renderWorkout === 'function') renderWorkout();
+}
+
 function getLastWeightSuggestion(exerciseId, sessionType, setType, setIndex) {
     if (!exerciseId || !sessionType) return null;
     
@@ -5556,9 +5666,10 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                 exSection.style.background = 'var(--bg-surface)';
             }
             
+            const safePinnedNote = (dbEx && dbEx.pinnedNotes) ? (typeof escapeHtml === 'function' ? escapeHtml(dbEx.pinnedNotes) : dbEx.pinnedNotes) : '';
             exSection.innerHTML = `
                 ${block.type === 'superset' ? `<div style="font-weight:700; color:var(--text-primary); margin-bottom:12px;">${getTrExName(ex.name)}</div>` : ''}
-                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 12px;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom: 10px;">
                     <div class="media-links" style="margin:0; width:100%; display:flex; flex-wrap:wrap; gap:8px;">${mediaHtml}</div>
                     <div style="display:flex; gap:6px;">
                         <button type="button" class="btn-secondary substitute-btn" onclick="openReplaceExerciseModal('${ex.exerciseId}', ${exInnerIndex}, ${blockIndex})" style="padding: 4px 8px; font-size: 11.5px; border-radius: 8px; display: inline-flex; align-items: center; gap: 4px; cursor: pointer;" title="${getT('replaceEx.title') || 'Sustituir'}"><i class="ph ph-arrows-left-right"></i> <span>${getT('replaceEx.btnReplace') || 'Sustituir'}</span></button>
@@ -5566,7 +5677,12 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                     </div>
                 </div>
                 
-                <div class="set-row header-row" style="margin-top: 16px;">
+                <div class="exercise-pinned-note" style="margin: 4px 0 12px 0; display: flex; align-items: center; gap: 8px; background: rgba(37, 99, 235, 0.08); border: 1px dashed rgba(37, 99, 235, 0.35); border-radius: 10px; padding: 6px 10px;">
+                    <i class="ph-bold ph-push-pin" style="color: var(--color-accent); font-size: 15px; flex-shrink: 0;" title="Nota fija de ajuste de máquina o técnica"></i>
+                    <input type="text" class="pinned-note-input" placeholder="📌 Nota fija de máquina (ej: asiento 4, polea altura 6...)" value="${safePinnedNote}" style="border: none; background: transparent; font-size: 12.5px; color: var(--text-primary); flex: 1; outline: none;" onchange="saveExercisePinnedNote('${ex.exerciseId}', this.value)" oninput="saveExercisePinnedNote('${ex.exerciseId}', this.value)">
+                </div>
+
+                <div class="set-row header-row" style="margin-top: 12px;">
                     <div></div>
                     <div style="font-size:12px; color:var(--text-secondary); text-align:center;">${getT('workout.type') || 'Tipo'}</div>
                     <div style="font-size:12px; color:var(--text-secondary); text-align:center;">${getT('workout.reps') || 'Reps'}</div>
@@ -5674,7 +5790,12 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                                 const prevWt = (lastPerf.weight !== null && lastPerf.weight > 0) ? `${lastPerf.weight} kg` : '';
                                 const prevReps = (lastPerf.reps !== null && lastPerf.reps !== '') ? `${lastPerf.reps} reps` : '';
                                 const prevText = [prevWt, prevReps].filter(Boolean).join(' × ');
-                                return `<div class="ghost-workout-tag" onclick="copyGhostPerformance(${flatExerciseIndex}, ${setIndex}, ${lastPerf.weight || 0}, '${lastPerf.reps || ''}')" title="Última vez (${lastPerf.date || ''}). Toca para rellenar" style="margin-top: 3px; font-size: 11px; font-weight: 600; color: var(--text-secondary); opacity: 0.88; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; background: rgba(255, 255, 255, 0.04); padding: 1px 6px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.08); transition: background 0.15s ease;"><i class="ph-bold ph-ghost" style="font-size: 11px; color: var(--color-accent);"></i><span>Última vez: <strong style="color: var(--text-primary); font-weight: 700;">${prevText}</strong></span></div>`;
+                                const ghostHtml = `<div class="ghost-workout-tag" onclick="copyGhostPerformance(${flatExerciseIndex}, ${setIndex}, ${lastPerf.weight || 0}, '${lastPerf.reps || ''}')" title="Última vez (${lastPerf.date || ''}). Toca para rellenar" style="margin-top: 3px; font-size: 11px; font-weight: 600; color: var(--text-secondary); opacity: 0.88; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; background: rgba(255, 255, 255, 0.04); padding: 1px 6px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.08); transition: background 0.15s ease;"><i class="ph-bold ph-ghost" style="font-size: 11px; color: var(--color-accent);"></i><span>Última vez: <strong style="color: var(--text-primary); font-weight: 700;">${prevText}</strong></span></div>`;
+
+                                const overloadSugg = getProgressiveOverloadSuggestion(ex.exerciseId, activeSession.type, targetReps, lastPerf);
+                                const overloadHtml = overloadSugg ? `<div class="overload-suggestion-tag" onclick="applyOverloadSuggestion(${flatExerciseIndex}, ${setIndex}, ${overloadSugg.suggestedWeight}, '${overloadSugg.suggestedReps}')" title="Sugerencia de Sobrecarga Progresiva. Toca para aplicar" style="margin-top: 3px; font-size: 10.5px; font-weight: 700; color: ${overloadSugg.type === 'weight' ? '#10b981' : '#3b82f6'}; background: ${overloadSugg.type === 'weight' ? 'rgba(16, 185, 129, 0.12)' : 'rgba(59, 130, 246, 0.12)'}; padding: 2px 6px; border-radius: 6px; border: 1px solid ${overloadSugg.type === 'weight' ? 'rgba(16, 185, 129, 0.3)' : 'rgba(59, 130, 246, 0.3)'}; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; transition: transform 0.1s ease;"><i class="${overloadSugg.type === 'weight' ? 'ph-bold ph-trend-up' : 'ph-bold ph-target'}"></i><span>${overloadSugg.label}</span></div>` : '';
+
+                                return `<div style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">${ghostHtml}${overloadHtml}</div>`;
                             }
                             return '';
                         })()}

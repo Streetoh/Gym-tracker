@@ -1047,6 +1047,10 @@
                       <textarea id="exercise-description" class="custom-exercise-textarea" placeholder="Añade instrucciones de técnica, agarre, postura o notas..." rows="5"></textarea>
                   </div>
                   <div class="form-group">
+                      <label style="display: flex; align-items: center; gap: 6px;"><i class="ph-bold ph-push-pin" style="color: var(--color-accent);"></i> <span>Nota fija de máquina / técnica</span></label>
+                      <input type="text" id="exercise-pinned-notes" class="form-input" placeholder="Ej. Polea altura 6, banco muesca 3, agarre neutro...">
+                  </div>
+                  <div class="form-group">
                     <label data-i18n="modals.exercise.image">Imagen Adjunta (Opcional)</label>
                     <input type="file" id="exercise-image" accept="image/*">
                     <img id="exercise-image-preview" src="" alt="Preview" style="display:none; max-width: 100%; margin-top: 10px; border-radius: 8px; cursor: pointer;" onclick="document.getElementById('lightbox-img').src=this.src; document.getElementById('modal-lightbox').classList.add('active');">

@@ -2761,3 +2761,28 @@ body.is-apk .ai-input-bar {
     background: var(--bg-surface-elevated);
     color: var(--text-muted);
 }
+
+/* PINNED NOTES & PROGRESSIVE OVERLOAD TAGS */
+.exercise-pinned-note {
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+.exercise-pinned-note:focus-within {
+    border-color: var(--color-accent) !important;
+    background: rgba(37, 99, 235, 0.12) !important;
+}
+.exercise-pinned-note input::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.8;
+}
+.overload-suggestion-tag {
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.12s ease, opacity 0.12s ease;
+}
+.overload-suggestion-tag:hover {
+    filter: brightness(1.1);
+}
+.overload-suggestion-tag:active {
+    transform: scale(0.96);
+    opacity: 0.85;
+}
