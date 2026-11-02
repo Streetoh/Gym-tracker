@@ -14907,6 +14907,7 @@ window.showToast = function(msg, duration = 2400) {
     };
 
     window.closePaywallModal = function() {
+        if (typeof window.closeProFeatureDetail === 'function') window.closeProFeatureDetail();
         const modal = document.getElementById('modal-paywall-compare');
         if (!modal) return;
         modal.classList.remove('active');
@@ -14986,4 +14987,316 @@ window.showToast = function(msg, duration = 2400) {
         window.updateProUIBadges();
     }
 })();
+
+    // === PRO FEATURES MULTILINGUAL EXPLANATIONS ===
+    const PRO_FEATURE_DETAILS = {
+        overload: {
+            icon: "ph-trend-up",
+            image: "img/screenshots/05_workout_rir_overload.png",
+            es: {
+                title: "Sobrecarga Inteligente",
+                badge: "Función Exclusiva PRO",
+                whatTitle: "¿Qué es?",
+                whatDesc: "La app analiza tu esfuerzo real (RPE y RIR en reserva) en cada serie y calcula si debes subir de peso o sumar repeticiones en tu próximo entrenamiento.",
+                whyTitle: "¿Cómo te ayuda?",
+                whyDesc: "Garantiza que sigas ganando masa muscular y fuerza de forma científica, evitando estancarte o entrenar con cargas excesivas que causen lesiones.",
+                btnText: "Entendido"
+            },
+            en: {
+                title: "Smart Progressive Overload",
+                badge: "Exclusive PRO Feature",
+                whatTitle: "What is it?",
+                whatDesc: "The app analyzes your real effort (RPE & reps in reserve) on every set and calculates whether to increase weight or add reps on your next session.",
+                whyTitle: "How does it help you?",
+                whyDesc: "Ensures continuous muscle and strength gains based on scientific progression, preventing plateaus and eliminating guesswork.",
+                btnText: "Got it"
+            },
+            ru: {
+                title: "Умная прогрессивная перегрузка",
+                badge: "Эксклюзивная функция PRO",
+                whatTitle: "Что это такое?",
+                whatDesc: "Приложение анализирует ваши реальные усилия (RPE и повторения в запасе RIR) в каждом подходе и рассчитывает точный вес или повторения для следующей тренировки.",
+                whyTitle: "Какая от этого польза?",
+                whyDesc: "Обеспечивает непрерывный рост мышц и силы без застоя и риска травм.",
+                btnText: "Понятно"
+            },
+            et: {
+                title: "Nutikas progressiivne ülekoormus",
+                badge: "Eksklusiivne PRO funktsioon",
+                whatTitle: "Mis see on?",
+                whatDesc: "Rakendus analüüsib sinu tegelikku pingutust (RPE ja RIR) igas seerias ning arvutab järgmiseks treeninguks optimaalse raskuse või korduste arvu.",
+                whyTitle: "Kuidas see sind aitab?",
+                whyDesc: "Tagab järjepideva lihasmassi ja jõu kasvu teaduslikul põhimõttel, vältides arengu seiskumist.",
+                btnText: "Sain aru"
+            },
+            uk: {
+                title: "Розумне прогресивне перевантаження",
+                badge: "Ексклюзивна функція PRO",
+                whatTitle: "Що це таке?",
+                whatDesc: "Додаток аналізує ваше реальне зусилля (RPE та повторення в запасі RIR) у кожному підході й розраховує точну вагу або повторення на наступне тренування.",
+                whyTitle: "Як це допомагає?",
+                whyDesc: "Гарантує стабільний ріст м'язів і сили без плато та ризику перетренованості.",
+                btnText: "Зрозуміло"
+            }
+        },
+        mesocycles: {
+            icon: "ph-calendar-plus",
+            image: "img/screenshots/04_mesocycle_planner.png",
+            es: {
+                title: "Periodizador de Mesociclos",
+                badge: "Función Exclusiva PRO",
+                whatTitle: "¿Qué es?",
+                whatDesc: "Un sistema para programar temporadas completas de 4 a 12 semanas, alternando fases de Hipertrofia, Fuerza/Pesado y Alta Intensidad con semanas de descarga (deload).",
+                whyTitle: "¿Cómo te ayuda?",
+                whyDesc: "Se programa en tu calendario con un solo clic. Entrenarás como los atletas de élite con una estructura clara y descansos programados.",
+                btnText: "Entendido"
+            },
+            en: {
+                title: "Mesocycles Periodizer",
+                badge: "Exclusive PRO Feature",
+                whatTitle: "What is it?",
+                whatDesc: "A complete system to schedule 4 to 12-week training cycles, cycling through Hypertrophy, Strength/Heavy, and High Intensity phases with planned deloads.",
+                whyTitle: "How does it help you?",
+                whyDesc: "Schedules everything directly into your calendar with 1 tap. Train like elite athletes with structured progression and fatigue management.",
+                btnText: "Got it"
+            },
+            ru: {
+                title: "Планировщик мезоциклов",
+                badge: "Эксклюзивная функция PRO",
+                whatTitle: "Что это такое?",
+                whatDesc: "Система планирования тренировочных циклов от 4 до 12 недель с чередованием фаз гипертрофии, силы и высокой интенсивности с неделями разгрузки.",
+                whyTitle: "Какая от этого польза?",
+                whyDesc: "Планирует все тренировки в календаре за 1 клик. Позволяет тренироваться как профессиональный атлет.",
+                btnText: "Понятно"
+            },
+            et: {
+                title: "Mesotsüklite perioodistaja",
+                badge: "Eksklusiivne PRO funktsioon",
+                whatTitle: "Mis see on?",
+                whatDesc: "Süsteem 4 kuni 12-nädalaste treeningtsüklite kavandamiseks, vahetades hüpertroofia, jõu ja kõrge intensiivsuse faase koos mahalaadimisnädalatega.",
+                whyTitle: "Kuidas see sind aitab?",
+                whyDesc: "Lisab kogu kava kalendrisse ühe puudutusega. Treenid selge struktuuri ja optimaalse taastumisega.",
+                btnText: "Sain aru"
+            },
+            uk: {
+                title: "Періодизатор мезоциклів",
+                badge: "Ексклюзивна функція PRO",
+                whatTitle: "Що це таке?",
+                whatDesc: "Система планування тренувальних циклів від 4 до 12 тижнів із чергуванням фаз гіпертрофії, сили та високої інтенсивності з тижнями розвантаження.",
+                whyTitle: "Як це допомагає?",
+                whyDesc: "Додає весь план у календар в 1 клік. Тренуйтеся за структурою професійних атлетів.",
+                btnText: "Зрозуміло"
+            }
+        },
+        joints: {
+            icon: "ph-heart-straight",
+            image: "img/screenshots/02_recovery_heatmap.png",
+            es: {
+                title: "Sugerencias Molestias Articulares",
+                badge: "Función Exclusiva PRO",
+                whatTitle: "¿Qué es?",
+                whatDesc: "Registra qué articulaciones tienes sensibles (hombros, rodillas, lumbares, codos). La app las monitoriza y detecta qué ejercicios les causan impacto.",
+                whyTitle: "¿Cómo te ayuda?",
+                whyDesc: "Al iniciar un entreno, la app te alerta en vivo si un ejercicio compromete tu articulación y te sugiere alternativas seguras y efectivas para no perder el entreno.",
+                btnText: "Entendido"
+            },
+            en: {
+                title: "Joint Stress Smart Suggestions",
+                badge: "Exclusive PRO Feature",
+                whatTitle: "What is it?",
+                whatDesc: "Log sensitive joints (shoulders, knees, lower back, elbows). The app tracks them and identifies which exercises put stress on them.",
+                whyTitle: "How does it help you?",
+                whyDesc: "Alerts you in real time during workouts if a movement stresses your joints and suggests pain-free, effective alternative exercises instantly.",
+                btnText: "Got it"
+            },
+            ru: {
+                title: "Контроль суставов и рекомендации",
+                badge: "Эксклюзивная функция PRO",
+                whatTitle: "Что это такое?",
+                whatDesc: "Отмечайте чувствительные суставы (плечи, колени, поясница, локти). Приложение отслеживает нагрузку на них в упражнениях.",
+                whyTitle: "Какая от этого польза?",
+                whyDesc: "Предупреждает во время тренировки и мгновенно предлагает безопасные упражнения-заменители без боли.",
+                btnText: "Понятно"
+            },
+            et: {
+                title: "Liigesekoormuse soovitused",
+                badge: "Eksklusiivne PRO funktsioon",
+                whatTitle: "Mis see on?",
+                whatDesc: "Märgi tundlikud liigesed (õlad, põlved, alaselg, küünarnukid). Rakendus jälgib neile langevat koormust.",
+                whyTitle: "Kuidas see sind aitab?",
+                whyDesc: "Hoiatab treeningu ajal ja soovitab koheselt valuvabu ning tõhusaid asendusharjutusi.",
+                btnText: "Sain aru"
+            },
+            uk: {
+                title: "Контроль суглобів та рекомендації",
+                badge: "Ексклюзивна функція PRO",
+                whatTitle: "Що це таке?",
+                whatDesc: "Відзначайте чутливі суглоби (плечі, коліна, поперек, лікті). Додаток відстежує навантаження на них.",
+                whyTitle: "Як це допомагає?",
+                whyDesc: "Попереджає під час тренування та миттєво пропонує безпечні альтернативні вправи без болю.",
+                btnText: "Зрозуміло"
+            }
+        },
+        history: {
+            icon: "ph-chart-line-up",
+            image: "img/screenshots/07_stats_fuerza.png",
+            es: {
+                title: "Historial Gráfico Ilimitado",
+                badge: "Función Exclusiva PRO",
+                whatTitle: "¿Qué es?",
+                whatDesc: "Acceso ilimitado a todo tu histórico de fuerza, volumen y 1RM estimado desde el primer día (el plan gratuito se limita a los últimos 2 meses).",
+                whyTitle: "¿Cómo te ayuda?",
+                whyDesc: "Compara tu progresión a lo largo de meses y años, visualiza récords PR y utiliza el slider fotográfico para ver tu cambio físico real.",
+                btnText: "Entendido"
+            },
+            en: {
+                title: "Unlimited Chart History",
+                badge: "Exclusive PRO Feature",
+                whatTitle: "What is it?",
+                whatDesc: "Unlimited access to your complete lifetime history of strength, volume, and estimated 1RM (free tier is limited to the last 2 months).",
+                whyTitle: "How does it help you?",
+                whyDesc: "Compare your long-term progress across months and years, track lifetime PRs, and use the photo slider to witness your physique transformation.",
+                btnText: "Got it"
+            },
+            ru: {
+                title: "Неограниченная история графиков",
+                badge: "Эксклюзивная функция PRO",
+                whatTitle: "Что это такое?",
+                whatDesc: "Неограниченный доступ ко всей вашей истории силы, тоннажа и 1ПМ за все время (бесплатная версия ограничена 2 месяцами).",
+                whyTitle: "Какая от этого польза?",
+                whyDesc: "Сравнивайте прогресс за годы, отслеживайте рекорды PR и используйте слайдер фото до/после.",
+                btnText: "Понятно"
+            },
+            et: {
+                title: "Piiramatu graafikute ajalugu",
+                badge: "Eksklusiivne PRO funktsioon",
+                whatTitle: "Mis see on?",
+                whatDesc: "Piiramatu ligipääs kogu oma treeningute, jõu ja hinnangulise 1KM ajaloole (tasuta versioon on piiratud 2 kuuga).",
+                whyTitle: "Kuidas see sind aitab?",
+                whyDesc: "Võrdle oma pikaajalist arengut kuude ja aastate lõikes, jälgi isiklikke rekordeid ja vaata keha muutust fotode liuguriga.",
+                btnText: "Sain aru"
+            },
+            uk: {
+                title: "Необмежена історія графіків",
+                badge: "Ексклюзивна функція PRO",
+                whatTitle: "Що це таке?",
+                whatDesc: "Необмежений доступ до повної історії сили, тоннажу та 1ПМ за весь час (безкоштовна версія обмежена 2 місяцями).",
+                whyTitle: "Як це допомагає?",
+                whyDesc: "Порівнюйте свій прогрес за роки, відстежуйте рекорди та порівнюйте фото До/Після у слайдері.",
+                btnText: "Зрозуміло"
+            }
+        },
+        routines: {
+            icon: "ph-squares-four",
+            image: "img/screenshots/03_session_creator_visual.png",
+            es: {
+                title: "Crea Rutinas Ilimitadas",
+                badge: "Función Exclusiva PRO",
+                whatTitle: "¿Qué es?",
+                whatDesc: "Crea y guarda tantas rutinas y divisiones de entrenamiento personalizadas como quieras (Push/Pull/Legs, Torso/Pierna, Arnold Split, etc.).",
+                whyTitle: "¿Cómo te ayuda?",
+                whyDesc: "Sin el tope de 4 rutinas de la versión gratuita. Podrás tener plantillas listas para cada fase, viajes, días de poco tiempo o amigos.",
+                btnText: "Entendido"
+            },
+            en: {
+                title: "Unlimited Custom Routines",
+                badge: "Exclusive PRO Feature",
+                whatTitle: "What is it?",
+                whatDesc: "Create and save as many custom routines and splits as you want (Push/Pull/Legs, Upper/Lower, Arnold Split, full body, etc.).",
+                whyTitle: "How does it help you?",
+                whyDesc: "No 4-routine cap from the free plan. Keep ready-to-go templates for each cycle, travel days, quick express workouts, or partner splits.",
+                btnText: "Got it"
+            },
+            ru: {
+                title: "Неограниченные программы тренировок",
+                badge: "Эксклюзивная функция PRO",
+                whatTitle: "Что это такое?",
+                whatDesc: "Создавайте и сохраняйте сколько угодно пользовательских тренировочных программ и сплитов без ограничений.",
+                whyTitle: "Какая от этого польза?",
+                whyDesc: "Без лимита в 4 шаблона. Готовые тренировки для поездок, экспресс-занятий и любых фаз прогресса.",
+                btnText: "Понятно"
+            },
+            et: {
+                title: "Piiramatud treeningkavad",
+                badge: "Eksklusiivne PRO funktsioon",
+                whatTitle: "Mis see on?",
+                whatDesc: "Loo ja salvesta nii palju kohandatud treeningkavasid ja jaotusi kui soovid (Push/Pull/Legs, Ülakeha/Alakeha jne).",
+                whyTitle: "Kuidas see sind aitab?",
+                whyDesc: "Puudub tasuta versiooni 4 kava piirang. Vali kiiresti sobiv kava igaks olukorraks või reisimiseks.",
+                btnText: "Sain aru"
+            },
+            uk: {
+                title: "Необмежені програми тренувань",
+                badge: "Ексклюзивна функція PRO",
+                whatTitle: "Що це таке?",
+                whatDesc: "Створюйте та зберігайте необмежену кількість власних програм тренувань та сплітів.",
+                whyTitle: "Як це допомагає?",
+                whyDesc: "Жодних обмежень у 4 шаблони. Зручні готові програми для будь-яких фаз та тренувальних цілей.",
+                btnText: "Зрозуміло"
+            }
+        }
+    };
+
+    window.openProFeatureDetail = function(featureKey) {
+        const feat = PRO_FEATURE_DETAILS[featureKey];
+        if (!feat) return;
+
+        const lang = (typeof state !== 'undefined' && state.language) || 'es';
+        const data = feat[lang] || feat.en || feat.es;
+
+        const sheet = document.getElementById('bottom-sheet-pro-feature');
+        if (!sheet) return;
+
+        // Set Icon
+        const iconEl = document.getElementById('pro-sheet-icon');
+        if (iconEl) iconEl.className = 'ph-bold ' + feat.icon;
+
+        // Set Titles & Badges
+        const titleEl = document.getElementById('pro-sheet-title');
+        if (titleEl) titleEl.textContent = data.title;
+
+        const badgeEl = document.getElementById('pro-sheet-badge');
+        if (badgeEl) badgeEl.textContent = data.badge;
+
+        // Set Image
+        const imgEl = document.getElementById('pro-sheet-image');
+        if (imgEl) {
+            imgEl.src = feat.image;
+            imgEl.alt = data.title;
+        }
+
+        // Set What & Why Bullets
+        const whatTitleEl = document.getElementById('pro-sheet-what-title');
+        if (whatTitleEl) whatTitleEl.textContent = data.whatTitle;
+
+        const whatDescEl = document.getElementById('pro-sheet-what-desc');
+        if (whatDescEl) whatDescEl.textContent = data.whatDesc;
+
+        const whyTitleEl = document.getElementById('pro-sheet-why-title');
+        if (whyTitleEl) whyTitleEl.textContent = data.whyTitle;
+
+        const whyDescEl = document.getElementById('pro-sheet-why-desc');
+        if (whyDescEl) whyDescEl.textContent = data.whyDesc;
+
+        const btnCloseEl = document.getElementById('pro-sheet-btn-close');
+        if (btnCloseEl) btnCloseEl.textContent = data.btnText;
+
+        // Show Bottom Sheet with slide animation
+        sheet.style.display = 'flex';
+        // force reflow for smooth transform
+        void sheet.offsetWidth;
+        sheet.classList.add('active');
+    };
+
+    window.closeProFeatureDetail = function() {
+        const sheet = document.getElementById('bottom-sheet-pro-feature');
+        if (!sheet) return;
+        sheet.classList.remove('active');
+        setTimeout(() => {
+            if (!sheet.classList.contains('active')) {
+                sheet.style.display = 'none';
+            }
+        }, 280);
+    };
+
 // === END GYM TRACKER PRO & SUBSCRIPTION CONTROLLER ===

@@ -2898,3 +2898,24 @@ body.is-apk .ai-input-bar {
 #btn-paywall-action:active {
     transform: scale(0.98);
 }
+
+
+/* === PRO FEATURE BOTTOM SHEET & INTERACTIVE ROWS === */
+.paywall-feature-row {
+    transition: background 0.15s ease, transform 0.1s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.paywall-feature-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+.paywall-feature-row:active {
+    transform: scale(0.985);
+    background: rgba(59, 130, 246, 0.12);
+}
+#bottom-sheet-pro-feature.active {
+    display: flex !important;
+}
+#bottom-sheet-pro-feature.active .bottom-sheet-card {
+    transform: translateY(0) !important;
+}
