@@ -2919,3 +2919,22 @@ body.is-apk .ai-input-bar {
 #bottom-sheet-pro-feature.active .bottom-sheet-card {
     transform: translateY(0) !important;
 }
+
+
+/* === FIGMA 3D ANATOMICAL MAP OVERLAY === */
+.anatomical-3d-wrapper {
+    position: relative;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.muscle-path {
+    mix-blend-mode: multiply;
+    transition: fill 0.25s ease, fill-opacity 0.25s ease;
+    cursor: pointer;
+}
+.muscle-path:hover {
+    filter: brightness(1.25);
+}
+.muscle-path.selected {
+    filter: brightness(1.35) drop-shadow(0 0 6px rgba(59, 130, 246, 0.8));
+}
