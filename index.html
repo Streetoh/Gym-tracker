@@ -112,7 +112,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="styles.css?v=1793700160681">
+    <link rel="stylesheet" href="styles.css?v=1793704045620">
 </head>
 <body>
 
@@ -768,6 +768,9 @@
                         </div>
                     </div>
 
+                    <!-- Mesocycle Weekly Progress Compass Banner -->
+                    <div id="workout-mesocycle-compass" class="mesocycle-compass-banner" style="display: none;"></div>
+
                     <!-- Sub-header Row for Completed Session (Title is above, this goes right underneath) -->
                     <div id="completed-workout-header-actions" style="display: none; align-items: center; gap: 10px; width: 100%; margin-top: 2px;">
                         <button id="btn-edit-completed-workout" class="btn-secondary" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 10px; font-weight: 700; font-size: 13px; cursor: pointer; background: var(--bg-surface-elevated); border: 1.5px solid var(--color-accent); color: var(--color-accent);" onclick="toggleEditCompletedWorkout()">
@@ -804,7 +807,36 @@
                         <button type="button" class="btn-timer-skip" onclick="skipRestTimer()"><i class="ph-bold ph-x"></i> <span data-i18n="workout.skip">Saltar</span></button>
                     </div>
                 </div>
-            </section>
+            
+                <!-- Custom In-App Gym NumPad (4x4 matching user reference) -->
+                <div id="workout-custom-numpad" class="custom-numpad-container" style="display: none;">
+                    <div class="numpad-active-preview">
+                        <span id="numpad-field-title">Editando: <strong>Peso (Kg)</strong></span>
+                        <span id="numpad-step-title">Salto: <strong>±2.5 kg</strong></span>
+                    </div>
+                    <div class="numpad-grid">
+                        <button type="button" class="numpad-key" data-key="1">1</button>
+                        <button type="button" class="numpad-key" data-key="2">2</button>
+                        <button type="button" class="numpad-key" data-key="3">3</button>
+                        <button type="button" class="numpad-key key-dismiss" id="numpad-btn-dismiss" title="Ocultar teclado"><i class="ph-bold ph-keyboard"></i></button>
+
+                        <button type="button" class="numpad-key" data-key="4">4</button>
+                        <button type="button" class="numpad-key" data-key="5">5</button>
+                        <button type="button" class="numpad-key" data-key="6">6</button>
+                        <button type="button" class="numpad-key key-op" id="numpad-btn-plus" title="Sumar">+</button>
+
+                        <button type="button" class="numpad-key" data-key="7">7</button>
+                        <button type="button" class="numpad-key" data-key="8">8</button>
+                        <button type="button" class="numpad-key" data-key="9">9</button>
+                        <button type="button" class="numpad-key key-op" id="numpad-btn-minus" title="Restar">−</button>
+
+                        <button type="button" class="numpad-key" data-key=".">.</button>
+                        <button type="button" class="numpad-key" data-key="0">0</button>
+                        <button type="button" class="numpad-key" id="numpad-btn-backspace" title="Borrar"><i class="ph-bold ph-backspace"></i></button>
+                        <button type="button" class="numpad-key key-next" id="numpad-btn-next" title="Siguiente">→</button>
+                    </div>
+                </div>
+        </section>
     
         <!-- AI VIEW -->
         <div id="view-ai" class="view">
@@ -1305,7 +1337,7 @@
                 </div>
                 
                 <div id="update-action-container" style="width: 100%;">
-                    <!-- Botón inyectado por app.js?v=1793700160681 -->
+                    <!-- Botón inyectado por app.js?v=1793704045620 -->
                 </div>
                 
                 <button class="btn-secondary full-width close-modal" style="padding: 12px; border: none; background: transparent; color: var(--text-secondary); width: 100%; white-space: nowrap; font-size: 13.5px; cursor: pointer;" data-i18n="update.later" onclick="document.getElementById('modal-update').classList.remove('active')">Quizás más tarde</button>
@@ -1599,9 +1631,9 @@
             });
         }
     </script>
-    <script src="default_db.js?v=1793700160681"></script>
-    <script src="app.js?v=1793700160681"></script>
-    <script src="ai_logic.js?v=1793700160681"></script>
+    <script src="default_db.js?v=1793704045620"></script>
+    <script src="app.js?v=1793704045620"></script>
+    <script src="ai_logic.js?v=1793704045620"></script>
 
     <!-- MODAL HISTORIA DE ENTRENAMIENTO (9:16 INSTAGRAM / WHATSAPP) -->
     <div id="modal-story-card" class="modal">
@@ -2009,36 +2041,47 @@
         </div>
     </div>
 
-</body>
-</html><div style="border-radius: 16px; overflow: hidden; background: #05070b; border: 1.5px solid #1e293b; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; padding: 6px;">
-                <img id="pro-sheet-image" src="" alt="Feature preview" style="width: 100%; max-height: 290px; object-fit: contain; display: block; border-radius: 12px;">
+
+    <!-- POST-WORKOUT 5-SECOND BIOFEEDBACK CHECK-IN MODAL (RP STYLE) -->
+    <div id="modal-post-workout-checkin" class="modal" style="display: none; align-items: flex-end; padding: 0;">
+        <div class="biofeedback-card">
+            <div class="bio-title">
+                <span data-i18n="workout.checkInTitle">Check-In de Recuperación</span>
+                <span style="font-size: 11px; color: var(--color-accent); font-weight: 700;">⏱ 5 segundos</span>
             </div>
-
-            <!-- 2 Key Benefit Bullets -->
-            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px;">
-                <div style="display: flex; gap: 10px; align-items: flex-start; background: #111723; padding: 10px 12px; border-radius: 12px; border-left: 3px solid #3b82f6;">
-                    <div style="font-size: 15px; line-height: 1.2;">🎯</div>
-                    <div>
-                        <div id="pro-sheet-what-title" style="font-size: 11.5px; font-weight: 700; color: #93c5fd; margin-bottom: 2px;">¿Qué es?</div>
-                        <div id="pro-sheet-what-desc" style="font-size: 12px; color: #cbd5e1; line-height: 1.35;">Explicación clara...</div>
-                    </div>
-                </div>
-
-                <div style="display: flex; gap: 10px; align-items: flex-start; background: #111723; padding: 10px 12px; border-radius: 12px; border-left: 3px solid #10b981;">
-                    <div style="font-size: 15px; line-height: 1.2;">⚡</div>
-                    <div>
-                        <div id="pro-sheet-why-title" style="font-size: 11.5px; font-weight: 700; color: #6ee7b7; margin-bottom: 2px;">¿Cómo te ayuda?</div>
-                        <div id="pro-sheet-why-desc" style="font-size: 12px; color: #cbd5e1; line-height: 1.35;">Beneficio clave...</div>
-                    </div>
+            <div>
+                <div class="bio-group-title" data-i18n="workout.pumpQuestion">1. ¿Qué nivel de congestión muscular conseguiste?</div>
+                <div class="pump-stars-row" id="checkin-pump-stars">
+                    <i class="ph-fill ph-star star-item" data-star="1"></i>
+                    <i class="ph-fill ph-star star-item" data-star="2"></i>
+                    <i class="ph-fill ph-star star-item" data-star="3"></i>
+                    <i class="ph-fill ph-star star-item" data-star="4"></i>
+                    <i class="ph-bold ph-star star-item" data-star="5" style="color: rgba(255,255,255,0.2);"></i>
                 </div>
             </div>
-
-            <!-- Close / Action Button -->
-            <button type="button" onclick="window.closeProFeatureDetail()" style="background: #007aff; color: #fff; font-size: 14px; font-weight: 700; padding: 12px; border-radius: 12px; border: none; cursor: pointer; width: 100%; transition: background 0.15s ease;">
-                <span id="pro-sheet-btn-close">Entendido</span>
+            <div>
+                <div class="bio-group-title" data-i18n="workout.jointQuestion">2. ¿Molestias o dolor en articulaciones?</div>
+                <div class="joint-chips-row" id="checkin-joint-level">
+                    <div class="joint-chip selected" data-level="none">✅ Ninguna</div>
+                    <div class="joint-chip" data-level="mild">🟡 Leve</div>
+                    <div class="joint-chip" data-level="moderate">🟠 Molestia</div>
+                    <div class="joint-chip" data-level="pain">🔴 Dolor</div>
+                </div>
+                <div id="checkin-joint-selector" style="display: none; margin-top: 8px;">
+                    <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 4px;">Selecciona la articulación afectada:</div>
+                    <div class="joint-subchips-row" style="display: flex; flex-wrap: wrap; gap: 6px;">
+                        <button type="button" class="joint-part-chip" data-joint="hombro">Hombro</button>
+                        <button type="button" class="joint-part-chip" data-joint="codo">Codo</button>
+                        <button type="button" class="joint-part-chip" data-joint="muneca">Muñeca</button>
+                        <button type="button" class="joint-part-chip" data-joint="rodilla">Rodilla</button>
+                        <button type="button" class="joint-part-chip" data-joint="lumbar">Lumbar</button>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn-bio-finish" onclick="savePostWorkoutCheckinAndFinish()">
+                <i class="ph-bold ph-check"></i> <span data-i18n="workout.saveAndSummary">Guardar y Finalizar Entrenamiento</span>
             </button>
         </div>
     </div>
-
 </body>
 </html>

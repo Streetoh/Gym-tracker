@@ -1913,6 +1913,16 @@ const translations = {
             "deleteAllConfirm": "¿Eliminar todos los entrenamientos del historial? Esta acción no se puede deshacer."
         },
         "workout": {
+            "checkInTitle": "Check-In de Recuperación",
+            "pumpQuestion": "1. ¿Qué nivel de congestión muscular conseguiste?",
+            "jointQuestion": "2. ¿Molestias o dolor en articulaciones?",
+            "saveAndSummary": "Guardar y Finalizar Entrenamiento",
+            "perDumbbell": "Por mancuerna (2×)",
+            "totalWeight": "Peso total combinado",
+            "none": "Ninguna",
+            "mild": "Leve",
+            "moderate": "Molestia",
+            "pain": "Dolor",
             "pinnedNotePlaceholder": "📌 Nota fija de máquina (ej: asiento 4, polea altura 6...)",
             "step": "Salto",
             "stepTitle": "Salto de peso de máquina",
@@ -2349,6 +2359,16 @@ const translations = {
             "deleteAllConfirm": "Delete all workouts from history? This cannot be undone."
         },
         "workout": {
+            "checkInTitle": "Recovery Check-In",
+            "pumpQuestion": "1. What muscle pump level did you achieve?",
+            "jointQuestion": "2. Any joint or tendon discomfort?",
+            "saveAndSummary": "Save & Finish Workout",
+            "perDumbbell": "Per dumbbell (2×)",
+            "totalWeight": "Total combined weight",
+            "none": "None",
+            "mild": "Mild",
+            "moderate": "Discomfort",
+            "pain": "Pain",
             "pinnedNotePlaceholder": "📌 Machine note (e.g., seat 4, pin 6...)",
             "step": "Step",
             "stepTitle": "Machine weight step",
@@ -2770,6 +2790,16 @@ const translations = {
             "deleteAllConfirm": "Удалить все тренировки из истории? Это нельзя отменить."
         },
         "workout": {
+            "checkInTitle": "Оценка восстановления",
+            "pumpQuestion": "1. Какой уровень пампа вы почувствовали?",
+            "jointQuestion": "2. Дискомфорт или боль в суставах?",
+            "saveAndSummary": "Сохранить и завершить тренировку",
+            "perDumbbell": "На гантель (2×)",
+            "totalWeight": "Общий вес",
+            "none": "Нет",
+            "mild": "Легкий",
+            "moderate": "Дискомфорт",
+            "pain": "Боль",
             "pinnedNotePlaceholder": "📌 Заметка тренажера (напр: сиденье 4, высота 6...)",
             "step": "Шаг",
             "stepTitle": "Шаг веса тренажера",
@@ -3182,6 +3212,16 @@ const translations = {
             "deleteAllConfirm": "Kustuta kõik treeningud ajaloost? Seda ei saa tagasi võtta."
         },
         "workout": {
+            "checkInTitle": "Taastumise hindamine",
+            "pumpQuestion": "1. Millise lihaspumba taseme saavutasid?",
+            "jointQuestion": "2. Liigese- või kõõlusevalu?",
+            "saveAndSummary": "Salvesta ja lõpeta treening",
+            "perDumbbell": "Hantli kohta (2×)",
+            "totalWeight": "Koguraskus",
+            "none": "Mitte ühtegi",
+            "mild": "Kerge",
+            "moderate": "Ebamugavustunne",
+            "pain": "Valu",
             "pinnedNotePlaceholder": "📌 Masina märge (nt: iste 4, ploki kõrgus 6...)",
             "step": "Samm",
             "stepTitle": "Trenažööri raskuse samm",
@@ -3595,6 +3635,16 @@ const translations = {
             "deleteAllConfirm": "Видалити всі тренування з історії? Це неможливо скасувати."
         },
         "workout": {
+            "checkInTitle": "Оцінка відновлення",
+            "pumpQuestion": "1. Який рівень пампу ви відчули?",
+            "jointQuestion": "2. Дискомфорт або біль у суглобах?",
+            "saveAndSummary": "Зберегти та завершити тренування",
+            "perDumbbell": "На гантель (2×)",
+            "totalWeight": "Загальна вага",
+            "none": "Немає",
+            "mild": "Легкий",
+            "moderate": "Дискомфорт",
+            "pain": "Біль",
             "pinnedNotePlaceholder": "📌 Примітка тренажера (напр: сидіння 4, висота 6...)",
             "step": "Крок",
             "stepTitle": "Крок ваги тренажера",
@@ -5614,6 +5664,313 @@ function getLastWeightSuggestion(exerciseId, sessionType, setType, setIndex) {
 
 
 // ==========================================
+
+// ==========================================
+// 4 FEATURES: NUMPAD, DUMBBELL, MESO COMPASS, BIOFEEDBACK
+// ==========================================
+let activeNumpadTarget = null; // { inputElem, type: 'weight'|'reps', flatExIndex, setIndex }
+
+window.openNumpad = function(inputElem, type, flatExIndex, setIndex) {
+    if (!inputElem) return;
+    
+    // Remove previous target highlight
+    document.querySelectorAll('.input-set-field.active-numpad-target').forEach(el => el.classList.remove('active-numpad-target'));
+    
+    activeNumpadTarget = { inputElem, type, flatExIndex, setIndex };
+    inputElem.classList.add('active-numpad-target');
+
+    const numpad = document.getElementById('workout-custom-numpad');
+    const fieldTitle = document.getElementById('numpad-field-title');
+    const stepTitle = document.getElementById('numpad-step-title');
+
+    if (numpad) {
+        numpad.style.display = 'flex';
+        if (fieldTitle) {
+            fieldTitle.innerHTML = type === 'weight' ? 'Editando: <strong>Peso (Kg)</strong>' : 'Editando: <strong>Repeticiones</strong>';
+        }
+        if (stepTitle) {
+            if (type === 'weight') {
+                const ex = (activeSession && activeSession.exercises) ? activeSession.exercises[flatExIndex] : null;
+                const dbEx = ex ? (state.exercises ? state.exercises.find(e => e.id === ex.exerciseId) : null) : null;
+                const step = typeof getExerciseWeightStep === 'function' ? getExerciseWeightStep(ex?.exerciseId, ex?.name, dbEx?.description) : 2.5;
+                stepTitle.innerHTML = `Salto: <strong>±${step} kg</strong>`;
+            } else {
+                stepTitle.innerHTML = `Salto: <strong>±1 rep</strong>`;
+            }
+        }
+    }
+};
+
+window.closeNumpad = function() {
+    activeNumpadTarget = null;
+    document.querySelectorAll('.input-set-field.active-numpad-target').forEach(el => el.classList.remove('active-numpad-target'));
+    const numpad = document.getElementById('workout-custom-numpad');
+    if (numpad) numpad.style.display = 'none';
+};
+
+window.handleNumpadKey = function(key) {
+    if (!activeNumpadTarget || !activeNumpadTarget.inputElem) return;
+    const { inputElem, type, flatExIndex, setIndex } = activeNumpadTarget;
+    let cur = inputElem.value || '';
+
+    if (key === 'backspace') {
+        cur = cur.slice(0, -1);
+    } else if (key === '.') {
+        if (!cur.includes('.')) cur = cur === '' ? '0.' : cur + '.';
+    } else {
+        cur += key;
+    }
+
+    inputElem.value = cur;
+    syncNumpadTargetValue(flatExIndex, setIndex, type, cur);
+};
+
+window.handleNumpadStep = function(direction) {
+    if (!activeNumpadTarget || !activeNumpadTarget.inputElem) return;
+    const { inputElem, type, flatExIndex, setIndex } = activeNumpadTarget;
+    let curNum = parseFloat(inputElem.value) || 0;
+
+    if (type === 'weight') {
+        const ex = (activeSession && activeSession.exercises) ? activeSession.exercises[flatExIndex] : null;
+        const dbEx = ex ? (state.exercises ? state.exercises.find(e => e.id === ex.exerciseId) : null) : null;
+        const step = typeof getExerciseWeightStep === 'function' ? getExerciseWeightStep(ex?.exerciseId, ex?.name, dbEx?.description) : 2.5;
+        curNum = direction > 0 ? (curNum + step) : Math.max(0, curNum - step);
+        curNum = Math.round(curNum * 100) / 100;
+    } else {
+        curNum = direction > 0 ? (curNum + 1) : Math.max(0, curNum - 1);
+    }
+
+    const resStr = String(curNum);
+    inputElem.value = resStr;
+    syncNumpadTargetValue(flatExIndex, setIndex, type, resStr);
+};
+
+window.handleNumpadNext = function() {
+    if (!activeNumpadTarget) return;
+    const { type, flatExIndex, setIndex } = activeNumpadTarget;
+
+    if (type === 'weight') {
+        // Move to reps of same set
+        const repsIn = document.querySelector(`.set-card-box:nth-child(${setIndex + 1}) .reps-input`);
+        if (repsIn) {
+            openNumpad(repsIn, 'reps', flatExIndex, setIndex);
+            repsIn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+    } else {
+        // Move to weight of next set or next exercise
+        const nextSetIn = document.querySelector(`.set-card-box:nth-child(${setIndex + 2}) .weight-input`);
+        if (nextSetIn) {
+            openNumpad(nextSetIn, 'weight', flatExIndex, setIndex + 1);
+            nextSetIn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+    }
+    closeNumpad();
+};
+
+function syncNumpadTargetValue(flatExIndex, setIndex, type, val) {
+    if (!activeSession || !activeSession.exercises || !activeSession.exercises[flatExIndex]) return;
+    const ex = activeSession.exercises[flatExIndex];
+    if (!ex.sets || !ex.sets[setIndex]) return;
+
+    if (type === 'weight') {
+        ex.sets[setIndex].weight = parseFloat(val) || 0;
+    } else {
+        ex.sets[setIndex].reps = val;
+    }
+
+    if (typeof autoSaveWorkout === 'function') autoSaveWorkout();
+    saveState();
+}
+
+// Attach numpad clicks once DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    initNumpadDOM();
+});
+if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(initNumpadDOM, 100);
+}
+
+function initNumpadDOM() {
+    const numpad = document.getElementById('workout-custom-numpad');
+    if (!numpad || numpad.hasAttribute('data-wired')) return;
+    numpad.setAttribute('data-wired', 'true');
+
+    numpad.querySelectorAll('.numpad-key[data-key]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleNumpadKey(btn.getAttribute('data-key'));
+        });
+    });
+
+    document.getElementById('numpad-btn-dismiss')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        closeNumpad();
+    });
+
+    document.getElementById('numpad-btn-plus')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        handleNumpadStep(1);
+    });
+
+    document.getElementById('numpad-btn-minus')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        handleNumpadStep(-1);
+    });
+
+    document.getElementById('numpad-btn-backspace')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        handleNumpadKey('backspace');
+    });
+
+    document.getElementById('numpad-btn-next')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        handleNumpadNext();
+    });
+}
+
+// 3. DUMBBELL DOUBLE-MATH TOGGLE
+window.toggleDumbbellMode = function(flatExIndex) {
+    if (!activeSession || !activeSession.exercises || !activeSession.exercises[flatExIndex]) return;
+    const ex = activeSession.exercises[flatExIndex];
+    ex.isPerDumbbell = !ex.isPerDumbbell;
+    if (typeof autoSaveWorkout === 'function') autoSaveWorkout();
+    saveState();
+    if (typeof renderWorkout === 'function') renderWorkout();
+};
+
+// 4. POST-WORKOUT 5-SECOND CHECK-IN (RP STYLE)
+let currentCheckinPump = 4;
+let currentCheckinJointLevel = 'none';
+let currentCheckinJointPart = '';
+
+window.openPostWorkoutCheckinModal = function() {
+    const modal = document.getElementById('modal-post-workout-checkin');
+    if (!modal) {
+        completeAndFinishWorkoutDirect();
+        return;
+    }
+    
+    currentCheckinPump = 4;
+    currentCheckinJointLevel = 'none';
+    currentCheckinJointPart = '';
+
+    updateCheckinStarsUI(4);
+    updateCheckinJointUI('none');
+
+    modal.style.display = 'flex';
+    modal.classList.add('active');
+
+    // Wire stars
+    const starContainer = document.getElementById('checkin-pump-stars');
+    if (starContainer && !starContainer.hasAttribute('data-wired')) {
+        starContainer.setAttribute('data-wired', 'true');
+        starContainer.querySelectorAll('.star-item').forEach(star => {
+            star.addEventListener('click', () => {
+                const num = parseInt(star.getAttribute('data-star'), 10) || 4;
+                currentCheckinPump = num;
+                updateCheckinStarsUI(num);
+            });
+        });
+    }
+
+    // Wire joint level chips
+    const levelContainer = document.getElementById('checkin-joint-level');
+    if (levelContainer && !levelContainer.hasAttribute('data-wired')) {
+        levelContainer.setAttribute('data-wired', 'true');
+        levelContainer.querySelectorAll('.joint-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const lvl = chip.getAttribute('data-level');
+                currentCheckinJointLevel = lvl;
+                updateCheckinJointUI(lvl);
+            });
+        });
+    }
+
+    // Wire joint parts
+    const partContainer = document.getElementById('checkin-joint-selector');
+    if (partContainer && !partContainer.hasAttribute('data-wired')) {
+        partContainer.setAttribute('data-wired', 'true');
+        partContainer.querySelectorAll('.joint-part-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                partContainer.querySelectorAll('.joint-part-chip').forEach(c => c.classList.remove('selected'));
+                chip.classList.add('selected');
+                currentCheckinJointPart = chip.getAttribute('data-joint');
+            });
+        });
+    }
+};
+
+function updateCheckinStarsUI(rating) {
+    const starContainer = document.getElementById('checkin-pump-stars');
+    if (!starContainer) return;
+    starContainer.querySelectorAll('.star-item').forEach(star => {
+        const num = parseInt(star.getAttribute('data-star'), 10) || 1;
+        if (num <= rating) {
+            star.className = 'ph-fill ph-star star-item';
+            star.style.color = '#f59e0b';
+        } else {
+            star.className = 'ph-bold ph-star star-item';
+            star.style.color = 'rgba(255,255,255,0.2)';
+        }
+    });
+}
+
+function updateCheckinJointUI(level) {
+    const levelContainer = document.getElementById('checkin-joint-level');
+    if (!levelContainer) return;
+    levelContainer.querySelectorAll('.joint-chip').forEach(chip => {
+        if (chip.getAttribute('data-level') === level) {
+            chip.classList.add('selected');
+        } else {
+            chip.classList.remove('selected');
+        }
+    });
+
+    const selector = document.getElementById('checkin-joint-selector');
+    if (selector) {
+        selector.style.display = (level !== 'none') ? 'block' : 'none';
+    }
+}
+
+window.savePostWorkoutCheckinAndFinish = function() {
+    if (activeSession) {
+        activeSession.pumpRating = currentCheckinPump;
+        activeSession.jointIssue = {
+            level: currentCheckinJointLevel,
+            part: currentCheckinJointPart || 'general'
+        };
+
+        // If user recorded joint issue, save into state.jointIssues to warn and colorize map!
+        if (currentCheckinJointLevel !== 'none' && currentCheckinJointPart) {
+            if (!Array.isArray(state.jointIssues)) state.jointIssues = [];
+            state.jointIssues = state.jointIssues.filter(j => j.joint !== currentCheckinJointPart);
+            state.jointIssues.push({
+                joint: currentCheckinJointPart,
+                level: currentCheckinJointLevel,
+                date: new Date().toISOString(),
+                sessionName: activeSession.name
+            });
+        }
+    }
+
+    const modal = document.getElementById('modal-post-workout-checkin');
+    if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('active');
+    }
+
+    completeAndFinishWorkoutDirect();
+};
+
+
 // WORKOUT V2: REST TIMER & MACHINE STEP HELPERS
 // ==========================================
 let restTimerInterval = null;
@@ -5795,6 +6152,38 @@ const renderWorkout = () => {
     try {
     if (!activeSession) return;
     const content = document.getElementById('workout-content');
+
+    // Render Mesocycle Weekly Progress Compass Banner
+    const compassEl = document.getElementById('workout-mesocycle-compass');
+    if (compassEl) {
+        const bType = activeSession.type || 'hypertrophy';
+        let blockName = (typeof getT === 'function' ? getT('blocks.hypertrophyTitle') : 'Hipertrofia') || 'Hipertrofia';
+        if (bType === 'heavy') blockName = (typeof getT === 'function' ? getT('blocks.heavyTitle') : 'Fuerza') || 'Fuerza';
+        else if (bType === 'intensity') blockName = (typeof getT === 'function' ? getT('blocks.intensityTitle') : 'Alta Intensidad') || 'Alta Intensidad';
+
+        let weekNum = activeSession.weekNumber || 2;
+        const totalWeeks = 5;
+        const rirTargets = { 1: 3, 2: 2, 3: 1, 4: 0, 5: 4 };
+        const rirTarget = rirTargets[weekNum] || 2;
+
+        let dotsHtml = '';
+        for (let w = 1; w <= totalWeeks; w++) {
+            const cls = (w < weekNum) ? 'past' : (w === weekNum ? 'active' : '');
+            dotsHtml += `<div class="meso-dot ${cls}" title="Semana ${w}"></div>`;
+        }
+
+        compassEl.style.display = 'flex';
+        compassEl.innerHTML = `
+            <div class="meso-info">
+                <span class="meso-title"><i class="ph-fill ph-compass"></i> Semana ${weekNum} de ${totalWeeks} · ${blockName}</span>
+                <span class="meso-target">🎯 ${typeof getT === 'function' ? (getT('workout.obj') || 'Objetivo') : 'Objetivo'}: RIR ${rirTarget}</span>
+            </div>
+            <div class="meso-dots">
+                ${dotsHtml}
+            </div>
+        `;
+    }
+
     if (!content) return;
     content.innerHTML = '';
     
@@ -6040,6 +6429,17 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                         </div>
                     </div>`;
                 })()}
+                ${(() => {
+                    const isDumbbell = /mancuerna|dumbbell/i.test(ex.name);
+                    if (ex.isPerDumbbell === undefined) ex.isPerDumbbell = isDumbbell;
+                    if (!isDumbbell) return '';
+                    return `
+                    <div style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 6px;">
+                        <button type="button" class="dumbbell-toggle-btn" onclick="toggleDumbbellMode(${flatExerciseIndex})" title="Alternar modo mancuerna (duplica el tonelaje automáticamente)">
+                            <i class="ph-bold ph-barbell"></i> <span>${ex.isPerDumbbell ? (getT('workout.perDumbbell') || 'Por mancuerna (2×)') : (getT('workout.totalWeight') || 'Peso total')}</span>
+                        </button>
+                    </div>`;
+                })()}
             `;
             
             const setsContainer = document.createElement('div');
@@ -6126,22 +6526,22 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                 if (isDropset) {
                     repsHtml = `
                         <div style="display: flex; gap: 4px; align-items: center;">
-                            <input type="number" inputmode="numeric" class="input-set-field reps-input ${isDone ? 'done' : ''}" value="${displayReps}" placeholder="${targetRepsBase}" ${disabledAttr}>
+                            <input type="number" inputmode="numeric" class="input-set-field reps-input ${isDone ? 'done' : ''}" value="${displayReps}" placeholder="${targetRepsBase}" ${disabledAttr} inputmode="none" onclick="openNumpad(this, 'reps', ${flatExerciseIndex}, ${setIndex})" onfocus="openNumpad(this, 'reps', ${flatExerciseIndex}, ${setIndex})">
                             <input type="number" inputmode="numeric" class="input-set-field reps-drop-input ${isDone ? 'done' : ''}" value="${displayDropReps}" placeholder="${targetRepsDrop || (set.type === 'Al fallo' ? 'Fallo' : 'Drop')}" ${disabledAttr}>
                         </div>
                     `;
                     weightHtml = `
                         <div style="display: flex; gap: 4px; align-items: center;">
-                            <input type="number" step="any" inputmode="numeric" class="input-set-field weight-input ${isDone ? 'done' : ''}" value="${set.weight || ''}" placeholder="${weightPlaceholder}" ${disabledAttr}>
+                            <input type="number" step="any" inputmode="numeric" class="input-set-field weight-input ${isDone ? 'done' : ''}" value="${set.weight || ''}" placeholder="${weightPlaceholder}" ${disabledAttr} inputmode="none" onclick="openNumpad(this, 'weight', ${flatExerciseIndex}, ${setIndex})" onfocus="openNumpad(this, 'weight', ${flatExerciseIndex}, ${setIndex})">
                             <input type="number" step="any" inputmode="numeric" class="input-set-field weight-drop-input ${isDone ? 'done' : ''}" value="${set.weightDrop || ''}" placeholder="${weightDropPlaceholder}" ${disabledAttr}>
                             <button type="button" class="btn-dropset-calc" style="background: #10b981; color: white; border: none; border-radius: 8px; width: 34px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; cursor: pointer; flex-shrink: 0;" title="Calcular Dropset" ${disabledAttr}>%</button>
                         </div>
                     `;
                 } else {
-                    repsHtml = `<input type="number" inputmode="numeric" class="input-set-field reps-input ${isDone ? 'done' : ''}" value="${displayReps}" placeholder="${targetRepsBase}" ${disabledAttr}>`;
+                    repsHtml = `<input type="number" inputmode="numeric" class="input-set-field reps-input ${isDone ? 'done' : ''}" value="${displayReps}" placeholder="${targetRepsBase}" ${disabledAttr} inputmode="none" onclick="openNumpad(this, 'reps', ${flatExerciseIndex}, ${setIndex})" onfocus="openNumpad(this, 'reps', ${flatExerciseIndex}, ${setIndex})">`;
                     const isBarbell = isBarbellExercise(dbEx || ex);
                     const plateBtn = isBarbell ? `<button type="button" class="btn-plate-calc" style="background: var(--bg-surface-elevated); color: var(--color-accent); border: 1px solid var(--border-color); border-radius: 8px; width: 34px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; flex-shrink: 0;" title="${getT('plateCalc.title') || 'Calculadora de discos'}" ${disabledAttr}><i class="ph-bold ph-barbell"></i></button>` : '';
-                    weightHtml = `<div style="display:flex; align-items:center; gap:4px; width:100%;"><input type="number" step="any" inputmode="numeric" class="input-set-field weight-input ${isDone ? 'done' : ''}" value="${set.weight || ''}" placeholder="${weightPlaceholder}" ${disabledAttr}>${plateBtn}</div>`;
+                    weightHtml = `<div style="display:flex; align-items:center; gap:4px; width:100%;"><input type="number" step="any" inputmode="numeric" class="input-set-field weight-input ${isDone ? 'done' : ''}" value="${set.weight || ''}" placeholder="${weightPlaceholder}" ${disabledAttr} inputmode="none" onclick="openNumpad(this, 'weight', ${flatExerciseIndex}, ${setIndex})" onfocus="openNumpad(this, 'weight', ${flatExerciseIndex}, ${setIndex})">${plateBtn}</div>`;
                 }
 
                 const isSetPR = (set.isPR) || completedPrs.some(p => {
@@ -6422,13 +6822,15 @@ document.getElementById('btn-delete-recurring').addEventListener('click', () => 
 // Initialization in the end of file
 document.getElementById('finish-workout').addEventListener('click', () => {
     syncActiveWorkoutInputsFromDOM();
-    const confirmMsg = translations[state.language] && translations[state.language].workout && translations[state.language].workout.finishConfirm 
-        ? translations[state.language].workout.finishConfirm 
-        : '¿Finalizar entrenamiento?';
-    
-    if (!confirm(confirmMsg)) {
-        return;
+    if (typeof openPostWorkoutCheckinModal === 'function') {
+        openPostWorkoutCheckinModal();
+    } else {
+        completeAndFinishWorkoutDirect();
     }
+});
+
+window.completeAndFinishWorkoutDirect = function() {
+    if (typeof closeNumpad === 'function') closeNumpad();
 
     clearInterval(timerInterval);
     const duration = Date.now() - (state.activeWorkoutState?.startTime || workoutStartTime || Date.now());
@@ -6493,7 +6895,7 @@ document.getElementById('finish-workout').addEventListener('click', () => {
     try {
         checkAndUnlockAchievements(lastCompleted);
     } catch(e) {}
-});
+};
 
 
 
@@ -6949,7 +7351,8 @@ window.showWorkoutSummaryModal = function(workoutData) {
                     const w = parseFloat(s.weight) || 0;
                     const r = parseFloat(s.reps) || 0;
                     if (w > 0 && r > 0) {
-                        totalVolume += w * r;
+                        const mult = ex.isPerDumbbell ? 2 : 1;
+                        totalVolume += (w * mult) * r;
                         completedSetsCount++;
                         exCompletedSets++;
                         if (w > exMaxWeight) exMaxWeight = w;
@@ -7307,7 +7710,8 @@ const renderGlobalHistory = () => {
             let totalVol = 0;
             (w.exercises || []).forEach(ex => {
                 (ex.sets || []).forEach(s => {
-                    totalVol += (parseFloat(s.weight) || 0) * (parseFloat(s.reps) || 0);
+                    const mult = ex.isPerDumbbell ? 2 : 1;
+                    totalVol += (parseFloat(s.weight) || 0) * mult * (parseFloat(s.reps) || 0);
                 });
             });
             const sessionPrs = (w.prs && w.prs.length > 0) ? w.prs : [];
