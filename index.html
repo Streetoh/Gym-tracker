@@ -85,7 +85,9 @@
             showGlobalErrorBanner(reason, '', '', '');
         });
     </script>
-    <title>Gym Tracker PWA</title>
+    <title>MesoPulse</title>
+    <link rel="icon" type="image/png" href="img/icons/icon-192.png">
+    <link rel="apple-touch-icon" href="img/icons/icon-192.png">
     <!-- PWA settings -->
     <meta name="theme-color" content="#121212">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -112,7 +114,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="styles.css?v=1793709410236">
+    <link rel="stylesheet" href="styles.css?v=1793711166834">
 </head>
 <body>
 
@@ -126,7 +128,7 @@
             <div class="mobile-drawer-header">
                 <div class="mobile-drawer-brand">
                     <i class="ph-bold ph-barbell"></i>
-                    <span>Gym Tracker</span>
+                    <span>MesoPulse</span>
                 </div>
                 <button id="btn-close-mobile-drawer" class="btn-icon mobile-drawer-close" aria-label="Cerrar Menú" title="Cerrar Menú">
                     <i class="ph ph-x"></i>
@@ -181,10 +183,10 @@
 
             <!-- MOBILE DRAWER FOOTER (APP VERSION) -->
             <div class="mobile-drawer-footer" style="padding: 12px 16px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px; align-items: center;">
-                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="window.handleVersionClick(event);" data-i18n-title="update.viewNews" title="Ver novedades">Gym Tracker v1.3.0</span>
+                <span class="drawer-version-badge" id="mobile-drawer-version" style="cursor: pointer;" onclick="window.handleVersionClick(event);" data-i18n-title="update.viewNews" title="Ver novedades">MesoPulse v1.3.0</span>
                 
                                 <button id="btn-open-pro-paywall" style="font-size: 13px; font-weight: 800; padding: 10px 14px; border-radius: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #000; border: none; box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35); margin-bottom: 2px;" onclick="window.handleProDrawerClick();">
-                    <i class="ph-fill ph-crown" style="font-size: 17px; color: #000;"></i> <span data-i18n="pro.drawerBtn">Gym Tracker PRO</span>
+                    <i class="ph-fill ph-crown" style="font-size: 17px; color: #000;"></i> <span data-i18n="pro.drawerBtn">MesoPulse PRO</span>
                 </button>
 <button id="btn-open-tutorial-guide" class="btn-secondary" style="font-size: 12px; padding: 7px 12px; border-radius: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; background: var(--bg-surface-elevated);" onclick="if(typeof closeMobileDrawer==='function')closeMobileDrawer(); openWelcomeTutorialModal();">
                     <i class="ph-bold ph-book-open" style="font-size: 15px; color: #10b981;"></i> <span data-i18n="nav.tutorial">Guía y Tutorial</span>
@@ -218,7 +220,7 @@
                         <i class="ph-fill ph-barbell" style="font-size: 16px;"></i> <span data-i18n="nav.workout">En curso</span>
                     </div>
                     <button id="btn-header-update" data-i18n-title="update.title" style="display: none; background-color: #10b981; color: white; border-radius: 12px; width: 38px; height: 38px; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 4px; border: none; cursor: pointer; box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);" onclick="window.openUpdateModal()" title="Actualización disponible"><i class="ph ph-rocket-launch" style="font-size: 20px;"></i></button>
-                    <button id="btn-header-dashboard" style="background-color: #8b5cf6; color: white; border-radius: 12px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 4px; border: none; cursor: pointer; box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);" onclick="openDashboardModal()" title="Dashboard Analítico"><i class="ph ph-chart-bar" style="font-size: 20px;"></i></button>
+                    <button id="btn-header-dashboard" style="background-color: #8b5cf6; color: white; border-radius: 12px; width: 38px; height: 38px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 4px; border: none; cursor: pointer; box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);" onclick="openDashboardModal()" title="Dashboard Analítico" data-i18n-title="dashboard.title"><i class="ph ph-chart-bar" style="font-size: 20px;"></i></button>
                     <button id="btn-ai-clear" class="btn-icon" onclick="clearAiChatHistory()" style="display:none; color: var(--text-primary); width: 40px; height: 40px; justify-content: center; align-items: center; border-radius: 50%; background: var(--bg-surface-elevated); margin-right: 4px;" title="Vaciar Chat"><i class="ph ph-trash"></i></button>
                     <button id="btn-ai-settings" class="btn-icon" onclick="openAiSettings()" style="display:none; color: var(--text-primary); width: 40px; height: 40px; justify-content: center; align-items: center; border-radius: 50%; background: var(--bg-surface-elevated); margin-right: 4px;" title="Ajustes de IA"><i class="ph ph-gear"></i></button>
                       <button id="btn-theme-toggle" class="btn-icon" style="color: var(--text-primary); width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i class="ph ph-sun" id="theme-icon"></i></button>
@@ -735,7 +737,7 @@
                 </div>
                 
                 <div id="backup-container" style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border-color);">
-                    <h3 style="font-size: 16px; margin-bottom: 12px; color: var(--text-primary);">Copia de Seguridad (JSON)</h3>
+                    <h3 style="font-size: 16px; margin-bottom: 12px; color: var(--text-primary);" data-i18n="backup.title">Copia de Seguridad (JSON)</h3>
                     <div style="display:flex; gap:12px; flex-direction: column;">
                         <button id="btn-backup-export" class="btn-secondary" style="width: 100%; padding: 12px; font-weight: 600; display: flex; justify-content: center; gap: 8px;"><i class="ph ph-download-simple"></i> <span data-i18n="export.exportBtn">Exportar (JSON)</span></button>
                         <button id="btn-backup-import" class="btn-secondary" style="width: 100%; padding: 12px; font-weight: 600; display: flex; justify-content: center; gap: 8px;"><i class="ph ph-upload-simple"></i> <span data-i18n="export.importBtn">Importar (JSON)</span></button>
@@ -744,11 +746,11 @@
                 </div>
 
                 <div id="dashboard-tool-container" style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--border-color); text-align: center;">
-                    <h3 style="font-size: 16px; margin-bottom: 8px; color: var(--text-primary);">Dashboard Analítico</h3>
-                    <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px;">Sube tu Copia de Seguridad (JSON) aquí para visualizar tus progresos.</p>
+                    <h3 style="font-size: 16px; margin-bottom: 8px; color: var(--text-primary);" data-i18n="dashboard.title">Dashboard Analítico</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 14px;" data-i18n="dashboard.desc">Sube tu Copia de Seguridad (JSON) aquí para visualizar tus progresos.</p>
                     <button id="btn-open-dashboard" class="btn-primary" style="width: 100%; padding: 16px; font-size: 16px; font-weight: 700; background-color: #8b5cf6; border-color: #8b5cf6; display: flex; justify-content: center; align-items: center; gap: 8px;" onclick="openDashboardModal()">
                         <i class="ph ph-chart-bar" style="font-size: 24px;"></i>
-                        <span>Abrir Creador de Dashboard</span>
+                        <span data-i18n="dashboard.openBtn">Abrir Creador de Dashboard</span>
                     </button>
                 </div>
 
@@ -1229,7 +1231,7 @@
             <div style="width: 58px; height: 58px; margin: 0 auto 16px auto; border-radius: 18px; background: rgba(37, 99, 235, 0.15); display: flex; align-items: center; justify-content: center; color: var(--color-accent); font-size: 28px;">
                 <i class="ph-bold ph-globe"></i>
             </div>
-            <h2 style="font-size: 20px; font-weight: 800; color: var(--text-primary); margin: 0 0 8px 0;">Welcome to Gym Tracker</h2>
+            <h2 style="font-size: 20px; font-weight: 800; color: var(--text-primary); margin: 0 0 8px 0;">Welcome to MesoPulse</h2>
             <p style="font-size: 13.5px; color: var(--text-secondary); margin: 0 0 20px 0; line-height: 1.5;">
                 Please select your preferred language to get started:
             </p>
@@ -1279,17 +1281,17 @@
     <div id="modal-dashboard-options" class="modal">
         <div class="modal-content" style="max-width: 400px; margin: auto; border-radius: 24px; text-align: center;">
             <div class="modal-header" style="justify-content: center; margin-bottom: 16px;">
-                <h3 style="font-size: 18px; font-weight: bold;">Generar Dashboard</h3>
+                <h3 style="font-size: 18px; font-weight: bold;" data-i18n="dashboard.modalTitle">Generar Dashboard</h3>
             </div>
             <div class="modal-body">
                 <button class="btn-primary full-width" style="margin-bottom: 12px; padding: 16px; background-color: #8b5cf6; border-color: #8b5cf6;" onclick="generateDashboard('auto')">
-                    <i class="ph ph-magic-wand" style="font-size: 24px; margin-bottom: 4px;"></i><br><span>Usar datos actuales de la App</span>
+                    <i class="ph ph-magic-wand" style="font-size: 24px; margin-bottom: 4px;"></i><br><span data-i18n="dashboard.useAppData">Usar datos actuales de la App</span>
                 </button>
                 <button class="btn-secondary full-width" style="margin-bottom: 12px; padding: 16px;" onclick="generateDashboard('manual')">
-                    <i class="ph ph-file-json" style="font-size: 24px; margin-bottom: 4px;"></i><br><span>Subir mi propio archivo JSON</span>
+                    <i class="ph ph-file-json" style="font-size: 24px; margin-bottom: 4px;"></i><br><span data-i18n="dashboard.uploadJson">Subir mi propio archivo JSON</span>
                 </button>
                 <button class="btn-secondary full-width" style="margin-bottom: 4px; padding: 12px; font-size: 13px; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="openDashboardApiKeyModal()">
-                    <i class="ph ph-key" style="font-size: 18px; color: #8b5cf6;"></i><span>Configurar API Key IA de Gemini</span>
+                    <i class="ph ph-key" style="font-size: 18px; color: #8b5cf6;"></i><span data-i18n="dashboard.configApiKey">Configurar API Key IA de Gemini</span>
                 </button>
             </div>
             <button class="btn-secondary full-width close-modal" style="margin-top: 16px;" data-i18n="common.cancel">Cancelar</button>
@@ -1337,7 +1339,7 @@
                 </div>
                 
                 <div id="update-action-container" style="width: 100%;">
-                    <!-- Botón inyectado por app.js?v=1793709410236 -->
+                    <!-- Botón inyectado por app.js?v=1793711166834 -->
                 </div>
                 
                 <button class="btn-secondary full-width close-modal" style="padding: 12px; border: none; background: transparent; color: var(--text-secondary); width: 100%; white-space: nowrap; font-size: 13.5px; cursor: pointer;" data-i18n="update.later" onclick="document.getElementById('modal-update').classList.remove('active')">Quizás más tarde</button>
@@ -1631,9 +1633,9 @@
             });
         }
     </script>
-    <script src="default_db.js?v=1793709410236"></script>
-    <script src="app.js?v=1793709410236"></script>
-    <script src="ai_logic.js?v=1793709410236"></script>
+    <script src="default_db.js?v=1793711166834"></script>
+    <script src="app.js?v=1793711166834"></script>
+    <script src="ai_logic.js?v=1793711166834"></script>
 
     <!-- MODAL HISTORIA DE ENTRENAMIENTO (9:16 INSTAGRAM / WHATSAPP) -->
     <div id="modal-story-card" class="modal">
@@ -1778,7 +1780,7 @@
     <!-- MODALS ACTIVIDAD DESACTIVADOS -->
     <div id="modal-activity-settings" style="display: none !important;"></div>
 
-    <!-- FULLSCREEN GYM TRACKER USER GUIDE MODAL (CONFORME A WIREFRAME) -->
+    <!-- FULLSCREEN MESOPULSE USER GUIDE MODAL (CONFORME A WIREFRAME) -->
     <div id="modal-welcome-tutorial" style="display: none; position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 10000000; background: #080c14; flex-direction: column; overflow: hidden; color: #fff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
         <!-- Top Header Bar -->
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px 14px 20px; border-bottom: 1.5px solid rgba(255, 255, 255, 0.08); background: #0c111d;">
@@ -1788,7 +1790,7 @@
                     <i class="ph-bold ph-barbell"></i>
                 </div>
                 <div>
-                    <div style="font-size: 15px; font-weight: 800; color: #fff; letter-spacing: 0.5px; line-height: 1.1;">GYM TRACKER</div>
+                    <div style="font-size: 15px; font-weight: 800; color: #fff; letter-spacing: 0.5px; line-height: 1.1;">MESOPULSE</div>
                     <div id="tutorial-header-subtitle" style="font-size: 10.5px; font-weight: 700; color: #60a5fa; text-transform: uppercase; letter-spacing: 0.8px;">GUÍA DE USO</div>
                 </div>
             </div>

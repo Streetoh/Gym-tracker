@@ -1199,7 +1199,9 @@ let state = {
     completedWorkouts: JSON.parse(localStorage.getItem('gym_completed')) || [],
     groups: (savedGroups && savedGroups.length > 0) ? savedGroups : (typeof defaultGroups !== 'undefined' ? defaultGroups : ['Sin Grupo']),
     activeWorkoutState: JSON.parse(localStorage.getItem('gym_active_workout')) || null,
-    evolution: JSON.parse(localStorage.getItem('gym_evolution')) || []
+    evolution: JSON.parse(localStorage.getItem('gym_evolution')) || [],
+    jointIssues: JSON.parse(localStorage.getItem('gym_joint_issues') || '{}'),
+    activeMesocycleConfig: JSON.parse(localStorage.getItem('gym_mesocycle_config') || '{}')
 };
 
 
@@ -1336,6 +1338,8 @@ function saveState() {
     localStorage.setItem('gym_groups', JSON.stringify(state.groups));
     localStorage.setItem('gym_active_workout', JSON.stringify(state.activeWorkoutState));
     localStorage.setItem('gym_evolution', JSON.stringify(state.evolution));
+    if (state.jointIssues) localStorage.setItem('gym_joint_issues', JSON.stringify(state.jointIssues));
+    if (state.activeMesocycleConfig) localStorage.setItem('gym_mesocycle_config', JSON.stringify(state.activeMesocycleConfig));
 };
 
 const formatDate = (date) => {
@@ -1479,7 +1483,7 @@ window.addEventListener('keydown', (e) => {
 function updateDrawerVersionDisplay() {
     const vEl = document.getElementById('mobile-drawer-version');
     if (vEl && typeof CURRENT_APP_VERSION !== 'undefined') {
-        vEl.textContent = `Gym Tracker v${CURRENT_APP_VERSION}`;
+        vEl.textContent = `MesoPulse v${CURRENT_APP_VERSION}`;
     }
 }
 
@@ -1767,7 +1771,7 @@ const translations = {
           "sets": "Series",
           "prs": "Nuevos Récords",
           "highlights": "DESTACADOS DE LA SESIÓN",
-          "watermark": "Gym Tracker • Superando límites cada día"
+          "watermark": "MesoPulse • Superando límites cada día"
 },
         "achievements": {
           "title": "Muro de Logros y Trofeos",
@@ -2213,7 +2217,7 @@ const translations = {
           "sets": "Sets",
           "prs": "New Records",
           "highlights": "SESSION HIGHLIGHTS",
-          "watermark": "Gym Tracker • Pushing limits every day"
+          "watermark": "MesoPulse • Pushing limits every day"
 },
         "achievements": {
           "title": "Achievements & Trophies Wall",
@@ -2647,7 +2651,7 @@ const translations = {
           "sets": "Подходы",
           "prs": "Новые рекорды",
           "highlights": "ГЛАВНОЕ ЗА ТРЕНИРОВКУ",
-          "watermark": "Gym Tracker • Преодолевая границы каждый день"
+          "watermark": "MesoPulse • Преодолевая границы каждый день"
 },
         "achievements": {
           "title": "Стена достижений и трофеев",
@@ -3070,7 +3074,7 @@ const translations = {
           "sets": "Seeriad",
           "prs": "Uued rekordid",
           "highlights": "TREENINGU TIPP-HETKED",
-          "watermark": "Gym Tracker • Ületades piire iga päev"
+          "watermark": "MesoPulse • Ületades piire iga päev"
 },
         "achievements": {
           "title": "Saavutuste sein",
@@ -3492,7 +3496,7 @@ const translations = {
           "sets": "Підходи",
           "prs": "Нові рекорди",
           "highlights": "ГОЛОВНЕ ЗА ТРЕНУВАННЯ",
-          "watermark": "Gym Tracker • Долаючи межі щодня"
+          "watermark": "MesoPulse • Долаючи межі щодня"
 },
         "achievements": {
           "title": "Стіна досягнень та трофеїв",
@@ -3951,14 +3955,16 @@ const getSetTypeT = (str) => {
 };
 
 window.getTranslatedGroupName = function(gName) {
-    if (!gName) return 'Sin Grupo';
+    if (!gName) return (typeof getT === 'function' ? getT('groups.sinGrupo') : 'Sin Grupo') || 'Sin Grupo';
     const clean = gName.trim().toLowerCase();
     let gKey = clean;
     if (clean === 'abdominales y core' || clean === 'core' || clean === 'abs') gKey = 'core';
     else if (clean === 'tríceps' || clean === 'triceps') gKey = 'triceps';
     else if (clean === 'bíceps' || clean === 'biceps') gKey = 'biceps';
     else if (clean === 'hombros' || clean === 'hombro' || clean === 'delts') gKey = 'hombro';
-    else if (clean === 'cuádriceps' || clean === 'gemelos' || clean === 'piernas') gKey = 'piernas';
+    else if (clean === 'cuádriceps' || clean === 'gemelos' || clean === 'piernas' || clean === 'pierna') gKey = 'piernas';
+    else if (clean === 'pecho' || clean === 'chest') gKey = 'pecho';
+    else if (clean === 'espalda' || clean === 'back') gKey = 'espalda';
     
     const trG = typeof getT === 'function' ? getT('groups.' + gKey) : gName;
     return (trG && trG !== 'groups.' + gKey) ? trG : gName;
@@ -4100,6 +4106,141 @@ Object.keys(extraParityTrans).forEach(lang => {
         deepMerge(translations[lang], extraParityTrans[lang]);
     }
 });
+
+const dashboardTranslations = {
+    es: {
+        backup: {
+            title: 'Copia de Seguridad (JSON)',
+            export: 'Exportar Datos (JSON)',
+            import: 'Importar Datos (JSON)'
+        },
+        dashboard: {
+            title: 'Dashboard Analítico',
+            desc: 'Sube tu Copia de Seguridad (JSON) aquí para visualizar tus progresos.',
+            openBtn: 'Abrir Creador de Dashboard',
+            modalTitle: 'Generar Dashboard',
+            useAppData: 'Usar datos actuales de la App',
+            uploadJson: 'Subir mi propio archivo JSON',
+            configApiKey: 'Configurar API Key IA de Gemini'
+        },
+        creator: {
+            scheduleOnDate: 'Programar en Fecha',
+            includedExercises: 'Ejercicios incluidos'
+        },
+        common: {
+            exercises: 'ejercicios',
+            sets: 'series',
+            edit: 'Editar'
+        }
+    },
+    en: {
+        backup: {
+            title: 'Backup (JSON)',
+            export: 'Export Data (JSON)',
+            import: 'Import Data (JSON)'
+        },
+        dashboard: {
+            title: 'Analytical Dashboard',
+            desc: 'Upload your Backup (JSON) here to visualize your progress.',
+            openBtn: 'Open Dashboard Creator',
+            modalTitle: 'Generate Dashboard',
+            useAppData: 'Use current App data',
+            uploadJson: 'Upload my own JSON file',
+            configApiKey: 'Configure Gemini AI API Key'
+        },
+        creator: {
+            scheduleOnDate: 'Schedule on Date',
+            includedExercises: 'Included exercises'
+        },
+        common: {
+            exercises: 'exercises',
+            sets: 'sets',
+            edit: 'Edit'
+        }
+    },
+    ru: {
+        backup: {
+            title: 'Резервная копия (JSON)',
+            export: 'Экспорт данных (JSON)',
+            import: 'Импорт данных (JSON)'
+        },
+        dashboard: {
+            title: 'Аналитический дашборд',
+            desc: 'Загрузите резервную копию (JSON) для визуализации прогресса.',
+            openBtn: 'Открыть конструктор дашборда',
+            modalTitle: 'Создать дашборд',
+            useAppData: 'Использовать текущие данные',
+            uploadJson: 'Загрузить свой JSON',
+            configApiKey: 'Настроить Gemini API Key'
+        },
+        creator: {
+            scheduleOnDate: 'Запланировать на дату',
+            includedExercises: 'Включенные упражнения'
+        },
+        common: {
+            exercises: 'упражнений',
+            sets: 'подходов',
+            edit: 'Изменить'
+        }
+    },
+    et: {
+        backup: {
+            title: 'Varundus (JSON)',
+            export: 'Ekspordi andmed (JSON)',
+            import: 'Impordi andmed (JSON)'
+        },
+        dashboard: {
+            title: 'Analüütiline töölaud',
+            desc: 'Laadi üles varundusfail (JSON) oma progressi vaatamiseks.',
+            openBtn: 'Ava töölaua looja',
+            modalTitle: 'Loo töölaud',
+            useAppData: 'Kasuta äpi praeguseid andmeid',
+            uploadJson: 'Laadi üles oma JSON',
+            configApiKey: 'Seadista Gemini API võti'
+        },
+        creator: {
+            scheduleOnDate: 'Määra kuupäevale',
+            includedExercises: 'Kaasatud harjutused'
+        },
+        common: {
+            exercises: 'harjutust',
+            sets: 'seeriat',
+            edit: 'Muuda'
+        }
+    },
+    uk: {
+        backup: {
+            title: 'Резервна копія (JSON)',
+            export: 'Експорт даних (JSON)',
+            import: 'Імпорт даних (JSON)'
+        },
+        dashboard: {
+            title: 'Аналітичний дашборд',
+            desc: 'Завантажте резервну копію (JSON) для візуалізації прогресу.',
+            openBtn: 'Відкрити конструктор дашборду',
+            modalTitle: 'Створити дашборд',
+            useAppData: 'Використовувати поточні дані',
+            uploadJson: 'Завантажити свій JSON',
+            configApiKey: 'Налаштувати Gemini API Key'
+        },
+        creator: {
+            scheduleOnDate: 'Запланувати на дату',
+            includedExercises: 'Включені вправи'
+        },
+        common: {
+            exercises: 'вправ',
+            sets: 'підходів',
+            edit: 'Редагувати'
+        }
+    }
+};
+
+Object.keys(dashboardTranslations).forEach(lang => {
+    if (translations[lang]) {
+        deepMerge(translations[lang], dashboardTranslations[lang]);
+    }
+});
+
 
 
 const getT = (path) => {
@@ -4605,7 +4746,7 @@ const renderExercises = () => {
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
                             <div class="exercise-info" style="flex: 1; min-width: 0; text-align: center;">
                                 <div class="exercise-name" style="font-size: 18px; font-weight: bold; color: var(--text-primary); margin-bottom: 2px;">${trName}</div>
-                                <div class="exercise-group" style="font-size: 13px; color: var(--text-secondary);">${ex.group || 'Sin Grupo'}</div>
+                                <div class="exercise-group" style="font-size: 13px; color: var(--text-secondary);">${getTranslatedGroupName(ex.group)}</div>
                                 ${(ex.prHeavy || ex.prHyp) ? `
                                 <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin-top:6px;">
                                     ${ex.prHeavy ? `<span style="background:rgba(220,38,38,0.18); color:#f87171; border:1px solid rgba(220,38,38,0.4); padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700;">🔴 PR Pesado: ${ex.prHeavy}</span>` : ''}
@@ -7420,7 +7561,7 @@ window.filterReplaceExerciseList = function() {
                     ${imgHtml}
                     <div style="text-align: left; overflow: hidden;">
                         <div style="font-weight: 700; font-size: 13.5px; color: var(--text-primary); text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">${trName}</div>
-                        <div style="font-size: 11.5px; color: var(--text-secondary);">${ex.group || ''}</div>
+                        <div style="font-size: 11.5px; color: var(--text-secondary);">${getTranslatedGroupName(ex.group)}</div>
                     </div>
                 </div>
                 <button type="button" class="btn-primary" style="padding: 6px 12px; font-size: 12px; border-radius: 8px; flex-shrink: 0;">${getT('replaceEx.btnReplace') || 'Sustituir'}</button>
@@ -7680,7 +7821,7 @@ window.showWorkoutSummaryModal = function(workoutData) {
 
     // Save summary text for sharing
     const prsSummaryStr = prsArray.length > 0 ? ('\n🏆 Récords superados:\n' + prsArray.map(p => '• ' + getTrExName(p.exerciseName) + ': ' + p.weight + 'kg x ' + p.reps).join('\n')) : '';
-    window.lastWorkoutSummaryText = `💪 Gym Tracker - ${getT('summary.title') || 'Entrenamiento Completado'}\n📅 ${workoutData.date || new Date().toLocaleDateString()} (${workoutData.name || 'Entrenamiento'})\n⏱️ ${getT('summary.time') || 'Tiempo'}: ${workoutData.duration || '00:00:00'}\n🏋️ ${getT('summary.volume') || 'Volumen'}: ${Math.round(totalVolume).toLocaleString()} kg\n🔢 ${getT('summary.sets') || 'Series'}: ${completedSetsCount}${prsSummaryStr}`;
+    window.lastWorkoutSummaryText = `💪 MesoPulse - ${getT('summary.title') || 'Entrenamiento Completado'}\n📅 ${workoutData.date || new Date().toLocaleDateString()} (${workoutData.name || 'Entrenamiento'})\n⏱️ ${getT('summary.time') || 'Tiempo'}: ${workoutData.duration || '00:00:00'}\n🏋️ ${getT('summary.volume') || 'Volumen'}: ${Math.round(totalVolume).toLocaleString()} kg\n🔢 ${getT('summary.sets') || 'Series'}: ${completedSetsCount}${prsSummaryStr}`;
 
     modal.classList.add('active');
     currentWorkoutPRs.clear();
@@ -9671,7 +9812,7 @@ document.getElementById('btn-export-calendar')?.addEventListener('click', async 
             gym_routines: localStorage.getItem('gym_routines')
         };
         const jsonStr = JSON.stringify(data);
-        const filename = 'gymtracker_planned_' + new Date().toISOString().split('T')[0] + '.json';
+        const filename = 'mesopulse_planned_' + new Date().toISOString().split('T')[0] + '.json';
 
         localStorage.setItem('gym_has_exported_json', 'true');
         localStorage.setItem('gym_last_export_json_raw', jsonStr.trim());
@@ -9774,7 +9915,7 @@ document.getElementById('btn-backup-export')?.addEventListener('click', async ()
             gym_completed: localStorage.getItem('gym_completed')
         };
         const jsonStr = JSON.stringify(data);
-        const filename = 'gymtracker_backup_' + new Date().toISOString().split('T')[0] + '.json';
+        const filename = 'mesopulse_backup_' + new Date().toISOString().split('T')[0] + '.json';
 
         localStorage.setItem('gym_has_exported_json', 'true');
         localStorage.setItem('gym_last_export_json_raw', jsonStr.trim());
@@ -13414,7 +13555,7 @@ window.drawStoryCardCanvas = function(data) {
     ctx.textAlign = 'center';
     ctx.fillStyle = '#64748b';
     ctx.font = '600 26px sans-serif';
-    ctx.fillText('🔥 Superando límites cada día • Gym Tracker', W / 2, 1690);
+    ctx.fillText('🔥 Superando límites cada día • MesoPulse', W / 2, 1690);
 
     // Badge at bottom
     ctx.fillStyle = '#1e293b';
@@ -13549,7 +13690,7 @@ window.shareStoryCard = async function() {
                 const file = new File([blob], fileName, { type: 'image/png' });
                 if (navigator.canShare({ files: [file] })) {
                     await navigator.share({
-                        title: 'Gym Tracker Historia',
+                        title: 'MesoPulse Historia',
                         files: [file]
                     });
                     return;
@@ -13602,7 +13743,7 @@ window.openTechniqueModal = function(exerciseId) {
             mediaContainer.innerHTML = '<iframe src="https://www.youtube.com/embed/' + ytID + '" allowfullscreen style="width: 100%; aspect-ratio: 16/9; border: none; border-radius: 12px;"></iframe>';
         } else if (dbEx.imageData) {
             mediaContainer.style.display = 'block';
-            mediaContainer.innerHTML = '<img src="' + dbEx.imageData + '" onclick="openLightbox(\'' + dbEx.imageData + '\')" style="width: 100%; max-height: 220px; object-fit: contain; border-radius: 12px; background: #000; cursor: pointer;">';
+            mediaContainer.innerHTML = '<img src="' + dbEx.imageData + '" onclick="openLightbox(\'" + dbEx.imageData + "\')" style="width: 100%; max-height: 220px; object-fit: contain; border-radius: 12px; background: #000; cursor: pointer;">';
         } else {
             mediaContainer.style.display = 'none';
         }
@@ -14226,7 +14367,7 @@ window.renderActivityView = function() {
         `;
     }
 
-    // Real workouts from Gym Tracker for this date
+    // Real workouts from MesoPulse for this date
     const todayWorkouts = (state.workouts || []).filter(w => {
         if (!w.date) return false;
         return w.date.startsWith(dateStr);
@@ -14243,7 +14384,7 @@ window.renderActivityView = function() {
                             <i class="ph-bold ph-barbell"></i>
                         </div>
                         <div>
-                            <div style="font-weight: 700; font-size: 13px;">${escapeHtml(w.name || 'Entrenamiento Gym Tracker')}</div>
+                            <div style="font-weight: 700; font-size: 13px;">${escapeHtml(w.name || 'Entrenamiento MesoPulse')}</div>
                             <div style="font-size: 11px; color: var(--text-secondary);">${setsCount} series completadas</div>
                         </div>
                     </div>
@@ -14254,7 +14395,7 @@ window.renderActivityView = function() {
     } else {
         workoutsListHtml = `
             <div style="font-size: 12px; color: var(--text-secondary); text-align: center; padding: 12px 0;">
-                No hay entrenamientos de Gym Tracker registrados en este día.
+                No hay entrenamientos de MesoPulse registrados en este día.
             </div>
         `;
     }
@@ -14406,7 +14547,7 @@ window.syncActivityData = function() {
             console.warn('Error syncing with Health Connect:', err);
             renderActivityView();
             if (typeof showToast === 'function') {
-                showToast('Abre Conexión de Salud para conceder permisos a Gym Tracker');
+                showToast('Abre Conexión de Salud para conceder permisos a MesoPulse');
             }
         });
     } else {
@@ -14519,7 +14660,7 @@ window.openNativeHealthConnect = function() {
             window.Capacitor.Plugins.HealthSync.openHealthConnectSettings().catch(e => console.warn(e));
         });
     } else {
-        alert('En tu teléfono Samsung, abre Samsung Health y ve a Ajustes > Conexión de Salud para autorizar a Gym Tracker.');
+        alert('En tu teléfono Samsung, abre Samsung Health y ve a Ajustes > Conexión de Salud para autorizar a MesoPulse.');
     }
 };
 
@@ -15318,12 +15459,7 @@ window.nextOrFinishTutorial = function() {
         return predefinedEditorItems;
     };
 
-    function getTranslatedGroupName(gName) {
-        if (!gName) return 'Sin Grupo';
-        const gKey = gName === 'Abdominales y core' ? 'core' : (gName === 'Tríceps' ? 'triceps' : (gName === 'Bíceps' ? 'biceps' : gName.toLowerCase()));
-        const trG = typeof getT === 'function' ? getT('groups.' + gKey) : gName;
-        return (trG && trG !== 'groups.' + gKey) ? trG : gName;
-    }
+    // Uses global window.getTranslatedGroupName
 
     function getTranslatedTypeLabel(type) {
         if (type === 'heavy') return (typeof getT === 'function' && getT('types.heavy') && getT('types.heavy') !== 'types.heavy') ? getT('types.heavy') : 'Pesado';
@@ -15562,9 +15698,9 @@ window.nextOrFinishTutorial = function() {
                             ? `<img src="${dbEx.imageData}" style="width: 38px; height: 38px; object-fit: cover; border-radius: 8px; flex-shrink: 0;">`
                             : `<div style="width: 38px; height: 38px; border-radius: 8px; background: var(--bg-surface-elevated); display: flex; align-items: center; justify-content: center; color: var(--text-secondary); font-size: 16px; flex-shrink: 0;"><i class="ph ph-barbell"></i></div>`;
                         
-                        const hypInfo = ex.setsByPhase?.hypertrophy?.length ? `${ex.setsByPhase.hypertrophy.length} series (${ex.setsByPhase.hypertrophy.map(s => s.reps).filter(Boolean)[0] || '10-12'})` : '-';
-                        const heaInfo = ex.setsByPhase?.heavy?.length ? `${ex.setsByPhase.heavy.length} series (${ex.setsByPhase.heavy.map(s => s.reps).filter(Boolean)[0] || '6-8'})` : '-';
-                        const intInfo = ex.setsByPhase?.intensity?.length ? `${ex.setsByPhase.intensity.length} series (${ex.setsByPhase.intensity.map(s => s.reps).filter(Boolean)[0] || 'Al fallo'})` : '-';
+                        const hypInfo = ex.setsByPhase?.hypertrophy?.length ? `${ex.setsByPhase.hypertrophy.length} ${getT('common.sets') || 'series'} (${ex.setsByPhase.hypertrophy.map(s => s.reps).filter(Boolean)[0] || '10-12'})` : '-';
+                        const heaInfo = ex.setsByPhase?.heavy?.length ? `${ex.setsByPhase.heavy.length} ${getT('common.sets') || 'series'} (${ex.setsByPhase.heavy.map(s => s.reps).filter(Boolean)[0] || '6-8'})` : '-';
+                        const intInfo = ex.setsByPhase?.intensity?.length ? `${ex.setsByPhase.intensity.length} ${getT('common.sets') || 'series'} (${ex.setsByPhase.intensity.map(s => s.reps).filter(Boolean)[0] || 'Al fallo'})` : '-';
 
                         return `
                             <div style="display: flex; align-items: center; gap: 10px; background: var(--bg-surface-elevated); padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border-color);">
@@ -15573,7 +15709,7 @@ window.nextOrFinishTutorial = function() {
                                     <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
                                         <span style="font-size: 11px; font-weight: 800; background: rgba(255,255,255,0.08); color: var(--text-secondary); padding: 1px 5px; border-radius: 4px;">#${itemCounter++}</span>
                                         <span style="font-size: 13px; font-weight: 700; color: var(--text-primary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${trName}</span>
-                                        <span style="font-size: 10.5px; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 1px 6px; border-radius: 4px;">${dbEx.group || 'Sin Grupo'}</span>
+                                        <span style="font-size: 10.5px; color: var(--text-secondary); background: rgba(255,255,255,0.05); padding: 1px 6px; border-radius: 4px;">${getTranslatedGroupName(dbEx.group)}</span>
                                     </div>
                                     <div style="display: flex; flex-wrap: wrap; gap: 6px; font-size: 10.5px; margin-top: 4px;">
                                         <span style="color: var(--color-hypertrophy);">🔵 <strong>${getT('types.hypertrophy') || 'Hipertrofia'}:</strong> ${hypInfo}</span>
@@ -15626,12 +15762,12 @@ window.nextOrFinishTutorial = function() {
                             </div>
                         </div>
                         <div style="font-size: 12.5px; color: var(--color-accent); font-weight: 700; margin-bottom: 6px;">
-                            💪 ${groupsText} (${exList.length} ejercicios)
+                            💪 ${groupsText} (${exList.length} ${getT('common.exercises') || (state.language === 'en' ? 'exercises' : 'ejercicios')})
                         </div>
                         <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px;">
-                            <span style="font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: rgba(37, 99, 235, 0.12); color: var(--color-hypertrophy); border: 1px solid rgba(37, 99, 235, 0.3);">🔵 Hipertrofia: ${hypSets} series</span>
-                            <span style="font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: rgba(220, 38, 38, 0.12); color: var(--color-heavy); border: 1px solid rgba(220, 38, 38, 0.3);">🔴 Pesado: ${heaSets} series</span>
-                            <span style="font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: var(--color-intensity); border: 1px solid rgba(16, 185, 129, 0.3);">🟢 Alta Int.: ${intSets} series</span>
+                            <span style="font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: rgba(37, 99, 235, 0.12); color: var(--color-hypertrophy); border: 1px solid rgba(37, 99, 235, 0.3);">🔵 ${getTranslatedTypeLabel('hypertrophy')}: ${hypSets} ${getT('common.sets') || 'series'}</span>
+                            <span style="font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: rgba(220, 38, 38, 0.12); color: var(--color-heavy); border: 1px solid rgba(220, 38, 38, 0.3);">🔴 ${getTranslatedTypeLabel('heavy')}: ${heaSets} ${getT('common.sets') || 'series'}</span>
+                            <span style="font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 6px; background: rgba(16, 185, 129, 0.12); color: var(--color-intensity); border: 1px solid rgba(16, 185, 129, 0.3);">🟢 ${getTranslatedTypeLabel('intensity')}: ${intSets} ${getT('common.sets') || 'series'}</span>
                         </div>
                         <div class="predefined-card-preview-text" style="font-size: 12px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                             ${exPreview}
@@ -15641,17 +15777,17 @@ window.nextOrFinishTutorial = function() {
 
                 <div class="predefined-card-details" style="display: none; flex-direction: column; gap: 8px; padding-top: 10px; border-top: 1px dashed var(--border-color);">
                     <div style="font-size: 12px; font-weight: 800; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px;">
-                        Ejercicios incluidos (${exList.length}):
+                        ${getT('creator.includedExercises') || 'Ejercicios incluidos'} (${exList.length}):
                     </div>
                     ${exercisesDetailsHtml}
                 </div>
 
                 <div style="display: flex; gap: 8px; border-top: 1px solid var(--border-color); padding-top: 10px;">
                     <button type="button" class="btn-primary schedule-tpl-btn" style="flex: 2; padding: 9px 12px; font-size: 12.5px; font-weight: 700; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                        <i class="ph-bold ph-calendar-plus"></i> <span>Programar en Fecha</span>
+                        <i class="ph-bold ph-calendar-plus"></i> <span>${getT('creator.scheduleOnDate') || 'Programar en Fecha'}</span>
                     </button>
                     <button type="button" class="btn-secondary edit-tpl-btn" style="flex: 1; padding: 9px 12px; font-size: 12.5px; font-weight: 700; border-radius: 10px; display: flex; align-items: center; justify-content: center; gap: 4px;">
-                        <i class="ph ph-pencil-simple"></i> <span>Editar</span>
+                        <i class="ph ph-pencil-simple"></i> <span>${getT('common.edit') || 'Editar'}</span>
                     </button>
                     <button type="button" class="btn-secondary del-tpl-btn" style="padding: 9px 12px; font-size: 12.5px; border-radius: 10px; color: var(--color-heavy); border-color: var(--color-heavy);">
                         <i class="ph ph-trash"></i>
@@ -16403,7 +16539,7 @@ window.showToast = function(msg, duration = 2400) {
 (function() {
     const PRO_TRANSLATIONS = {
         es: {
-            drawerBtn: "Gym Tracker PRO",
+            drawerBtn: "MesoPulse PRO",
             modalTitle: "¿Necesitas comparar?",
             colFree: "Gratis",
             colPro: "Pro",
@@ -16434,12 +16570,12 @@ window.showToast = function(msg, duration = 2400) {
             billingNotice: "Iniciando pasarela de Google Play Billing...",
             restoring: "Consultando compras activas en Google Play...",
             noPurchasesFound: "No se encontraron compras activas en tu cuenta de Google Play.",
-            purchaseSuccess: "¡Gym Tracker PRO activado con éxito!",
-            devActivated: "Gym Tracker PRO Activado (Modo desarrollador / prueba)",
-            devDeactivated: "Gym Tracker GRATIS Activado"
+            purchaseSuccess: "¡MesoPulse PRO activado con éxito!",
+            devActivated: "MesoPulse PRO Activado (Modo desarrollador / prueba)",
+            devDeactivated: "MesoPulse GRATIS Activado"
         },
         en: {
-            drawerBtn: "Gym Tracker PRO",
+            drawerBtn: "MesoPulse PRO",
             modalTitle: "Need to compare?",
             colFree: "Free",
             colPro: "Pro",
@@ -16470,9 +16606,9 @@ window.showToast = function(msg, duration = 2400) {
             billingNotice: "Opening Google Play Billing...",
             restoring: "Checking active purchases on Google Play...",
             noPurchasesFound: "No active purchases found for your Google Play account.",
-            purchaseSuccess: "Gym Tracker PRO successfully activated!",
-            devActivated: "Gym Tracker PRO Activated (Dev/Testing Mode)",
-            devDeactivated: "Gym Tracker FREE Activated"
+            purchaseSuccess: "MesoPulse PRO successfully activated!",
+            devActivated: "MesoPulse PRO Activated (Dev/Testing Mode)",
+            devDeactivated: "MesoPulse FREE Activated"
         }
     };
 
@@ -16566,11 +16702,11 @@ window.showToast = function(msg, duration = 2400) {
         if (isPro) {
             const isEn = (state?.language === 'en');
             const confirmMsg = isEn
-                ? 'You currently have Gym Tracker PRO active.\n\nDo you want to switch back to the FREE version to test restrictions?'
-                : 'Tienes Gym Tracker PRO activo actualmente.\n\n¿Deseas volver a la versión GRATIS para probar las restricciones?';
+                ? 'You currently have MesoPulse PRO active.\n\nDo you want to switch back to the FREE version to test restrictions?'
+                : 'Tienes MesoPulse PRO activo actualmente.\n\n¿Deseas volver a la versión GRATIS para probar las restricciones?';
             if (confirm(confirmMsg)) {
                 window.setProStatus(false);
-                const toastMsg = isEn ? 'Gym Tracker FREE active (test restrictions applied)' : 'Gym Tracker GRATIS activado (restricciones de prueba)';
+                const toastMsg = isEn ? 'MesoPulse FREE active (test restrictions applied)' : 'MesoPulse GRATIS activado (restricciones de prueba)';
                 if (typeof showToast === 'function') showToast(toastMsg);
                 else alert(toastMsg);
                 return;
@@ -16595,12 +16731,12 @@ window.showToast = function(msg, duration = 2400) {
         const btn = document.getElementById('btn-open-pro-paywall');
         if (btn) {
             if (isPro) {
-                btn.innerHTML = '<i class="ph-fill ph-crown" style="font-size: 16px; color: #fbbf24;"></i> <span>Gym Tracker PRO ✓</span>';
+                btn.innerHTML = '<i class="ph-fill ph-crown" style="font-size: 16px; color: #fbbf24;"></i> <span>MesoPulse PRO ✓</span>';
                 btn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
                 btn.style.color = '#ffffff';
             } else {
-                const label = (typeof getT === 'function' ? getT('pro.drawerBtn') : 'Gym Tracker PRO');
-                btn.innerHTML = '<i class="ph-fill ph-crown" style="font-size: 16px;"></i> <span>' + (label && label !== 'pro.drawerBtn' ? label : 'Gym Tracker PRO') + '</span>';
+                const label = (typeof getT === 'function' ? getT('pro.drawerBtn') : 'MesoPulse PRO');
+                btn.innerHTML = '<i class="ph-fill ph-crown" style="font-size: 16px;"></i> <span>' + (label && label !== 'pro.drawerBtn' ? label : 'MesoPulse PRO') + '</span>';
                 btn.style.background = 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)';
                 btn.style.color = '#000000';
             }
