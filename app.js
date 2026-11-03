@@ -1190,7 +1190,7 @@ function getTrExName(originalName) {
 }
 
 let state = {
-    language: localStorage.getItem('gym_language') || 'en',
+    language: localStorage.getItem('gym_language') || 'es',
     exercises: (savedExercises && savedExercises.length > 0) ? savedExercises : (typeof defaultExercises !== 'undefined' ? defaultExercises : []),
     sessions: JSON.parse(localStorage.getItem('gym_sessions')) || [],
     predefinedSessions: JSON.parse(localStorage.getItem('gym_routines')) || [],
@@ -1610,7 +1610,7 @@ window.selectEventType = (type) => {
     }
 };
 
-document.getElementById('btn-save-goal').addEventListener('click', () => {
+document.getElementById('btn-save-goal')?.addEventListener('click', () => {
     const steps = document.getElementById('goal-steps-target').value;
     state.sessions.push({
         id: Date.now().toString(),
@@ -1855,7 +1855,7 @@ const translations = {
             "progression": "Progresión",
             "evolution": "Evolución",
             "export": "Exp / Imp",
-            "tutorial": "Guía y Tutorial"
+            "tutorial": "Guide & Tutorial"
         },
         "header": {
             "statistics": "Estadísticas",
@@ -2301,7 +2301,7 @@ const translations = {
             "progression": "Progression",
             "evolution": "Evolution",
             "export": "Exp / Imp",
-            "tutorial": "Guía y Tutorial"
+            "tutorial": "Guide & Tutorial"
         },
         "header": {
             "statistics": "Statistics",
@@ -4027,14 +4027,96 @@ Object.keys(mesoTrans).forEach(lang => {
     }
 });
 
+const extraParityTrans = {
+    ru: {
+        nav: { statistics: 'Статистика', tutorial: 'Руководство и туториал' },
+        header: { statistics: 'Статистика' },
+        workout: {
+            activeNotificationTitle: 'Тренировка идет',
+            activeNotificationBody: 'У вас активная тренировка. Нажмите, чтобы продолжить.',
+            reopenExercise: 'Возобновить упражнение',
+            reopenSuperset: 'Возобновить суперсет'
+        },
+        modals: {
+            routine: {
+                workoutTitle: 'Одиночная тренировка',
+                editTitle: 'Редактировать тренировку',
+                date: 'Дата тренировки',
+                saveChanges: 'Сохранить изменения'
+            }
+        }
+    },
+    et: {
+        nav: { menu: 'Menüü', statistics: 'Statistika', tutorial: 'Juhend ja õpetus' },
+        header: { statistics: 'Statistika' },
+        workout: {
+            activeNotificationTitle: 'Treening pooleli',
+            activeNotificationBody: 'Sul on pooleli treening. Puuduta jätkamiseks.',
+            reopenExercise: 'Ava harjutus uuesti',
+            reopenSuperset: 'Ava supersett uuesti'
+        },
+        modals: {
+            routine: {
+                workoutTitle: 'Üksik treening',
+                editTitle: 'Muuda treeningut',
+                date: 'Treeningu kuupäev',
+                saveChanges: 'Salvesta muudatused'
+            }
+        }
+    },
+    uk: {
+        nav: { statistics: 'Статистика', tutorial: 'Посібник та навчання' },
+        header: { statistics: 'Статистика' },
+        workout: {
+            activeNotificationTitle: 'Тренування триває',
+            activeNotificationBody: 'У вас є активне тренування. Натисніть, щоб продовжити.',
+            reopenExercise: 'Відновити вправу',
+            reopenSuperset: 'Відновити суперсет'
+        },
+        modals: {
+            routine: {
+                workoutTitle: 'Окреме тренування',
+                editTitle: 'Редагувати тренування',
+                date: 'Дата тренування',
+                saveChanges: 'Зберегти зміни'
+            }
+        }
+    }
+};
+
+function deepMerge(target, source) {
+    for (const key of Object.keys(source)) {
+        if (source[key] instanceof Object && key in target) {
+            deepMerge(target[key], source[key]);
+        } else {
+            target[key] = source[key];
+        }
+    }
+    return target;
+}
+
+Object.keys(extraParityTrans).forEach(lang => {
+    if (translations[lang]) {
+        deepMerge(translations[lang], extraParityTrans[lang]);
+    }
+});
+
+
 const getT = (path) => {
     const keys = path.split('.');
     let result = translations[state.language];
     for (const key of keys) {
-        if (result === undefined) return path;
+        if (result === undefined) break;
         result = result[key];
     }
-    return result || path;
+    if (result !== undefined && result !== null) return result;
+    // Fallback to Spanish or English if key is missing in active language
+    let fallback = (translations['es'] || translations['en']);
+    for (const key of keys) {
+        if (fallback === undefined) return path;
+        fallback = fallback[key];
+    }
+    return fallback || path;
 };
 
 
@@ -4190,14 +4272,14 @@ const renderCalendar = () => {
     if (typeof updateCalendarRecoveryWidget === 'function') updateCalendarRecoveryWidget();
 };
 
-document.getElementById('prev-week').addEventListener('click', () => {
+document.getElementById('prev-week')?.addEventListener('click', () => {
     state.currentWeekStart.setDate(state.currentWeekStart.getDate() - 7);
     const offset = state.selectedDate.getDay() === 0 ? 6 : state.selectedDate.getDay() - 1;
     state.selectedDate = new Date(state.currentWeekStart);
     state.selectedDate.setDate(state.selectedDate.getDate() + offset);
     renderCalendar();
 });
-document.getElementById('next-week').addEventListener('click', () => {
+document.getElementById('next-week')?.addEventListener('click', () => {
     state.currentWeekStart.setDate(state.currentWeekStart.getDate() + 7);
     const offset = state.selectedDate.getDay() === 0 ? 6 : state.selectedDate.getDay() - 1;
     state.selectedDate = new Date(state.currentWeekStart);
@@ -4279,11 +4361,11 @@ const renderManageGroups = () => {
         `;
     });
 };
-document.getElementById('btn-manage-groups').addEventListener('click', () => {
+document.getElementById('btn-manage-groups')?.addEventListener('click', () => {
     renderManageGroups();
     openModal(modalManageGroups);
 });
-document.getElementById('btn-add-group').addEventListener('click', () => {
+document.getElementById('btn-add-group')?.addEventListener('click', () => {
     const name = document.getElementById('new-group-name').value.trim();
     if(name && !state.groups.includes(name)) {
         state.groups.push(name);
@@ -4303,11 +4385,11 @@ window.deleteGroup = (g) => {
 };
 
 // EXCEL IMPORT
-document.getElementById('btn-import-excel').addEventListener('click', () => {
+document.getElementById('btn-import-excel')?.addEventListener('click', () => {
     document.getElementById('input-import-excel').click();
 });
 
-document.getElementById('input-import-excel').addEventListener('change', (e) => {
+document.getElementById('input-import-excel')?.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -4689,7 +4771,7 @@ function recalculatePRs() {
 window.recalculatePRs = recalculatePRs;
 
 
-document.getElementById('btn-delete-exercise').addEventListener('click', () => {
+document.getElementById('btn-delete-exercise')?.addEventListener('click', () => {
     const id = document.getElementById('exercise-id').value;
     if (id && confirm(getT('common.delete') + '?')) {
         state.exercises = state.exercises.filter(e => e.id !== id);
@@ -4699,7 +4781,7 @@ document.getElementById('btn-delete-exercise').addEventListener('click', () => {
     }
 });
 
-document.getElementById('btn-save-exercise').addEventListener('click', () => {
+document.getElementById('btn-save-exercise')?.addEventListener('click', () => {
     const id = document.getElementById('exercise-id').value;
     const name = document.getElementById('exercise-name').value;
     const group = document.getElementById('exercise-group').value || 'Sin Grupo';
@@ -4781,7 +4863,7 @@ document.querySelector('.type-btn.hypertrophy').classList.add('selected');
 let routineItems = []; // { id, isSuperset, name, exercises: [ {exerciseId, dbEx} ] }
 let supersetCounter = 1;
 
-document.getElementById('btn-open-exercise-selector').addEventListener('click', () => {
+document.getElementById('btn-open-exercise-selector')?.addEventListener('click', () => {
     const list = document.getElementById('exercise-selection-list');
     list.innerHTML = '';
     
@@ -5071,11 +5153,11 @@ const renderRoutineItems = () => {
 };
 
 
-document.getElementById('btn-cancel-exercises').addEventListener('click', () => {
+document.getElementById('btn-cancel-exercises')?.addEventListener('click', () => {
     closeModal(modalSelectExercises);
 });
 
-document.getElementById('btn-confirm-exercises').addEventListener('click', () => {
+document.getElementById('btn-confirm-exercises')?.addEventListener('click', () => {
     const selectedBlockType = document.querySelector('.block-type-selector .type-btn.selected')?.dataset.type || 'hypertrophy';
     (window.exerciseSelectionOrder || []).forEach(exId => {
         const ex = state.exercises.find(e => e.id === exId);
@@ -5097,7 +5179,7 @@ document.getElementById('btn-confirm-exercises').addEventListener('click', () =>
     closeModal(modalSelectExercises);
 });
 
-document.getElementById('btn-create-superset').addEventListener('click', () => {
+document.getElementById('btn-create-superset')?.addEventListener('click', () => {
     const checkedBoxes = Array.from(document.querySelectorAll('.builder-chk:checked'));
     if(checkedBoxes.length < 2) return alert(getT('alerts.supersetMin') || 'Select at least 2 items');
     
@@ -5139,13 +5221,13 @@ document.getElementById('btn-create-superset').addEventListener('click', () => {
     renderRoutineItems();
 });
 
-document.getElementById('btn-remove-selected-items').addEventListener('click', () => {
+document.getElementById('btn-remove-selected-items')?.addEventListener('click', () => {
     const selectedIds = Array.from(document.querySelectorAll('.builder-chk:checked')).map(cb => cb.value);
     routineItems = routineItems.filter(item => !selectedIds.includes(item.id));
     renderRoutineItems();
 });
 
-document.getElementById('btn-save-routine').addEventListener('click', () => {
+document.getElementById('btn-save-routine')?.addEventListener('click', () => {
     const name = document.getElementById('routine-name').value || 'Entrenamiento';
     const duration = parseInt(document.getElementById('routine-duration').value) || 1;
     if(routineItems.length === 0) return alert(getT('alerts.exerciseRequired') || 'Select at least 1 exercise');
@@ -5309,6 +5391,7 @@ const extractYouTubeID = (url) => {
     return (match && match[2].length === 11) ? match[2] : null;
 };
 
+window.startWorkout = function(session) { return startWorkout(session); };
 const startWorkout = (session) => {
     if (!session) return;
     activeSession = JSON.parse(JSON.stringify(session)); 
@@ -5423,7 +5506,7 @@ const startWorkout = (session) => {
     renderWorkout();
 };
 
-document.getElementById('btn-start-workout').addEventListener('click', (e) => {
+document.getElementById('btn-start-workout')?.addEventListener('click', (e) => {
     if (state.activeWorkoutState && state.activeWorkoutState.startTime) {
         if (!confirm(getT('workout.replaceConfirm') || 'You already have an active workout. Cancel it and start this one?')) {
             return;
@@ -5924,13 +6007,19 @@ window.openMesocycleCompassConfig = function() {
     const weekSel = document.getElementById('meso-config-week-select');
     const totalWeeksSel = document.getElementById('meso-config-totalweeks-select');
 
-    const curBlock = (activeSession && activeSession.type) || (state.activeMesocycleConfig && state.activeMesocycleConfig.type) || 'hypertrophy';
-    const curWeek = (activeSession && activeSession.weekNumber) || (state.activeMesocycleConfig && state.activeMesocycleConfig.weekNumber) || 2;
-    const curTotalWeeks = (activeSession && activeSession.totalWeeks) || (state.activeMesocycleConfig && state.activeMesocycleConfig.totalWeeks) || 5;
+    const cfg = state.activeMesocycleConfig || {};
+    const mesoInfo = typeof window.getEffectiveMesocycleInfo === 'function' ? window.getEffectiveMesocycleInfo() : {};
+    const curBlock = mesoInfo.type || (activeSession && activeSession.type) || cfg.type || 'hypertrophy';
+    const curWeek = mesoInfo.weekNumber || (activeSession && activeSession.weekNumber) || cfg.weekNumber || 2;
+    const curTotalWeeks = mesoInfo.totalWeeks || (activeSession && activeSession.totalWeeks) || cfg.totalWeeks || 5;
 
     if (blockSel) blockSel.value = curBlock;
     if (weekSel) weekSel.value = String(curWeek);
     if (totalWeeksSel) totalWeeksSel.value = String(curTotalWeeks);
+    const rirInput = document.getElementById('meso-config-rir-input');
+    if (rirInput) {
+        rirInput.value = (cfg.manualRir !== undefined && cfg.manualRir !== null) ? cfg.manualRir : '';
+    }
 
     window.updateMesoConfigRirPreview();
     modal.style.display = 'flex';
@@ -5949,13 +6038,56 @@ window.updateMesoConfigRirPreview = function() {
     const weekSel = document.getElementById('meso-config-week-select');
     const blockSel = document.getElementById('meso-config-block-select');
     const rirPrev = document.getElementById('meso-config-rir-preview');
+    const rirInput = document.getElementById('meso-config-rir-input');
     if (!rirPrev || !weekSel) return;
 
     const w = parseInt(weekSel.value, 10) || 1;
     const block = blockSel ? blockSel.value : 'hypertrophy';
     const rirMap = { 1: 3, 2: 2, 3: 1, 4: 0, 5: 4, 6: 4 };
-    const rir = (block === 'deload') ? 'RIR 4+ (Descarga)' : (w === 4 ? 'RIR 0 (Fallo muscular)' : (w >= 5 ? 'RIR 4+ (Descarga)' : `RIR ${rirMap[w] !== undefined ? rirMap[w] : 2}`));
-    rirPrev.textContent = rir;
+    const autoRir = (block === 'deload') ? 'RIR 4+ (Descarga)' : (w === 4 ? 'RIR 0 (Fallo muscular)' : (w >= 5 ? 'RIR 4+ (Descarga)' : `RIR ${rirMap[w] !== undefined ? rirMap[w] : 2}`));
+    rirPrev.textContent = `(Sugerido auto: ${autoRir})`;
+    if (rirInput && !rirInput.value) {
+        rirInput.placeholder = `Automático (${autoRir})`;
+    }
+};
+
+window.setMesoConfigRirQuick = function(val) {
+    const rirInput = document.getElementById('meso-config-rir-input');
+    if (rirInput) {
+        rirInput.value = val;
+    }
+};
+
+window.getEffectiveMesocycleInfo = function() {
+    const cfg = state.activeMesocycleConfig || {};
+    const totalWeeks = cfg.totalWeeks || 5;
+    const block = cfg.type || (activeSession ? activeSession.type : 'hypertrophy') || 'hypertrophy';
+
+    if (!cfg.anchorWeekOneMonday) {
+        const fallbackWeek = activeSession?.weekNumber || cfg.weekNumber || 1;
+        return {
+            weekNumber: Math.min(totalWeeks, Math.max(1, fallbackWeek)),
+            totalWeeks: totalWeeks,
+            type: block,
+            isCompleted: fallbackWeek > totalWeeks
+        };
+    }
+
+    const today = new Date();
+    const curMonday = typeof getMonday === 'function' ? getMonday(today) : new Date();
+    const anchorMon = new Date(cfg.anchorWeekOneMonday);
+    const elapsedWeeks = Math.floor((curMonday.getTime() - anchorMon.getTime()) / (7 * 24 * 60 * 60 * 1000));
+    const computedWeek = 1 + elapsedWeeks;
+    const isCompleted = computedWeek > totalWeeks;
+    const finalWeek = Math.min(totalWeeks, Math.max(1, computedWeek));
+
+    return {
+        weekNumber: finalWeek,
+        totalWeeks: totalWeeks,
+        type: block,
+        isCompleted: isCompleted,
+        elapsedWeeks: elapsedWeeks
+    };
 };
 
 window.saveMesocycleCompassConfig = function() {
@@ -5967,15 +6099,28 @@ window.saveMesocycleCompassConfig = function() {
     const week = parseInt(weekSel ? weekSel.value : '2', 10) || 2;
     const totalWeeks = parseInt(totalWeeksSel ? totalWeeksSel.value : '5', 10) || 5;
 
+    // Anchor calculation: anchorWeekOneMonday is the Monday corresponding to Week 1
+    const today = new Date();
+    const curMonday = typeof getMonday === 'function' ? getMonday(today) : new Date();
+    const anchorMonday = new Date(curMonday.getTime() - (week - 1) * 7 * 24 * 60 * 60 * 1000);
+    const anchorMondayStr = anchorMonday.toISOString().split('T')[0];
+
+    const rirInput = document.getElementById('meso-config-rir-input');
+    const manualRirVal = rirInput ? rirInput.value.trim() : '';
+
     if (!state.activeMesocycleConfig) state.activeMesocycleConfig = {};
     state.activeMesocycleConfig.type = block;
     state.activeMesocycleConfig.weekNumber = week;
     state.activeMesocycleConfig.totalWeeks = totalWeeks;
+    state.activeMesocycleConfig.anchorWeekOneMonday = anchorMondayStr;
+    state.activeMesocycleConfig.configuredAt = today.toISOString();
+    state.activeMesocycleConfig.manualRir = manualRirVal !== '' ? manualRirVal : null;
 
     if (activeSession) {
         activeSession.type = block;
         activeSession.weekNumber = week;
         activeSession.totalWeeks = totalWeeks;
+        activeSession.targetRir = manualRirVal !== '' ? manualRirVal : null;
     }
 
     if (typeof autoSaveWorkout === 'function') autoSaveWorkout();
@@ -6331,17 +6476,21 @@ const renderWorkout = () => {
     // Render Mesocycle Weekly Progress Compass Banner
     const compassEl = document.getElementById('workout-mesocycle-compass');
     if (compassEl) {
+        const mesoInfo = typeof window.getEffectiveMesocycleInfo === 'function' ? window.getEffectiveMesocycleInfo() : {};
         const cfg = state.activeMesocycleConfig || {};
-        const bType = activeSession.type || cfg.type || 'hypertrophy';
+        const bType = mesoInfo.type || activeSession.type || cfg.type || 'hypertrophy';
         let blockName = (typeof getT === 'function' ? getT('blocks.hypertrophyTitle') : 'Hipertrofia') || 'Hipertrofia';
         if (bType === 'heavy') blockName = (typeof getT === 'function' ? getT('blocks.heavyTitle') : 'Fuerza') || 'Fuerza';
         else if (bType === 'intensity') blockName = (typeof getT === 'function' ? getT('blocks.intensityTitle') : 'Alta Intensidad') || 'Alta Intensidad';
         else if (bType === 'deload') blockName = 'Descarga';
 
-        let weekNum = activeSession.weekNumber || cfg.weekNumber || 2;
-        const totalWeeks = activeSession.totalWeeks || cfg.totalWeeks || 5;
+        let weekNum = mesoInfo.weekNumber || activeSession.weekNumber || cfg.weekNumber || 2;
+        const totalWeeks = mesoInfo.totalWeeks || activeSession.totalWeeks || cfg.totalWeeks || 5;
+        const isBlockDone = mesoInfo.isCompleted;
         const rirTargets = { 1: 3, 2: 2, 3: 1, 4: 0, 5: 4, 6: 4 };
-        const rirTarget = (bType === 'deload') ? 4 : (rirTargets[weekNum] !== undefined ? rirTargets[weekNum] : 2);
+        const autoRir = (bType === 'deload') ? 4 : (rirTargets[weekNum] !== undefined ? rirTargets[weekNum] : 2);
+        const manualRir = (cfg.manualRir !== undefined && cfg.manualRir !== null && String(cfg.manualRir).trim() !== '') ? String(cfg.manualRir).trim() : null;
+        const rirTarget = manualRir !== null ? manualRir : autoRir;
 
         let dotsHtml = '';
         for (let w = 1; w <= totalWeeks; w++) {
@@ -6373,77 +6522,7 @@ const renderWorkout = () => {
     const blockBanner = document.createElement('div');
     blockBanner.classList.add('workout-block-banner');
     
-    window.isMultipowerExercise = isMultipowerExercise;
-function isMultipowerExercise(ex) {
-    if (!ex || !ex.name) return false;
-    return /multipower|smith/i.test(ex.name);
-}
-
-let activePlateCalcTargetInput = null;
-let activePlateCalcSetObj = null;
-let currentPlateCalcBar = 20;
-
-window.calculateBarbellPlates = calculateBarbellPlates;
-function calculateBarbellPlates(targetWeight, barWeight) {
-    const platesAvailable = [25, 20, 15, 10, 5, 2.5, 1.25];
-    const target = parseFloat(targetWeight) || 0;
-    const bar = parseFloat(barWeight) || 20;
-
-    if (target < bar) {
-        return {
-            barWeight: bar,
-            targetWeight: target,
-            totalLoaded: bar,
-            platesPerSide: [],
-            isTooLow: true
-        };
-    }
-
-    let remPerSide = (target - bar) / 2;
-    const platesPerSide = [];
-
-    for (const p of platesAvailable) {
-        while (remPerSide >= p - 0.001) {
-            platesPerSide.push(p);
-            remPerSide -= p;
-        }
-    }
-
-    const loadedWeightPerSide = platesPerSide.reduce((a, b) => a + b, 0);
-    const totalLoaded = bar + (loadedWeightPerSide * 2);
-
-    return {
-        barWeight: bar,
-        targetWeight: target,
-        totalLoaded: Math.round(totalLoaded * 100) / 100,
-        platesPerSide: platesPerSide,
-        isTooLow: false,
-        remainder: Math.round(remPerSide * 2 * 100) / 100
-    };
-}
-
-window.openPlateCalcModal = function(wInput, setObj, exObj) {
-    activePlateCalcTargetInput = wInput;
-    activePlateCalcSetObj = setObj;
-
-    const initialWeight = parseFloat(wInput ? wInput.value : 0) || 60;
-    const targetInput = document.getElementById('plate-calc-target-weight');
-    if (targetInput) targetInput.value = initialWeight;
-
-    if (exObj && isMultipowerExercise(exObj)) {
-        currentPlateCalcBar = 15;
-    } else if (exObj && /ez|curl.*barra/i.test(exObj.name)) {
-        currentPlateCalcBar = 10;
-    } else {
-        currentPlateCalcBar = 20;
-    }
-
-    setPlateCalcBar(currentPlateCalcBar);
-    recalculatePlates();
-
-    const modal = document.getElementById('modal-plate-calc');
-    if (modal) modal.classList.add('active');
-};
+// Plate calculator and multipower helper functions referenced globally
     
     let bType = activeSession.type || 'hypertrophy';
     let bTitle = getT('blocks.hypertrophyTitle') || 'Bloque de Hipertrofia';
@@ -6921,7 +7000,7 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
     } catch(e) { alert("ERROR in renderWorkout: " + e.stack); }
 };
 
-document.getElementById('close-workout').addEventListener('click', () => {
+document.getElementById('close-workout')?.addEventListener('click', () => {
     workoutView.classList.remove('active');
     document.body.classList.remove('in-workout');
     if (typeof skipRestTimer === 'function') skipRestTimer();
@@ -6931,7 +7010,7 @@ document.getElementById('close-workout').addEventListener('click', () => {
 
 // Lightbox is closed by generic modal handler
 
-document.getElementById('btn-delete-single').addEventListener('click', () => {
+document.getElementById('btn-delete-single')?.addEventListener('click', () => {
     if(sessionToDelete) {
         state.sessions = state.sessions.filter(s => s.id !== sessionToDelete.id);
         saveState();
@@ -6941,7 +7020,7 @@ document.getElementById('btn-delete-single').addEventListener('click', () => {
     }
 });
 
-document.getElementById('btn-delete-recurring').addEventListener('click', () => {
+document.getElementById('btn-delete-recurring')?.addEventListener('click', () => {
     if(sessionToDelete) {
         const parseDateStr = (dStr) => {
             if (!dStr) return new Date();
@@ -7002,7 +7081,7 @@ document.getElementById('btn-delete-recurring').addEventListener('click', () => 
 });
 
 // Initialization in the end of file
-document.getElementById('finish-workout').addEventListener('click', () => {
+document.getElementById('finish-workout')?.addEventListener('click', () => {
     syncActiveWorkoutInputsFromDOM();
     if (typeof openPostWorkoutCheckinModal === 'function') {
         openPostWorkoutCheckinModal();
@@ -7101,7 +7180,6 @@ window.isMultipowerExercise = isMultipowerExercise;
 function isMultipowerExercise(ex) {
     if (!ex || !ex.name) return false;
     return /multipower|smith/i.test(ex.name);
-    return false;
 }
 
 let activePlateCalcTargetInput = null;
@@ -9584,7 +9662,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
 
-document.getElementById('btn-export-calendar').addEventListener('click', async () => {
+document.getElementById('btn-export-calendar')?.addEventListener('click', async () => {
     try {
         const data = {
             gym_exercises: localStorage.getItem('gym_exercises'),
@@ -9635,11 +9713,11 @@ document.getElementById('btn-export-calendar').addEventListener('click', async (
     }
 });
 
-document.getElementById('btn-import-calendar').addEventListener('click', () => {
+document.getElementById('btn-import-calendar')?.addEventListener('click', () => {
     document.getElementById('file-import-calendar').click();
 });
 
-document.getElementById('file-import-calendar').addEventListener('change', (e) => {
+document.getElementById('file-import-calendar')?.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
@@ -12581,6 +12659,41 @@ window.checkAndUnlockAchievements = function() {
 
     if (maxInWeek >= 3) unlock('streak_3_week');
     if (maxInWeek >= 4) unlock('perfect_week');
+
+    // Full body week (pecho, espalda, hombro, pierna en la misma semana)
+    const musclesByWeek = {};
+    completed.forEach(w => {
+        const d = w.completedAt ? new Date(w.completedAt) : (w.date ? new Date(w.date) : null);
+        if (d && !isNaN(d.getTime())) {
+            const y = d.getFullYear();
+            const oneJan = new Date(y, 0, 1);
+            const numberOfDays = Math.floor((d - oneJan) / (24 * 60 * 60 * 1000));
+            const week = Math.ceil((d.getDay() + 1 + numberOfDays) / 7);
+            const key = `${y}_W${week}`;
+            if (!musclesByWeek[key]) musclesByWeek[key] = new Set();
+            (w.exercises || []).forEach(ex => {
+                const n = (ex.name || '').toLowerCase();
+                const g = (ex.group || '').toLowerCase();
+                if (n.includes('pecho') || g.includes('pecho')) musclesByWeek[key].add('pecho');
+                if (n.includes('espalda') || g.includes('espalda')) musclesByWeek[key].add('espalda');
+                if (n.includes('hombro') || g.includes('hombro')) musclesByWeek[key].add('hombro');
+                if (n.includes('pierna') || g.includes('pierna') || n.includes('sentadilla') || n.includes('prensa')) musclesByWeek[key].add('pierna');
+            });
+        }
+    });
+    for (const wKey in musclesByWeek) {
+        if (musclesByWeek[wKey].size >= 4) {
+            unlock('full_body_week');
+            break;
+        }
+    }
+
+    // Assembler optimizer (rutina terminada en 15% menos de tiempo manteniendo volumen)
+    completed.forEach(w => {
+        if (w.duration && w.previousDuration && w.duration <= (w.previousDuration * 0.85)) {
+            unlock('assembler_optimizer');
+        }
+    });
 
     // Leg day respect (at least 4 leg workouts in same month)
     const legsByMonth = {};

@@ -3771,3 +3771,23 @@ body.in-workout #main-header {
     color: #ef4444 !important;
 }
 
+
+
+.rir-quick-chip {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 8px;
+    padding: 5px 12px;
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.rir-quick-chip:hover, .rir-quick-chip:active {
+    background: var(--color-accent);
+    color: #fff;
+    border-color: var(--color-accent);
+    transform: translateY(-1px);
+}
+
