@@ -1,4 +1,4 @@
-const CACHE_NAME = 'mesopulse-v1793711166834';
+const CACHE_NAME = 'mesopulse-v1793711841019';
 const urlsToCache = [
   './',
   './index.html',
