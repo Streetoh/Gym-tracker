@@ -1201,7 +1201,8 @@ let state = {
     activeWorkoutState: JSON.parse(localStorage.getItem('gym_active_workout')) || null,
     evolution: JSON.parse(localStorage.getItem('gym_evolution')) || [],
     jointIssues: JSON.parse(localStorage.getItem('gym_joint_issues') || '{}'),
-    activeMesocycleConfig: JSON.parse(localStorage.getItem('gym_mesocycle_config') || '{}')
+    activeMesocycleConfig: JSON.parse(localStorage.getItem('gym_mesocycle_config') || '{}'),
+    mesocycles: JSON.parse(localStorage.getItem('gym_mesocycles') || '[]')
 };
 
 
@@ -1340,6 +1341,7 @@ function saveState() {
     localStorage.setItem('gym_evolution', JSON.stringify(state.evolution));
     if (state.jointIssues) localStorage.setItem('gym_joint_issues', JSON.stringify(state.jointIssues));
     if (state.activeMesocycleConfig) localStorage.setItem('gym_mesocycle_config', JSON.stringify(state.activeMesocycleConfig));
+    localStorage.setItem('gym_mesocycles', JSON.stringify(state.mesocycles || []));
 };
 
 const formatDate = (date) => {
@@ -9912,7 +9914,8 @@ document.getElementById('btn-backup-export')?.addEventListener('click', async ()
             gym_evolution: localStorage.getItem('gym_evolution'),
             gym_routines: localStorage.getItem('gym_routines'),
             gym_goals: localStorage.getItem('gym_goals'),
-            gym_completed: localStorage.getItem('gym_completed')
+            gym_completed: localStorage.getItem('gym_completed'),
+            gym_mesocycles: localStorage.getItem('gym_mesocycles')
         };
         const jsonStr = JSON.stringify(data);
         const filename = 'mesopulse_backup_' + new Date().toISOString().split('T')[0] + '.json';
@@ -9979,6 +9982,7 @@ document.getElementById('file-import-json')?.addEventListener('change', (e) => {
             if (data.gym_routines) localStorage.setItem('gym_routines', data.gym_routines);
             if (data.gym_goals) localStorage.setItem('gym_goals', data.gym_goals);
             if (data.gym_completed) localStorage.setItem('gym_completed', data.gym_completed);
+            if (data.gym_mesocycles) localStorage.setItem('gym_mesocycles', data.gym_mesocycles);
             alert(getT('alerts.importSuccess') || 'Import successful. App will restart.');
             window.location.reload();
         } catch (err) {
@@ -10065,7 +10069,8 @@ window.generateDashboard = function(mode) {
         const exportData = {
             gym_exercises: localStorage.getItem('gym_exercises') || '[]',
             gym_evolution: localStorage.getItem('gym_evolution') || '[]',
-            gym_completed: localStorage.getItem('gym_completed') || '[]',
+            gym_completed: localStorage.getItem('gym_completed'),
+            gym_mesocycles: localStorage.getItem('gym_mesocycles') || '[]',
             apiKey: key,
             gemini_api_key: key,
             GEMINI_API_KEY: key
@@ -15297,14 +15302,14 @@ window.nextOrFinishTutorial = function() {
         es: {
             navSessionCreator: 'Sesiones',
             preTitle: 'Sesiones Predefinidas',
-            mesoShortTitle: 'Crear Mesociclo',
+            mesoShortTitle: 'Mesociclos',
             preDesc: 'Crea tus sesiones predefinidas seleccionando los ejercicios visualmente por grupo muscular y personaliza sus series y repeticiones para Hipertrofia, Pesado y Alta Intensidad.',
             preCreateNew: 'Crear Nueva Sesión Predefinida',
             quickCustomBtn: 'Sesión suelta o bloque puntual (sin plantilla)',
             preSelectByMuscle: '2. Elige los Ejercicios (Toca las tarjetas para seleccionar)',
             preConfigureSets: '3. Series y Repeticiones Independientes por Fase',
             preSaveBtn: 'Guardar Sesión Predefinida',
-            mesoTitle: 'Planificador de Mesociclo (Lunes a Viernes)',
+            mesoTitle: 'Planificador de Mesociclo',
             mesoDesc: 'Elige qué sesión predefinida se repetirá cada día de Lunes a Viernes. Con el Ciclo Completo de 12 Semanas se programan 4 semanas de Hipertrofia, 4 de Pesado y 4 de Alta Intensidad automáticamente.',
             mesoStartDate: 'Lunes de Inicio del Mesociclo',
             mesoWeeks: 'Estructura y Duración del Mesociclo',
@@ -15315,19 +15320,31 @@ window.nextOrFinishTutorial = function() {
             thursday: '4. Jueves',
             friday: '5. Viernes',
             mesoScheduleBtn: 'Establecer Mesociclo en el Calendario',
+            mesoListDesc: 'Gestiona tus mesociclos estructurados, consulta el progreso de tus bloques o edita su distribución semanal.',
+            mesoCreateNew: 'Planificar Nuevo Mesociclo',
+            mesoEmptyTitle: 'No tienes mesociclos creados',
+            mesoEmptyDesc: 'Pulsa en "Planificar Nuevo Mesociclo" para organizar tus semanas con progresión automática de sobrecarga.',
+            mesoName: 'Nombre del Mesociclo (Opcional)',
+            mesoEditTitle: 'Editar Mesociclo',
+            mesoSaveBtn: 'Guardar Cambios del Mesociclo',
+            mesoEditBtn: 'Editar',
+            mesoDeleteBtn: 'Eliminar',
+            mesoStatusCompleted: 'Finalizado',
+            mesoStatusActive: 'En curso',
+            mesoStatusUpcoming: 'Próximo',
             back: 'Volver'
         },
         en: {
             navSessionCreator: 'Sessions',
             preTitle: 'Predefined Sessions',
-            mesoShortTitle: 'Create Mesocycle',
+            mesoShortTitle: 'Mesocycles',
             preDesc: 'Create predefined sessions by visually selecting exercises by muscle group and customize independent sets & reps for Hypertrophy, Heavy, and High Intensity.',
             preCreateNew: 'Create New Predefined Session',
             quickCustomBtn: 'Single session or custom block (no template)',
             preSelectByMuscle: '2. Choose Exercises (Tap cards to select)',
             preConfigureSets: '3. Independent Sets & Reps by Phase',
             preSaveBtn: 'Save Predefined Session',
-            mesoTitle: 'Mesocycle Planner (Monday to Friday)',
+            mesoTitle: 'Mesocycle Planner',
             mesoDesc: 'Assign which predefined session repeats each day from Monday to Friday across 12 weeks (4 Hypertrophy -> 4 Heavy -> 4 High Intensity) or a 4-week block.',
             mesoStartDate: 'Start Week (Monday)',
             mesoWeeks: 'Mesocycle Structure & Duration',
@@ -15338,6 +15355,18 @@ window.nextOrFinishTutorial = function() {
             thursday: '4. Thursday',
             friday: '5. Friday',
             mesoScheduleBtn: 'Schedule Mesocycle in Calendar',
+            mesoListDesc: 'Manage your structured mesocycles, track block progress, or edit weekly distribution.',
+            mesoCreateNew: 'Plan New Mesocycle',
+            mesoEmptyTitle: 'No mesocycles created yet',
+            mesoEmptyDesc: 'Tap "Plan New Mesocycle" to set up your structured training block with progressive overload.',
+            mesoName: 'Mesocycle Name (Optional)',
+            mesoEditTitle: 'Edit Mesocycle',
+            mesoSaveBtn: 'Save Mesocycle Changes',
+            mesoEditBtn: 'Edit',
+            mesoDeleteBtn: 'Delete',
+            mesoStatusCompleted: 'Completed',
+            mesoStatusActive: 'In progress',
+            mesoStatusUpcoming: 'Upcoming',
             back: 'Back'
         },
         ru: {
@@ -15443,7 +15472,19 @@ window.nextOrFinishTutorial = function() {
                 wednesday: t.wednesday,
                 thursday: t.thursday,
                 friday: t.friday,
-                scheduleBtn: t.mesoScheduleBtn
+                scheduleBtn: t.mesoScheduleBtn,
+                listDesc: t.mesoListDesc,
+                createNew: t.mesoCreateNew,
+                emptyTitle: t.mesoEmptyTitle,
+                emptyDesc: t.mesoEmptyDesc,
+                name: t.mesoName,
+                editTitle: t.mesoEditTitle,
+                saveBtn: t.mesoSaveBtn,
+                editBtn: t.mesoEditBtn,
+                deleteBtn: t.mesoDeleteBtn,
+                statusCompleted: t.mesoStatusCompleted,
+                statusActive: t.mesoStatusActive,
+                statusUpcoming: t.mesoStatusUpcoming
             });
         });
         if (typeof updateLanguageUI === 'function') {
@@ -15619,12 +15660,11 @@ window.nextOrFinishTutorial = function() {
             if (tabMeso) tabMeso.style.display = 'block';
             if (btnTemplates) { btnTemplates.className = 'btn-secondary'; btnTemplates.style.border = 'none'; }
             if (btnMeso) { btnMeso.className = 'btn-primary'; }
-            const startInput = document.getElementById('mesocycle-start-date');
-            if (startInput && !startInput.value) {
-                const monday = typeof getMonday === 'function' ? getMonday(state.selectedDate || new Date()) : new Date();
-                startInput.value = typeof dateToInputFormat === 'function' ? dateToInputFormat(monday) : monday.toISOString().split('T')[0];
+            if (typeof window.showMesocycleListView === 'function') {
+                window.showMesocycleListView();
+            } else {
+                window.populateMesocycleDropdowns();
             }
-            window.populateMesocycleDropdowns();
         } else {
             if (tabTemplates) tabTemplates.style.display = 'block';
             if (tabMeso) tabMeso.style.display = 'none';
@@ -16391,8 +16431,156 @@ window.nextOrFinishTutorial = function() {
     };
 
     // ============================================================
-    // MESOCYCLE BUILDER (12-WEEK FULL CYCLE OR 4-WEEK PHASE)
+    // MESOCYCLE MANAGEMENT & BUILDER (VIEW, EDIT, SCHEDULE, DELETE)
     // ============================================================
+
+    // Heal / auto-migrate past mesocycles from scheduled sessions if not already in state.mesocycles
+    window.healMesocycles = function() {
+        state.mesocycles = state.mesocycles || [];
+        const existingIds = new Set(state.mesocycles.map(m => String(m.id)));
+        const sessions = state.sessions || [];
+        const mesoMap = {};
+
+        sessions.forEach(s => {
+            const mId = s.mesocycleId || (s.blockId && s.blockId.startsWith('meso_') ? s.blockId : null);
+            if (!mId) return;
+            if (!mesoMap[mId]) mesoMap[mId] = [];
+            mesoMap[mId].push(s);
+        });
+
+        let healedCount = 0;
+        Object.keys(mesoMap).forEach(mId => {
+            if (existingIds.has(mId)) return;
+            const group = mesoMap[mId];
+            if (group.length === 0) return;
+
+            // Sort by date to deduce start date and duration
+            const dates = group.map(s => {
+                const parts = (s.date || '').split('/');
+                return parts.length === 3 ? new Date(parts[2], parts[1] - 1, parts[0]) : new Date(s.date);
+            }).filter(d => !isNaN(d.getTime())).sort((a, b) => a - b);
+
+            const earliestDate = dates[0] || new Date();
+            const startMon = typeof getMonday === 'function' ? getMonday(earliestDate) : earliestDate;
+            const startMonStr = typeof dateToInputFormat === 'function' ? dateToInputFormat(startMon) : startMon.toISOString().split('T')[0];
+
+            // Deduce weeks and phases
+            const phases = new Set(group.map(s => s.type));
+            const hasMultiplePhases = phases.has('hypertrophy') && (phases.has('heavy') || phases.has('intensity'));
+            const totalWeeks = hasMultiplePhases ? 12 : 4;
+            const mode = hasMultiplePhases ? 'cycle_12' : (phases.has('heavy') ? 'phase_heavy' : (phases.has('intensity') ? 'phase_intensity' : 'phase_hypertrophy'));
+
+            // Deduce template per day of week (0=Mon, 1=Tue, 2=Wed, 3=Thu, 4=Fri)
+            const days = ['', '', '', '', ''];
+            group.forEach(s => {
+                const parts = (s.date || '').split('/');
+                const d = parts.length === 3 ? new Date(parts[2], parts[1] - 1, parts[0]) : new Date(s.date);
+                if (isNaN(d.getTime())) return;
+                const jsDay = d.getDay(); // 0 is Sun, 1 is Mon...
+                const mesoDay = jsDay === 0 ? 6 : jsDay - 1; // 0=Mon, 1=Tue, 2=Wed, 3=Thu, 4=Fri
+                if (mesoDay >= 0 && mesoDay < 5 && s.templateId) {
+                    days[mesoDay] = s.templateId;
+                }
+            });
+
+            const modeLabel = mode === 'cycle_12' ? 'Ciclo Completo' : (mode === 'phase_heavy' ? 'Pesado' : (mode === 'phase_intensity' ? 'Alta Intensidad' : 'Hipertrofia'));
+            const healedName = `Mesociclo ${modeLabel} (${totalWeeks} semanas)`;
+
+            state.mesocycles.push({
+                id: mId,
+                name: healedName,
+                startDate: startMonStr,
+                mode: mode,
+                totalWeeks: totalWeeks,
+                days: days,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            });
+            existingIds.add(mId);
+            healedCount++;
+        });
+
+        if (healedCount > 0) {
+            saveState();
+            console.log(`Healed ${healedCount} past mesocycles from existing sessions.`);
+        }
+    };
+
+    window.showMesocycleListView = function() {
+        const listView = document.getElementById('mesocycle-list-view');
+        const editorView = document.getElementById('mesocycle-editor-view');
+        if (listView) listView.style.display = 'block';
+        if (editorView) editorView.style.display = 'none';
+        window.renderMesocyclesList();
+    };
+
+    window.openMesocycleEditor = function(mesoId = null) {
+        const listView = document.getElementById('mesocycle-list-view');
+        const editorView = document.getElementById('mesocycle-editor-view');
+        if (listView) listView.style.display = 'none';
+        if (editorView) editorView.style.display = 'block';
+
+        window.populateMesocycleDropdowns();
+
+        const editIdInput = document.getElementById('mesocycle-edit-id');
+        const nameInput = document.getElementById('mesocycle-name-input');
+        const startInput = document.getElementById('mesocycle-start-date');
+        const modeSelect = document.getElementById('mesocycle-mode');
+        const headingEl = document.getElementById('mesocycle-editor-heading');
+        const btnText = document.getElementById('btn-schedule-mesocycle-text');
+
+        if (mesoId) {
+            const meso = (state.mesocycles || []).find(m => String(m.id) === String(mesoId));
+            if (meso) {
+                if (editIdInput) editIdInput.value = meso.id;
+                if (nameInput) nameInput.value = meso.name || '';
+                if (startInput) startInput.value = meso.startDate || '';
+                if (modeSelect) modeSelect.value = meso.mode || 'cycle_12';
+
+                for (let d = 0; d < 5; d++) {
+                    const sel = document.getElementById('meso-day-' + d);
+                    if (sel && meso.days && meso.days[d] !== undefined) {
+                        sel.value = meso.days[d] || '';
+                    }
+                }
+
+                if (headingEl) {
+                    const t = typeof getT === 'function' ? getT('modals.mesocycle.editTitle') : null;
+                    headingEl.innerHTML = `<i class="ph-bold ph-pencil-simple-line" style="color: #38bdf8; font-size: 20px;"></i> <span>${t || 'Editar Mesociclo'}</span>`;
+                }
+                if (btnText) {
+                    const t = typeof getT === 'function' ? getT('modals.mesocycle.saveBtn') : null;
+                    btnText.textContent = t || 'Guardar Cambios del Mesociclo';
+                }
+            }
+        } else {
+            if (editIdInput) editIdInput.value = '';
+            if (nameInput) nameInput.value = '';
+            if (modeSelect) modeSelect.value = 'cycle_12';
+
+            if (startInput) {
+                const monday = typeof getMonday === 'function' ? getMonday(state.selectedDate || new Date()) : new Date();
+                startInput.value = typeof dateToInputFormat === 'function' ? dateToInputFormat(monday) : monday.toISOString().split('T')[0];
+            }
+
+            for (let d = 0; d < 5; d++) {
+                const sel = document.getElementById('meso-day-' + d);
+                if (sel) sel.value = '';
+            }
+
+            if (headingEl) {
+                const t = typeof getT === 'function' ? getT('modals.mesocycle.title') : null;
+                headingEl.innerHTML = `<i class="ph-bold ph-calendar-check" style="color: #10b981; font-size: 20px;"></i> <span>${t || 'Planificador de Mesociclo'}</span>`;
+            }
+            if (btnText) {
+                const t = typeof getT === 'function' ? getT('modals.mesocycle.scheduleBtn') : null;
+                btnText.textContent = t || 'Establecer Mesociclo en el Calendario';
+            }
+        }
+
+        window.updateMesocycleSummaryPreview();
+    };
+
     window.populateMesocycleDropdowns = function() {
         const templates = state.predefinedSessions || [];
         for (let d = 0; d < 5; d++) {
@@ -16434,7 +16622,177 @@ window.nextOrFinishTutorial = function() {
         }
     };
 
-    window.scheduleMesocycle = function() {
+    window.renderMesocyclesList = function() {
+        window.healMesocycles();
+        const container = document.getElementById('mesocycle-cards-container');
+        if (!container) return;
+
+        const mesocycles = state.mesocycles || [];
+        if (mesocycles.length === 0) {
+            container.innerHTML = `<div class="empty-state" style="padding: 28px 20px; text-align: center; color: var(--text-secondary); background: var(--bg-surface); border-radius: 14px; border: 1px dashed var(--border-color);">
+                <i class="ph-bold ph-calendar-check" style="font-size: 36px; opacity: 0.5; margin-bottom: 8px; color: #10b981;"></i>
+                <div style="font-weight: 700; font-size: 15px; color: var(--text-primary); margin-bottom: 4px;">${(typeof getT === 'function' && getT('modals.mesocycle.emptyTitle')) || 'No tienes mesociclos creados'}</div>
+                <div style="font-size: 12.5px; line-height: 1.45; max-width: 320px; margin: 0 auto;">${(typeof getT === 'function' && getT('modals.mesocycle.emptyDesc')) || 'Pulsa en "Planificar Nuevo Mesociclo" para organizar tus semanas con progresión automática de sobrecarga.'}</div>
+            </div>`;
+            return;
+        }
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        container.innerHTML = '';
+        mesocycles.forEach(meso => {
+            const card = document.createElement('div');
+            card.className = 'mesocycle-card';
+
+            // Calculate start and end date
+            const startMon = meso.startDate ? (typeof inputToDate === 'function' ? inputToDate(meso.startDate) : new Date(meso.startDate)) : new Date();
+            const endSun = new Date(startMon);
+            endSun.setDate(startMon.getDate() + (meso.totalWeeks * 7) - 1);
+            endSun.setHours(23, 59, 59, 999);
+
+            // Compute status badge
+            let statusBadge = '';
+            let statusBorderColor = '#10b981';
+            let currentWeekNum = 1;
+
+            if (today < startMon) {
+                statusBorderColor = '#38bdf8';
+                statusBadge = `<span style="font-size: 11px; font-weight: 800; background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.3); padding: 3px 8px; border-radius: 999px;">⏳ Próximo</span>`;
+            } else if (today > endSun) {
+                statusBorderColor = '#64748b';
+                statusBadge = `<span style="font-size: 11px; font-weight: 800; background: rgba(100, 116, 139, 0.15); color: #94a3b8; border: 1px solid rgba(100, 116, 139, 0.3); padding: 3px 8px; border-radius: 999px;">✅ Finalizado</span>`;
+            } else {
+                const diffWeeks = Math.floor((today.getTime() - startMon.getTime()) / (7 * 24 * 60 * 60 * 1000));
+                currentWeekNum = Math.min(meso.totalWeeks, Math.max(1, diffWeeks + 1));
+                statusBorderColor = '#10b981';
+                statusBadge = `<span style="font-size: 11px; font-weight: 800; background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(52, 211, 153, 0.3); padding: 3px 8px; border-radius: 999px; display: inline-flex; align-items: center; gap: 4px;">
+                    <span style="width: 6px; height: 6px; border-radius: 50%; background: #34d399; display: inline-block;"></span>
+                    ⚡ Semana ${currentWeekNum} de ${meso.totalWeeks}
+                </span>`;
+            }
+
+            card.style.cssText = `background: var(--bg-surface); border: 1px solid var(--border-color); border-left: 5px solid ${statusBorderColor}; border-radius: 14px; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);`;
+
+            // Sessions progress count
+            const mesoSessions = (state.sessions || []).filter(s => String(s.mesocycleId) === String(meso.id) || String(s.blockId) === String(meso.id));
+            const totalPlanned = mesoSessions.length;
+            const completedCount = mesoSessions.filter(s => {
+                return (state.completedWorkouts || []).some(c => c.id === s.id || (c.date === s.date && c.name === s.name));
+            }).length;
+            const progressPct = totalPlanned > 0 ? Math.round((completedCount / totalPlanned) * 100) : 0;
+
+            // Structure Tag
+            const modeTag = meso.mode === 'cycle_12'
+                ? '<span style="color: #38bdf8; font-weight: 700;">🔥 Ciclo Completo 12 Semanas (4 Hipertrofia &rarr; 4 Pesado &rarr; 4 Alta Int.)</span>'
+                : `<span style="color: #a855f7; font-weight: 700;">Bloque 4 Semanas (${meso.mode === 'phase_heavy' ? 'Pesado' : meso.mode === 'phase_intensity' ? 'Alta Intensidad' : 'Hipertrofia'})</span>`;
+
+            // Day schedule badges
+            const dayNames = ['L', 'M', 'X', 'J', 'V'];
+            let dayChipsHtml = '';
+            for (let d = 0; d < 5; d++) {
+                const tplId = (meso.days && meso.days[d]) || '';
+                const tpl = tplId ? (state.predefinedSessions || []).find(t => String(t.id) === String(tplId)) : null;
+                if (tpl) {
+                    dayChipsHtml += `<span style="font-size: 11px; background: var(--bg-surface-elevated); border: 1px solid var(--border-color); padding: 3px 7px; border-radius: 6px; color: var(--text-primary);"><strong style="color: var(--color-accent);">${dayNames[d]}:</strong> ${tpl.name}</span>`;
+                } else {
+                    dayChipsHtml += `<span style="font-size: 11px; background: rgba(255,255,255,0.03); border: 1px dashed var(--border-color); padding: 3px 7px; border-radius: 6px; color: var(--text-secondary); opacity: 0.7;"><strong>${dayNames[d]}:</strong> Descanso</span>`;
+                }
+            }
+
+            const safeTitle = typeof window.escapeHtml === 'function' ? window.escapeHtml(meso.name) : meso.name;
+            const dateRangeStr = `${typeof formatDate === 'function' ? formatDate(startMon) : meso.startDate} &mdash; ${typeof formatDate === 'function' ? formatDate(endSun) : ''}`;
+
+            card.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;">
+                    <div>
+                        <h4 style="margin: 0 0 3px 0; font-size: 16px; font-weight: 800; color: var(--text-primary);">${safeTitle}</h4>
+                        <div style="font-size: 12px; color: var(--text-secondary); display: flex; align-items: center; gap: 5px;">
+                            <i class="ph-bold ph-calendar"></i> ${dateRangeStr}
+                        </div>
+                    </div>
+                    <div>${statusBadge}</div>
+                </div>
+
+                <div style="font-size: 12px; line-height: 1.4;">${modeTag}</div>
+
+                <!-- Progress bar -->
+                <div style="background: var(--bg-surface-elevated); padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border-color);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; font-weight: 700; margin-bottom: 5px;">
+                        <span style="color: var(--text-secondary);"><i class="ph-bold ph-check-circle"></i> Progreso de sesiones:</span>
+                        <span style="color: var(--text-primary);">${completedCount} de ${totalPlanned} completadas (${progressPct}%)</span>
+                    </div>
+                    <div style="width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 999px; overflow: hidden;">
+                        <div style="width: ${progressPct}%; height: 100%; background: linear-gradient(90deg, #3b82f6, #10b981); border-radius: 999px; transition: width 0.3s ease;"></div>
+                    </div>
+                </div>
+
+                <!-- Day schedule chips -->
+                <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                    ${dayChipsHtml}
+                </div>
+
+                <!-- Action Buttons: Edit & Delete -->
+                <div style="display: flex; gap: 8px; margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--border-color);">
+                    <button type="button" class="btn-secondary" style="flex: 1; padding: 8px 12px; font-size: 12.5px; font-weight: 700; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;" onclick="editMesocycle('${meso.id}')">
+                        <i class="ph-bold ph-pencil-simple-line" style="color: #38bdf8;"></i> <span>${(typeof getT === 'function' && getT('common.edit')) || 'Editar'}</span>
+                    </button>
+                    <button type="button" class="btn-secondary" style="padding: 8px 12px; font-size: 12.5px; font-weight: 700; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);" onclick="deleteMesocycle('${meso.id}')" title="Eliminar Mesociclo">
+                        <i class="ph-bold ph-trash"></i>
+                    </button>
+                </div>
+            `;
+
+            container.appendChild(card);
+        });
+    };
+
+    window.editMesocycle = function(mesoId) {
+        window.openMesocycleEditor(mesoId);
+    };
+
+    window.deleteMesocycle = function(mesoId) {
+        const meso = (state.mesocycles || []).find(m => String(m.id) === String(mesoId));
+        if (!meso) return;
+
+        const confirmMsg = `¿Deseas eliminar el mesociclo "${meso.name}"?
+
+Pulsa ACEPTAR para eliminar el mesociclo y retirar las sesiones futuras pendientes de tu calendario.
+(Tus sesiones pasadas y completadas se mantendrán intactas en tu historial).`;
+        if (!confirm(confirmMsg)) return;
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Filter out future uncompleted sessions of this mesocycle
+        state.sessions = (state.sessions || []).filter(s => {
+            const isThisMeso = String(s.mesocycleId) === String(mesoId) || String(s.blockId) === String(mesoId);
+            if (!isThisMeso) return true;
+
+            // Check if completed
+            const isCompleted = (state.completedWorkouts || []).some(c => c.id === s.id || (c.date === s.date && c.name === s.name));
+            if (isCompleted) return true; // keep completed!
+
+            // Parse session date
+            const parts = (s.date || '').split('/');
+            const sDate = parts.length === 3 ? new Date(parts[2], parts[1] - 1, parts[0]) : new Date(s.date);
+            if (sDate < today) return true; // keep past sessions
+
+            return false; // delete future uncompleted session
+        });
+
+        // Remove from mesocycles list
+        state.mesocycles = (state.mesocycles || []).filter(m => String(m.id) !== String(mesoId));
+
+        saveState();
+        if (typeof renderCalendar === 'function') renderCalendar();
+        if (typeof showToast === 'function') showToast('Mesociclo eliminado');
+        window.renderMesocyclesList();
+    };
+
+    window.saveMesocycle = function() {
+        const editId = document.getElementById('mesocycle-edit-id')?.value || '';
+        const customName = (document.getElementById('mesocycle-name-input')?.value || '').trim();
         const startVal = document.getElementById('mesocycle-start-date')?.value;
         const baseDate = startVal ? inputToDate(startVal) : getMonday(state.selectedDate || new Date());
         const startMonday = getMonday(baseDate);
@@ -16452,6 +16810,107 @@ window.nextOrFinishTutorial = function() {
             return 0;
         }
 
+        const modeLabel = mode === 'cycle_12' ? 'Ciclo Completo' : (mode === 'phase_heavy' ? 'Pesado' : (mode === 'phase_intensity' ? 'Alta Intensidad' : 'Hipertrofia'));
+        const autoName = `Mesociclo ${modeLabel} (${totalWeeks} semanas)`;
+        const finalName = customName || autoName;
+        const startMonStr = typeof dateToInputFormat === 'function' ? dateToInputFormat(startMonday) : startMonday.toISOString().split('T')[0];
+
+        state.mesocycles = state.mesocycles || [];
+
+        if (editId) {
+            // EDITING EXISTING MESOCYCLE
+            const existingIdx = state.mesocycles.findIndex(m => String(m.id) === String(editId));
+            if (existingIdx !== -1) {
+                state.mesocycles[existingIdx] = {
+                    ...state.mesocycles[existingIdx],
+                    name: finalName,
+                    startDate: startMonStr,
+                    mode: mode,
+                    totalWeeks: totalWeeks,
+                    days: daySelections,
+                    updatedAt: new Date().toISOString()
+                };
+            }
+
+            // Remove uncompleted future sessions of this mesocycle to re-schedule
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            state.sessions = (state.sessions || []).filter(s => {
+                const isThisMeso = String(s.mesocycleId) === String(editId) || String(s.blockId) === String(editId);
+                if (!isThisMeso) return true;
+                const isCompleted = (state.completedWorkouts || []).some(c => c.id === s.id || (c.date === s.date && c.name === s.name));
+                if (isCompleted) return true; // keep completed!
+                const parts = (s.date || '').split('/');
+                const sDate = parts.length === 3 ? new Date(parts[2], parts[1] - 1, parts[0]) : new Date(s.date);
+                if (sDate < today) return true; // keep past sessions
+                return false;
+            });
+
+            // Re-schedule future sessions from startMonday (or today) onwards
+            const weekWord = (typeof getT === 'function' && getT('calendar.week') && getT('calendar.week') !== 'calendar.week') ? getT('calendar.week') : 'Semana';
+
+            for (let w = 0; w < totalWeeks; w++) {
+                let phaseForWeek = 'hypertrophy';
+                if (mode === 'cycle_12') {
+                    if (w < 4) phaseForWeek = 'hypertrophy';
+                    else if (w < 8) phaseForWeek = 'heavy';
+                    else phaseForWeek = 'intensity';
+                } else if (mode === 'phase_heavy') {
+                    phaseForWeek = 'heavy';
+                } else if (mode === 'phase_intensity') {
+                    phaseForWeek = 'intensity';
+                } else {
+                    phaseForWeek = 'hypertrophy';
+                }
+
+                for (let d = 0; d < 5; d++) {
+                    const tplId = daySelections[d];
+                    if (!tplId) continue;
+                    const tpl = (state.predefinedSessions || []).find(t => String(t.id) === String(tplId));
+                    if (!tpl) continue;
+
+                    const sessionDate = new Date(startMonday);
+                    sessionDate.setDate(startMonday.getDate() + (w * 7) + d);
+                    sessionDate.setHours(0, 0, 0, 0);
+
+                    // Skip if date is in the past
+                    if (sessionDate < today) continue;
+
+                    const sourceExercises = (tpl.exercisesByPhase && tpl.exercisesByPhase[phaseForWeek])
+                        ? tpl.exercisesByPhase[phaseForWeek]
+                        : buildPhaseWorkoutExercises(tpl.routineItems || [], phaseForWeek);
+
+                    const clonedExercises = JSON.parse(JSON.stringify(sourceExercises || [])).map(ex => ({
+                        ...ex,
+                        supersetId: ex.supersetId ? (ex.supersetId + '_w' + w + '_d' + d) : null,
+                        sets: (ex.sets || []).map(s => ({
+                            ...s,
+                            reps: ''
+                        }))
+                    }));
+
+                    state.sessions.push({
+                        id: Date.now().toString() + '_w' + w + '_d' + d + '_' + Math.random().toString(36).slice(2, 6),
+                        blockId: editId,
+                        mesocycleId: editId,
+                        templateId: tpl.id,
+                        date: formatDate(sessionDate),
+                        name: `${tpl.name} (${weekWord} ${w + 1})`,
+                        type: phaseForWeek,
+                        exercises: clonedExercises
+                    });
+                }
+            }
+
+            saveState();
+            if (typeof renderCalendar === 'function') renderCalendar();
+            if (typeof showToast === 'function') showToast('¡Mesociclo actualizado con éxito!');
+            window.showMesocycleListView();
+            return;
+        }
+
+        // CREATING NEW MESOCYCLE
         const mesocycleBlockId = 'meso_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
         const weekWord = (typeof getT === 'function' && getT('calendar.week') && getT('calendar.week') !== 'calendar.week') ? getT('calendar.week') : 'Semana';
         let createdCount = 0;
@@ -16506,11 +16965,27 @@ window.nextOrFinishTutorial = function() {
             }
         }
 
+        // Save mesocycle record
+        state.mesocycles.push({
+            id: mesocycleBlockId,
+            name: finalName,
+            startDate: startMonStr,
+            mode: mode,
+            totalWeeks: totalWeeks,
+            days: daySelections,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        });
+
         saveState();
         if (typeof renderCalendar === 'function') renderCalendar();
-        alert(`¡Mesociclo programado con éxito! Se han establecido ${createdCount} sesiones en tu Calendario.`);
+        if (typeof showToast === 'function') showToast(`¡Mesociclo creado con éxito (${createdCount} sesiones)!`);
+        window.showMesocycleListView();
         return createdCount;
     };
+
+    // Alias for backward-compatibility
+    window.scheduleMesocycle = window.saveMesocycle;
 })();
 // === END PREDEFINED SESSIONS & MESOCYCLE MODULE ===
 
