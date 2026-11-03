@@ -112,7 +112,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="styles.css?v=1793663725908">
+    <link rel="stylesheet" href="styles.css?v=1793700160681">
 </head>
 <body>
 
@@ -789,6 +789,21 @@
 
                     <button id="finish-workout" class="btn-primary full-width" data-i18n="workout.finish">Finalizar Entrenamiento</button>
                 </div>
+            
+                <!-- Floating Rest Countdown Bar -->
+                <div id="workout-floating-rest-bar" class="floating-rest-bar" style="display: none;">
+                    <div class="rest-timer-left">
+                        <div class="rest-timer-icon"><i class="ph-fill ph-timer"></i></div>
+                        <div>
+                            <div class="rest-time-label" data-i18n="workout.restBetweenSets">Descanso entre series</div>
+                            <div id="rest-timer-display" class="rest-time-digits">01:30</div>
+                        </div>
+                    </div>
+                    <div class="rest-timer-actions">
+                        <button type="button" class="btn-timer-plus" onclick="addRestTimerSeconds(30)">+30s</button>
+                        <button type="button" class="btn-timer-skip" onclick="skipRestTimer()"><i class="ph-bold ph-x"></i> <span data-i18n="workout.skip">Saltar</span></button>
+                    </div>
+                </div>
             </section>
     
         <!-- AI VIEW -->
@@ -1290,7 +1305,7 @@
                 </div>
                 
                 <div id="update-action-container" style="width: 100%;">
-                    <!-- Botón inyectado por app.js -->
+                    <!-- Botón inyectado por app.js?v=1793700160681 -->
                 </div>
                 
                 <button class="btn-secondary full-width close-modal" style="padding: 12px; border: none; background: transparent; color: var(--text-secondary); width: 100%; white-space: nowrap; font-size: 13.5px; cursor: pointer;" data-i18n="update.later" onclick="document.getElementById('modal-update').classList.remove('active')">Quizás más tarde</button>
@@ -1584,9 +1599,9 @@
             });
         }
     </script>
-    <script src="default_db.js?v=1788267000000"></script>
-    <script src="app.js?v=1793663725908"></script>
-    <script src="ai_logic.js?v=1788267000000"></script>
+    <script src="default_db.js?v=1793700160681"></script>
+    <script src="app.js?v=1793700160681"></script>
+    <script src="ai_logic.js?v=1793700160681"></script>
 
     <!-- MODAL HISTORIA DE ENTRENAMIENTO (9:16 INSTAGRAM / WHATSAPP) -->
     <div id="modal-story-card" class="modal">

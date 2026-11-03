@@ -1913,6 +1913,16 @@ const translations = {
             "deleteAllConfirm": "¿Eliminar todos los entrenamientos del historial? Esta acción no se puede deshacer."
         },
         "workout": {
+            "pinnedNotePlaceholder": "📌 Nota fija de máquina (ej: asiento 4, polea altura 6...)",
+            "step": "Salto",
+            "stepTitle": "Salto de peso de máquina",
+            "restBetweenSets": "Descanso entre series",
+            "skip": "Saltar",
+            "previous": "Anterior",
+            "setCompleted": "Serie completada",
+            "markSetComplete": "Marcar como completada",
+            "obj": "Obj",
+            "finishExercise": "Finalizar Ejercicio",
             "activeNotificationTitle": "Тренування триває",
             "activeNotificationBody": "У вас активне тренування. Натисніть, щоб продовжити.",
             "reopenExercise": "Відновити вправу",
@@ -2339,6 +2349,16 @@ const translations = {
             "deleteAllConfirm": "Delete all workouts from history? This cannot be undone."
         },
         "workout": {
+            "pinnedNotePlaceholder": "📌 Machine note (e.g., seat 4, pin 6...)",
+            "step": "Step",
+            "stepTitle": "Machine weight step",
+            "restBetweenSets": "Rest between sets",
+            "skip": "Skip",
+            "previous": "Previous",
+            "setCompleted": "Set completed",
+            "markSetComplete": "Mark as completed",
+            "obj": "Target",
+            "finishExercise": "Finish Exercise",
             "activeNotificationTitle": "Workout in progress",
             "activeNotificationBody": "You have an active workout. Tap to resume.",
             "reopenExercise": "Reopen Exercise",
@@ -2750,6 +2770,16 @@ const translations = {
             "deleteAllConfirm": "Удалить все тренировки из истории? Это нельзя отменить."
         },
         "workout": {
+            "pinnedNotePlaceholder": "📌 Заметка тренажера (напр: сиденье 4, высота 6...)",
+            "step": "Шаг",
+            "stepTitle": "Шаг веса тренажера",
+            "restBetweenSets": "Отдых между подходами",
+            "skip": "Пропустить",
+            "previous": "Прошлый",
+            "setCompleted": "Подход завершен",
+            "markSetComplete": "Отметить выполненным",
+            "obj": "Цель",
+            "finishExercise": "Завершить упражнение",
             "type": "Тип",
             "reps": "Повт.",
             "kg": "Кг",
@@ -3152,6 +3182,16 @@ const translations = {
             "deleteAllConfirm": "Kustuta kõik treeningud ajaloost? Seda ei saa tagasi võtta."
         },
         "workout": {
+            "pinnedNotePlaceholder": "📌 Masina märge (nt: iste 4, ploki kõrgus 6...)",
+            "step": "Samm",
+            "stepTitle": "Trenažööri raskuse samm",
+            "restBetweenSets": "Puhkus seeriate vahel",
+            "skip": "Jäta vahele",
+            "previous": "Eelmine",
+            "setCompleted": "Seeria tehtud",
+            "markSetComplete": "Märgi tehtuks",
+            "obj": "Siht",
+            "finishExercise": "Lõpeta harjutus",
             "type": "Tüüp",
             "reps": "Kord.",
             "kg": "Kg",
@@ -3555,6 +3595,16 @@ const translations = {
             "deleteAllConfirm": "Видалити всі тренування з історії? Це неможливо скасувати."
         },
         "workout": {
+            "pinnedNotePlaceholder": "📌 Примітка тренажера (напр: сидіння 4, висота 6...)",
+            "step": "Крок",
+            "stepTitle": "Крок ваги тренажера",
+            "restBetweenSets": "Відпочинок між підходами",
+            "skip": "Пропустити",
+            "previous": "Попередній",
+            "setCompleted": "Підхід завершено",
+            "markSetComplete": "Позначити виконаним",
+            "obj": "Ціль",
+            "finishExercise": "Завершити вправу",
             "type": "Тип",
             "reps": "Повт.",
             "kg": "Кг",
@@ -5159,6 +5209,7 @@ const startWorkout = (session) => {
     activeSession = JSON.parse(JSON.stringify(session)); 
 
     workoutView.classList.add('active');
+    document.body.classList.add('in-workout');
     document.getElementById('workout-title').textContent = session.name || 'Entrenamiento';
     workoutView.style.setProperty('--color-accent', `var(--color-${session.type || 'hypertrophy'})`); 
     
@@ -5451,7 +5502,7 @@ function getProgressiveOverloadSuggestion(exerciseIdOrObj, sessionType, targetRe
         isCompound = true;
     }
 
-    const weightIncrement = isCompound ? 2.5 : 1.0;
+    const weightIncrement = typeof getExerciseWeightStep === 'function' ? getExerciseWeightStep(exerciseId, exName, dbEx ? dbEx.description : '') : (isCompound ? 2.5 : 1.0);
 
     if (lastReps >= maxTarget) {
         const suggestedWeight = Math.round((lastWeight + weightIncrement) * 100) / 100;
@@ -5535,25 +5586,210 @@ function getLastWeightSuggestion(exerciseId, sessionType, setType, setIndex) {
         if (!Array.isArray(session.exercises)) continue;
         const ex = session.exercises.find(e => e.exerciseId === exerciseId || (e.name && e.name === exerciseId));
         if (ex && Array.isArray(ex.sets)) {
-            // First check same setIndex and same type
             if (ex.sets[setIndex] && ex.sets[setIndex].type === setType && ex.sets[setIndex].weight > 0) {
-                return {
-                    weight: ex.sets[setIndex].weight,
-                    weightDrop: ex.sets[setIndex].weightDrop || null
-                };
+                return { weight: ex.sets[setIndex].weight, weightDrop: ex.sets[setIndex].weightDrop || null };
             }
-            // Next check any set with the same type in this exercise
             const setMatch = ex.sets.find(s => s.type === setType && s.weight > 0);
             if (setMatch) {
-                return {
-                    weight: setMatch.weight,
-                    weightDrop: setMatch.weightDrop || null
-                };
+                return { weight: setMatch.weight, weightDrop: setMatch.weightDrop || null };
+            }
+        }
+    }
+    // Fallback: search ANY completed workout with this exercise and set type
+    for (const session of allCompleted) {
+        if (!Array.isArray(session.exercises)) continue;
+        const ex = session.exercises.find(e => e.exerciseId === exerciseId || (e.name && e.name === exerciseId));
+        if (ex && Array.isArray(ex.sets)) {
+            if (ex.sets[setIndex] && ex.sets[setIndex].type === setType && ex.sets[setIndex].weight > 0) {
+                return { weight: ex.sets[setIndex].weight, weightDrop: ex.sets[setIndex].weightDrop || null };
+            }
+            const setMatch = ex.sets.find(s => s.type === setType && s.weight > 0);
+            if (setMatch) {
+                return { weight: setMatch.weight, weightDrop: setMatch.weightDrop || null };
             }
         }
     }
     return null;
 }
+
+
+// ==========================================
+// WORKOUT V2: REST TIMER & MACHINE STEP HELPERS
+// ==========================================
+let restTimerInterval = null;
+let restSecondsRemaining = 0;
+
+window.getExerciseWeightStep = getExerciseWeightStep;
+function getExerciseWeightStep(exerciseId, exName, exDesc) {
+    if (state && state.exercises) {
+        const db = state.exercises.find(e => e.id === exerciseId);
+        if (db && db.weightStep) return parseFloat(db.weightStep);
+    }
+    const name = (exName || '').toLowerCase();
+    const desc = (exDesc || '').toLowerCase();
+    if (/jalón|lat pulldown|polea alta|prensa|leg press|hack|sentadilla en multipower/i.test(name)) return 5.0;
+    if (/cable|polea|cruces|crossover/i.test(name)) return 2.5;
+    if (/mancuerna|dumbbell/i.test(name)) return 2.0;
+    if (/barra|barbell|multipower|smith/i.test(name)) return 2.5;
+    return 2.5;
+}
+
+window.saveExerciseWeightStep = function(exerciseId, stepVal) {
+    if (!exerciseId || !state || !state.exercises) return;
+    const db = state.exercises.find(e => e.id === exerciseId);
+    if (db) {
+        db.weightStep = parseFloat(stepVal) || 2.5;
+        saveState();
+        if (typeof renderWorkout === 'function') renderWorkout();
+    }
+};
+
+window.startRestTimer = startRestTimer;
+function startRestTimer(seconds) {
+    if (restTimerInterval) clearInterval(restTimerInterval);
+    restSecondsRemaining = Math.max(5, parseInt(seconds, 10) || 60);
+
+    const bar = document.getElementById('workout-floating-rest-bar');
+    if (!bar) return;
+
+    updateRestTimerDisplay();
+    bar.style.display = 'flex';
+
+    restTimerInterval = setInterval(() => {
+        restSecondsRemaining--;
+        if (restSecondsRemaining <= 0) {
+            clearInterval(restTimerInterval);
+            restTimerInterval = null;
+            bar.style.display = 'none';
+            notifyRestTimerComplete();
+        } else {
+            updateRestTimerDisplay();
+        }
+    }, 1000);
+}
+
+function updateRestTimerDisplay() {
+    const display = document.getElementById('rest-timer-display');
+    if (!display) return;
+    const m = Math.floor(restSecondsRemaining / 60);
+    const s = restSecondsRemaining % 60;
+    display.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
+window.addRestTimerSeconds = function(secs) {
+    restSecondsRemaining += (parseInt(secs, 10) || 30);
+    updateRestTimerDisplay();
+};
+
+window.skipRestTimer = function() {
+    if (restTimerInterval) clearInterval(restTimerInterval);
+    restTimerInterval = null;
+    const bar = document.getElementById('workout-floating-rest-bar');
+    if (bar) bar.style.display = 'none';
+};
+
+function notifyRestTimerComplete() {
+    try {
+        if (navigator.vibrate) {
+            navigator.vibrate([200, 100, 200]);
+        }
+    } catch (e) {}
+    try {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (AudioContextClass) {
+            const ctx = new AudioContextClass();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(880, ctx.currentTime);
+            gain.gain.setValueAtTime(0.3, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.45);
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            osc.stop(ctx.currentTime + 0.45);
+        }
+    } catch (e) {}
+}
+
+window.toggleSetCompleted = function(flatExIndex, setIndex) {
+    if (!activeSession || !activeSession.exercises) return;
+    const ex = activeSession.exercises[flatExIndex];
+    if (!ex || !ex.sets || !ex.sets[setIndex]) return;
+
+    const set = ex.sets[setIndex];
+    set.completed = !set.completed;
+
+    if (set.completed) {
+        // Strict Biomechanics Reps Target
+        let targetReps = '10';
+        if (set.type === 'Calentamiento') targetReps = '15-20';
+        else if (set.type === 'Aproximación') targetReps = '3-5';
+        else {
+            const dbEx = state.exercises ? state.exercises.find(e => e.id === ex.exerciseId) : null;
+            if (dbEx && dbEx.defaults) targetReps = dbEx.defaults[activeSession.type] || '10';
+        }
+
+        const weightSugg = getLastWeightSuggestion(ex.exerciseId, activeSession.type, set.type, setIndex);
+        const weightPlaceholder = (weightSugg && weightSugg.weight) ? weightSugg.weight : 0;
+
+        if (!set.reps || String(set.reps).trim() === '') {
+            const matchNum = String(targetReps).match(/\d+/);
+            set.reps = matchNum ? matchNum[0] : '10';
+        }
+        if (!set.weight || parseFloat(set.weight) === 0) {
+            if (weightPlaceholder > 0) set.weight = weightPlaceholder;
+        }
+
+        const allSetsDone = ex.sets.every(s => s.completed);
+        if (allSetsDone) {
+            ex.completed = true;
+        }
+
+        // Rest time countdown
+        let restSecs = 60;
+        if (set.restTime) {
+            const num = parseInt(String(set.restTime).replace(/\D/g, ''), 10);
+            if (num > 0) restSecs = num;
+        } else if (set.type === 'Calentamiento') {
+            restSecs = 45;
+        } else if (set.type === 'Aproximación') {
+            restSecs = 60;
+        } else {
+            restSecs = 90;
+        }
+        startRestTimer(restSecs);
+    }
+
+    if (typeof autoSaveWorkout === 'function') autoSaveWorkout();
+    saveState();
+    if (typeof renderWorkout === 'function') renderWorkout();
+};
+
+window.addSetToExercise = function(flatExIndex) {
+    if (!activeSession || !activeSession.exercises) return;
+    const ex = activeSession.exercises[flatExIndex];
+    if (!ex) return;
+    if (!Array.isArray(ex.sets)) ex.sets = [];
+
+    const dbEx = state.exercises ? state.exercises.find(e => e.id === ex.exerciseId) : null;
+    const defaultReps = (dbEx && dbEx.defaults && dbEx.defaults[activeSession.type]) ? dbEx.defaults[activeSession.type] : '10';
+
+    ex.sets.push({
+        type: 'Efectiva',
+        reps: '',
+        weight: '',
+        rir: '-',
+        completed: false,
+        targetReps: defaultReps,
+        restTime: '90s'
+    });
+
+    if (typeof autoSaveWorkout === 'function') autoSaveWorkout();
+    saveState();
+    if (typeof renderWorkout === 'function') renderWorkout();
+};
+
 
 const renderWorkout = () => {
     try {
@@ -5784,33 +6020,46 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                     </div>
                 </div>
                 
-                <div class="exercise-pinned-note" style="margin: 4px 0 12px 0; display: flex; align-items: center; gap: 8px; background: rgba(37, 99, 235, 0.08); border: 1px dashed rgba(37, 99, 235, 0.35); border-radius: 10px; padding: 6px 10px;">
-                    <i class="ph-bold ph-push-pin" style="color: var(--color-accent); font-size: 15px; flex-shrink: 0;" title="Nota fija de ajuste de máquina o técnica"></i>
-                    <input type="text" class="pinned-note-input" placeholder="📌 Nota fija de máquina (ej: asiento 4, polea altura 6...)" value="${safePinnedNote}" style="border: none; background: transparent; font-size: 12.5px; color: var(--text-primary); flex: 1; outline: none;" onchange="saveExercisePinnedNote('${ex.exerciseId}', this.value)" oninput="saveExercisePinnedNote('${ex.exerciseId}', this.value)">
-                </div>
-
-                <div class="set-row header-row" style="margin-top: 12px;">
-                    <div></div>
-                    <div style="font-size:12px; color:var(--text-secondary); text-align:center;">${getT('workout.type') || 'Tipo'}</div>
-                    <div style="font-size:12px; color:var(--text-secondary); text-align:center;">${getT('workout.reps') || 'Reps'}</div>
-                    <div style="font-size:12px; color:var(--text-secondary); width: 50px; text-align:center;">${getT('workout.kg') || 'Kg'}</div>
-                    <div style="font-size:12px; color:var(--text-secondary); width: 44px; text-align:center;" title="Repeticiones en Reserva (RIR)">RIR</div>
-                </div>
+                ${(() => {
+                    const currentStep = typeof getExerciseWeightStep === 'function' ? getExerciseWeightStep(ex.exerciseId, ex.name, dbEx ? dbEx.description : '') : 2.5;
+                    return `
+                    <div class="machine-settings-bar">
+                        <div class="machine-note-wrap">
+                            <i class="ph-bold ph-push-pin" title="Nota fija de ajuste de máquina o técnica"></i>
+                            <input type="text" class="pinned-note-input" placeholder="${getT('workout.pinnedNotePlaceholder') || '📌 Nota fija de máquina (ej: asiento 4, polea altura 6...)'}" value="${safePinnedNote}" onchange="saveExercisePinnedNote('${ex.exerciseId}', this.value)" oninput="saveExercisePinnedNote('${ex.exerciseId}', this.value)">
+                        </div>
+                        <div class="machine-increment-picker" title="${getT('workout.stepTitle') || 'Salto de peso de máquina'}">
+                            <label>⚖️ ${getT('workout.step') || 'Salto'}:</label>
+                            <select onchange="saveExerciseWeightStep('${ex.exerciseId}', this.value)">
+                                <option value="1" ${currentStep === 1 ? 'selected' : ''}>1 kg</option>
+                                <option value="2" ${currentStep === 2 ? 'selected' : ''}>2 kg</option>
+                                <option value="2.5" ${currentStep === 2.5 ? 'selected' : ''}>2.5 kg</option>
+                                <option value="5" ${currentStep === 5 ? 'selected' : ''}>5 kg</option>
+                                <option value="10" ${currentStep === 10 ? 'selected' : ''}>10 kg</option>
+                            </select>
+                        </div>
+                    </div>`;
+                })()}
             `;
             
             const setsContainer = document.createElement('div');
+            setsContainer.className = 'workout-sets-list';
             
             ex.sets.forEach((set, setIndex) => {
-                let targetReps = (set.targetReps !== undefined && set.targetReps !== null && String(set.targetReps).trim() !== '') ? String(set.targetReps) : '';
-                if (!targetReps) {
-                    if (set.type === 'Calentamiento') targetReps = '15-20';
-                    else if (set.type === 'Aproximación') targetReps = '3-5';
-                    else if (dbEx && dbEx.defaults) targetReps = dbEx.defaults[activeSession.type] || '';
+                // Strict Biomechanics Reps Target Rule:
+                // Warmup ALWAYS 15-20, Approach ALWAYS 3-5
+                let targetReps = '';
+                if (set.type === 'Calentamiento') {
+                    targetReps = '15-20';
+                } else if (set.type === 'Aproximación') {
+                    targetReps = '3-5';
+                } else if (set.targetReps !== undefined && set.targetReps !== null && String(set.targetReps).trim() !== '') {
+                    targetReps = String(set.targetReps);
+                } else if (dbEx && dbEx.defaults) {
+                    targetReps = dbEx.defaults[activeSession.type] || '10';
+                } else {
+                    targetReps = '10';
                 }
-                
-                const setRow = document.createElement('div');
-                setRow.classList.add('set-row');
-                setRow.style.padding = '4px 0';
                 
                 let targetRepsBase = targetReps;
                 let targetRepsDrop = '';
@@ -5821,7 +6070,7 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                     } else {
                         targetRepsBase = parts[0].trim();
                     }
-                    targetRepsDrop = targetReps; // The full string for dropset
+                    targetRepsDrop = targetReps;
                 }
 
                 const isDropset = set.type && (set.type.includes('Dropset') || set.type === 'Al fallo');
@@ -5829,15 +6078,10 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                 const weightPlaceholder = (weightSugg && weightSugg.weight) ? weightSugg.weight : '0';
                 const weightDropPlaceholder = (weightSugg && weightSugg.weightDrop) ? weightSugg.weightDrop : 'Drop kg';
 
-                let repsHtml = '';
-                let weightHtml = '';
-
                 const isExCompleted = !!ex.completed;
                 const isFieldEditable = (isWorkoutActive && !isExCompleted) || (activeSession.completed && window.isEditingCompletedWorkout);
                 const disabledAttr = !isFieldEditable ? 'disabled' : '';
-                const disabledStyle = !isFieldEditable ? 'opacity: 0.72; cursor: not-allowed;' : '';
-                
-                // Only show explicit value if user typed it or workout is completed, else keep placeholder as grey suggestion
+
                 let displayReps = '';
                 if (activeSession.completed || isExCompleted) {
                     displayReps = set.reps || '';
@@ -5846,27 +6090,58 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                 }
                 let displayDropReps = (activeSession.completed || isExCompleted) ? (set.repsDrop || '') : (set.repsDrop && set.repsDrop !== targetRepsDrop ? set.repsDrop : '');
 
+                // Badges & Labels
+                let badgeClass = 'badge-efectiva';
+                if (set.type === 'Calentamiento') badgeClass = 'badge-calentamiento';
+                else if (set.type === 'Aproximación') badgeClass = 'badge-aproximacion';
+                else if (set.type === 'Al fallo') badgeClass = 'badge-fallo';
+                else if (set.type && set.type.includes('Dropset')) badgeClass = 'badge-dropset';
+
+                const setFullLabel = typeof getSetTypeT === 'function' ? getSetTypeT(set.type) : set.type;
+
+                // Ghost performance
+                const lastPerf = getLastSetPerformance(ex.exerciseId, activeSession.type, set.type, setIndex);
+                let ghostHtml = '';
+                if (lastPerf && ((lastPerf.weight && lastPerf.weight > 0) || (lastPerf.reps && lastPerf.reps > 0))) {
+                    const prevWt = (lastPerf.weight !== null && lastPerf.weight > 0) ? `${lastPerf.weight} kg` : '';
+                    const prevReps = (lastPerf.reps !== null && lastPerf.reps !== '') ? `${lastPerf.reps}` : '';
+                    const prevText = [prevWt, prevReps].filter(Boolean).join(' × ');
+                    ghostHtml = `<span class="history-tag-clean" onclick="copyGhostPerformance(${flatExerciseIndex}, ${setIndex}, ${lastPerf.weight || 0}, '${lastPerf.reps || ''}')" title="${getT('workout.previous') || 'Anterior'}: toca para rellenar">👻 ${getT('workout.previous') || 'Anterior'}: ${prevText}</span>`;
+                }
+
+                // Progressive overload suggestion
+                const overloadSugg = getProgressiveOverloadSuggestion(ex.exerciseId, activeSession.type, targetReps, lastPerf);
+                let overloadHtml = '';
+                if (overloadSugg && overloadSugg.type === 'weight') {
+                    overloadHtml = `<span class="overload-tag-clean" onclick="applyOverloadSuggestion(${flatExerciseIndex}, ${setIndex}, ${overloadSugg.suggestedWeight}, '${overloadSugg.suggestedReps}')" title="Sugerencia de sobrecarga: toca para aplicar">🚀 ${overloadSugg.suggestedWeight} kg (+${overloadSugg.delta} kg)</span>`;
+                }
+
+                const restTimeText = set.restTime || (set.type === 'Calentamiento' ? '45s' : set.type === 'Aproximación' ? '60s' : '90s');
+                const isDone = !!set.completed;
+                const checkBtnClass = isDone ? 'checked' : '';
+
+                let repsHtml = '';
+                let weightHtml = '';
+
                 if (isDropset) {
                     repsHtml = `
-                        <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;">
-                            <input type="number" inputmode="numeric" class="set-input reps-input" value="${displayReps}" placeholder="${targetRepsBase}" style="width: 50px; height: 32px; text-align: center; font-size: 13px; ${disabledStyle}" ${disabledAttr}>
-                            <input type="number" inputmode="numeric" class="set-input reps-drop-input" value="${displayDropReps}" placeholder="${targetRepsDrop || (set.type === 'Al fallo' ? 'Fallo' : 'Drop')}" style="width: 58px; height: 32px; text-align: center; font-size: 13px; ${disabledStyle}" ${disabledAttr}>
+                        <div style="display: flex; gap: 4px; align-items: center;">
+                            <input type="number" inputmode="numeric" class="input-set-field reps-input ${isDone ? 'done' : ''}" value="${displayReps}" placeholder="${targetRepsBase}" ${disabledAttr}>
+                            <input type="number" inputmode="numeric" class="input-set-field reps-drop-input ${isDone ? 'done' : ''}" value="${displayDropReps}" placeholder="${targetRepsDrop || (set.type === 'Al fallo' ? 'Fallo' : 'Drop')}" ${disabledAttr}>
                         </div>
                     `;
                     weightHtml = `
-                        <div style="display: flex; flex-direction: column; gap: 4px;">
-                            <div style="display: flex; align-items: center; gap: 4px;">
-                                <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 50px; height: 32px; text-align: center; font-size: 13px; ${disabledStyle}" ${disabledAttr}>
-                                <button type="button" class="btn-dropset-calc" style="background: #10b981; color: white; border: none; border-radius: 8px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; cursor: pointer; flex-shrink: 0; ${disabledStyle}" title="Calcular Dropset" ${disabledAttr}>%</button>
-                            </div>
-                            <input type="number" step="any" inputmode="numeric" pattern="[0-9]*" class="set-input weight-drop-input" value="${set.weightDrop || ''}" placeholder="${weightDropPlaceholder}" style="width: 58px; height: 32px; text-align: center; font-size: 13px; ${disabledStyle}" ${disabledAttr}>
+                        <div style="display: flex; gap: 4px; align-items: center;">
+                            <input type="number" step="any" inputmode="numeric" class="input-set-field weight-input ${isDone ? 'done' : ''}" value="${set.weight || ''}" placeholder="${weightPlaceholder}" ${disabledAttr}>
+                            <input type="number" step="any" inputmode="numeric" class="input-set-field weight-drop-input ${isDone ? 'done' : ''}" value="${set.weightDrop || ''}" placeholder="${weightDropPlaceholder}" ${disabledAttr}>
+                            <button type="button" class="btn-dropset-calc" style="background: #10b981; color: white; border: none; border-radius: 8px; width: 34px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; cursor: pointer; flex-shrink: 0;" title="Calcular Dropset" ${disabledAttr}>%</button>
                         </div>
                     `;
                 } else {
-                    repsHtml = `<input type="number" inputmode="numeric" class="set-input reps-input" value="${displayReps}" placeholder="${targetRepsBase}" style="width: 50px; height: 32px; text-align: center; font-size: 13px; ${disabledStyle}" ${disabledAttr}>`;
+                    repsHtml = `<input type="number" inputmode="numeric" class="input-set-field reps-input ${isDone ? 'done' : ''}" value="${displayReps}" placeholder="${targetRepsBase}" ${disabledAttr}>`;
                     const isBarbell = isBarbellExercise(dbEx || ex);
-                    const plateBtn = isBarbell ? `<button type="button" class="btn-plate-calc" style="background: var(--bg-surface-elevated); color: var(--color-accent); border: 1px solid var(--border-color); border-radius: 8px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; flex-shrink: 0;" title="${getT('plateCalc.title') || 'Calculadora de discos'}" ${disabledAttr} style="background: var(--bg-surface-elevated); color: var(--color-accent); border: 1px solid var(--border-color); border-radius: 8px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; flex-shrink: 0; ${disabledStyle}"><i class="ph-bold ph-barbell"></i></button>` : '';
-                    weightHtml = `<div style="display:flex; align-items:center; gap:4px;"><input type="number" step="any" inputmode="numeric" pattern="[0-9]*" class="set-input weight-input" value="${set.weight || ''}" placeholder="${weightPlaceholder}" style="width: 50px; height: 32px; text-align: center; font-size: 13px; ${disabledStyle}" ${disabledAttr}>${plateBtn}</div>`;
+                    const plateBtn = isBarbell ? `<button type="button" class="btn-plate-calc" style="background: var(--bg-surface-elevated); color: var(--color-accent); border: 1px solid var(--border-color); border-radius: 8px; width: 34px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; flex-shrink: 0;" title="${getT('plateCalc.title') || 'Calculadora de discos'}" ${disabledAttr}><i class="ph-bold ph-barbell"></i></button>` : '';
+                    weightHtml = `<div style="display:flex; align-items:center; gap:4px; width:100%;"><input type="number" step="any" inputmode="numeric" class="input-set-field weight-input ${isDone ? 'done' : ''}" value="${set.weight || ''}" placeholder="${weightPlaceholder}" ${disabledAttr}>${plateBtn}</div>`;
                 }
 
                 const isSetPR = (set.isPR) || completedPrs.some(p => {
@@ -5880,69 +6155,65 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                 });
                 const prBadgeHtml = isSetPR ? `<span class="pr-badge" style="background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.4); border-radius: 6px; padding: 1px 5px; font-size: 10px; font-weight: 800; margin-left: 4px; display: inline-flex; align-items: center; gap: 2px;" title="Récord Personal superado en esta serie"><i class="ph-bold ph-trophy"></i> PR</span>` : '';
 
-                setRow.innerHTML = `
-                    <div class="set-number" style="margin-top: 8px;">${setIndex + 1}${prBadgeHtml}</div>
-                    <div style="display:flex; flex-direction:column; justify-content: flex-start; flex: 1; min-width: 0;">
-                        <select class="set-type-select" disabled style="opacity: 0.95; cursor: not-allowed; pointer-events: none; width: 100%;">
-                            <option value="Calentamiento" ${set.type==='Calentamiento'?'selected':''}>${getSetTypeT('Calentamiento')}</option>
-                            <option value="Aproximación" ${set.type==='Aproximación'?'selected':''}>${getSetTypeT('Aproximación')}</option>
-                            <option value="Efectiva" ${set.type==='Efectiva'?'selected':''}>${getSetTypeT('Efectiva')}</option>
-                            <option value="Al fallo" ${set.type==='Al fallo'?'selected':''}>${getSetTypeT('Al fallo')}</option>
-                            <option value="Dropset" ${set.type==='Dropset'?'selected':''}>${getSetTypeT('Dropset')}</option>
-                            <option value="Dropset fallo" ${set.type==='Dropset fallo'?'selected':''}>${getSetTypeT('Dropset fallo')}</option>
-                        </select>
-                        <div class="target-reps-text" style="margin-top: 4px;">Obj: ${targetReps}</div>
-                        ${(() => {
-                            const lastPerf = getLastSetPerformance(ex.exerciseId, activeSession.type, set.type, setIndex);
-                            if (lastPerf && ((lastPerf.weight && lastPerf.weight > 0) || (lastPerf.reps && lastPerf.reps > 0))) {
-                                const prevWt = (lastPerf.weight !== null && lastPerf.weight > 0) ? `${lastPerf.weight} kg` : '';
-                                const prevReps = (lastPerf.reps !== null && lastPerf.reps !== '') ? `${lastPerf.reps} reps` : '';
-                                const prevText = [prevWt, prevReps].filter(Boolean).join(' × ');
-                                const ghostHtml = `<div class="ghost-workout-tag" onclick="copyGhostPerformance(${flatExerciseIndex}, ${setIndex}, ${lastPerf.weight || 0}, '${lastPerf.reps || ''}')" title="Última vez (${lastPerf.date || ''}). Toca para rellenar" style="margin-top: 3px; font-size: 11px; font-weight: 600; color: var(--text-secondary); opacity: 0.88; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; background: rgba(255, 255, 255, 0.04); padding: 1px 6px; border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.08); transition: background 0.15s ease;"><i class="ph-bold ph-ghost" style="font-size: 11px; color: var(--color-accent);"></i><span>Última vez: <strong style="color: var(--text-primary); font-weight: 700;">${prevText}</strong></span></div>`;
-
-                                const overloadSugg = getProgressiveOverloadSuggestion(ex.exerciseId, activeSession.type, targetReps, lastPerf);
-                                const overloadHtml = overloadSugg ? `<div class="overload-suggestion-tag" onclick="applyOverloadSuggestion(${flatExerciseIndex}, ${setIndex}, ${overloadSugg.suggestedWeight}, '${overloadSugg.suggestedReps}')" title="Sugerencia de Sobrecarga Progresiva. Toca para aplicar" style="margin-top: 3px; font-size: 10.5px; font-weight: 700; color: ${overloadSugg.type === 'weight' ? '#10b981' : '#3b82f6'}; background: ${overloadSugg.type === 'weight' ? 'rgba(16, 185, 129, 0.12)' : 'rgba(59, 130, 246, 0.12)'}; padding: 2px 6px; border-radius: 6px; border: 1px solid ${overloadSugg.type === 'weight' ? 'rgba(16, 185, 129, 0.3)' : 'rgba(59, 130, 246, 0.3)'}; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; transition: transform 0.1s ease;"><i class="${overloadSugg.type === 'weight' ? 'ph-bold ph-trend-up' : 'ph-bold ph-target'}"></i><span>${overloadSugg.label}</span></div>` : '';
-
-                                return `<div style="display:flex; flex-direction:column; align-items:flex-start; gap:2px;">${ghostHtml}${overloadHtml}</div>`;
-                            }
-                            return '';
-                        })()}
+                const setCard = document.createElement('div');
+                setCard.className = `set-card-box ${isDone ? 'is-done' : ''}`;
+                setCard.innerHTML = `
+                    <div class="set-meta-header">
+                        <span class="set-type-badge-full ${badgeClass}">
+                            <span>${setIndex + 1}</span> • <span>${setFullLabel}</span>${prBadgeHtml}
+                        </span>
+                        <div class="set-meta-right">
+                            ${ghostHtml}
+                            ${overloadHtml}
+                            <span class="rest-tag-micro">⏱ ${restTimeText}</span>
+                        </div>
                     </div>
-                    <div style="display:flex; flex-direction:column; align-items:center; justify-content: flex-start;">
-                        ${repsHtml}
-                    </div>
-                    <div style="display:flex; flex-direction:column; align-items:flex-start; justify-content: flex-start;">${weightHtml}</div>
-                    <div style="display:flex; flex-direction:column; align-items:center; justify-content: flex-start;">
-                        <select class="set-input rir-select" style="width: 44px; height: 32px; text-align: center; font-size: 11.5px; font-weight: 600; padding: 2px; border-radius: 6px; ${disabledStyle}" ${disabledAttr} title="Repeticiones en Reserva (RIR)">
-                            <option value="" ${(!set.rir && set.rir !== 0 && set.rir !== '0') ? 'selected' : ''}>-</option>
-                            <option value="0" ${(set.rir === '0' || set.rir === 0 || ((!set.rir && set.rir !== 0) && (set.type === 'Al fallo' || set.type === 'Dropset fallo'))) ? 'selected' : ''}>0</option>
-                            <option value="1" ${(set.rir === '1' || set.rir === 1) ? 'selected' : ''}>1</option>
-                            <option value="2" ${(set.rir === '2' || set.rir === 2) ? 'selected' : ''}>2</option>
-                            <option value="3" ${(set.rir === '3' || set.rir === 3) ? 'selected' : ''}>3</option>
-                            <option value="4+" ${(set.rir === '4+' || set.rir === '4' || set.rir === 4) ? 'selected' : ''}>4+</option>
-                        </select>
+                    <div class="set-controls-row">
+                        <div class="control-group">
+                            <span class="control-label">${getT('workout.kg') || 'Peso (Kg)'}</span>
+                            ${weightHtml}
+                        </div>
+                        <div class="control-group">
+                            <span class="control-label">${getT('workout.reps') || 'Reps'} (${getT('workout.obj') || 'Obj'}: ${targetRepsBase})</span>
+                            ${repsHtml}
+                        </div>
+                        <div class="control-group">
+                            <span class="control-label">RIR</span>
+                            <select class="select-rir-field rir-select" ${disabledAttr}>
+                                <option value="-" ${(!set.rir || set.rir === '-') ? 'selected' : ''}>-</option>
+                                <option value="0" ${(set.rir === '0' || set.rir === 0 || ((!set.rir && set.rir !== 0) && (set.type === 'Al fallo' || set.type === 'Dropset fallo'))) ? 'selected' : ''}>0</option>
+                                <option value="1" ${(set.rir === '1' || set.rir === 1) ? 'selected' : ''}>1</option>
+                                <option value="2" ${(set.rir === '2' || set.rir === 2) ? 'selected' : ''}>2</option>
+                                <option value="3" ${(set.rir === '3' || set.rir === 3) ? 'selected' : ''}>3</option>
+                                <option value="4+" ${(set.rir === '4+' || set.rir === '4' || set.rir === 4) ? 'selected' : ''}>4+</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn-check-action ${checkBtnClass}" onclick="toggleSetCompleted(${flatExerciseIndex}, ${setIndex})" title="${isDone ? (getT('workout.setCompleted') || 'Serie completada') : (getT('workout.markSetComplete') || 'Marcar como completada')}">
+                            <i class="ph-bold ph-check"></i>
+                        </button>
                     </div>
                 `;
-                
-                const wInput = setRow.querySelector('.weight-input');
-                const wDropInput = setRow.querySelector('.weight-drop-input');
-                const rInput = setRow.querySelector('.reps-input');
-                const rDropInput = setRow.querySelector('.reps-drop-input');
-                const calcBtn = setRow.querySelector('.btn-dropset-calc');
-                
+
+                // Wire up event listeners
+                const wInput = setCard.querySelector('.weight-input');
+                const wDropInput = setCard.querySelector('.weight-drop-input');
+                const rInput = setCard.querySelector('.reps-input');
+                const rDropInput = setCard.querySelector('.reps-drop-input');
+                const calcBtn = setCard.querySelector('.btn-dropset-calc');
+                const plateBtnEl = setCard.querySelector('.btn-plate-calc');
+
                 if (wInput) {
                     wInput.addEventListener('input', (e) => { 
                         set.weight = parseFloat(e.target.value) || 0; 
-                        checkSetPR(ex.exerciseId, set.weight, set.reps, setRow, setIndex);
+                        checkSetPR(ex.exerciseId, set.weight, set.reps, setCard, setIndex);
                         autoSaveWorkout(); 
                     });
                     wInput.addEventListener('change', (e) => { 
                         set.weight = parseFloat(e.target.value) || 0; 
-                        checkSetPR(ex.exerciseId, set.weight, set.reps, setRow, setIndex);
+                        checkSetPR(ex.exerciseId, set.weight, set.reps, setCard, setIndex);
                         autoSaveWorkout(); 
                     });
                 }
-                const plateBtnEl = setRow.querySelector('.btn-plate-calc');
                 if (plateBtnEl) {
                     plateBtnEl.addEventListener('click', () => {
                         openPlateCalcModal(wInput, set, dbEx || ex);
@@ -5955,16 +6226,16 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                 if (rInput) {
                     rInput.addEventListener('input', (e) => { 
                         set.reps = e.target.value; 
-                        checkSetPR(ex.exerciseId, set.weight, set.reps, setRow, setIndex);
+                        checkSetPR(ex.exerciseId, set.weight, set.reps, setCard, setIndex);
                         autoSaveWorkout(); 
                     });
                     rInput.addEventListener('change', (e) => { 
                         set.reps = e.target.value; 
-                        checkSetPR(ex.exerciseId, set.weight, set.reps, setRow, setIndex);
+                        checkSetPR(ex.exerciseId, set.weight, set.reps, setCard, setIndex);
                         autoSaveWorkout(); 
                     });
                 }
-                const rirInput = setRow.querySelector('.rir-select');
+                const rirInput = setCard.querySelector('.rir-select');
                 if (rirInput) {
                     rirInput.addEventListener('change', (e) => {
                         set.rir = e.target.value;
@@ -5981,26 +6252,22 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                         openDropsetCalc(curW, wDropInput, set);
                     });
                 }
-                
-                const deleteBtn = setRow.querySelector('.delete-set');
-                if (deleteBtn) {
-                    deleteBtn.addEventListener('click', () => {
-                        ex.sets.splice(setIndex, 1);
-                        autoSaveWorkout();
-                        renderWorkout();
-                    });
-                }
-                
-                setsContainer.appendChild(setRow);
-                if (set.restTime && setIndex < ex.sets.length - 1) {
-                    const restDiv = document.createElement('div');
-                    restDiv.style.cssText = "font-size:11px; color:var(--color-heavy); margin: 4px 0 12px 24px; display:flex; align-items:center; gap:4px;";
-                    restDiv.innerHTML = `<i class="ph ph-timer"></i> ${set.restTime}`;
-                    setsContainer.appendChild(restDiv);
-                }
+
+                setsContainer.appendChild(setCard);
             });
             
             exSection.appendChild(setsContainer);
+
+            // Add Set button (+ Añadir Serie)
+            const addSetBtn = document.createElement('button');
+            addSetBtn.type = 'button';
+            addSetBtn.className = 'btn-add-set-micro';
+            addSetBtn.style.cssText = 'font-size: 11.5px; font-weight: 600; color: var(--color-accent); background: rgba(59, 130, 246, 0.1); border: 1px dashed rgba(59, 130, 246, 0.3); border-radius: 6px; padding: 7px 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; margin: 4px 0 10px 0;';
+            addSetBtn.innerHTML = `<i class="ph-bold ph-plus"></i> <span>${getT('workout.addSet') || 'Añadir Serie'}</span>`;
+            addSetBtn.addEventListener('click', () => {
+                addSetToExercise(flatExerciseIndex);
+            });
+            exSection.appendChild(addSetBtn);
             
             // "Añadir Serie" button removed as per user request
 
@@ -6074,6 +6341,8 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
 
 document.getElementById('close-workout').addEventListener('click', () => {
     workoutView.classList.remove('active');
+    document.body.classList.remove('in-workout');
+    if (typeof skipRestTimer === 'function') skipRestTimer();
     workoutView.style.removeProperty('--color-accent');
     if (typeof updateWorkoutBanner !== 'undefined') updateWorkoutBanner();
 });
@@ -6206,6 +6475,8 @@ document.getElementById('finish-workout').addEventListener('click', () => {
     state.completedWorkouts.push(window.lastCompletedWorkoutData);
     
     workoutView.classList.remove('active');
+    document.body.classList.remove('in-workout');
+    if (typeof skipRestTimer === 'function') skipRestTimer();
     workoutView.style.removeProperty('--color-accent');
     state.activeWorkoutState = null; // CLEAR active state fully
     if (window.manageWorkoutNotification) window.manageWorkoutNotification(false);
@@ -7195,6 +7466,7 @@ if (state.activeWorkoutState) {
     if (activeSession) {
         workoutStartTime = state.activeWorkoutState.startTime;
         workoutView.classList.add('active');
+    document.body.classList.add('in-workout');
         clearInterval(timerInterval);
         timerInterval = setInterval(updateTimerUI, 1000);
         updateTimerUI();
@@ -8709,6 +8981,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (confirm(getT('workout.cancelConfirm') || 'Cancel workout? Data will be lost.')) {
                 const workoutView = document.getElementById('view-workout');
                 if (workoutView) workoutView.classList.remove('active');
+    document.body.classList.remove('in-workout');
+    if (typeof skipRestTimer === 'function') skipRestTimer();
                 state.activeWorkoutState = null;
                 activeSession = null;
                 openExerciseAccordions = [];
@@ -9391,6 +9665,7 @@ function initApp() {
         if (activeSession) {
             workoutStartTime = state.activeWorkoutState.startTime;
             workoutView.classList.add('active');
+    document.body.classList.add('in-workout');
             clearInterval(timerInterval);
             timerInterval = setInterval(updateTimerUI, 1000);
             updateTimerUI();
