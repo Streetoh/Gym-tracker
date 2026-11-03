@@ -112,7 +112,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="styles.css?v=1793704045620">
+    <link rel="stylesheet" href="styles.css?v=1793705183607">
 </head>
 <body>
 
@@ -1337,7 +1337,7 @@
                 </div>
                 
                 <div id="update-action-container" style="width: 100%;">
-                    <!-- Botón inyectado por app.js?v=1793704045620 -->
+                    <!-- Botón inyectado por app.js?v=1793705183607 -->
                 </div>
                 
                 <button class="btn-secondary full-width close-modal" style="padding: 12px; border: none; background: transparent; color: var(--text-secondary); width: 100%; white-space: nowrap; font-size: 13.5px; cursor: pointer;" data-i18n="update.later" onclick="document.getElementById('modal-update').classList.remove('active')">Quizás más tarde</button>
@@ -1631,9 +1631,9 @@
             });
         }
     </script>
-    <script src="default_db.js?v=1793704045620"></script>
-    <script src="app.js?v=1793704045620"></script>
-    <script src="ai_logic.js?v=1793704045620"></script>
+    <script src="default_db.js?v=1793705183607"></script>
+    <script src="app.js?v=1793705183607"></script>
+    <script src="ai_logic.js?v=1793705183607"></script>
 
     <!-- MODAL HISTORIA DE ENTRENAMIENTO (9:16 INSTAGRAM / WHATSAPP) -->
     <div id="modal-story-card" class="modal">
@@ -2083,5 +2083,82 @@
             </button>
         </div>
     </div>
+
+    <!-- MODAL: CONFIGURE MESOCYCLE COMPASS -->
+    <div id="modal-mesocycle-compass-config" class="modal" style="display: none; align-items: center; justify-content: center; z-index: 10001;">
+        <div class="modal-content" style="max-width: 390px; width: 92%; border-radius: 18px; background: var(--bg-surface); border: 1.5px solid var(--border-color); padding: 20px; box-shadow: 0 16px 40px rgba(0,0,0,0.7);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <div style="font-size: 16px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+                    <i class="ph-fill ph-compass" style="color: var(--color-accent); font-size: 20px;"></i>
+                    <span data-i18n="workout.mesoConfigTitle">Configurar Brújula de Mesociclo</span>
+                </div>
+                <button type="button" onclick="closeMesocycleCompassConfig()" style="background: none; border: none; color: var(--text-secondary); font-size: 20px; cursor: pointer; padding: 4px;">
+                    <i class="ph-bold ph-x"></i>
+                </button>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px;">
+                <!-- Block Selection -->
+                <div>
+                    <label style="display: block; font-size: 11.5px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;" data-i18n="workout.mesoConfigBlock">
+                        Bloque del Mesociclo
+                    </label>
+                    <select id="meso-config-block-select" onchange="updateMesoConfigRirPreview()" style="width: 100%; padding: 11px 12px; border-radius: 10px; background: var(--bg-surface-elevated); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 13.5px; font-weight: 600;">
+                        <option value="hypertrophy">🔵 Bloque de Hipertrofia (RPE 7-9 / RIR 1-3)</option>
+                        <option value="heavy">🔴 Bloque de Pesados / Fuerza (RPE 8-10 / RIR 1-2)</option>
+                        <option value="intensity">🟢 Bloque de Alta Intensidad (Al fallo / Dropsets)</option>
+                        <option value="deload">🟡 Descarga / Deload (RIR 4+)</option>
+                    </select>
+                </div>
+
+                <!-- Week Selection -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div>
+                        <label style="display: block; font-size: 11.5px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;" data-i18n="workout.mesoConfigCurrentWeek">
+                            Semana actual
+                        </label>
+                        <select id="meso-config-week-select" onchange="updateMesoConfigRirPreview()" style="width: 100%; padding: 11px 12px; border-radius: 10px; background: var(--bg-surface-elevated); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 13.5px; font-weight: 600;">
+                            <option value="1">Semana 1</option>
+                            <option value="2">Semana 2</option>
+                            <option value="3">Semana 3</option>
+                            <option value="4">Semana 4</option>
+                            <option value="5">Semana 5</option>
+                            <option value="6">Semana 6</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 11.5px; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;" data-i18n="workout.mesoConfigTotalWeeks">
+                            Duración total
+                        </label>
+                        <select id="meso-config-totalweeks-select" style="width: 100%; padding: 11px 12px; border-radius: 10px; background: var(--bg-surface-elevated); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 13.5px; font-weight: 600;">
+                            <option value="4">4 semanas</option>
+                            <option value="5" selected>5 semanas</option>
+                            <option value="6">6 semanas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Suggested Target RIR -->
+                <div style="background: var(--bg-surface-elevated); border-radius: 10px; padding: 10px 14px; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+                    <div style="font-size: 12px; color: var(--text-secondary);">
+                        🎯 <span data-i18n="workout.mesoConfigTargetRir">Objetivo sugerido:</span>
+                    </div>
+                    <div id="meso-config-rir-preview" style="font-size: 13.5px; font-weight: 800; color: var(--color-accent);">
+                        RIR 2
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button type="button" class="btn-secondary" onclick="closeMesocycleCompassConfig()" style="flex: 1; padding: 11px; border-radius: 10px; font-weight: 700; font-size: 13.5px;" data-i18n="workout.cancel">
+                    Cancelar
+                </button>
+                <button type="button" class="btn-primary" onclick="saveMesocycleCompassConfig()" style="flex: 1; padding: 11px; border-radius: 10px; font-weight: 700; font-size: 13.5px;" data-i18n="workout.save">
+                    Guardar
+                </button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

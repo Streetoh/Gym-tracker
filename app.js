@@ -3972,6 +3972,61 @@ window.getTranslatedTypeLabel = function(type) {
 };
 function getTranslatedTypeLabel(type) { return window.getTranslatedTypeLabel(type); }
 
+// Register mesocycle and rest overtime translations
+const mesoTrans = {
+    es: {
+        mesoConfigTitle: 'Configurar Brújula de Mesociclo',
+        mesoConfigBlock: 'Bloque del Mesociclo',
+        mesoConfigCurrentWeek: 'Semana actual',
+        mesoConfigTotalWeeks: 'Duración total',
+        mesoConfigTargetRir: 'Objetivo sugerido',
+        mesoUpdated: 'Mesociclo actualizado',
+        restOvertime: 'Tiempo extra'
+    },
+    en: {
+        mesoConfigTitle: 'Configure Mesocycle Compass',
+        mesoConfigBlock: 'Mesocycle Phase',
+        mesoConfigCurrentWeek: 'Current Week',
+        mesoConfigTotalWeeks: 'Total Duration',
+        mesoConfigTargetRir: 'Suggested Target',
+        mesoUpdated: 'Mesocycle updated',
+        restOvertime: 'Overtime rest'
+    },
+    ru: {
+        mesoConfigTitle: 'Настройка мезоцикла',
+        mesoConfigBlock: 'Фаза мезоцикла',
+        mesoConfigCurrentWeek: 'Текущая неделя',
+        mesoConfigTotalWeeks: 'Всего недель',
+        mesoConfigTargetRir: 'Целевой RIR',
+        mesoUpdated: 'Мезоцикл обновлен',
+        restOvertime: 'Лишний отдых'
+    },
+    et: {
+        mesoConfigTitle: 'Mesotsükli seadistamine',
+        mesoConfigBlock: 'Mesotsükli faas',
+        mesoConfigCurrentWeek: 'Praegune nädal',
+        mesoConfigTotalWeeks: 'Kestus kokku',
+        mesoConfigTargetRir: 'Siht-RIR',
+        mesoUpdated: 'Mesotsükkel uuendatud',
+        restOvertime: 'Üleliigne puhkus'
+    },
+    uk: {
+        mesoConfigTitle: 'Налаштування мезоциклу',
+        mesoConfigBlock: 'Фаза мезоциклу',
+        mesoConfigCurrentWeek: 'Поточний тиждень',
+        mesoConfigTotalWeeks: 'Всього тижнів',
+        mesoConfigTargetRir: 'Цільовий RIR',
+        mesoUpdated: 'Мезоцикл оновлено',
+        restOvertime: 'Зайвий відпочинок'
+    }
+};
+Object.keys(mesoTrans).forEach(lang => {
+    if (translations[lang]) {
+        if (!translations[lang].workout) translations[lang].workout = {};
+        Object.assign(translations[lang].workout, mesoTrans[lang]);
+    }
+});
+
 const getT = (path) => {
     const keys = path.split('.');
     let result = translations[state.language];
@@ -5673,6 +5728,10 @@ let activeNumpadTarget = null; // { inputElem, type: 'weight'|'reps', flatExInde
 window.openNumpad = function(inputElem, type, flatExIndex, setIndex) {
     if (!inputElem) return;
     
+    // Strict Native Keyboard Suppression: force readonly and inputmode none
+    inputElem.readOnly = true;
+    inputElem.setAttribute('inputmode', 'none');
+    
     // Remove previous target highlight
     document.querySelectorAll('.input-set-field.active-numpad-target').forEach(el => el.classList.remove('active-numpad-target'));
     
@@ -5686,10 +5745,11 @@ window.openNumpad = function(inputElem, type, flatExIndex, setIndex) {
     if (numpad) {
         numpad.style.display = 'flex';
         if (fieldTitle) {
-            fieldTitle.innerHTML = type === 'weight' ? 'Editando: <strong>Peso (Kg)</strong>' : 'Editando: <strong>Repeticiones</strong>';
+            const isWeight = type.startsWith('weight');
+            fieldTitle.innerHTML = isWeight ? 'Editando: <strong>Peso (Kg)</strong>' : 'Editando: <strong>Repeticiones</strong>';
         }
         if (stepTitle) {
-            if (type === 'weight') {
+            if (type.startsWith('weight')) {
                 const ex = (activeSession && activeSession.exercises) ? activeSession.exercises[flatExIndex] : null;
                 const dbEx = ex ? (state.exercises ? state.exercises.find(e => e.id === ex.exerciseId) : null) : null;
                 const step = typeof getExerciseWeightStep === 'function' ? getExerciseWeightStep(ex?.exerciseId, ex?.name, dbEx?.description) : 2.5;
@@ -5699,6 +5759,12 @@ window.openNumpad = function(inputElem, type, flatExIndex, setIndex) {
             }
         }
     }
+
+    // Move floating rest bar above numpad if visible
+    const bar = document.getElementById('workout-floating-rest-bar');
+    if (bar && bar.style.display === 'flex') {
+        bar.style.bottom = '290px';
+    }
 };
 
 window.closeNumpad = function() {
@@ -5706,6 +5772,12 @@ window.closeNumpad = function() {
     document.querySelectorAll('.input-set-field.active-numpad-target').forEach(el => el.classList.remove('active-numpad-target'));
     const numpad = document.getElementById('workout-custom-numpad');
     if (numpad) numpad.style.display = 'none';
+
+    // Reset floating rest bar to bottom
+    const bar = document.getElementById('workout-floating-rest-bar');
+    if (bar && bar.style.display === 'flex') {
+        bar.style.bottom = '14px';
+    }
 };
 
 window.handleNumpadKey = function(key) {
@@ -5776,6 +5848,10 @@ function syncNumpadTargetValue(flatExIndex, setIndex, type, val) {
 
     if (type === 'weight') {
         ex.sets[setIndex].weight = parseFloat(val) || 0;
+    } else if (type === 'weight-drop') {
+        ex.sets[setIndex].weightDrop = parseFloat(val) || 0;
+    } else if (type === 'reps-drop') {
+        ex.sets[setIndex].repsDrop = val;
     } else {
         ex.sets[setIndex].reps = val;
     }
@@ -5835,6 +5911,82 @@ function initNumpadDOM() {
         handleNumpadNext();
     });
 }
+
+
+// ==========================================
+// MESOCYCLE COMPASS CONFIGURATION CONTROLLER
+// ==========================================
+window.openMesocycleCompassConfig = function() {
+    const modal = document.getElementById('modal-mesocycle-compass-config');
+    if (!modal) return;
+
+    const blockSel = document.getElementById('meso-config-block-select');
+    const weekSel = document.getElementById('meso-config-week-select');
+    const totalWeeksSel = document.getElementById('meso-config-totalweeks-select');
+
+    const curBlock = (activeSession && activeSession.type) || (state.activeMesocycleConfig && state.activeMesocycleConfig.type) || 'hypertrophy';
+    const curWeek = (activeSession && activeSession.weekNumber) || (state.activeMesocycleConfig && state.activeMesocycleConfig.weekNumber) || 2;
+    const curTotalWeeks = (activeSession && activeSession.totalWeeks) || (state.activeMesocycleConfig && state.activeMesocycleConfig.totalWeeks) || 5;
+
+    if (blockSel) blockSel.value = curBlock;
+    if (weekSel) weekSel.value = String(curWeek);
+    if (totalWeeksSel) totalWeeksSel.value = String(curTotalWeeks);
+
+    window.updateMesoConfigRirPreview();
+    modal.style.display = 'flex';
+    modal.classList.add('active');
+};
+
+window.closeMesocycleCompassConfig = function() {
+    const modal = document.getElementById('modal-mesocycle-compass-config');
+    if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('active');
+    }
+};
+
+window.updateMesoConfigRirPreview = function() {
+    const weekSel = document.getElementById('meso-config-week-select');
+    const blockSel = document.getElementById('meso-config-block-select');
+    const rirPrev = document.getElementById('meso-config-rir-preview');
+    if (!rirPrev || !weekSel) return;
+
+    const w = parseInt(weekSel.value, 10) || 1;
+    const block = blockSel ? blockSel.value : 'hypertrophy';
+    const rirMap = { 1: 3, 2: 2, 3: 1, 4: 0, 5: 4, 6: 4 };
+    const rir = (block === 'deload') ? 'RIR 4+ (Descarga)' : (w === 4 ? 'RIR 0 (Fallo muscular)' : (w >= 5 ? 'RIR 4+ (Descarga)' : `RIR ${rirMap[w] !== undefined ? rirMap[w] : 2}`));
+    rirPrev.textContent = rir;
+};
+
+window.saveMesocycleCompassConfig = function() {
+    const blockSel = document.getElementById('meso-config-block-select');
+    const weekSel = document.getElementById('meso-config-week-select');
+    const totalWeeksSel = document.getElementById('meso-config-totalweeks-select');
+
+    const block = blockSel ? blockSel.value : 'hypertrophy';
+    const week = parseInt(weekSel ? weekSel.value : '2', 10) || 2;
+    const totalWeeks = parseInt(totalWeeksSel ? totalWeeksSel.value : '5', 10) || 5;
+
+    if (!state.activeMesocycleConfig) state.activeMesocycleConfig = {};
+    state.activeMesocycleConfig.type = block;
+    state.activeMesocycleConfig.weekNumber = week;
+    state.activeMesocycleConfig.totalWeeks = totalWeeks;
+
+    if (activeSession) {
+        activeSession.type = block;
+        activeSession.weekNumber = week;
+        activeSession.totalWeeks = totalWeeks;
+    }
+
+    if (typeof autoSaveWorkout === 'function') autoSaveWorkout();
+    saveState();
+    window.closeMesocycleCompassConfig();
+    if (typeof renderWorkout === 'function') renderWorkout();
+
+    if (typeof showToast === 'function') {
+        showToast(typeof getT === 'function' ? (getT('workout.mesoUpdated') || 'Mesociclo actualizado') : 'Mesociclo actualizado');
+    }
+};
 
 // 3. DUMBBELL DOUBLE-MATH TOGGLE
 window.toggleDumbbellMode = function(flatExIndex) {
@@ -6004,33 +6156,51 @@ window.saveExerciseWeightStep = function(exerciseId, stepVal) {
 window.startRestTimer = startRestTimer;
 function startRestTimer(seconds) {
     if (restTimerInterval) clearInterval(restTimerInterval);
-    restSecondsRemaining = Math.max(5, parseInt(seconds, 10) || 60);
+    restSecondsRemaining = Math.max(1, parseInt(seconds, 10) || 60);
 
     const bar = document.getElementById('workout-floating-rest-bar');
     if (!bar) return;
 
+    bar.classList.remove('is-overtime');
     updateRestTimerDisplay();
     bar.style.display = 'flex';
 
+    // Position above custom numpad if open
+    const numpad = document.getElementById('workout-custom-numpad');
+    const isNumpadOpen = numpad && numpad.style.display === 'flex';
+    bar.style.bottom = isNumpadOpen ? '290px' : '14px';
+
     restTimerInterval = setInterval(() => {
         restSecondsRemaining--;
-        if (restSecondsRemaining <= 0) {
-            clearInterval(restTimerInterval);
-            restTimerInterval = null;
-            bar.style.display = 'none';
+        if (restSecondsRemaining === 0) {
             notifyRestTimerComplete();
-        } else {
-            updateRestTimerDisplay();
         }
+        updateRestTimerDisplay();
     }, 1000);
 }
 
 function updateRestTimerDisplay() {
     const display = document.getElementById('rest-timer-display');
+    const bar = document.getElementById('workout-floating-rest-bar');
+    const label = bar ? bar.querySelector('.rest-time-label') : null;
+    const icon = bar ? bar.querySelector('.rest-timer-icon') : null;
     if (!display) return;
-    const m = Math.floor(restSecondsRemaining / 60);
-    const s = restSecondsRemaining % 60;
-    display.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+
+    if (restSecondsRemaining < 0) {
+        // Negative count in RED
+        const absSec = Math.abs(restSecondsRemaining);
+        const m = Math.floor(absSec / 60);
+        const s = absSec % 60;
+        display.textContent = `-${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        if (bar) bar.classList.add('is-overtime');
+        if (label) { const tr = (typeof getT === 'function' && getT('workout.restOvertime') && getT('workout.restOvertime') !== 'workout.restOvertime') ? getT('workout.restOvertime') : 'Tiempo extra'; label.textContent = tr; }
+    } else {
+        const m = Math.floor(restSecondsRemaining / 60);
+        const s = restSecondsRemaining % 60;
+        display.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+        if (bar) bar.classList.remove('is-overtime');
+        if (label) label.textContent = typeof getT === 'function' ? (getT('workout.restBetweenSets') || 'Descanso entre series') : 'Descanso entre series';
+    }
 }
 
 window.addRestTimerSeconds = function(secs) {
@@ -6041,8 +6211,13 @@ window.addRestTimerSeconds = function(secs) {
 window.skipRestTimer = function() {
     if (restTimerInterval) clearInterval(restTimerInterval);
     restTimerInterval = null;
+    restSecondsRemaining = 0;
     const bar = document.getElementById('workout-floating-rest-bar');
-    if (bar) bar.style.display = 'none';
+    if (bar) {
+        bar.style.display = 'none';
+        bar.classList.remove('is-overtime');
+        bar.style.bottom = '14px';
+    }
 };
 
 function notifyRestTimerComplete() {
@@ -6156,15 +6331,17 @@ const renderWorkout = () => {
     // Render Mesocycle Weekly Progress Compass Banner
     const compassEl = document.getElementById('workout-mesocycle-compass');
     if (compassEl) {
-        const bType = activeSession.type || 'hypertrophy';
+        const cfg = state.activeMesocycleConfig || {};
+        const bType = activeSession.type || cfg.type || 'hypertrophy';
         let blockName = (typeof getT === 'function' ? getT('blocks.hypertrophyTitle') : 'Hipertrofia') || 'Hipertrofia';
         if (bType === 'heavy') blockName = (typeof getT === 'function' ? getT('blocks.heavyTitle') : 'Fuerza') || 'Fuerza';
         else if (bType === 'intensity') blockName = (typeof getT === 'function' ? getT('blocks.intensityTitle') : 'Alta Intensidad') || 'Alta Intensidad';
+        else if (bType === 'deload') blockName = 'Descarga';
 
-        let weekNum = activeSession.weekNumber || 2;
-        const totalWeeks = 5;
-        const rirTargets = { 1: 3, 2: 2, 3: 1, 4: 0, 5: 4 };
-        const rirTarget = rirTargets[weekNum] || 2;
+        let weekNum = activeSession.weekNumber || cfg.weekNumber || 2;
+        const totalWeeks = activeSession.totalWeeks || cfg.totalWeeks || 5;
+        const rirTargets = { 1: 3, 2: 2, 3: 1, 4: 0, 5: 4, 6: 4 };
+        const rirTarget = (bType === 'deload') ? 4 : (rirTargets[weekNum] !== undefined ? rirTargets[weekNum] : 2);
 
         let dotsHtml = '';
         for (let w = 1; w <= totalWeeks; w++) {
@@ -6173,9 +6350,14 @@ const renderWorkout = () => {
         }
 
         compassEl.style.display = 'flex';
+        compassEl.onclick = () => window.openMesocycleCompassConfig();
+        compassEl.title = "Toca para configurar la semana y bloque del mesociclo";
         compassEl.innerHTML = `
             <div class="meso-info">
-                <span class="meso-title"><i class="ph-fill ph-compass"></i> Semana ${weekNum} de ${totalWeeks} · ${blockName}</span>
+                <span class="meso-title">
+                    <i class="ph-fill ph-compass"></i> Semana ${weekNum} de ${totalWeeks} · ${blockName}
+                    <span class="meso-edit-chip"><i class="ph-bold ph-sliders"></i> Ajustar</span>
+                </span>
                 <span class="meso-target">🎯 ${typeof getT === 'function' ? (getT('workout.obj') || 'Objetivo') : 'Objetivo'}: RIR ${rirTarget}</span>
             </div>
             <div class="meso-dots">
@@ -6526,22 +6708,22 @@ window.openPlateCalcModal = function(wInput, setObj, exObj) {
                 if (isDropset) {
                     repsHtml = `
                         <div style="display: flex; gap: 4px; align-items: center;">
-                            <input type="number" inputmode="numeric" class="input-set-field reps-input ${isDone ? 'done' : ''}" value="${displayReps}" placeholder="${targetRepsBase}" ${disabledAttr} inputmode="none" onclick="openNumpad(this, 'reps', ${flatExerciseIndex}, ${setIndex})" onfocus="openNumpad(this, 'reps', ${flatExerciseIndex}, ${setIndex})">
-                            <input type="number" inputmode="numeric" class="input-set-field reps-drop-input ${isDone ? 'done' : ''}" value="${displayDropReps}" placeholder="${targetRepsDrop || (set.type === 'Al fallo' ? 'Fallo' : 'Drop')}" ${disabledAttr}>
+                            <input type="text" readonly inputmode="none" class="input-set-field reps-input ${isDone ? 'done' : ''}" value="${displayReps}" placeholder="${targetRepsBase}" ${disabledAttr} onclick="openNumpad(this, 'reps', ${flatExerciseIndex}, ${setIndex})" onfocus="openNumpad(this, 'reps', ${flatExerciseIndex}, ${setIndex})">
+                            <input type="text" readonly inputmode="none" class="input-set-field reps-drop-input ${isDone ? 'done' : ''}" value="${displayDropReps}" placeholder="${targetRepsDrop || (set.type === 'Al fallo' ? 'Fallo' : 'Drop')}" ${disabledAttr} onclick="openNumpad(this, 'reps-drop', ${flatExerciseIndex}, ${setIndex})" onfocus="openNumpad(this, 'reps-drop', ${flatExerciseIndex}, ${setIndex})">
                         </div>
                     `;
                     weightHtml = `
                         <div style="display: flex; gap: 4px; align-items: center;">
-                            <input type="number" step="any" inputmode="numeric" class="input-set-field weight-input ${isDone ? 'done' : ''}" value="${set.weight || ''}" placeholder="${weightPlaceholder}" ${disabledAttr} inputmode="none" onclick="openNumpad(this, 'weight', ${flatExerciseIndex}, ${setIndex})" onfocus="openNumpad(this, 'weight', ${flatExerciseIndex}, ${setIndex})">
-                            <input type="number" step="any" inputmode="numeric" class="input-set-field weight-drop-input ${isDone ? 'done' : ''}" value="${set.weightDrop || ''}" placeholder="${weightDropPlaceholder}" ${disabledAttr}>
+                            <input type="text" readonly inputmode="none" class="input-set-field weight-input ${isDone ? 'done' : ''}" value="${set.weight || ''}" placeholder="${weightPlaceholder}" ${disabledAttr} onclick="openNumpad(this, 'weight', ${flatExerciseIndex}, ${setIndex})" onfocus="openNumpad(this, 'weight', ${flatExerciseIndex}, ${setIndex})">
+                            <input type="text" readonly inputmode="none" class="input-set-field weight-drop-input ${isDone ? 'done' : ''}" value="${set.weightDrop || ''}" placeholder="${weightDropPlaceholder}" ${disabledAttr} onclick="openNumpad(this, 'weight-drop', ${flatExerciseIndex}, ${setIndex})" onfocus="openNumpad(this, 'weight-drop', ${flatExerciseIndex}, ${setIndex})">
                             <button type="button" class="btn-dropset-calc" style="background: #10b981; color: white; border: none; border-radius: 8px; width: 34px; height: 40px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 15px; cursor: pointer; flex-shrink: 0;" title="Calcular Dropset" ${disabledAttr}>%</button>
                         </div>
                     `;
                 } else {
-                    repsHtml = `<input type="number" inputmode="numeric" class="input-set-field reps-input ${isDone ? 'done' : ''}" value="${displayReps}" placeholder="${targetRepsBase}" ${disabledAttr} inputmode="none" onclick="openNumpad(this, 'reps', ${flatExerciseIndex}, ${setIndex})" onfocus="openNumpad(this, 'reps', ${flatExerciseIndex}, ${setIndex})">`;
+                    repsHtml = `<input type="text" readonly inputmode="none" class="input-set-field reps-input ${isDone ? 'done' : ''}" value="${displayReps}" placeholder="${targetRepsBase}" ${disabledAttr} onclick="openNumpad(this, 'reps', ${flatExerciseIndex}, ${setIndex})" onfocus="openNumpad(this, 'reps', ${flatExerciseIndex}, ${setIndex})">`;
                     const isBarbell = isBarbellExercise(dbEx || ex);
                     const plateBtn = isBarbell ? `<button type="button" class="btn-plate-calc" style="background: var(--bg-surface-elevated); color: var(--color-accent); border: 1px solid var(--border-color); border-radius: 8px; width: 34px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; flex-shrink: 0;" title="${getT('plateCalc.title') || 'Calculadora de discos'}" ${disabledAttr}><i class="ph-bold ph-barbell"></i></button>` : '';
-                    weightHtml = `<div style="display:flex; align-items:center; gap:4px; width:100%;"><input type="number" step="any" inputmode="numeric" class="input-set-field weight-input ${isDone ? 'done' : ''}" value="${set.weight || ''}" placeholder="${weightPlaceholder}" ${disabledAttr} inputmode="none" onclick="openNumpad(this, 'weight', ${flatExerciseIndex}, ${setIndex})" onfocus="openNumpad(this, 'weight', ${flatExerciseIndex}, ${setIndex})">${plateBtn}</div>`;
+                    weightHtml = `<div style="display:flex; align-items:center; gap:4px; width:100%;"><input type="text" readonly inputmode="none" class="input-set-field weight-input ${isDone ? 'done' : ''}" value="${set.weight || ''}" placeholder="${weightPlaceholder}" ${disabledAttr} onclick="openNumpad(this, 'weight', ${flatExerciseIndex}, ${setIndex})" onfocus="openNumpad(this, 'weight', ${flatExerciseIndex}, ${setIndex})">${plateBtn}</div>`;
                 }
 
                 const isSetPR = (set.isPR) || completedPrs.some(p => {

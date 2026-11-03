@@ -3713,3 +3713,61 @@ body.in-workout #main-header {
     justify-content: center;
     gap: 8px;
 }
+
+
+/* Mesocycle Compass banner interactive styles */
+.mesocycle-compass-banner {
+    cursor: pointer !important;
+    transition: background 0.15s ease, transform 0.1s ease !important;
+    user-select: none !important;
+}
+.mesocycle-compass-banner:hover {
+    background: linear-gradient(90deg, rgba(37, 99, 235, 0.22), rgba(16, 185, 129, 0.22)) !important;
+}
+.mesocycle-compass-banner:active {
+    transform: scale(0.99);
+}
+.meso-edit-chip {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--color-accent);
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    border-radius: 6px;
+    padding: 2px 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+/* Floating rest countdown timer overtime (negative count in RED) */
+.floating-rest-bar.is-overtime {
+    border-color: rgba(239, 68, 68, 0.7) !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 22px rgba(239, 68, 68, 0.4) !important;
+    animation: restOvertimePulse 2s infinite ease-in-out;
+}
+@keyframes restOvertimePulse {
+    0%, 100% {
+        border-color: rgba(239, 68, 68, 0.7);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 20px rgba(239, 68, 68, 0.35);
+    }
+    50% {
+        border-color: rgba(239, 68, 68, 1);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 30px rgba(239, 68, 68, 0.65);
+    }
+}
+.floating-rest-bar.is-overtime .rest-time-digits {
+    color: #ef4444 !important;
+    font-weight: 800;
+    text-shadow: 0 0 12px rgba(239, 68, 68, 0.6);
+}
+.floating-rest-bar.is-overtime .rest-time-label {
+    color: #fca5a5 !important;
+}
+.floating-rest-bar.is-overtime .rest-timer-icon {
+    background: rgba(239, 68, 68, 0.25) !important;
+    color: #ef4444 !important;
+}
+
