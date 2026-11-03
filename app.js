@@ -2110,6 +2110,11 @@ const translations = {
             "steps": "Pasos"
         },
         "progression": {
+            "desc": "Visualiza tus mejoras de fuerza, fatiga muscular acumulada y logros desbloqueados.",
+            "tabCharts": "Fuerza",
+            "tabFatigue": "Fatiga y Volumen",
+            "tabMeasurements": "Medidas y Fotos",
+            "tabAchievements": "Logros",
             "searchPlaceholder": "Buscar ejercicio..."
         },
         "blocks": {
@@ -2519,6 +2524,11 @@ const translations = {
             "steps": "Steps"
         },
         "progression": {
+            "desc": "Track your strength improvements, accumulated muscle fatigue, and unlocked achievements.",
+            "tabCharts": "Strength",
+            "tabFatigue": "Fatigue & Volume",
+            "tabMeasurements": "Measurements & Photos",
+            "tabAchievements": "Achievements",
             "searchPlaceholder": "Search exercise..."
         },
         "blocks": {
@@ -2917,6 +2927,11 @@ const translations = {
             "steps": "Шаги"
         },
         "progression": {
+            "desc": "Отслеживайте рост силы, накопленную мышечную усталость и открытые достижения.",
+            "tabCharts": "Сила",
+            "tabFatigue": "Усталость и объем",
+            "tabMeasurements": "Замеры и фото",
+            "tabAchievements": "Достижения",
             "searchPlaceholder": "Поиск упражнения..."
         },
         "blocks": {
@@ -3314,6 +3329,11 @@ const translations = {
             "steps": "Sammud"
         },
         "progression": {
+            "desc": "Jälgi oma jõu arengut, lihaste väsimust ja avatud saavutusi.",
+            "tabCharts": "Jõud",
+            "tabFatigue": "Väsimus ja maht",
+            "tabMeasurements": "Mõõdud ja fotod",
+            "tabAchievements": "Saavutused",
             "searchPlaceholder": "Otsi harjutust..."
         },
         "blocks": {
@@ -3712,6 +3732,11 @@ const translations = {
             "steps": "Кроки"
         },
         "progression": {
+            "desc": "Відстежуйте покращення сили, накопичену втому м'язів та розблоковані досягнення.",
+            "tabCharts": "Сила",
+            "tabFatigue": "Втома та об'єм",
+            "tabMeasurements": "Заміри та фото",
+            "tabAchievements": "Досягнення",
             "searchPlaceholder": "Пошук вправи..."
         },
         "blocks": {
@@ -7297,6 +7322,8 @@ const renderProgressionExerciseList = () => {
     }
     
     list.style.display = 'flex';
+    list.style.flexDirection = 'column';
+    list.style.gap = '8px';
     list.innerHTML = '';
     
     let filtered = state.exercises.filter(ex => {
@@ -7306,25 +7333,48 @@ const renderProgressionExerciseList = () => {
     });
     
     if (filtered.length === 0) {
-        list.innerHTML = '<div style="color:var(--text-muted); font-size:13px; padding:12px; text-align:center;">No hay ejercicios para esta selección.</div>';
+        list.innerHTML = '<div style="color:var(--text-muted); font-size:13px; padding:16px; text-align:center;">No hay ejercicios para esta selección.</div>';
         return;
     }
     
     filtered.forEach(ex => {
+        const isSelected = progressionSelectedExId === ex.id;
         const item = document.createElement('div');
-        item.style.padding = '10px 14px';
-        item.style.background = progressionSelectedExId === ex.id ? 'rgba(37, 99, 235, 0.15)' : 'var(--bg-surface)';
-        item.style.border = progressionSelectedExId === ex.id ? '1px solid var(--color-accent)' : '1px solid var(--border-color)';
-        item.style.borderRadius = '8px';
-        item.style.fontSize = '14px';
-        item.style.fontWeight = progressionSelectedExId === ex.id ? '600' : '400';
-        item.style.color = progressionSelectedExId === ex.id ? 'var(--color-accent)' : 'var(--text-primary)';
+        item.className = 'progression-exercise-card';
+        item.style.padding = '8px 12px';
+        item.style.background = isSelected ? 'rgba(37, 99, 235, 0.16)' : 'var(--bg-surface)';
+        item.style.border = isSelected ? '1.5px solid var(--color-accent)' : '1px solid var(--border-color)';
+        item.style.borderRadius = '12px';
         item.style.cursor = 'pointer';
         item.style.display = 'flex';
-        item.style.justifyContent = 'space-between';
         item.style.alignItems = 'center';
+        item.style.gap = '12px';
+        item.style.transition = 'all 0.18s ease';
+        if (isSelected) {
+            item.style.boxShadow = '0 0 14px rgba(37, 99, 235, 0.28)';
+        }
         
-        item.innerHTML = `<span>${getTrExName(ex.name)}</span> ${progressionSelectedExId === ex.id ? '<i class="ph ph-check" style="font-weight:bold;"></i>' : ''}`;
+        const fallbackSvg = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 24 24' fill='%2364748b'><path d='M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L2 8c1.52.41 3.12.7 4.77.89L5 17h2l1.24-5.69c1.23.13 2.49.19 3.76.19 1.27 0 2.53-.06 3.76-.19L17 17h2l-1.77-8.11c1.65-.19 3.25-.48 4.77-.89l-1.5-2z'/></svg>";
+        const imgSrc = ex.imageData ? ex.imageData : fallbackSvg;
+        
+        const groupLabel = window.getTranslatedMuscleName ? window.getTranslatedMuscleName(ex.group) : ex.group;
+        
+        item.innerHTML = `
+            <div style="width: 52px; height: 52px; min-width: 52px; border-radius: 8px; overflow: hidden; background: #0b0f19; border: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center;">
+                <img src="${imgSrc}" alt="${getTrExName(ex.name)}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='${fallbackSvg}';" />
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0;">
+                <span style="font-size: 13.5px; font-weight: ${isSelected ? '700' : '600'}; color: ${isSelected ? 'var(--color-accent)' : 'var(--text-primary)'}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    ${getTrExName(ex.name)}
+                </span>
+                <span style="font-size: 11px; color: var(--text-secondary); text-transform: capitalize;">
+                    ${groupLabel || ''}
+                </span>
+            </div>
+            <div style="width: 24px; height: 24px; min-width: 24px; border-radius: 50%; background: ${isSelected ? 'var(--color-accent)' : 'rgba(255,255,255,0.05)'}; display: flex; align-items: center; justify-content: center; color: ${isSelected ? '#fff' : 'transparent'}; font-size: 13px;">
+                <i class="ph-bold ph-check"></i>
+            </div>
+        `;
         
         item.onclick = () => {
             progressionSelectedExId = ex.id;
@@ -9400,7 +9450,12 @@ window.switchProgressionTab = function(tabName) {
 
     const activeBtn = document.getElementById('tab-btn-prog-' + tabName);
     const activeView = document.getElementById('prog-subview-' + tabName);
-    if (activeBtn) activeBtn.classList.add('active');
+    if (activeBtn) {
+        activeBtn.classList.add('active');
+        try {
+            activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        } catch (e) {}
+    }
     if (activeView) {
         activeView.style.display = 'block';
         activeView.classList.add('active');
@@ -9420,9 +9475,9 @@ window.switchProgressionTab = function(tabName) {
 // =========================================================================
 // 2. ANATOMICAL MUSCLE FATIGUE MAP
 // =========================================================================
-const ANATOMY_SVG_MARKUP = `<div class="anatomical-3d-wrapper" style="position: relative; width: 100%; max-width: 580px; margin: 0 auto 14px auto; aspect-ratio: 2470 / 1728; background: #07090e; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.6);">
+const ANATOMY_SVG_MARKUP = `<div class="anatomical-3d-wrapper" style="position: relative; width: 100%; max-width: 520px; margin: 0 auto 14px auto; aspect-ratio: 1390 / 1280; background: #07090e; border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.6);">
     <img src="img/cuerpo-base.png" alt="Anatomía 3D" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; user-select: none;" />
-    <svg id="interactive-anatomy-svg" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: auto;" xmlns="http://www.w3.org/2000/svg" width="2470" height="1728" viewBox="0 0 2470 1728" fill="none">
+    <svg id="interactive-anatomy-svg" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: auto;" xmlns="http://www.w3.org/2000/svg" width="1390" height="1280" viewBox="540 160 1390 1280" fill="none">
 <g id="Frame 1">
 <g id="Core">
 <g id="Core 2">
@@ -9696,6 +9751,45 @@ window.getMuscleRecoveryStatus = function() {
     return result;
 };
 
+
+const RECOVERY_PARENT_GROUPS = [
+    {
+        id: 'legs',
+        names: { es: 'Piernas', en: 'Legs', ru: 'Ноги', et: 'Jalad', uk: 'Ноги' },
+        muscles: ['cuadriceps', 'isquiotibiales', 'gluteos', 'gemelos', 'aductores', 'abductores']
+    },
+    {
+        id: 'back',
+        names: { es: 'Espalda', en: 'Back', ru: 'Спина', et: 'Selg', uk: 'Спина' },
+        muscles: ['dorsales', 'trapecio', 'lumbar']
+    },
+    {
+        id: 'chest',
+        names: { es: 'Pecho', en: 'Chest', ru: 'Грудь', et: 'Rind', uk: 'Груди' },
+        muscles: ['pectoral']
+    },
+    {
+        id: 'arms_shoulders',
+        names: { es: 'Hombros y Brazos', en: 'Shoulders & Arms', ru: 'Плечи и руки', et: 'Õlad ja käed', uk: 'Плечі та руки' },
+        muscles: ['deltoides', 'biceps', 'triceps']
+    },
+    {
+        id: 'core',
+        names: { es: 'Core / Abdomen', en: 'Core & Abs', ru: 'Кор и пресс', et: 'Kere ja kõht', uk: 'Кор та прес' },
+        muscles: ['abdominales']
+    }
+];
+
+window.activeExpandedRecoveryGroups = window.activeExpandedRecoveryGroups || { 'legs': true };
+
+window.toggleRecoveryGroup = function(groupId) {
+    window.activeExpandedRecoveryGroups = window.activeExpandedRecoveryGroups || {};
+    window.activeExpandedRecoveryGroups[groupId] = !window.activeExpandedRecoveryGroups[groupId];
+    if (typeof window.updateCalendarRecoveryWidget === 'function') {
+        window.updateCalendarRecoveryWidget();
+    }
+};
+
 window.updateCalendarRecoveryWidget = function() {
     const badge = document.getElementById('calendar-recovery-summary-badge');
     const chipsContainer = document.getElementById('calendar-recovery-chips');
@@ -9738,17 +9832,75 @@ window.updateCalendarRecoveryWidget = function() {
     }
 
     if (chipsContainer) {
-        const activeMuscles = FUNCTIONAL_MUSCLE_GROUPS.filter(m => recovery[m].status !== 'ready');
-        const displayList = activeMuscles.length > 0 ? activeMuscles : ['cuadriceps', 'pectoral', 'dorsales', 'deltoides', 'gluteos', 'isquiotibiales'];
+        const lang = (window.state && window.state.language) || 'es';
+        
+        let groupsHtml = '';
+        RECOVERY_PARENT_GROUPS.forEach(grp => {
+            const grpTitle = grp.names[lang] || grp.names.en || grp.names.es;
+            const isExpanded = !!window.activeExpandedRecoveryGroups[grp.id];
 
-        chipsContainer.innerHTML = displayList.slice(0, 6).map(m => {
-            const info = recovery[m];
-            const chipColor = info.status === 'fatigued' ? '#ef4444' : info.status === 'recovering' ? '#f59e0b' : '#10b981';
-            let subtext = info.hoursAgo === Infinity ? (getT('recovery.statusReady') || 'Listo') : `${info.hoursAgo}h`;
-            return `<div class="recovery-chip" title="${info.displayName}: ${info.label}" style="cursor: pointer;" onclick="window.selectMuscleOnMap('${m}')"><span class="recovery-chip-dot" style="background:${chipColor};"></span><span>${info.displayName}</span><span style="opacity:0.75; font-size:10px;">${subtext}</span></div>`;
-        }).join('');
+            let grpFatigued = 0;
+            let grpRecovering = 0;
+            grp.muscles.forEach(m => {
+                const info = recovery[m];
+                if (info && info.status === 'fatigued') grpFatigued++;
+                else if (info && info.status === 'recovering') grpRecovering++;
+            });
+
+            let grpColor = '#10b981';
+            let grpBadge = getT('recovery.statusReady') || 'Listo';
+            if (grpFatigued > 0) {
+                grpColor = '#ef4444';
+                grpBadge = `${grpFatigued} ${grpFatigued > 1 ? (getT('recovery.fatiguedPlural') || 'fatigados') : (getT('recovery.fatiguedSingle') || 'fatigado')}`;
+            } else if (grpRecovering > 0) {
+                grpColor = '#f59e0b';
+                grpBadge = `${grpRecovering} ${getT('recovery.recovering') || 'recuperando'}`;
+            }
+
+            const subchipsHtml = grp.muscles.map(m => {
+                const info = recovery[m];
+                if (!info) return '';
+                const chipColor = info.status === 'fatigued' ? '#ef4444' : info.status === 'recovering' ? '#f59e0b' : '#10b981';
+                
+                let subtext = getT('recovery.statusReady') || 'Listo';
+                if (info.status === 'fatigued') {
+                    const remH = Math.max(1, 48 - (info.hoursAgo !== Infinity ? info.hoursAgo : 0));
+                    subtext = `${remH}h rest.`;
+                } else if (info.status === 'recovering') {
+                    const remH = Math.max(1, 24 - (info.hoursAgo !== Infinity ? info.hoursAgo : 0));
+                    subtext = `${remH}h rest.`;
+                }
+
+                const isSelected = window.currentSelectedRecoveryMuscle === m;
+
+                return `<div class="recovery-chip ${isSelected ? 'selected' : ''}" data-muscle="${m}" title="${info.displayName}: ${info.label}" onclick="event.stopPropagation(); window.selectMuscleOnMap('${m}')">
+                    <span class="recovery-chip-dot" style="background:${chipColor};"></span>
+                    <span>${info.displayName}</span>
+                    <span style="opacity:0.75; font-size:10px;">${subtext}</span>
+                </div>`;
+            }).join('');
+
+            groupsHtml += `
+                <div class="recovery-group-card">
+                    <div class="recovery-group-header" onclick="window.toggleRecoveryGroup('${grp.id}')">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span class="recovery-chip-dot" style="background:${grpColor}; width: 8px; height: 8px;"></span>
+                            <span style="font-weight: 700; font-size: 13px; color: var(--text-primary);">${grpTitle}</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 11px; font-weight: 600; color: ${grpColor}; opacity: 0.9;">${grpBadge}</span>
+                            <i class="ph-bold ${isExpanded ? 'ph-caret-up' : 'ph-caret-down'}" style="font-size: 13px; color: var(--text-secondary);"></i>
+                        </div>
+                    </div>
+                    ${isExpanded ? `<div class="recovery-subchips-grid">${subchipsHtml}</div>` : ''}
+                </div>
+            `;
+        });
+
+        chipsContainer.innerHTML = groupsHtml;
     }
 };
+
 
 window.getAnatomySvgMarkup = function() {
     return ANATOMY_SVG_MARKUP;
@@ -9782,6 +9934,26 @@ window.render3DMuscleHeatmap = function(containerId = 'calendar-anatomy-silhouet
 };
 
 window.selectMuscleOnMap = function(muscleKey, containerId = 'calendar-anatomy-silhouette-mount', detailId = 'calendar-anatomy-selected-muscle-detail') {
+    window.currentSelectedRecoveryMuscle = muscleKey;
+
+    // Auto-expand the parent group that contains this muscle
+    if (typeof RECOVERY_PARENT_GROUPS !== 'undefined') {
+        const foundGrp = RECOVERY_PARENT_GROUPS.find(g => g.muscles.includes(muscleKey));
+        if (foundGrp) {
+            window.activeExpandedRecoveryGroups = window.activeExpandedRecoveryGroups || {};
+            window.activeExpandedRecoveryGroups[foundGrp.id] = true;
+        }
+    }
+
+    // Update active state on all recovery chips
+    document.querySelectorAll('.recovery-chip').forEach(chip => {
+        if (chip.getAttribute('data-muscle') === muscleKey) {
+            chip.classList.add('selected');
+        } else {
+            chip.classList.remove('selected');
+        }
+    });
+
     const silMount = document.getElementById(containerId);
     const recovery = window.getMuscleRecoveryStatus();
     const info = recovery[muscleKey];
@@ -9812,14 +9984,24 @@ window.selectMuscleOnMap = function(muscleKey, containerId = 'calendar-anatomy-s
     const detailEl = document.getElementById(detailId);
     if (detailEl) {
         const statusColor = info.status === 'fatigued' ? '#ef4444' : info.status === 'recovering' ? '#f59e0b' : '#10b981';
-        const hoursText = info.hoursAgo === Infinity ? (getT('recovery.moreThan7Days') || 'Más de 7 días (Descansado)') : `${info.hoursAgo} horas`;
+        let statusText = '';
+        if (info.status === 'ready') {
+            statusText = `${info.label} (${getT('recovery.statusReady') || 'Totalmente recuperado'})`;
+        } else if (info.status === 'fatigued') {
+            const remH = Math.max(1, 48 - (info.hoursAgo !== Infinity ? info.hoursAgo : 0));
+            statusText = `${info.label} (~${remH}h para recuperar)`;
+        } else {
+            const remH = Math.max(1, 24 - (info.hoursAgo !== Infinity ? info.hoursAgo : 0));
+            statusText = `${info.label} (~${remH}h para recuperar)`;
+        }
+
         detailEl.innerHTML = `
             <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 14px; margin-top: 8px;">
                 <div style="display: flex; align-items: center; gap: 8px;">
                     <span style="width: 10px; height: 10px; border-radius: 50%; background: ${statusColor};"></span>
                     <strong style="font-size: 14px; color: #fff;">${info.displayName}</strong>
                 </div>
-                <div style="font-size: 12px; color: ${statusColor}; font-weight: 700;">${info.label} (${hoursText})</div>
+                <div style="font-size: 12px; color: ${statusColor}; font-weight: 700;">${statusText}</div>
             </div>
         `;
     }
@@ -11871,9 +12053,9 @@ window.renderAchievementsView = function() {
         }
 
         html += `
-            <div class="achievement-card ${isUnlocked ? 'unlocked' : 'locked'}" style="display: flex; flex-direction: column; justify-content: space-between;">
-                <div style="display: flex; gap: 12px; align-items: flex-start;">
-                    <div class="achievement-icon-wrapper" style="flex-shrink: 0;">
+            <div class="achievement-card ${isUnlocked ? 'unlocked' : 'locked'}" style="display: flex; flex-direction: column; justify-content: space-between; align-items: stretch; width: 100%;">
+                <div style="display: flex; gap: 12px; align-items: flex-start; width: 100%;">
+                    <div class="achievement-icon-wrapper" style="width: 44px; min-width: 44px; max-width: 44px; height: 44px; min-height: 44px; flex-shrink: 0;">
                         <i class="ph-bold ${ach.icon}"></i>
                     </div>
                     <div style="flex: 1; min-width: 0;">
@@ -12718,8 +12900,60 @@ window.renderJointIssuesList = function() {
     if (!container) return;
 
     state.jointIssues = state.jointIssues || {};
+    const lang = (window.state && window.state.language) || 'es';
 
-    let html = '';
+    const tMedical = {
+        es: "Si sientes dolor o molestias persistentes, consulta siempre con un profesional de la salud antes de realizar cualquier ejercicio.",
+        en: "If you experience persistent pain or discomfort, always consult a healthcare professional before performing any exercise.",
+        ru: "При постоянной боли или дискомфорте обязательно проконсультируйтесь с врачом перед выполнением упражнений.",
+        et: "Püsiva valu või ebamugavuse korral konsulteeri enne harjutuse sooritamist alati tervishoiutöötajaga.",
+        uk: "При постійному болю чи дискомфорті завжди консультуйтеся з лікарем перед виконанням будь-яких вправ."
+    };
+
+    const tTitle = {
+        es: "Protección Articular 3D",
+        en: "3D Joint Protection & Relief",
+        ru: "3D Защита суставов",
+        et: "3D Liigeste kaitse",
+        uk: "3D Захист суглобів"
+    };
+
+    const tDesc = {
+        es: "Marca articulaciones sensibles para recibir alertas y sustituciones seguras automáticas.",
+        en: "Flag sensitive joints to receive instant warnings and safe biomechanical substitutions.",
+        ru: "Отметьте проблемные суставы для получения предупреждений и безопасных аналогов.",
+        et: "Märgi tundlikud liigesed hoiatuste ja ohutute asendusharjutuste saamiseks.",
+        uk: "Відзначте чутливі суглоби для отримання попереджень та безпечних замін."
+    };
+
+    let html = `
+        <div style="margin-bottom: 14px; background: #07090e; border-radius: 16px; padding: 12px; border: 1.5px solid rgba(245, 158, 11, 0.35); box-shadow: 0 6px 20px rgba(0,0,0,0.5);">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 14px;">
+                <div style="position: relative; width: 85px; height: 130px; border-radius: 10px; overflow: hidden; background: #0b0f19; border: 1px solid rgba(255,255,255,0.08); flex-shrink: 0;">
+                    <img src="img/cuerpo-base.png" alt="Anatomía 3D Articular" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.8));" />
+                    <div style="position: absolute; top: 32%; left: 24%; width: 10px; height: 10px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 10px #ef4444; border: 2px solid #fff; animation: pulse 1.5s infinite;"></div>
+                    <div style="position: absolute; top: 32%; right: 24%; width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; box-shadow: 0 0 10px #f59e0b; border: 2px solid #fff;"></div>
+                    <div style="position: absolute; top: 68%; left: 36%; width: 10px; height: 10px; border-radius: 50%; background: #ef4444; box-shadow: 0 0 10px #ef4444; border: 2px solid #fff; animation: pulse 1.5s infinite;"></div>
+                </div>
+                <div style="text-align: left; flex: 1;">
+                    <div style="font-size: 13px; font-weight: 800; color: #f59e0b; display: flex; align-items: center; gap: 6px;">
+                        <span>🛡️</span> ${tTitle[lang] || tTitle.en}
+                    </div>
+                    <div style="font-size: 11px; color: #94a3b8; line-height: 1.35; margin-top: 4px;">
+                        ${tDesc[lang] || tDesc.en}
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 10px; font-weight: 700;">
+                        <span style="display: flex; align-items: center; gap: 4px; color: #f59e0b;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #f59e0b;"></span> Hombros</span>
+                        <span style="display: flex; align-items: center; gap: 4px; color: #ef4444;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #ef4444;"></span> Rodillas</span>
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 10px; padding: 8px 12px; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: 10px; font-size: 11px; color: #fca5a5; line-height: 1.4; display: flex; align-items: flex-start; gap: 8px;">
+                <span style="font-size: 14px; flex-shrink: 0;">⚠️</span>
+                <span>${tMedical[lang] || tMedical.en}</span>
+            </div>
+        </div>
+    `;
     JOINT_DEFINITIONS.forEach(def => {
         const issue = state.jointIssues[def.id] || { active: false, side: 'ambos', severity: 'moderada', notes: '' };
         const isActive = !!issue.active;
@@ -13422,36 +13656,522 @@ window.chooseFirstRunLanguage = function(lang) {
     }
 };
 
-window.openWelcomeTutorialModal = function() {
-    const curLang = state.language || localStorage.getItem('gym_language') || 'en';
-    let m = document.getElementById('modal-welcome-tutorial');
-    if (!m) {
-        m = document.createElement('div');
-        m.id = 'modal-welcome-tutorial';
-        m.className = 'modal';
-        m.style.cssText = 'display: none; position: fixed; inset: 0; z-index: 999999; align-items: center; justify-content: center; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(5px); padding: 12px;';
-        m.innerHTML = `
-            <div class="modal-backdrop" style="position: absolute; inset: 0;" onclick="closeWelcomeTutorialModal()"></div>
-            <iframe id="iframe-welcome-tutorial" src="tutorial-preview.html?lang=${curLang}" style="width: 100%; max-width: 680px; height: min(92vh, 760px); border: none; border-radius: 24px; position: relative; z-index: 1000000; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); background: #0f172a;"></iframe>
-        `;
-        document.body.appendChild(m);
-    }
-    m.style.display = 'flex';
-    m.classList.add('active');
-    const iframe = document.getElementById('iframe-welcome-tutorial');
-    if (iframe) {
-        iframe.src = `tutorial-preview.html?lang=${curLang}`;
+// =========================================================================
+// FULLSCREEN GYM TRACKER USER GUIDE MODULE (MULTILINGUAL)
+// =========================================================================
+
+window.currentTutorialSlideIndex = 0;
+
+const TUTORIAL_SLIDES_DATA = {
+    es: {
+        subtitle: "GUÍA DE USO",
+        dontShowAgain: "No volver a mostrar al iniciar la app",
+        btnUnderstood: "¡ENTENDIDO!",
+        btnFinish: "¡Empezar a Entrenar!",
+        btnNext: "Siguiente",
+        btnPrev: "Anterior",
+        slides: [
+            {
+                badge: "Paso 1 de 5 • Planificación",
+                title: "Calendario y Rutinas",
+                desc: "Organiza tus días de entreno y descanso con total claridad. Toca cualquier día del calendario para revisar tu sesión asignada o registrar un entrenamiento puntual.",
+                image: "img/screenshots/01_calendar_view.png",
+                bullets: [
+                    { icon: "ph-calendar-check", title: "Mesociclos Estructurados", desc: "Programa temporadas completas de Hipertrofia, Fuerza y Alta intensidad con 1 toque." },
+                    { icon: "ph-barbell", title: "Rutinas a tu Medida", desc: "Combina ejercicios de la biblioteca oficial de más de 85 ejercicios o crea los tuyos." },
+                    { icon: "ph-clock-countdown", title: "Historial Completo", desc: "Cada serie y repetición queda guardada de forma 100% privada en tu dispositivo." }
+                ]
+            },
+            {
+                badge: "Paso 2 de 5 • Progresión",
+                title: "Sobrecarga Progresiva Inteligente",
+                desc: "Anota el peso, repeticiones y tu RIR (repeticiones en reserva). La app analiza tu esfuerzo real y calcula cuándo y cuánto subir de carga.",
+                image: "img/screenshots/05_workout_rir_overload.png",
+                bullets: [
+                    { icon: "ph-trend-up", title: "Recomendaciones Científicas", desc: "Sugerencia de aumento de peso o repeticiones basada en tu rendimiento previo." },
+                    { icon: "ph-calculator", title: "Calculadora de Discos", desc: "Calcula al instante los discos exactos por lado para cualquier peso de barra." },
+                    { icon: "ph-timer", title: "Descanso Automático", desc: "Cronómetro inteligente entre series para maximizar tu recuperación muscular." }
+                ]
+            },
+            {
+                badge: "Paso 3 de 5 • Anatomía 3D",
+                title: "Mapa de Fatiga y Recuperación",
+                desc: "Tu silueta anatómica interactiva muestra el descanso real de 14 grupos musculares funcionales organizados en categorías desplegables.",
+                image: "img/screenshots/02_recovery_heatmap.png",
+                bullets: [
+                    { icon: "ph-activity", title: "Impacto Específico", desc: "Sentadilla y prensa fatigan cuádriceps y glúteo sin afectar aductores ni abductores." },
+                    { icon: "ph-hourglass", title: "Semáforo de Recuperación", desc: "🔴 Fatigado (0-24h), 🟡 Recuperando (24-48h) y 🟢 Listo para volver a entrenar." },
+                    { icon: "ph-hand-pointing", title: "Pastillas Desplegables", desc: "Toca Piernas, Espalda o Pecho para desplegar los músculos individuales." }
+                ]
+            },
+            {
+                badge: "Paso 4 de 5 • Salud Articular",
+                title: "Gestor de Molestias y Variantes Seguras",
+                desc: "Si sientes dolor en hombro, rodilla, codo o lumbar, la app te sugiere ejercicios sustitutivos sin perder estímulo.",
+                image: "img/screenshots/02_joint_issues_modal.png",
+                medicalNotice: "Si sientes dolor o molestias persistentes, consulta siempre con un profesional de la salud antes de realizar cualquier ejercicio.",
+                bullets: [
+                    { icon: "ph-shield-check", title: "Alertas Preventivas", desc: "Avisos claros en ejercicios que comprometan tus articulaciones marcadas." },
+                    { icon: "ph-arrows-clockwise", title: "Sustituciones Inteligentes", desc: "Variantes sugeridas que mantienen el estímulo muscular sin dolor." },
+                    { icon: "ph-first-aid", title: "Graduación de Intensidad", desc: "Registra el nivel de molestia (leve, moderada, alta) por articulación." }
+                ]
+            },
+            {
+                badge: "Paso 5 de 5 • Resultados",
+                title: "Gráficos de Fuerza y Logros",
+                desc: "Mide tu evolución real en el tiempo con estimación de 1RM, volumen semanal, control de medidas corporales y más de 50 medallas.",
+                image: "img/screenshots/07_stats_charts_history.png",
+                bullets: [
+                    { icon: "ph-chart-line-up", title: "Historial y 1RM Estimado", desc: "Curvas de progresión por ejercicio para ver tu fuerza máxima histórica." },
+                    { icon: "ph-ruler", title: "Medidas y Fotos", desc: "Compara tu composición corporal con fotos de progreso en un slider interactivo." },
+                    { icon: "ph-trophy", title: "50 Logros Desbloqueables", desc: "Gana medallas conforme bates récords personales y mantienes la disciplina." }
+                ]
+            }
+        ]
+    },
+    en: {
+        subtitle: "USER GUIDE",
+        dontShowAgain: "Do not show again on app launch",
+        btnUnderstood: "UNDERSTOOD!",
+        btnFinish: "Start Training!",
+        btnNext: "Next",
+        btnPrev: "Previous",
+        slides: [
+            {
+                badge: "Step 1 of 5 • Planning",
+                title: "Calendar & Workout Routines",
+                desc: "Organize training and rest days with clarity. Tap any calendar day to check scheduled sessions or log an ad-hoc workout.",
+                image: "img/screenshots/01_calendar_view.png",
+                bullets: [
+                    { icon: "ph-calendar-check", title: "Structured Mesocycles", desc: "Schedule complete cycles of Hypertrophy, Strength, and High Intensity with 1 tap." },
+                    { icon: "ph-barbell", title: "Tailored Routines", desc: "Combine movements from our official 85+ exercise library or create your own." },
+                    { icon: "ph-clock-countdown", title: "Full Workout History", desc: "Every set and rep is saved 100% privately on your local device." }
+                ]
+            },
+            {
+                badge: "Step 2 of 5 • Progression",
+                title: "Smart Progressive Overload",
+                desc: "Log weight, reps, and RIR (reps in reserve). The app analyzes your true effort and calculates exact load progressions.",
+                image: "img/screenshots/05_workout_rir_overload.png",
+                bullets: [
+                    { icon: "ph-trend-up", title: "Scientific Guidance", desc: "Weight or rep increase suggestions grounded in your past performance." },
+                    { icon: "ph-calculator", title: "Barbell Plate Calculator", desc: "Instantly see exact plates per side for any target barbell load." },
+                    { icon: "ph-timer", title: "Smart Rest Timer", desc: "Auto rest countdown between sets to maximize muscular recovery." }
+                ]
+            },
+            {
+                badge: "Step 3 of 5 • 3D Anatomy",
+                title: "Muscle Fatigue & Recovery Map",
+                desc: "Your interactive 3D model tracks true recovery across 14 functional muscle groups organized in collapsible categories.",
+                image: "img/screenshots/02_recovery_heatmap.png",
+                bullets: [
+                    { icon: "ph-activity", title: "Rigorous Biomechanics", desc: "Squats and Leg Press fatigue quads and glutes without loading adductors." },
+                    { icon: "ph-hourglass", title: "Recovery Semaphore", desc: "🔴 Fatigued (0-24h), 🟡 Recovering (24-48h), 🟢 Ready to train again." },
+                    { icon: "ph-hand-pointing", title: "Collapsible Groups", desc: "Tap Legs, Back, or Chest to toggle and inspect individual muscles." }
+                ]
+            },
+            {
+                badge: "Step 4 of 5 • Joint Health",
+                title: "Joint Protection & Safe Substitutions",
+                desc: "If shoulders, knees, elbows, or lower back bother you, the app suggests safe alternative movements with identical stimulus.",
+                image: "img/screenshots/02_joint_issues_modal.png",
+                medicalNotice: "If you experience persistent pain or discomfort, always consult a healthcare professional before performing any exercise.",
+                bullets: [
+                    { icon: "ph-shield-check", title: "Preventive Warnings", desc: "Clear alerts on exercises that compromise your flagged joints." },
+                    { icon: "ph-arrows-clockwise", title: "Smart Substitutions", desc: "Recommended safe variations that keep progress going pain-free." },
+                    { icon: "ph-first-aid", title: "Severity Tracking", desc: "Set mild, moderate, or high sensitivity for each joint." }
+                ]
+            },
+            {
+                badge: "Step 5 of 5 • Results",
+                title: "Strength Charts & Achievements",
+                desc: "Track real progress with estimated 1RM curves, weekly volume gauges, body measurements, and 50 unlockable badges.",
+                image: "img/screenshots/07_stats_charts_history.png",
+                bullets: [
+                    { icon: "ph-chart-line-up", title: "1RM Progression Curves", desc: "Visual strength charts across months and years for each exercise." },
+                    { icon: "ph-ruler", title: "Measurements & Photos", desc: "Side-by-side photo comparison slider to inspect body transformation." },
+                    { icon: "ph-trophy", title: "50 Trophy Achievements", desc: "Unlock badges as you smash PRs and forge lasting training habits." }
+                ]
+            }
+        ]
+    },
+    ru: {
+        subtitle: "РУКОВОДСТВО ПОЛЬЗОВАТЕЛЯ",
+        dontShowAgain: "Не показывать при запуске",
+        btnUnderstood: "ПОНЯТНО!",
+        btnFinish: "Начать тренировку!",
+        btnNext: "Вперед",
+        btnPrev: "Назад",
+        slides: [
+            {
+                badge: "Шаг 1 из 5 • Планирование",
+                title: "Календарь и Программы",
+                desc: "Организуйте дни тренировок и отдыха с максимальной четкостью.",
+                image: "img/screenshots/01_calendar_view.png",
+                bullets: [
+                    { icon: "ph-calendar-check", title: "Мезоциклы", desc: "Планируйте полные циклы гипертрофии, силы и высокой интенсивности в 1 касание." },
+                    { icon: "ph-barbell", title: "Свои программы", desc: "Библиотека из более чем 85 упражнений с созданием собственных." },
+                    { icon: "ph-clock-countdown", title: "Полная история", desc: "Все подходы и повторения сохраняются конфиденциально на устройстве." }
+                ]
+            },
+            {
+                badge: "Шаг 2 из 5 • Прогрессия",
+                title: "Умная прогрессивная перегрузка",
+                desc: "Записывайте вес, повторения и RIR. Приложение точно рассчитывает нагрузку на следующий раз.",
+                image: "img/screenshots/05_workout_rir_overload.png",
+                bullets: [
+                    { icon: "ph-trend-up", title: "Научный расчет", desc: "Рекомендации по весу на основе реального усилия в предыдущих подходах." },
+                    { icon: "ph-calculator", title: "Калькулятор блинов", desc: "Мгновенно показывает блины на гриф для любого веса." },
+                    { icon: "ph-timer", title: "Таймер отдыха", desc: "Автоматический отсчет отдыха между подходами." }
+                ]
+            },
+            {
+                badge: "Шаг 3 из 5 • 3D Анатомия",
+                title: "Карта усталости и восстановления",
+                desc: "Интерактивная 3D модель отслеживает восстановление 14 мышечных групп в удобных группах.",
+                image: "img/screenshots/02_recovery_heatmap.png",
+                bullets: [
+                    { icon: "ph-activity", title: "Точная биомеханика", desc: "Приседания и жим ногами нагружают квадрицепс и ягодицы без приводящих." },
+                    { icon: "ph-hourglass", title: "Светофор статуса", desc: "🔴 Усталость (0-24ч), 🟡 Восстановление (24-48ч), 🟢 Готов к нагрузке." },
+                    { icon: "ph-hand-pointing", title: "Раскрывающиеся группы", desc: "Нажмите на Ноги, Спину или Грудь, чтобы открыть мышцы." }
+                ]
+            },
+            {
+                badge: "Шаг 4 из 5 • Суставы",
+                title: "Защита суставов и замена упражнений",
+                desc: "Отмечайте дискомфорт в суставах для мгновенного подбора безопасных аналогов.",
+                image: "img/screenshots/02_joint_issues_modal.png",
+                medicalNotice: "При постоянной боли или дискомфорте обязательно проконсультируйтесь с врачом перед выполнением упражнений.",
+                bullets: [
+                    { icon: "ph-shield-check", title: "Предупреждения", desc: "Система предупреждает об опасных нагрузках на проблемные зоны." },
+                    { icon: "ph-arrows-clockwise", title: "Умная замена", desc: "Подбор эффективных вариантов без боли и потери стимула." },
+                    { icon: "ph-first-aid", title: "Настройка тяжести", desc: "Уровни легкой, средней и высокой чувствительности суставов." }
+                ]
+            },
+            {
+                badge: "Шаг 5 из 5 • Результаты",
+                title: "Графики силы и прогресс",
+                desc: "Оценивайте долгосрочный рост с помощью графиков 1ПМ, тоннажа, замеров тела и 50 наград.",
+                image: "img/screenshots/07_stats_charts_history.png",
+                bullets: [
+                    { icon: "ph-chart-line-up", title: "Кривые 1ПМ", desc: "Наглядная динамика рекордов PR по упражнениям за месяцы и годы." },
+                    { icon: "ph-ruler", title: "Замеры и фото", desc: "Слайдер До/После для визуальной оценки трансформации тела." },
+                    { icon: "ph-trophy", title: "Стена трофеев", desc: "Разблокируйте медали по мере покорения новых рекордов." }
+                ]
+            }
+        ]
+    },
+    et: {
+        subtitle: "KASUTUSJUHEND",
+        dontShowAgain: "Ära näita rakenduse käivitamisel",
+        btnUnderstood: "SAIN ARU!",
+        btnFinish: "Alusta treeningut!",
+        btnNext: "Järgmine",
+        btnPrev: "Tagasi",
+        slides: [
+            {
+                badge: "Samm 1 / 5 • Planeerimine",
+                title: "Kalender ja treeningkavad",
+                desc: "Korralda treening- ja puhkepäevi selgelt. Puuduta kalendripäeva treeningu vaatamiseks.",
+                image: "img/screenshots/01_calendar_view.png",
+                bullets: [
+                    { icon: "ph-calendar-check", title: "Mesotsüklid", desc: "Planeeri hüpertroofia, jõu ja kõrge intensiivsuse tsükleid 1 puudutusega." },
+                    { icon: "ph-barbell", title: "Oma kavad", desc: "Üle 85 ametliku harjutuse koos kohandamise võimalusega." },
+                    { icon: "ph-clock-countdown", title: "Täielik ajalugu", desc: "Kõik andmed salvestatakse privaatselt sinu seadmesse." }
+                ]
+            },
+            {
+                badge: "Samm 2 / 5 • Progressioon",
+                title: "Nutikas progresseeruv ülekoormus",
+                desc: "Märgi kaal, kordused ja RIR. Rakendus arvutab täpse koormuse järgmiseks korraks.",
+                image: "img/screenshots/05_workout_rir_overload.png",
+                bullets: [
+                    { icon: "ph-trend-up", title: "Teaduslikud soovitused", desc: "Raskuse ja korduste soovitused varasema soorituse põhjal." },
+                    { icon: "ph-calculator", title: "Ketta kalkulaator", desc: "Näitab kangile pandavaid kettaid mõlemale poolele." },
+                    { icon: "ph-timer", title: "Puhkuse taimer", desc: "Automaatne puhkeaja loendus seeriate vahel." }
+                ]
+            },
+            {
+                badge: "Samm 3 / 5 • 3D Anatoomia",
+                title: "Lihaste väsimuse ja taastumise kaart",
+                desc: "Interaktiivne 3D mudel jälgib 14 lihasgrupi taastumist mugavates gruppides.",
+                image: "img/screenshots/02_recovery_heatmap.png",
+                bullets: [
+                    { icon: "ph-activity", title: "Täpne biomehaanika", desc: "Kükk ja jalgadega surumine koormavad reisi ja tuharat ilma lähendajalihasteta." },
+                    { icon: "ph-hourglass", title: "Taastumise foor", desc: "🔴 Väsinud (0-24h), 🟡 Taastumas (24-48h), 🟢 Valmis treenima." },
+                    { icon: "ph-hand-pointing", title: "Rippmenüüd", desc: "Puuduta Jalad, Selg või Rind üksikute lihaste avamiseks." }
+                ]
+            },
+            {
+                badge: "Samm 4 / 5 • Liigeste tervis",
+                title: "Liigeste kaitse ja ohutud alternatiivid",
+                desc: "Märgi valu õlas, põlves või alaseljas valuvabade asendusharjutuste saamiseks.",
+                image: "img/screenshots/02_joint_issues_modal.png",
+                medicalNotice: "Püsiva valu või ebamugavuse korral konsulteeri enne harjutuse sooritamist alati tervishoiutöötajaga.",
+                bullets: [
+                    { icon: "ph-shield-check", title: "Ennetavad hoiatused", desc: "Hoiatused harjutuste puhul, mis koormavad tundlikke liigeseid." },
+                    { icon: "ph-arrows-clockwise", title: "Nutikad asendused", desc: "Ohutud variandid lihasstimulatsiooni säilitamiseks." },
+                    { icon: "ph-first-aid", title: "Tundlikkuse tase", desc: "Kerge, mõõdukas või kõrge tundlikkus liigeste kaupa." }
+                ]
+            },
+            {
+                badge: "Samm 5 / 5 • Tulemused",
+                title: "Jõugraafikud ja saavutused",
+                desc: "Mõõda tegelikku arengut 1KM graafikute, kehamõõtude ja 50 trofeega.",
+                image: "img/screenshots/07_stats_charts_history.png",
+                bullets: [
+                    { icon: "ph-chart-line-up", title: "1KM progressioon", desc: "Graafikud maksimaalse jõu arengu jälgimiseks kuude lõikes." },
+                    { icon: "ph-ruler", title: "Mõõdud ja fotod", desc: "Enne/pärast fotode võrdlus keha muutumise hindamiseks." },
+                    { icon: "ph-trophy", title: "50 saavutust", desc: "Ava medaleid rekordite purustamisel ja järjepidevuse hoidmisel." }
+                ]
+            }
+        ]
+    },
+    uk: {
+        subtitle: "ІНСТРУКЦІЯ КОРИСТУВАЧА",
+        dontShowAgain: "Не показувати під час запуску",
+        btnUnderstood: "ЗРОЗУМІЛО!",
+        btnFinish: "Почати тренування!",
+        btnNext: "Далі",
+        btnPrev: "Назад",
+        slides: [
+            {
+                badge: "Крок 1 з 5 • Планування",
+                title: "Календар та Програми",
+                desc: "Організуйте тренувальні дні та дні відпочинку з максимальною зручністю.",
+                image: "img/screenshots/01_calendar_view.png",
+                bullets: [
+                    { icon: "ph-calendar-check", title: "Мезоцикли", desc: "Плануйте повні цикли гіпертрофії, сили та високої інтенсивності в 1 дотик." },
+                    { icon: "ph-barbell", title: "Власні програми", desc: "Бібліотека з понад 85 вправ з можливістю додавання власних." },
+                    { icon: "ph-clock-countdown", title: "Повна історія", desc: "Кожен підхід зберігається конфіденційно на вашому пристрої." }
+                ]
+            },
+            {
+                badge: "Крок 2 з 5 • Прогресія",
+                title: "Розумне прогресивне перевантаження",
+                desc: "Фіксуйте вагу, повторення та RIR. Додаток розраховує ідеальне навантаження.",
+                image: "img/screenshots/05_workout_rir_overload.png",
+                bullets: [
+                    { icon: "ph-trend-up", title: "Наукові підказки", desc: "Рекомендації ваги та повторень на основі реального зусилля." },
+                    { icon: "ph-calculator", title: "Калькулятор дисків", desc: "Миттєвий розрахунок дисків на гриф з кожного боку." },
+                    { icon: "ph-timer", title: "Таймер відпочинку", desc: "Автоматичний відлік часу між підходами." }
+                ]
+            },
+            {
+                badge: "Крок 3 з 5 • 3D Анатомія",
+                title: "Карта втоми та відновлення",
+                desc: "Інтерактивна 3D модель відстежує стан 14 функціональних груп м'язів.",
+                image: "img/screenshots/02_recovery_heatmap.png",
+                bullets: [
+                    { icon: "ph-activity", title: "Точна біомеханіка", desc: "Присідання та жим ногами навантажують квадрицепс і сідниці без привідних." },
+                    { icon: "ph-hourglass", title: "Світлофор відновлення", desc: "🔴 Втома (0-24год), 🟡 Відновлення (24-48год), 🟢 Готовність." },
+                    { icon: "ph-hand-pointing", title: "Зручні групи", desc: "Торкніться Ноги, Спина або Груди для розкриття м'язів." }
+                ]
+            },
+            {
+                badge: "Крок 4 з 5 • Здоров'я суглобів",
+                title: "Захист суглобів та безпечні заміни",
+                desc: "Відзначайте дискомфорт для миттєвого підбору безпечних та ефективних замін.",
+                image: "img/screenshots/02_joint_issues_modal.png",
+                medicalNotice: "При постійному болю чи дискомфорті завжди консультуйтеся з лікарем перед виконанням будь-яких вправ.",
+                bullets: [
+                    { icon: "ph-shield-check", title: "Застереження", desc: "Попередження щодо вправ, які перевантажують чутливі суглоби." },
+                    { icon: "ph-arrows-clockwise", title: "Розумна заміна", desc: "Безпечні варіанти для продовження прогресу без болю." },
+                    { icon: "ph-first-aid", title: "Рівень тяжкості", desc: "Легка, помірна або висока чутливість суглобів." }
+                ]
+            },
+            {
+                badge: "Крок 5 з 5 • Результати",
+                title: "Графіки сили та досягнення",
+                desc: "Оцінюйте довгостроковий прогрес за допомогою графіків 1ПМ, замірів та 50 нагород.",
+                image: "img/screenshots/07_stats_charts_history.png",
+                bullets: [
+                    { icon: "ph-chart-line-up", title: "Криві 1ПМ", desc: "Динаміка рекордів PR за вправами протягом місяців і років." },
+                    { icon: "ph-ruler", title: "Заміри та фото", desc: "Слайдер До/Після для візуальної оцінки прогресу тіла." },
+                    { icon: "ph-trophy", title: "50 трофеїв", desc: "Отримуйте медалі за встановлення нових особистих рекордів." }
+                ]
+            }
+        ]
     }
 };
+
+window.renderTutorialSlide = function() {
+    const curLang = (typeof state !== 'undefined' && state.language) || localStorage.getItem('gym_language') || 'es';
+    const langData = TUTORIAL_SLIDES_DATA[curLang] || TUTORIAL_SLIDES_DATA.es;
+    const slides = langData.slides;
+    const idx = Math.max(0, Math.min(window.currentTutorialSlideIndex, slides.length - 1));
+    const currentSlide = slides[idx];
+
+    // Subtitle & Checkbox label
+    const subTitleEl = document.getElementById('tutorial-header-subtitle');
+    if (subTitleEl) subTitleEl.textContent = langData.subtitle;
+
+    const chkLbl = document.getElementById('lbl-tutorial-dont-show-again');
+    if (chkLbl) chkLbl.textContent = langData.dontShowAgain;
+
+    // Dots indicator
+    const dotsContainer = document.getElementById('tutorial-dots-container');
+    if (dotsContainer) {
+        dotsContainer.innerHTML = slides.map((s, i) => `
+            <div class="tutorial-dot ${i === idx ? 'active' : ''}" onclick="window.goToTutorialSlide(${i})" title="Paso ${i+1}"></div>
+        `).join('');
+    }
+
+    // Prev / Next button state
+    const btnPrev = document.getElementById('btn-tutorial-prev');
+    if (btnPrev) {
+        btnPrev.style.opacity = idx === 0 ? '0.35' : '1';
+        btnPrev.style.pointerEvents = idx === 0 ? 'none' : 'auto';
+    }
+
+    const btnNext = document.getElementById('btn-tutorial-next');
+    if (btnNext) {
+        btnNext.style.opacity = idx === slides.length - 1 ? '0.35' : '1';
+        btnNext.style.pointerEvents = idx === slides.length - 1 ? 'none' : 'auto';
+    }
+
+    // Action button text
+    const btnAction = document.getElementById('btn-tutorial-primary-action');
+    if (btnAction) {
+        btnAction.textContent = (idx === slides.length - 1) ? langData.btnFinish : langData.btnUnderstood;
+    }
+
+    // Middle Content Area
+    const container = document.getElementById('tutorial-slide-container');
+    if (container) {
+        const bulletsHtml = currentSlide.bullets.map(b => `
+            <div style="display: flex; align-items: flex-start; gap: 12px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.06); border-radius: 14px; padding: 12px 14px;">
+                <div style="width: 38px; height: 38px; border-radius: 10px; background: rgba(59, 130, 246, 0.14); color: #60a5fa; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;">
+                    <i class="ph-bold ${b.icon}"></i>
+                </div>
+                <div style="flex: 1; min-width: 0;">
+                    <div style="font-size: 13.5px; font-weight: 700; color: #f1f5f9; margin-bottom: 2px;">${b.title}</div>
+                    <div style="font-size: 12px; color: #94a3b8; line-height: 1.4;">${b.desc}</div>
+                </div>
+            </div>
+        `).join('');
+
+        container.innerHTML = `
+            <div style="max-width: 540px; margin: 0 auto; width: 100%; display: flex; flex-direction: column; gap: 14px; animation: fadeIn 0.25s ease;">
+                <!-- Step Badge -->
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <span style="font-size: 11px; font-weight: 800; background: rgba(59, 130, 246, 0.16); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.35); padding: 4px 12px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.5px;">
+                        ${currentSlide.badge}
+                    </span>
+                    <span style="font-size: 12px; color: #64748b; font-weight: 700;">${idx + 1} / ${slides.length}</span>
+                </div>
+
+                <!-- Slide Feature Screenshot -->
+                ${currentSlide.image ? `
+                <div style="width: 100%; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.12); background: #07090e; box-shadow: 0 6px 20px rgba(0,0,0,0.5);">
+                    <img src="${currentSlide.image}" alt="${currentSlide.title}" style="width: 100%; height: 185px; object-fit: cover; object-position: center; display: block;" />
+                </div>` : ''}
+
+                <!-- Medical Advisory Notice if present -->
+                ${currentSlide.medicalNotice ? `
+                <div style="background: rgba(239, 68, 68, 0.12); border: 1.5px solid rgba(239, 68, 68, 0.35); border-radius: 12px; padding: 10px 14px; font-size: 11.5px; color: #fca5a5; display: flex; align-items: center; gap: 8px; line-height: 1.4;">
+                    <i class="ph-bold ph-warning-circle" style="font-size: 18px; color: #ef4444; flex-shrink: 0;"></i>
+                    <span>${currentSlide.medicalNotice}</span>
+                </div>` : ''}
+
+                <!-- Titles -->
+                <div>
+                    <h2 style="font-size: 20px; font-weight: 800; color: #f8fafc; line-height: 1.25; margin: 0 0 6px 0;">${currentSlide.title}</h2>
+                    <p style="font-size: 13px; color: #94a3b8; line-height: 1.45; margin: 0;">${currentSlide.desc}</p>
+                </div>
+
+                <!-- Bullets List -->
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    ${bulletsHtml}
+                </div>
+            </div>
+        `;
+    }
+};
+
+
+window.openWelcomeTutorialModal = function() {
+    const modal = document.getElementById('modal-welcome-tutorial');
+    if (!modal) return;
+
+    window.currentTutorialSlideIndex = 0;
+    
+    // Sync language select
+    const curLang = (typeof state !== 'undefined' && state.language) || localStorage.getItem('gym_language') || 'es';
+    const langSelect = document.getElementById('tutorial-lang-select');
+    if (langSelect) langSelect.value = curLang;
+
+    // Sync checkbox
+    const chk = document.getElementById('chk-tutorial-dont-show-again');
+    if (chk) chk.checked = localStorage.getItem('gym_dont_show_tutorial') === 'true';
+
+    modal.style.display = 'flex';
+    modal.classList.add('active');
+
+    window.renderTutorialSlide();
+};
+
+window.openWelcomeTutorial = window.openWelcomeTutorialModal;
 
 window.closeWelcomeTutorialModal = function() {
-    const m = document.getElementById('modal-welcome-tutorial');
-    if (m) {
-        m.style.display = 'none';
-        m.classList.remove('active');
+    const chk = document.getElementById('chk-tutorial-dont-show-again');
+    if (chk && chk.checked) {
+        localStorage.setItem('gym_dont_show_tutorial', 'true');
+    } else {
+        localStorage.removeItem('gym_dont_show_tutorial');
+    }
+
+    const modal = document.getElementById('modal-welcome-tutorial');
+    if (modal) {
+        modal.classList.remove('active');
+        modal.style.display = 'none';
     }
 };
 
+window.closeWelcomeTutorial = window.closeWelcomeTutorialModal;
+
+window.setTutorialLanguage = function(lang) {
+    if (typeof state !== 'undefined') {
+        state.language = lang;
+    }
+    localStorage.setItem('gym_language', lang);
+    if (typeof updateLanguageUI === 'function') {
+        try { updateLanguageUI(); } catch (e) {}
+    }
+    window.renderTutorialSlide();
+};
+
+window.prevTutorialSlide = function() {
+    if (window.currentTutorialSlideIndex > 0) {
+        window.currentTutorialSlideIndex--;
+        window.renderTutorialSlide();
+    }
+};
+
+window.nextTutorialSlide = function() {
+    const curLang = (typeof state !== 'undefined' && state.language) || localStorage.getItem('gym_language') || 'es';
+    const langData = TUTORIAL_SLIDES_DATA[curLang] || TUTORIAL_SLIDES_DATA.es;
+    if (window.currentTutorialSlideIndex < langData.slides.length - 1) {
+        window.currentTutorialSlideIndex++;
+        window.renderTutorialSlide();
+    }
+};
+
+window.goToTutorialSlide = function(idx) {
+    window.currentTutorialSlideIndex = idx;
+    window.renderTutorialSlide();
+};
+
+window.nextOrFinishTutorial = function() {
+    const curLang = (typeof state !== 'undefined' && state.language) || 'es';
+    const langData = TUTORIAL_SLIDES_DATA[curLang] || TUTORIAL_SLIDES_DATA.es;
+    if (window.currentTutorialSlideIndex < langData.slides.length - 1) {
+        window.currentTutorialSlideIndex++;
+        window.renderTutorialSlide();
+    } else {
+        window.closeWelcomeTutorialModal();
+    }
+};
 
 // === START PREDEFINED SESSIONS & MESOCYCLE MODULE ===
 (function() {
@@ -15122,7 +15842,7 @@ window.showToast = function(msg, duration = 2400) {
         },
         joints: {
             icon: "ph-heart-straight",
-            image: "img/screenshots/02_recovery_heatmap.png",
+            image: "img/screenshots/02_joint_issues_modal.png",
             es: {
                 title: "Sugerencias Molestias Articulares",
                 badge: "Función Exclusiva PRO",
@@ -15171,7 +15891,7 @@ window.showToast = function(msg, duration = 2400) {
         },
         history: {
             icon: "ph-chart-line-up",
-            image: "img/screenshots/07_stats_fuerza.png",
+            image: "img/screenshots/07_stats_charts_history.png",
             es: {
                 title: "Historial Gráfico Ilimitado",
                 badge: "Función Exclusiva PRO",
